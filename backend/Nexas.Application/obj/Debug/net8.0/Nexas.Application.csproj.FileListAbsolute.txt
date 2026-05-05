@@ -1,0 +1,15 @@
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Application\bin\Debug\net8.0\Nexas.Application.deps.json
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Application\bin\Debug\net8.0\Nexas.Application.dll
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Application\bin\Debug\net8.0\Nexas.Application.pdb
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Application\bin\Debug\net8.0\Nexas.Domain.dll
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Application\bin\Debug\net8.0\Nexas.Domain.pdb
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Application\obj\Debug\net8.0\Nexas.Application.csproj.AssemblyReference.cache
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Application\obj\Debug\net8.0\Nexas.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Application\obj\Debug\net8.0\Nexas.Application.AssemblyInfoInputs.cache
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Application\obj\Debug\net8.0\Nexas.Application.AssemblyInfo.cs
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Application\obj\Debug\net8.0\Nexas.Application.csproj.CoreCompileInputs.cache
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Application\obj\Debug\net8.0\Nexas.Ap.BFACD500.Up2Date
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Application\obj\Debug\net8.0\Nexas.Application.dll
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Application\obj\Debug\net8.0\refint\Nexas.Application.dll
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Application\obj\Debug\net8.0\Nexas.Application.pdb
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Application\obj\Debug\net8.0\ref\Nexas.Application.dll

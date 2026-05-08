@@ -9,3 +9,7 @@ C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Domain\obj
 C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Domain\obj\Debug\net8.0\refint\Nexas.Domain.dll
 C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Domain\obj\Debug\net8.0\Nexas.Domain.pdb
 C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Domain\obj\Debug\net8.0\ref\Nexas.Domain.dll
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Domain\obj\Debug\net8.0\Nexas.Domain.sourcelink.json
+C:\Temp\nexas-api-build\Nexas.Domain.deps.json
+C:\Temp\nexas-api-build\Nexas.Domain.dll
+C:\Temp\nexas-api-build\Nexas.Domain.pdb

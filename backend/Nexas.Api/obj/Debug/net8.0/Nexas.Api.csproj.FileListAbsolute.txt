@@ -121,3 +121,16 @@ C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Api\obj\De
 C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Api\obj\Debug\net8.0\Nexas.Api.pdb
 C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Api\obj\Debug\net8.0\Nexas.Api.genruntimeconfig.cache
 C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Api\obj\Debug\net8.0\ref\Nexas.Api.dll
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Api\obj\Debug\net8.0\Nexas.Api.sourcelink.json
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Api\bin\Debug\net8.0\Nexas.Api.xml
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Api\bin\Debug\net8.0\Swashbuckle.AspNetCore.Annotations.dll
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Api\bin\Debug\net8.0\Nexas.Application.xml
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Api\obj\Debug\net8.0\Nexas.Api.xml
+C:\Temp\nexas-api-build\appsettings.Development.json
+C:\Temp\nexas-api-build\appsettings.json
+C:\Temp\nexas-api-build\Nexas.Api.exe
+C:\Temp\nexas-api-build\Nexas.Api.deps.json
+C:\Temp\nexas-api-build\Nexas.Api.runtimeconfig.json
+C:\Temp\nexas-api-build\Nexas.Api.dll
+C:\Temp\nexas-api-build\Nexas.Api.pdb
+C:\Temp\nexas-api-build\Nexas.Api.xml

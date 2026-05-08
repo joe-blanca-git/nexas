@@ -17,3 +17,9 @@ C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Infrastruc
 C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Infrastructure\obj\Debug\net8.0\Nexas.Infrastructure.pdb
 C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Infrastructure\obj\Debug\net8.0\Nexas.Infrastructure.genruntimeconfig.cache
 C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Infrastructure\obj\Debug\net8.0\ref\Nexas.Infrastructure.dll
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Infrastructure\obj\Debug\net8.0\Nexas.Infrastructure.sourcelink.json
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Infrastructure\bin\Debug\net8.0\Nexas.Application.xml
+C:\Temp\nexas-api-build\Nexas.Infrastructure.deps.json
+C:\Temp\nexas-api-build\Nexas.Infrastructure.runtimeconfig.json
+C:\Temp\nexas-api-build\Nexas.Infrastructure.dll
+C:\Temp\nexas-api-build\Nexas.Infrastructure.pdb

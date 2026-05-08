@@ -2,6 +2,8 @@ using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Nexas.Application.Common.Behaviors;
+using Nexas.Application.Common.Interfaces;
+using Nexas.Application.Common.Services;
 using System.Reflection;
 
 namespace Nexas.Application
@@ -19,6 +21,8 @@ namespace Nexas.Application
             });
 
             services.AddValidatorsFromAssembly(assembly);
+
+            services.AddScoped<IUserContextService, UserContextService>();
 
             return services;
         }

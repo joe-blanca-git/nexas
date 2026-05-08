@@ -1,0 +1,285 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Nexas.Application</name>
+    </assembly>
+    <members>
+        <member name="T:Nexas.Application.Courses.Commands.CreateCourse.CreateCourseCommand">
+            <summary>
+            Comando para criação de um novo curso completo com módulos e aulas.
+            </summary>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.CreateCourse.CreateCourseCommand.Name">
+            <summary>Nome do curso.</summary>
+            <example>Desenvolvimento Web com .NET 8</example>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.CreateCourse.CreateCourseCommand.Description">
+            <summary>Descrição detalhada do curso.</summary>
+            <example>Um curso completo sobre as tecnologias mais modernas do ecossistema .NET.</example>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.CreateCourse.CreateCourseCommand.DescriptionSub">
+            <summary>Sub-descrição ou subtítulo do curso.</summary>
+            <example>Do zero ao avançado em Clean Architecture.</example>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.CreateCourse.CreateCourseCommand.Level">
+            <summary>Nível de dificuldade.</summary>
+            <example>Avançado</example>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.CreateCourse.CreateCourseCommand.PriceSingle">
+            <summary>Preço de venda do curso individual.</summary>
+            <example>299.90</example>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.CreateCourse.CreateCourseCommand.ImgCoverLink">
+            <summary>Link da imagem de capa do curso.</summary>
+            <example>https://cdn.example.com/covers/course-cover.jpg</example>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.CreateCourse.CreateCourseCommand.BunnyLibraryId">
+            <summary>ID da biblioteca Bunny para o curso.</summary>
+            <example>library_12345</example>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.CreateCourse.CreateCourseCommand.Modules">
+            <summary>Lista de módulos que compõem o curso.</summary>
+        </member>
+        <member name="T:Nexas.Application.Courses.Commands.CreateCourse.CreateModuleDto">
+            <summary>DTO para criação de um módulo.</summary>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.CreateCourse.CreateModuleDto.Name">
+            <summary>Nome do módulo.</summary>
+            <example>Módulo 1: Fundamentos</example>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.CreateCourse.CreateModuleDto.Description">
+            <summary>Descrição do módulo.</summary>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.CreateCourse.CreateModuleDto.DescriptionSub">
+            <summary>Sub-descrição do módulo.</summary>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.CreateCourse.CreateModuleDto.ImgCoverLink">
+            <summary>Link da imagem de capa do módulo.</summary>
+            <example>https://cdn.example.com/covers/module-cover.jpg</example>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.CreateCourse.CreateModuleDto.BunnyCollectionId">
+            <summary>ID da coleção Bunny para o módulo.</summary>
+            <example>collection_12345</example>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.CreateCourse.CreateModuleDto.Lessons">
+            <summary>Lista de aulas do módulo.</summary>
+        </member>
+        <member name="T:Nexas.Application.Courses.Commands.CreateCourse.CreateLessonDto">
+            <summary>DTO para criação de uma aula.</summary>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.CreateCourse.CreateLessonDto.Name">
+            <summary>Nome da aula.</summary>
+            <example>Aula 1: Introdução ao C#</example>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.CreateCourse.CreateLessonDto.Description">
+            <summary>Descrição do conteúdo da aula.</summary>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.CreateCourse.CreateLessonDto.DurationSeconds">
+            <summary>Duração estimada em segundos.</summary>
+            <example>600</example>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.CreateCourse.CreateLessonDto.BunnyVideoId">
+            <summary>ID do vídeo Bunny para a aula.</summary>
+            <example>video_12345</example>
+        </member>
+        <member name="T:Nexas.Application.Courses.Commands.CreateLesson.CreateLessonCommand">
+            <summary>
+            Comando para criação de uma nova aula em um módulo existente.
+            </summary>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.CreateLesson.CreateLessonCommand.ModuleId">
+            <summary>ID do módulo ao qual a aula será adicionada.</summary>
+            <example>1</example>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.CreateLesson.CreateLessonCommand.Name">
+            <summary>Nome da aula.</summary>
+            <example>Aula 1: Introdução ao C#</example>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.CreateLesson.CreateLessonCommand.Description">
+            <summary>Descrição detalhada do conteúdo da aula.</summary>
+            <example>Aprenda os conceitos fundamentais da linguagem C#.</example>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.CreateLesson.CreateLessonCommand.DurationSeconds">
+            <summary>Duração estimada da aula em segundos.</summary>
+            <example>600</example>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.CreateLesson.CreateLessonCommand.BunnyVideoId">
+            <summary>ID do vídeo Bunny para a aula.</summary>
+            <example>video_12345</example>
+        </member>
+        <member name="T:Nexas.Application.Courses.Commands.CreateModule.CreateModuleCommand">
+            <summary>
+            Comando para criação de um novo módulo em um curso existente.
+            </summary>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.CreateModule.CreateModuleCommand.CourseId">
+            <summary>ID do curso ao qual o módulo será adicionado.</summary>
+            <example>1</example>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.CreateModule.CreateModuleCommand.Name">
+            <summary>Nome do módulo.</summary>
+            <example>Módulo 1: Fundamentos</example>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.CreateModule.CreateModuleCommand.Description">
+            <summary>Descrição detalhada do módulo.</summary>
+            <example>Aprenda os fundamentos básicos do framework.</example>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.CreateModule.CreateModuleCommand.DescriptionSub">
+            <summary>Sub-descrição ou subtítulo do módulo.</summary>
+            <example>Conceitos essenciais</example>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.CreateModule.CreateModuleCommand.ImgCoverLink">
+            <summary>Link da imagem de capa do módulo.</summary>
+            <example>https://cdn.example.com/covers/module-cover.jpg</example>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.CreateModule.CreateModuleCommand.BunnyCollectionId">
+            <summary>ID da coleção Bunny para o módulo.</summary>
+            <example>collection_12345</example>
+        </member>
+        <member name="T:Nexas.Application.Courses.Commands.DeactivateCourse.DeactivateCourseCommand">
+            <summary>
+            Comando para inativar um curso sem deletá-lo do banco de dados.
+            </summary>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.DeactivateCourse.DeactivateCourseCommand.Id">
+            <summary>ID do curso a ser inativado.</summary>
+            <example>1</example>
+        </member>
+        <member name="T:Nexas.Application.Courses.Commands.DeactivateLesson.DeactivateLessonCommand">
+            <summary>
+            Comando para inativar uma aula sem deletá-la do banco de dados.
+            </summary>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.DeactivateLesson.DeactivateLessonCommand.Id">
+            <summary>ID da aula a ser inativada.</summary>
+            <example>1</example>
+        </member>
+        <member name="T:Nexas.Application.Courses.Commands.DeactivateModule.DeactivateModuleCommand">
+            <summary>
+            Comando para inativar um módulo sem deletá-lo do banco de dados.
+            </summary>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.DeactivateModule.DeactivateModuleCommand.Id">
+            <summary>ID do módulo a ser inativado.</summary>
+            <example>1</example>
+        </member>
+        <member name="T:Nexas.Application.Courses.Commands.DeleteLesson.DeleteLessonCommand">
+            <summary>
+            Comando para deletar permanentemente uma aula.
+            </summary>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.DeleteLesson.DeleteLessonCommand.Id">
+            <summary>ID da aula a ser deletada.</summary>
+            <example>1</example>
+        </member>
+        <member name="T:Nexas.Application.Courses.Commands.DeleteModule.DeleteModuleCommand">
+            <summary>
+            Comando para deletar permanentemente um módulo e todas as suas aulas.
+            </summary>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.DeleteModule.DeleteModuleCommand.Id">
+            <summary>ID do módulo a ser deletado.</summary>
+            <example>1</example>
+        </member>
+        <member name="T:Nexas.Application.Courses.Commands.UpdateCourse.UpdateCourseCommand">
+            <summary>
+            Comando para atualizar os dados de um curso existente.
+            </summary>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.UpdateCourse.UpdateCourseCommand.Id">
+            <summary>ID do curso a ser atualizado.</summary>
+            <example>1</example>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.UpdateCourse.UpdateCourseCommand.Name">
+            <summary>Novo nome do curso.</summary>
+            <example>Desenvolvimento Web com .NET 8 (Atualizado)</example>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.UpdateCourse.UpdateCourseCommand.Description">
+            <summary>Nova descrição detalhada do curso.</summary>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.UpdateCourse.UpdateCourseCommand.DescriptionSub">
+            <summary>Novo subtítulo do curso.</summary>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.UpdateCourse.UpdateCourseCommand.Level">
+            <summary>Novo nível de dificuldade.</summary>
+            <example>Avançado</example>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.UpdateCourse.UpdateCourseCommand.PriceSingle">
+            <summary>Novo preço do curso.</summary>
+            <example>349.90</example>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.UpdateCourse.UpdateCourseCommand.ImgCoverLink">
+            <summary>Novo link da imagem de capa do curso.</summary>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.UpdateCourse.UpdateCourseCommand.BunnyLibraryId">
+            <summary>Novo ID da biblioteca Bunny para o curso.</summary>
+        </member>
+        <member name="T:Nexas.Application.Courses.Commands.UpdateLesson.UpdateLessonCommand">
+            <summary>
+            Comando para atualizar os dados de uma aula existente.
+            </summary>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.UpdateLesson.UpdateLessonCommand.Id">
+            <summary>ID da aula a ser atualizada.</summary>
+            <example>1</example>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.UpdateLesson.UpdateLessonCommand.Name">
+            <summary>Novo nome da aula.</summary>
+            <example>Aula 1: Introdução ao C# (Atualizada)</example>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.UpdateLesson.UpdateLessonCommand.Description">
+            <summary>Nova descrição da aula.</summary>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.UpdateLesson.UpdateLessonCommand.DurationSeconds">
+            <summary>Nova duração estimada em segundos.</summary>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.UpdateLesson.UpdateLessonCommand.BunnyVideoId">
+            <summary>Novo ID do vídeo Bunny para a aula.</summary>
+        </member>
+        <member name="T:Nexas.Application.Courses.Commands.UpdateModule.UpdateModuleCommand">
+            <summary>
+            Comando para atualizar os dados de um módulo existente.
+            </summary>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.UpdateModule.UpdateModuleCommand.Id">
+            <summary>ID do módulo a ser atualizado.</summary>
+            <example>1</example>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.UpdateModule.UpdateModuleCommand.Name">
+            <summary>Novo nome do módulo.</summary>
+            <example>Módulo 1: Fundamentos (Atualizado)</example>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.UpdateModule.UpdateModuleCommand.Description">
+            <summary>Nova descrição do módulo.</summary>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.UpdateModule.UpdateModuleCommand.DescriptionSub">
+            <summary>Nova sub-descrição do módulo.</summary>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.UpdateModule.UpdateModuleCommand.ImgCoverLink">
+            <summary>Novo link da imagem de capa do módulo.</summary>
+        </member>
+        <member name="P:Nexas.Application.Courses.Commands.UpdateModule.UpdateModuleCommand.BunnyCollectionId">
+            <summary>Novo ID da coleção Bunny para o módulo.</summary>
+        </member>
+        <member name="T:Nexas.Application.Courses.Queries.GetCourses.GetCoursesQuery">
+            <summary>
+            Consulta para obter a lista de cursos ativos com todos os detalhes (módulos e aulas).
+            </summary>
+        </member>
+        <member name="T:Nexas.Application.Courses.Queries.GetCourses.CourseDto">
+            <summary>
+            DTO representando um curso completo com módulos e aulas.
+            </summary>
+        </member>
+        <member name="T:Nexas.Application.Courses.Queries.GetCourses.ModuleDto">
+            <summary>
+            DTO representando um módulo com suas aulas.
+            </summary>
+        </member>
+        <member name="T:Nexas.Application.Courses.Queries.GetCourses.LessonDto">
+            <summary>
+            DTO representando uma aula.
+            </summary>
+        </member>
+    </members>
+</doc>

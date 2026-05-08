@@ -13,3 +13,10 @@ C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Applicatio
 C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Application\obj\Debug\net8.0\refint\Nexas.Application.dll
 C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Application\obj\Debug\net8.0\Nexas.Application.pdb
 C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Application\obj\Debug\net8.0\ref\Nexas.Application.dll
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Application\obj\Debug\net8.0\Nexas.Application.sourcelink.json
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Application\bin\Debug\net8.0\Nexas.Application.xml
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Application\obj\Debug\net8.0\Nexas.Application.xml
+C:\Temp\nexas-api-build\Nexas.Application.deps.json
+C:\Temp\nexas-api-build\Nexas.Application.dll
+C:\Temp\nexas-api-build\Nexas.Application.pdb
+C:\Temp\nexas-api-build\Nexas.Application.xml

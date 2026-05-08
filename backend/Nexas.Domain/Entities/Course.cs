@@ -4,15 +4,35 @@ namespace Nexas.Domain.Entities
 {
     public class Course : BaseEntity
     {
-        public string Title { get; private set; } = string.Empty;
-        public string Description { get; private set; } = string.Empty;
-        
-        // Relations
-        public virtual ICollection<Enrollment> Enrollments { get; private set; } = new List<Enrollment>();
+        public string Name { get; set; } = string.Empty;
+        public string? Description { get; set; }
+        public string? DescriptionSub { get; set; }
+        public string? Level { get; set; }
+        public decimal? PriceSingle { get; set; }
+        public string? ImgCoverLink { get; set; }
+        public bool Active { get; set; } = true;
+        public int? CreatedBy { get; set; }
+        public int? UpdatedBy { get; set; }
+        public string? BunnyLibraryId { get; set; }
 
-        public static Course Create(string title, string description)
+        // Relations
+        public virtual ICollection<Module> Modules { get; set; } = new List<Module>();
+        public virtual ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
+
+        public static Course Create(string name, string? description, string? descriptionSub, string? level, decimal? priceSingle, string? imgCoverLink, string? bunnyLibraryId, int? createdBy)
         {
-            return new Course { Title = title, Description = description };
+            return new Course 
+            { 
+                Name = name, 
+                Description = description,
+                DescriptionSub = descriptionSub,
+                Level = level,
+                PriceSingle = priceSingle,
+                ImgCoverLink = imgCoverLink,
+                BunnyLibraryId = bunnyLibraryId,
+                CreatedBy = createdBy,
+                Active = true
+            };
         }
     }
 }

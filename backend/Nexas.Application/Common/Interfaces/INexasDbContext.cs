@@ -7,6 +7,8 @@ namespace Nexas.Application.Common.Interfaces
     {
         DbSet<User> Users { get; }
         DbSet<Course> Courses { get; }
+        DbSet<Module> Modules { get; }
+        DbSet<Lesson> Lessons { get; }
         DbSet<Enrollment> Enrollments { get; }
         DbSet<Subscription> Subscriptions { get; }
 

@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
 async function fetchCursos() {
     const container = document.getElementById("container-cursos");
     const preloader = document.getElementById("preloader");
-    const API_URL = "http://localhost:5079/Courses"; 
+    const API_URL = "https://joederblanca.com.br/nexas-api/Courses"; 
 
     try {
         const response = await fetch(API_URL);

@@ -7,7 +7,6 @@ using Nexas.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,9 +14,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("DevelopmentCors", policy =>
     {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
+        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
     });
 });
 
@@ -32,20 +29,11 @@ builder.Services.AddSwaggerSetup();
 
 var app = builder.Build();
 
-app.UseSwagger(c =>
-{
-    c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
-    {
-        swaggerDoc.Servers = new List<OpenApiServer> 
-        { 
-            new OpenApiServer { Url = $"https://{httpReq.Host.Value}/nexas" } 
-        };
-    });
-});
-
+// Swagger sempre disponível para testes no servidor
+app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
-    c.SwaggerEndpoint("/nexas/swagger/v1/swagger.json", "Nexas API V1");
+    c.SwaggerEndpoint("/nexas-api/swagger/v1/swagger.json", "Nexas API V1");
     c.RoutePrefix = "swagger";
 });
 

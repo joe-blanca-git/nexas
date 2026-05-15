@@ -29,7 +29,17 @@ builder.Services.AddSwaggerSetup();
 
 var app = builder.Build();
 
-app.UseSwagger();
+app.UseSwagger(c =>
+{
+    c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
+    {
+        swaggerDoc.Servers = new List<Microsoft.OpenApi.Models.OpenApiServer> 
+        { 
+            new Microsoft.OpenApi.Models.OpenApiServer { Url = $"https://{httpReq.Host.Value}/nexas-api" } 
+        };
+    });
+});
+
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/nexas-api/swagger/v1/swagger.json", "Nexas API V1");

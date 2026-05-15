@@ -45,11 +45,18 @@ var app = builder.Build();
 // 2. Configuração do Pipeline de Middleware (HTTP Request)
 // ============================================================
 
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    app.UseSwaggerUI(c =>
+    {
+        // O prefixo /nexas deve bater com o que você colocou no Nginx
+        c.SwaggerEndpoint("/nexas/swagger/v1/swagger.json", "Nexas API V1");
+        
+        // Define a rota onde o Swagger será acessado (joederblanca.com.br/nexas/swagger)
+        c.RoutePrefix = "swagger"; 
+    });
+//}
 
 // O UseCors deve vir antes da Autenticação/Autorização
 app.UseCors("DevelopmentCors");

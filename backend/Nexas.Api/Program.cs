@@ -29,22 +29,28 @@ builder.Services.AddSwaggerSetup();
 
 var app = builder.Build();
 
-app.UseSwagger(c =>
+if (app.Environment.IsDevelopment())
 {
-    c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}else{
+    app.UseSwagger(c =>
     {
-        swaggerDoc.Servers = new List<Microsoft.OpenApi.Models.OpenApiServer> 
-        { 
-            new Microsoft.OpenApi.Models.OpenApiServer { Url = $"https://{httpReq.Host.Value}/nexas-api" } 
-        };
+        c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
+        {
+            swaggerDoc.Servers = new List<Microsoft.OpenApi.Models.OpenApiServer> 
+            { 
+                new Microsoft.OpenApi.Models.OpenApiServer { Url = $"https://{httpReq.Host.Value}/nexas-api" } 
+            };
+        });
     });
-});
 
-app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("/nexas-api/swagger/v1/swagger.json", "Nexas API V1");
-    c.RoutePrefix = "swagger";
-});
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/nexas-api/swagger/v1/swagger.json", "Nexas API V1");
+        c.RoutePrefix = "swagger";
+    });
+}
 
 app.UseCors("DevelopmentCors");
 app.UseGlobalExceptionHandler();

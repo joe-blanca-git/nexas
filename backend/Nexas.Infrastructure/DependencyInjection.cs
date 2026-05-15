@@ -12,12 +12,14 @@ namespace Nexas.Infrastructure
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
 
+            var serverVersion = new MySqlServerVersion(new Version(8, 0, 36));
+
             services.AddDbContext<NexasDbContext>(options =>
-                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString),
-                    b => b.MigrationsAssembly(typeof(NexasDbContext).Assembly.FullName)));
+                options.UseMySql(connectionString, serverVersion,
+                b => b.MigrationsAssembly(typeof(NexasDbContext).Assembly.FullName)));
 
             services.AddScoped<INexasDbContext>(provider => provider.GetRequiredService<NexasDbContext>());
-            
+                                
             return services;
         }
     }

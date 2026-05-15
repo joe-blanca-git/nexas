@@ -29,7 +29,6 @@ builder.Services.AddSwaggerSetup();
 
 var app = builder.Build();
 
-// Swagger sempre disponível para testes no servidor
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {

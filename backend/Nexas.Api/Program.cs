@@ -30,8 +30,6 @@ builder.Services.AddSwaggerSetup();
 
 var app = builder.Build();
 
-var app = builder.Build();
-
 if (!app.Environment.IsDevelopment())
 {
     app.UseSwagger(c =>

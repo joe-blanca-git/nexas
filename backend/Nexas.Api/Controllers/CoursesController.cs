@@ -13,6 +13,7 @@ using Nexas.Application.Courses.Commands.DeactivateLesson;
 using Nexas.Application.Courses.Commands.UpdateCourse;
 using Nexas.Application.Courses.Commands.DeactivateCourse;
 using Nexas.Application.Courses.Queries.GetCourses;
+using Nexas.Application.Courses.Queries.GetCourseById;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Nexas.Api.Controllers
@@ -60,12 +61,15 @@ namespace Nexas.Api.Controllers
         [AllowAnonymous]
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Obtém um curso por ID")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CourseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            // Placeholder para manter o CreatedAtAction funcionando
-            return Ok(new { id });
+            var result = await _mediator.Send(new GetCourseByIdQuery { Id = id });
+            if (result == null)
+                return NotFound(new { message = $"Curso com ID {id} não encontrado." });
+
+            return Ok(result);
         }
 
         /// <summary>

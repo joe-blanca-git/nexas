@@ -261,6 +261,14 @@
         <member name="P:Nexas.Application.Courses.Commands.UpdateModule.UpdateModuleCommand.BunnyCollectionId">
             <summary>Novo ID da coleção Bunny para o módulo.</summary>
         </member>
+        <member name="T:Nexas.Application.Courses.Queries.GetCourseById.GetCourseByIdQuery">
+            <summary>
+            Consulta para obter os detalhes de um curso específico pelo ID (incluindo módulos e aulas).
+            </summary>
+        </member>
+        <member name="P:Nexas.Application.Courses.Queries.GetCourseById.GetCourseByIdQuery.Id">
+            <summary>ID do curso.</summary>
+        </member>
         <member name="T:Nexas.Application.Courses.Queries.GetCourses.GetCoursesQuery">
             <summary>
             Consulta para obter a lista de cursos ativos com todos os detalhes (módulos e aulas).

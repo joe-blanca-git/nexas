@@ -18,6 +18,14 @@
 </head>
 <body>
 
+    <div id="preloader">
+        <div class="loader-content">
+            <img src="./assets/images/logos/logo-nobg.png" alt="Nexas" class="loader-logo">
+            <div class="spinner-agro"></div>
+            <p class="text-white-50 mt-3 small text-uppercase tracking-wider"></p>
+        </div>
+    </div>
+
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg fixed-top scrolled" id="mainNav">
         <div class="container">
@@ -42,7 +50,7 @@
     </nav>
 
     <!-- Course Hero Section -->
-    <header class="hero" id="curso-hero" style="min-height: 80vh; background-image: linear-gradient(rgba(15, 18, 16, 0.8), rgba(15, 18, 16, 0.9)), url('./assets/images/others/1.jpeg');">
+    <header class="hero" id="curso-hero" style="min-height: 80vh;">
         <div class="container">
             <div class="row align-items-center g-5">
                 <div class="col-lg-7 reveal">
@@ -50,26 +58,26 @@
                         <span class="badge bg-accent text-dark px-3 py-2 rounded-pill fw-bold">MAIS VENDIDO</span>
                         <span class="badge bg-primary text-white px-3 py-2 rounded-pill fw-bold">ATUALIZADO 2024</span>
                     </div>
-                    <h1 class="display-font">Mestres do <span class="highlight">Operations Center</span></h1>
-                    <p class="lead mb-4 fs-4 text-light">O guia definitivo para dominar a gestão de dados e performance na plataforma John Deere.</p>
+                    <h1 class="display-font" id="course-name">Carregando...</h1>
+                    <p class="lead mb-4 fs-4 text-light" id="course-description-sub">Buscando informações do curso...</p>
                     
                     <div class="row g-3 mb-5">
                         <div class="col-6 col-md-3">
                             <div class="text-white-50 small">Duração</div>
-                            <div class="fw-bold">12 Horas</div>
+                            <div class="fw-bold" id="course-duration">-</div>
                         </div>
                         <div class="col-6 col-md-3">
                             <div class="text-white-50 small">Nível</div>
-                            <div class="fw-bold">Intermediário</div>
+                            <div class="fw-bold" id="course-level">-</div>
                         </div>
                         <div class="col-6 col-md-3">
                             <div class="text-white-50 small">Aulas</div>
-                            <div class="fw-bold">45 Vídeos</div>
+                            <div class="fw-bold" id="course-lessons-count">-</div>
                         </div>
-                        <div class="col-6 col-md-3">
+                        <!-- <div class="col-6 col-md-3">
                             <div class="text-white-50 small">Alunos</div>
                             <div class="fw-bold">+1.200</div>
-                        </div>
+                        </div> -->
                     </div>
 
                     <div class="d-flex flex-column flex-sm-row gap-3">
@@ -77,11 +85,11 @@
                         <a href="#conteudo" class="btn btn-outline-light px-5">Ver conteúdo</a>
                     </div>
                 </div>
-                <div class="col-lg-5 reveal delay-1 d-none d-lg-block">
-                    <div class="position-relative">
-                        <img src="./assets/images/others/1.jpeg" class="img-fluid rounded-5 shadow-lg border border-light border-opacity-10" alt="Cover Course">
+                <div class="col-lg-5 reveal delay-1 mt-5 mt-lg-0 text-center">
+                    <div class="position-relative d-inline-block">
+                        <img src="" id="course-cover-img" class="img-fluid rounded-5 shadow-lg border border-light border-opacity-10" alt="Cover Course" style="display: none;">
                         <div class="position-absolute top-50 start-50 translate-middle">
-                            <a href="#" class="btn btn-white rounded-circle p-4 shadow-lg pulse-animation">
+                            <a href="#conteudo" class="btn btn-white rounded-circle p-4 shadow-lg pulse-animation">
                                 <i class="bi bi-play-fill fs-1 text-primary"></i>
                             </a>
                         </div>
@@ -95,14 +103,14 @@
     <section class="py-4 bg-primary text-white">
         <div class="container">
             <div class="row justify-content-center text-center g-4">
-                <div class="col-md-3">
+                <!-- <div class="col-md-3">
                     <div class="h3 fw-bold mb-0">4.9/5</div>
                     <div class="small opacity-75 text-accent"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
-                </div>
-                <div class="col-md-3 border-start border-white border-opacity-25">
+                </div> -->
+                <!-- <div class="col-md-3 border-start border-white border-opacity-25">
                     <div class="h3 fw-bold mb-0">+1.200</div>
                     <div class="small opacity-75">Alunos ativos</div>
-                </div>
+                </div> -->
                 <div class="col-md-3 border-start border-white border-opacity-25">
                     <div class="h3 fw-bold mb-0">100%</div>
                     <div class="small opacity-75">Online e Flexível</div>
@@ -120,8 +128,8 @@
                         <span class="text-primary fw-bold text-uppercase">Sobre o curso</span>
                         <h2>Torne-se o especialista que o campo procura</h2>
                     </div>
-                    <p class="mb-4 fs-5 text-muted">O Operations Center não é apenas um lugar para ver mapas; é o cérebro da operação agrícola moderna. Neste curso, você sairá do básico e aprenderá a extrair inteligência real para a tomada de decisão.</p>
-                    <p class="mb-5 text-muted">Vamos cobrir desde a organização inicial de talhões e equipamentos até a análise avançada de performance de máquinas, consumo de combustível e gestão de prescrições. Tudo focado em resultados práticos.</p>
+                    <p class="mb-4 fs-5 text-muted" id="course-description">Carregando descrição detalhada...</p>
+                    <p class="mb-5 text-muted" id="course-description-sub2"></p>
                     
                     <h4 class="fw-bold mb-4">O que você vai dominar:</h4>
                     <div class="row g-4">
@@ -167,7 +175,7 @@
                     <div class="card p-4 bg-light-agro border-0 sticky-top" style="top: 100px;">
                         <h4 class="fw-bold mb-4">Este curso inclui:</h4>
                         <ul class="list-unstyled mb-4">
-                            <li class="mb-3 d-flex align-items-center gap-3"><i class="bi bi-play-btn text-primary"></i> 45 aulas gravadas em 4K</li>
+                            <li class="mb-3 d-flex align-items-center gap-3"><i class="bi bi-play-btn text-primary"></i> <span id="include-lessons-count">Carregando...</span></li>
                             <li class="mb-3 d-flex align-items-center gap-3"><i class="bi bi-file-earmark-pdf text-primary"></i> Materiais de apoio e checklists</li>
                             <li class="mb-3 d-flex align-items-center gap-3"><i class="bi bi-infinity text-primary"></i> Acesso vitalício</li>
                             <li class="mb-3 d-flex align-items-center gap-3"><i class="bi bi-device-ssd text-primary"></i> Acesso via mobile e tablet</li>
@@ -191,78 +199,9 @@
             <div class="row justify-content-center">
                 <div class="col-lg-8 reveal">
                     <div class="accordion" id="curriculumAccordion">
-                        <!-- Module 1 -->
-                        <div class="accordion-item mb-3 shadow-sm border-0">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#mod1">
-                                    Módulo 01: Fundamentos e Organização
-                                </button>
-                            </h2>
-                            <div id="mod1" class="accordion-collapse collapse show" data-bs-parent="#curriculumAccordion">
-                                <div class="accordion-body p-0">
-                                    <ul class="list-group list-group-flush">
-                                        <li class="list-group-item d-flex justify-content-between align-items-center py-3 bg-transparent">
-                                            <div class="d-flex align-items-center gap-3">
-                                                <i class="bi bi-play-circle text-primary"></i> Introdução ao Ecossistema Nexas
-                                            </div>
-                                            <span class="badge bg-light text-muted fw-normal">10 min</span>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between align-items-center py-3 bg-transparent">
-                                            <div class="d-flex align-items-center gap-3">
-                                                <i class="bi bi-play-circle text-primary"></i> Criando e Configurando sua Organização
-                                            </div>
-                                            <span class="badge bg-light text-muted fw-normal">25 min</span>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between align-items-center py-3 bg-transparent">
-                                            <div class="d-flex align-items-center gap-3">
-                                                <i class="bi bi-play-circle text-primary"></i> Gestão de Parceiros e Acessos Remotos
-                                            </div>
-                                            <span class="badge bg-light text-muted fw-normal">15 min</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Module 2 -->
-                        <div class="accordion-item mb-3 shadow-sm border-0">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#mod2">
-                                    Módulo 02: Configuração de Dados de Campo
-                                </button>
-                            </h2>
-                            <div id="mod2" class="accordion-collapse collapse" data-bs-parent="#curriculumAccordion">
-                                <div class="accordion-body p-0">
-                                    <ul class="list-group list-group-flush">
-                                        <li class="list-group-item d-flex justify-content-between align-items-center py-3 bg-transparent">
-                                            <div class="d-flex align-items-center gap-3">
-                                                <i class="bi bi-lock text-muted"></i> Importação de Talhões e Fronteiras
-                                            </div>
-                                            <span class="badge bg-light text-muted fw-normal">30 min</span>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between align-items-center py-3 bg-transparent">
-                                            <div class="d-flex align-items-center gap-3">
-                                                <i class="bi bi-lock text-muted"></i> Configuração de Variedades e Insumos
-                                            </div>
-                                            <span class="badge bg-light text-muted fw-normal">20 min</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Module 3 -->
-                        <div class="accordion-item mb-3 shadow-sm border-0">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#mod3">
-                                    Módulo 03: Análise Avançada e Performance
-                                </button>
-                            </h2>
-                            <div id="mod3" class="accordion-collapse collapse" data-bs-parent="#curriculumAccordion">
-                                <div class="accordion-body p-0">
-                                    <ul class="list-group list-group-flush text-muted">
-                                        <li class="list-group-item py-3 bg-transparent italic">Mais 15 aulas neste módulo...</li>
-                                    </ul>
-                                </div>
-                            </div>
+                        <div class="p-4 text-center text-muted">
+                            <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
+                            Carregando conteúdo programático...
                         </div>
                     </div>
                 </div>
@@ -305,11 +244,11 @@
                 <div class="col-lg-5 reveal">
                     <div class="card p-5 border-0 rounded-5 h-100 bg-white text-dark-theme shadow-lg">
                         <h4 class="fw-bold mb-3">Apenas este Curso</h4>
-                        <p class="text-muted small mb-4">Acesso vitalício ao curso Mestres do Operations Center e todas as atualizações.</p>
+                        <p class="text-muted small mb-4">Acesso vitalício ao curso <span id="price-course-name">...</span> e todas as atualizações.</p>
                         <div class="mb-5">
-                            <span class="h1 fw-bold text-primary">R$ 497</span>
+                            <span class="h1 fw-bold text-primary" id="price-value">...</span>
                             <span class="text-muted">/ à vista</span>
-                            <div class="text-muted small mt-2">ou 12x de R$ 49,70</div>
+                            <div class="text-muted small mt-2" id="price-installments">...</div>
                         </div>
                         <ul class="list-unstyled mb-5 text-muted small">
                             <li class="mb-3"><i class="bi bi-check2 text-primary me-2"></i> Certificado profissional individual</li>
@@ -323,7 +262,7 @@
                 <div class="col-lg-5 reveal delay-1">
                     <div class="card p-5 border-primary border-3 rounded-5 h-100 bg-white text-dark-theme shadow-lg position-relative overflow-visible">
                         <div class="position-absolute top-0 start-50 translate-middle">
-                            <span class="badge bg-accent text-dark px-4 py-2 rounded-pill fw-bold shadow-sm">MELHOR CUSTO-BENEFÍCIO</span>
+                            <span class="badge bg-success text-light px-4 py-2 rounded-pill fw-bold shadow-sm">MELHOR CUSTO-BENEFÍCIO</span>
                         </div>
                         <h4 class="fw-bold mb-3">Nexas Pass <span class="text-primary">(Assinatura)</span></h4>
                         <p class="text-muted small mb-4">Acesso ilimitado a TODOS os cursos atuais e futuros lançamentos da plataforma.</p>
@@ -451,5 +390,6 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/scripts.js"></script>
+    <script src="js/courses.js"></script>
 </body>
 </html>

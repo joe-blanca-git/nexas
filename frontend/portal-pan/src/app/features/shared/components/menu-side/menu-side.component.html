@@ -1,0 +1,9 @@
+<a *ngFor="let item of menu" class="menu-nav-item d-flex align-items-center py-2.5 px-3 my-1 mx-2 rounded-3 cursor-pointer transition mb-5" 
+   [class.active]="activeTab === item.route" 
+   [class.collapsed-item]="sidebarCollapsed"
+   (click)="setActiveTab(item.route)">
+  <div class="menu-icon-container text-center">
+    <i class="fs-5" [ngClass]="item.icon"></i>
+  </div>
+  <span class="menu-nav-text ms-3 fw-medium" *ngIf="!sidebarCollapsed">{{item.title}}</span>
+</a>

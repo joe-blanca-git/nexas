@@ -1,0 +1,398 @@
+<div class="animated-fade-in">
+
+  <!-- ════════════════════════════════════════════════════════════ -->
+  <!-- PAGE HEADER                                                  -->
+  <!-- ════════════════════════════════════════════════════════════ -->
+  <div class="row mb-4 align-items-center">
+    <div class="col-12 col-md-8">
+      <h3 class="fw-extrabold text-dark mb-1" style="font-size: 1.4rem; letter-spacing: -0.01rem;">
+        <i class="fas fa-comments me-2" style="color: #6366f1; font-size: 1.1rem;"></i>Fórum da Comunidade
+      </h3>
+      <p class="text-muted small mb-0">
+        Tire dúvidas, compartilhe conhecimento e interaja com colegas e professores da plataforma Nexas.
+      </p>
+    </div>
+    <div class="col-12 col-md-4 mt-3 mt-md-0 d-flex justify-content-md-end">
+      <button class="btn btn-dark rounded-pill px-4 py-2 fw-bold d-flex align-items-center gap-2 shadow-sm"
+              style="font-size: 0.83rem;"
+              (click)="openNewTopic()">
+        <i class="fas fa-plus"></i> Novo Tópico
+      </button>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════ -->
+  <!-- STATS CARDS (Skeleton)                                      -->
+  <!-- ════════════════════════════════════════════════════════════ -->
+  <div class="row g-3 mb-4" *ngIf="isLoading">
+    <div class="col-6 col-lg" *ngFor="let i of [1,2,3,4,5]">
+      <div class="card border-0 rounded-4 shadow-sm p-3 skeleton-card">
+        <div class="skeleton skeleton-xs mb-2"></div>
+        <div class="skeleton skeleton-lg"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════ -->
+  <!-- STATS CARDS                                                 -->
+  <!-- ════════════════════════════════════════════════════════════ -->
+  <div class="row g-3 mb-4" *ngIf="!isLoading">
+
+    <div class="col-6 col-lg">
+      <div class="card border-0 rounded-4 shadow-sm forum-stat-card p-3 h-100">
+        <div class="d-flex align-items-center gap-2 mb-1">
+          <div class="stat-icon-box" style="background: rgba(99,102,241,0.09); color: #6366f1;">
+            <i class="fas fa-layer-group" style="font-size: 0.85rem;"></i>
+          </div>
+          <span class="text-muted fw-semibold text-uppercase font-monospace" style="font-size: 0.65rem; letter-spacing: 0.04rem;">Tópicos</span>
+        </div>
+        <h4 class="fw-extrabold text-dark mb-0 mt-1" style="font-size: 1.3rem;">{{ stats.totalTopics }}</h4>
+        <span class="text-muted" style="font-size: 0.7rem;">publicados</span>
+      </div>
+    </div>
+
+    <div class="col-6 col-lg">
+      <div class="card border-0 rounded-4 shadow-sm forum-stat-card p-3 h-100">
+        <div class="d-flex align-items-center gap-2 mb-1">
+          <div class="stat-icon-box" style="background: rgba(16,185,129,0.09); color: #10b981;">
+            <i class="fas fa-reply-all" style="font-size: 0.85rem;"></i>
+          </div>
+          <span class="text-muted fw-semibold text-uppercase font-monospace" style="font-size: 0.65rem; letter-spacing: 0.04rem;">Respostas</span>
+        </div>
+        <h4 class="fw-extrabold text-dark mb-0 mt-1" style="font-size: 1.3rem;">{{ stats.totalReplies }}</h4>
+        <span class="text-muted" style="font-size: 0.7rem;">recebidas</span>
+      </div>
+    </div>
+
+    <div class="col-6 col-lg">
+      <div class="card border-0 rounded-4 shadow-sm forum-stat-card p-3 h-100">
+        <div class="d-flex align-items-center gap-2 mb-1">
+          <div class="stat-icon-box" style="background: rgba(245,158,11,0.09); color: #f59e0b;">
+            <i class="fas fa-question-circle" style="font-size: 0.85rem;"></i>
+          </div>
+          <span class="text-muted fw-semibold text-uppercase font-monospace" style="font-size: 0.65rem; letter-spacing: 0.04rem;">Sem Resp.</span>
+        </div>
+        <h4 class="fw-extrabold text-dark mb-0 mt-1" style="font-size: 1.3rem;">{{ stats.unansweredTopics }}</h4>
+        <span class="text-muted" style="font-size: 0.7rem;">precisam de atenção</span>
+      </div>
+    </div>
+
+    <div class="col-6 col-lg">
+      <div class="card border-0 rounded-4 shadow-sm forum-stat-card p-3 h-100">
+        <div class="d-flex align-items-center gap-2 mb-1">
+          <div class="stat-icon-box" style="background: rgba(236,72,153,0.09); color: #ec4899;">
+            <i class="fas fa-star" style="font-size: 0.85rem;"></i>
+          </div>
+          <span class="text-muted fw-semibold text-uppercase font-monospace" style="font-size: 0.65rem; letter-spacing: 0.04rem;">Favoritos</span>
+        </div>
+        <h4 class="fw-extrabold text-dark mb-0 mt-1" style="font-size: 1.3rem;">{{ stats.favoriteTopics }}</h4>
+        <span class="text-muted" style="font-size: 0.7rem;">salvos</span>
+      </div>
+    </div>
+
+    <div class="col-6 col-lg">
+      <div class="card border-0 rounded-4 shadow-sm forum-stat-card p-3 h-100">
+        <div class="d-flex align-items-center gap-2 mb-1">
+          <div class="stat-icon-box" style="background: rgba(139,92,246,0.09); color: #8b5cf6;">
+            <i class="fas fa-bell" style="font-size: 0.85rem;"></i>
+          </div>
+          <span class="text-muted fw-semibold text-uppercase font-monospace" style="font-size: 0.65rem; letter-spacing: 0.04rem;">Não Lidos</span>
+        </div>
+        <h4 class="fw-extrabold text-dark mb-0 mt-1" style="font-size: 1.3rem;">{{ stats.unreadReplies }}</h4>
+        <span class="text-muted" style="font-size: 0.7rem;">notificações</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════ -->
+  <!-- SEARCH & CATEGORY FILTER                                    -->
+  <!-- ════════════════════════════════════════════════════════════ -->
+  <div class="card border-0 rounded-4 shadow-sm p-3 mb-3">
+    <div class="row g-2 align-items-center">
+      <div class="col-12 col-md-7">
+        <div class="position-relative">
+          <span class="position-absolute start-0 top-50 translate-middle-y ps-3 text-muted" style="font-size: 0.82rem;">
+            <i class="fas fa-search"></i>
+          </span>
+          <input type="text"
+                 class="form-control rounded-pill ps-5 bg-light border-0 shadow-none py-2"
+                 placeholder="Buscar tópico, autor ou conteúdo..."
+                 [(ngModel)]="searchTerm"
+                 (ngModelChange)="currentPage = 1"
+                 style="font-size: 0.83rem;">
+        </div>
+      </div>
+      <div class="col-12 col-md-5">
+        <select class="form-select rounded-pill bg-light border-0 shadow-none py-2"
+                [(ngModel)]="selectedCategory"
+                (ngModelChange)="currentPage = 1"
+                style="font-size: 0.83rem;">
+          <option *ngFor="let opt of categoryOptions" [value]="opt">{{ opt }}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════ -->
+  <!-- NAVIGATION TABS                                             -->
+  <!-- ════════════════════════════════════════════════════════════ -->
+  <div class="forum-tabs d-flex gap-1 mb-4">
+    <button class="forum-tab-btn rounded-pill px-4 py-2 border-0 fw-semibold"
+            [class.active]="activeTab === 'forums'"
+            (click)="setTab('forums')"
+            style="font-size: 0.82rem;">
+      <i class="fas fa-th-large me-1.5"></i> Todos os Fóruns
+    </button>
+    <button class="forum-tab-btn rounded-pill px-4 py-2 border-0 fw-semibold"
+            [class.active]="activeTab === 'recent'"
+            (click)="setTab('recent')"
+            style="font-size: 0.82rem;">
+      <i class="fas fa-clock me-1.5"></i> Tópicos Recentes
+    </button>
+    <button class="forum-tab-btn rounded-pill px-4 py-2 border-0 fw-semibold position-relative"
+            [class.active]="activeTab === 'mine'"
+            (click)="setTab('mine')"
+            style="font-size: 0.82rem;">
+      <i class="fas fa-user me-1.5"></i> Meus Tópicos
+      <span class="badge rounded-pill ms-1" style="background:#6366f1; color:#fff; font-size: 0.6rem;">
+        {{ myTopics.length }}
+      </span>
+    </button>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════ -->
+  <!-- TAB: FORUMS GRID (Category Cards)                           -->
+  <!-- ════════════════════════════════════════════════════════════ -->
+  <div *ngIf="activeTab === 'forums'">
+
+    <!-- Skeleton -->
+    <div class="row g-3" *ngIf="isLoading">
+      <div class="col-12 col-md-6" *ngFor="let i of [1,2,3,4]">
+        <div class="card border-0 rounded-4 shadow-sm p-4 skeleton-card" style="min-height: 130px;">
+          <div class="d-flex gap-3 align-items-center">
+            <div class="skeleton rounded-3" style="width:48px; height:48px; flex-shrink:0;"></div>
+            <div class="flex-grow-1">
+              <div class="skeleton skeleton-sm mb-2"></div>
+              <div class="skeleton skeleton-xs"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Forum Category Cards Grid -->
+    <div class="row g-3" *ngIf="!isLoading">
+      <div class="col-12 col-md-6" *ngFor="let cat of categories">
+        <div class="card border-0 rounded-4 shadow-sm forum-category-card p-4 h-100"
+             (click)="setTab('recent'); selectedCategory = cat.name">
+          <div class="d-flex align-items-start gap-3">
+            <!-- Category Icon -->
+            <div class="forum-cat-icon rounded-3 flex-shrink-0 d-flex align-items-center justify-content-center"
+                 [style.background]="cat.color + '18'">
+              <i class="fas" [ngClass]="cat.icon" [style.color]="cat.color" style="font-size: 1.1rem;"></i>
+            </div>
+            <!-- Info -->
+            <div class="flex-grow-1 min-w-0">
+              <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
+                <h6 class="fw-extrabold text-dark mb-0" style="font-size: 0.9rem;">{{ cat.name }}</h6>
+                <span class="badge rounded-pill px-2 py-1 fw-semibold"
+                      style="background: rgba(16,185,129,0.1); color: #10b981; font-size: 0.6rem;"
+                      *ngIf="cat.isRecent">
+                  <i class="fas fa-circle me-1" style="font-size: 0.4rem;"></i>Ativo agora
+                </span>
+              </div>
+              <p class="text-muted mb-2 line-clamp-2" style="font-size: 0.78rem; line-height: 1.45;">{{ cat.description }}</p>
+              <div class="d-flex align-items-center gap-3 text-muted" style="font-size: 0.7rem;">
+                <span><i class="fas fa-layer-group me-1"></i>{{ cat.topicCount }} tópicos</span>
+                <span><i class="fas fa-users me-1"></i>{{ cat.memberCount }} membros</span>
+                <span class="d-none d-sm-inline"><i class="fas fa-clock me-1"></i>{{ cat.lastActivity }}</span>
+              </div>
+            </div>
+            <i class="fas fa-chevron-right text-muted" style="font-size: 0.75rem; margin-top: 4px;"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════ -->
+  <!-- TAB: RECENT TOPICS LIST                                     -->
+  <!-- ════════════════════════════════════════════════════════════ -->
+  <div *ngIf="activeTab === 'recent' || activeTab === 'mine'">
+
+    <!-- Skeleton Rows -->
+    <div class="card border-0 rounded-4 shadow-sm overflow-hidden" *ngIf="isLoading">
+      <div class="p-4">
+        <div class="mb-4" *ngFor="let i of [1,2,3]">
+          <div class="d-flex align-items-start gap-3">
+            <div class="skeleton rounded-circle flex-shrink-0" style="width:40px; height:40px;"></div>
+            <div class="flex-grow-1">
+              <div class="skeleton skeleton-sm mb-2"></div>
+              <div class="skeleton skeleton-xs" style="width: 55%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Topics List -->
+    <div class="card border-0 rounded-4 shadow-sm overflow-hidden" *ngIf="!isLoading">
+      <!-- Header -->
+      <div class="card-header bg-white border-bottom border-secondary border-opacity-10 px-4 py-3 d-flex align-items-center justify-content-between">
+        <span class="fw-bold text-dark small">
+          {{ activeTab === 'mine' ? 'Meus Tópicos' : 'Tópicos Recentes' }}
+          <span class="text-muted fw-normal ms-1" style="font-size: 0.78rem;">
+            ({{ filteredTopics.length }} {{ filteredTopics.length === 1 ? 'tópico' : 'tópicos' }})
+          </span>
+        </span>
+      </div>
+
+      <!-- Empty State -->
+      <div class="text-center py-5 px-4" *ngIf="filteredTopics.length === 0">
+        <div class="py-3">
+          <div class="mx-auto mb-3 d-flex align-items-center justify-content-center rounded-circle"
+               style="width:72px; height:72px; background: rgba(99,102,241,0.07);">
+            <i class="fas fa-comments text-muted" style="font-size: 1.8rem; opacity: 0.4;"></i>
+          </div>
+          <h6 class="fw-bold text-dark mb-1">Nenhum tópico encontrado</h6>
+          <p class="text-muted small mb-3" style="font-size: 0.82rem;">
+            {{ activeTab === 'mine' ? 'Você ainda não criou nenhum tópico.' : 'Tente ajustar os filtros ou a busca.' }}
+          </p>
+          <button class="btn btn-dark btn-sm rounded-pill px-4 py-2" (click)="openNewTopic()">
+            <i class="fas fa-plus me-1"></i> Criar Primeiro Tópico
+          </button>
+        </div>
+      </div>
+
+      <!-- Topics Loop -->
+      <div class="topic-list-item px-4 py-3"
+           *ngFor="let topic of paginatedTopics; let last = last"
+           [class.border-bottom]="!last"
+           style="border-color: rgba(0,0,0,0.04) !important;">
+        <div class="d-flex align-items-start gap-3">
+          <!-- Author Avatar -->
+          <div class="author-avatar rounded-circle d-flex align-items-center justify-content-center fw-bold text-white flex-shrink-0"
+               [style.background]="topic.authorColor"
+               style="width: 38px; height: 38px; font-size: 0.72rem;">
+            {{ topic.authorInitials }}
+          </div>
+          <!-- Topic Content -->
+          <div class="flex-grow-1 min-w-0">
+            <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
+              <span class="fw-extrabold text-dark topic-title-link" style="font-size: 0.88rem; cursor: pointer;">
+                {{ topic.title }}
+              </span>
+              <span class="badge rounded-pill px-2 py-1 fw-semibold" [ngClass]="getStatusBadgeClass(topic.status)" style="font-size: 0.62rem;">
+                <i class="fas me-1" [ngClass]="getStatusIcon(topic.status)" style="font-size: 0.55rem;"></i>
+                {{ topic.status }}
+              </span>
+              <span class="badge rounded-pill px-2 py-1 fw-bold"
+                    style="background: rgba(99,102,241,0.1); color: #6366f1; font-size: 0.6rem;"
+                    *ngIf="topic.isUnread">
+                Novo
+              </span>
+            </div>
+            <p class="text-muted mb-2 line-clamp-1" style="font-size: 0.78rem; line-height: 1.45;">{{ topic.preview }}</p>
+            <div class="d-flex align-items-center gap-3 flex-wrap" style="font-size: 0.7rem;">
+              <span class="text-muted">
+                <i class="fas fa-user me-1"></i>{{ topic.authorName }}
+              </span>
+              <span class="badge rounded-pill px-2 py-1 fw-semibold"
+                    style="background: rgba(0,0,0,0.04); color: #64748b; font-size: 0.62rem;">
+                {{ topic.categoryName }}
+              </span>
+              <span class="text-muted"><i class="fas fa-reply me-1"></i>{{ topic.replyCount }} respostas</span>
+              <span class="text-muted"><i class="fas fa-eye me-1"></i>{{ topic.viewCount }} views</span>
+              <span class="text-muted"><i class="fas fa-clock me-1"></i>{{ topic.date }}</span>
+              <span class="text-warning fw-semibold" *ngIf="topic.hasPendingReplies" style="font-size: 0.7rem;">
+                <i class="fas fa-exclamation-circle me-1"></i>Resposta pendente
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="card-footer bg-white border-top border-secondary border-opacity-10 px-4 py-3 d-flex align-items-center justify-content-between"
+           *ngIf="totalPages > 1">
+        <span class="text-muted" style="font-size: 0.78rem;">Página {{ currentPage }} de {{ totalPages }}</span>
+        <div class="d-flex gap-1">
+          <button class="btn btn-sm rounded-3 border-0 pagination-btn" [disabled]="currentPage === 1" (click)="setPage(currentPage - 1)">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button class="btn btn-sm rounded-3 border-0 pagination-btn" *ngFor="let p of pages"
+                  [class.active-page]="p === currentPage" (click)="setPage(p)">{{ p }}</button>
+          <button class="btn btn-sm rounded-3 border-0 pagination-btn" [disabled]="currentPage === totalPages" (click)="setPage(currentPage + 1)">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- NEW TOPIC MODAL                                             -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<div class="custom-modal-backdrop animated-fade-in" *ngIf="showNewTopicModal" (click)="closeNewTopic()">
+  <div class="custom-modal-box rounded-5 bg-white p-4 shadow-2xl animate-scale-up"
+       style="max-width: 520px; width: 94vw;"
+       (click)="$event.stopPropagation()">
+
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-secondary border-opacity-10">
+      <h5 class="fw-extrabold text-dark mb-0">
+        <i class="fas fa-pen-alt me-2" style="color: #6366f1;"></i>Criar Novo Tópico
+      </h5>
+      <button class="btn btn-outline-dark border-0 rounded-circle p-1.5" (click)="closeNewTopic()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <form (submit)="submitNewTopic($event)">
+      <div class="mb-3">
+        <label class="form-label fw-semibold text-muted" style="font-size: 0.73rem; text-transform: uppercase; letter-spacing: 0.04rem;">Categoria</label>
+        <select class="form-select rounded-3 bg-light border-0 shadow-none py-2"
+                [(ngModel)]="newTopicCategory" name="topicCategory" style="font-size: 0.85rem;">
+          <option *ngFor="let cat of categories" [value]="cat.name">{{ cat.name }}</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold text-muted" style="font-size: 0.73rem; text-transform: uppercase; letter-spacing: 0.04rem;">Título do Tópico</label>
+        <input type="text"
+               class="form-control rounded-3 bg-light border-0 shadow-none py-2"
+               placeholder="Escreva um título claro e objetivo..."
+               [(ngModel)]="newTopicTitle"
+               name="topicTitle"
+               style="font-size: 0.85rem;">
+      </div>
+      <div class="mb-4">
+        <label class="form-label fw-semibold text-muted" style="font-size: 0.73rem; text-transform: uppercase; letter-spacing: 0.04rem;">Mensagem</label>
+        <textarea class="form-control rounded-3 bg-light border-0 shadow-none py-2"
+                  rows="4"
+                  placeholder="Descreva sua dúvida ou assunto com o máximo de detalhes possível..."
+                  [(ngModel)]="newTopicMessage"
+                  name="topicMessage"
+                  style="font-size: 0.85rem; resize: none;"></textarea>
+      </div>
+      <div class="d-flex gap-2 justify-content-end">
+        <button type="button" class="btn btn-outline-dark rounded-3 px-4 py-2 fw-semibold" style="font-size: 0.82rem;" (click)="closeNewTopic()">Cancelar</button>
+        <button type="submit" class="btn btn-dark rounded-3 px-4 py-2 fw-bold" style="font-size: 0.82rem;">
+          <i class="fas fa-paper-plane me-1"></i> Publicar Tópico
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- FLOATING TOAST                                              -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<div class="custom-floating-toast rounded-4 p-3 shadow-lg border-0 text-white d-flex align-items-center gap-2.5 animated-slide-in"
+     *ngIf="showToast"
+     style="background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px);">
+  <i class="fas fa-check-circle text-success fs-5"></i>
+  <span class="small fw-semibold">{{ toastMessage }}</span>
+</div>

@@ -1,0 +1,265 @@
+/* ═══════════════════════════════════════════════════════
+   Financial Home — Component Stylesheet
+   Nexas Portal do Aluno (PAN) Design System
+   ═══════════════════════════════════════════════════════ */
+
+$primary: #6366f1;
+$dark-base: #0f172a;
+$transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+$card-border: 1px solid rgba(0, 0, 0, 0.035);
+
+:host {
+  display: block;
+  font-family: 'Outfit', 'Inter', sans-serif;
+  color: $dark-base;
+}
+
+/* ─── Page Entrance Animation ───────────────────────────── */
+.animated-fade-in {
+  animation: fadeInUp 0.4s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Summary Cards ─────────────────────────────────────── */
+.financial-summary-card {
+  border: $card-border !important;
+  transition: $transition-smooth;
+  box-shadow: 0 4px 14px -3px rgba(0, 0, 0, 0.04) !important;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px -5px rgba(0, 0, 0, 0.07) !important;
+  }
+}
+
+.summary-icon-box {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+/* ─── Transaction Table ─────────────────────────────────── */
+.transaction-table {
+  border-collapse: separate;
+  border-spacing: 0;
+
+  thead th {
+    background-color: #f9fafb;
+    border: none;
+    font-weight: 600;
+    color: #94a3b8;
+  }
+
+  tbody tr.transaction-row {
+    cursor: pointer;
+    transition: background-color 0.18s ease;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+
+    &:hover {
+      background-color: rgba(99, 102, 241, 0.028);
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    td {
+      border: none;
+    }
+  }
+}
+
+/* ─── Transaction Icon Box ──────────────────────────────── */
+.tx-icon-box {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+
+/* ─── Type Badges ───────────────────────────────────────── */
+.badge-type-course {
+  background: rgba(99, 102, 241, 0.1);
+  color: #6366f1;
+}
+
+.badge-type-sub {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+/* ─── Status Badges ─────────────────────────────────────── */
+.badge-status-paid {
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
+}
+
+.badge-status-pending {
+  background: rgba(245, 158, 11, 0.1);
+  color: #d97706;
+}
+
+.badge-status-cancelled {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+}
+
+.badge-status-refunded {
+  background: rgba(139, 92, 246, 0.1);
+  color: #7c3aed;
+}
+
+/* ─── Action Button ─────────────────────────────────────── */
+.btn-action-detail {
+  background: rgba(99, 102, 241, 0.08);
+  color: $primary;
+  transition: $transition-smooth;
+
+  &:hover {
+    background: $primary;
+    color: #fff;
+  }
+}
+
+/* ─── Pagination ────────────────────────────────────────── */
+.pagination-btn {
+  width: 34px;
+  height: 34px;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 0.78rem;
+  transition: $transition-smooth;
+
+  &:hover:not(:disabled) {
+    background: rgba(99, 102, 241, 0.09);
+    color: $primary;
+  }
+
+  &.active-page {
+    background: $primary;
+    color: #fff;
+    font-weight: 700;
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+}
+
+/* ─── Table Header Sortable ──────────────────────────────── */
+.sortable-col {
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: $primary !important;
+  }
+}
+
+/* ─── Skeleton Loading ───────────────────────────────────── */
+.skeleton {
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: 8px;
+  height: 14px;
+  width: 100%;
+
+  &.skeleton-xs  { height: 10px; }
+  &.skeleton-sm  { height: 14px; width: 70%; }
+  &.skeleton-lg  { height: 28px; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-card {
+  min-height: 120px;
+}
+
+/* ─── Modal Backdrop & Box ───────────────────────────────── */
+.custom-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(5px);
+  z-index: 1055;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.custom-modal-box {
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.animate-scale-up {
+  animation: scaleUp 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes scaleUp {
+  from { transform: scale(0.93); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+/* ─── Detail Modal Row ───────────────────────────────────── */
+.detail-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+
+  &:last-child { border-bottom: none; }
+}
+
+.detail-label {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03rem;
+}
+
+.detail-value {
+  font-size: 0.85rem;
+  color: $dark-base;
+  text-align: right;
+}
+
+/* ─── Floating Toast ─────────────────────────────────────── */
+.custom-floating-toast {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 9999;
+  min-width: 220px;
+}
+
+.animated-slide-in {
+  animation: slideIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(16px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+/* ─── Utilities ──────────────────────────────────────────── */
+.fw-extrabold { font-weight: 800; }
+.shadow-2xl   { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.18); }
+.w-fit        { width: fit-content; }

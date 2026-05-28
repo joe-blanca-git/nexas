@@ -1,0 +1,124 @@
+<div class="animated-fade-in">
+  <!-- Courses Page Header -->
+  <div class="row mb-4 align-items-center">
+    <div class="col-12 col-md-8">
+      <h3 class="fw-extrabold text-dark-title tracking-tight mb-1">Meus Cursos</h3>
+      <p class="text-muted small mb-0">Gerencie e acesse suas disciplinas, acompanhe seu progresso e assista suas aulas.</p>
+    </div>
+    <div class="col-12 col-md-4 mt-3 mt-md-0 d-flex justify-content-md-end">
+      <!-- Global Quick Search Box -->
+      <div class="position-relative w-100 search-wrapper">
+        <span class="position-absolute start-0 top-50 translate-middle-y ps-3 text-muted search-icon-align">
+          <i class="fas fa-search"></i>
+        </span>
+        <input type="text"
+               class="form-control rounded-pill ps-5 bg-white border shadow-sm py-2"
+               placeholder="Buscar disciplina ou professor..."
+               [(ngModel)]="searchTerm"
+               style="font-size: 0.85rem; border-color: rgba(0,0,0,0.06) !important;">
+      </div>
+    </div>
+  </div>
+
+  <!-- Category Filters Bar -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="d-flex flex-wrap gap-2 py-1 scroll-x-mobile">
+        <button *ngFor="let cat of categories"
+                class="btn btn-sm rounded-pill px-4 py-2 fw-semibold transition-all border-0 shadow-sm filter-pill"
+                [class.active-pill]="selectedCategory === cat"
+                [class.inactive-pill]="selectedCategory !== cat"
+                (click)="selectCategory(cat)">
+          {{ cat }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Grid List of Active Courses -->
+  <div class="row g-4">
+    <!-- No Results Found State -->
+    <div class="col-12 text-center py-5" *ngIf="getFilteredCourses().length === 0">
+      <div class="py-4">
+        <i class="fas fa-search-minus text-muted mb-3" style="font-size: 3rem; opacity: 0.35;"></i>
+        <h5 class="fw-bold text-dark">Nenhum curso encontrado</h5>
+        <p class="text-muted small">Tente ajustar seus termos de pesquisa ou selecionar outra categoria.</p>
+        <button class="btn btn-outline-dark btn-sm rounded-pill px-4 mt-2" (click)="selectedCategory = 'Todos'; searchTerm = ''">
+          Limpar Filtros
+        </button>
+      </div>
+    </div>
+
+    <!-- Cards Rendering Loop -->
+    <div class="col-12 col-md-6 col-lg-4 d-flex" *ngFor="let course of getFilteredCourses()">
+      <div class="card h-100 border-0 rounded-4 shadow-sm overflow-hidden course-interactive-card bg-white w-100 d-flex flex-column transition-all"
+           (click)="navigateDetail(course.id)">
+        
+        <!-- Card Image Thumbnail Header -->
+        <div class="position-relative overflow-hidden" style="height: 160px; min-height: 160px;">
+          <img [src]="course.image" class="w-100 h-100 object-fit-cover course-thumbnail" alt="Course Cover Image">
+          <span class="badge position-absolute start-3 top-3 px-3 py-1.5 rounded-pill shadow-sm"
+                [style.background-color]="course.color"
+                style="font-size: 0.65rem; font-weight: 600; color: #ffffff;">
+            {{ course.category }}
+          </span>
+        </div>
+
+        <!-- Card Description Body -->
+        <div class="card-body p-4 d-flex flex-column flex-grow-1 justify-content-between">
+          <div>
+            <!-- Title & Code Details -->
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="font-monospace text-muted small" style="font-size: 0.68rem; letter-spacing: 0.02rem;">{{ course.code }}</span>
+              <div class="d-flex align-items-center gap-1 small text-muted" style="font-size: 0.72rem;">
+                <i class="fas fa-star text-warning"></i>
+                <span class="fw-bold text-dark">{{ course.rating }}</span>
+              </div>
+            </div>
+            
+            <h5 class="fw-extrabold text-dark mb-2 course-title-hover" style="font-size: 0.98rem; line-height: 1.35; height: 2.6rem; overflow: hidden;">
+              {{ course.name }}
+            </h5>
+            
+            <p class="text-muted small mb-4 line-clamp-2" style="font-size: 0.78rem; line-height: 1.45; height: 2.2rem; overflow: hidden;">
+              {{ course.description }}
+            </p>
+          </div>
+
+          <div>
+            <!-- Progress Bar Section -->
+            <div class="pt-3 border-top border-secondary border-opacity-10">
+              <div class="d-flex justify-content-between align-items-center mb-1.5" style="font-size: 0.72rem;">
+                <span class="text-muted">Progresso</span>
+                <span class="fw-bold text-dark">{{ course.progress }}%</span>
+              </div>
+              
+              <div class="progress rounded-pill bg-light" style="height: 6px; overflow: hidden;">
+                <div class="progress-bar rounded-pill transition"
+                     role="progressbar"
+                     [style.width.%]="course.progress"
+                     [style.background-color]="course.color"
+                     [style.box-shadow]="'0 0 8px ' + course.color + '80'">
+                </div>
+              </div>
+
+              <!-- Card Bottom Lesson Status details & CTA -->
+              <div class="d-flex justify-content-between align-items-center mt-3 pt-1">
+                <span class="text-muted font-monospace" style="font-size: 0.65rem;">
+                  <i class="far fa-play-circle me-1"></i>{{ course.completedLessons }}/{{ course.totalLessons }} aulas
+                </span>
+                <a class="btn btn-link text-decoration-none fw-bold p-0 d-flex align-items-center gap-1.5 transition active-hover-link"
+                   [style.color]="course.color"
+                   style="font-size: 0.72rem;">
+                  {{ course.progress === 100 ? 'Revisar Curso' : course.progress === 0 ? 'Iniciar' : 'Acessar' }}
+                  <i class="fas fa-arrow-right fs-8"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

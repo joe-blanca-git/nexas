@@ -1,0 +1,73 @@
+<div class="row p-0 m-0 min-vh-100">
+    <!-- Left panel (Form) -->
+    <div class="col-12 col-md-6 d-flex flex-column gap-3 justify-content-center align-items-center login-left px-2 px-md-5">
+        <div class="card w-100 rounded-5 shadow border-0">
+            <!-- Mobile Header Logo (visible only on mobile) -->
+            <div class="card-header rounded-top-5 d-md-none mb-2 bg-dark d-flex justify-content-center align-items-center py-4">
+                <img width="150" height="auto" src="logos/logo-nobg.png" alt="Logo Mobile">
+            </div>
+
+            <div class="card-body p-4 p-md-5">
+                <!-- Title -->
+                <div class="text-center text-md-start mb-4">
+                    <h3 class="fw-bold text-dark mb-1">Bem-vindo de volta!</h3>
+                    <p class="text-muted small">Insira suas credenciais para acessar o portal.</p>
+                </div>
+
+                <form [formGroup]="loginForm">
+                    <!-- E-mail -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-muted">E-mail</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-muted border-end-0"><i class="fas fa-envelope"></i></span>
+                            <input type="email" class="form-control bg-light border-start-0" formControlName="email" placeholder="nome@exemplo.com"
+                                [class.is-invalid]="(f['email'].touched || submitted) && f['email'].invalid"
+                                [class.is-valid]="f['email'].touched && f['email'].valid">
+                        </div>
+                        <div class="text-danger small mt-1" *ngIf="(f['email'].touched || submitted) && f['email'].errors?.['required']">E-mail é obrigatório.</div>
+                        <div class="text-danger small mt-1" *ngIf="(f['email'].touched || submitted) && f['email'].errors?.['email']">Digite um e-mail válido.</div>
+                    </div>
+
+                    <!-- Senha -->
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <label class="form-label fw-semibold text-muted mb-0">Senha de Acesso</label>
+                            <a class="text-muted text-decoration-none small hover-link" routerLink="/auth/recovery-password">Esqueceu a senha?</a>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-muted border-end-0"><i class="fas fa-lock"></i></span>
+                            <input [type]="showPassword ? 'text' : 'password'" class="form-control bg-light border-start-0 border-end-0" formControlName="password" placeholder="Digite sua senha"
+                                [class.is-invalid]="(f['password'].touched || submitted) && f['password'].invalid"
+                                [class.is-valid]="f['password'].touched && f['password'].valid">
+                            <button type="button" class="input-group-text bg-light text-muted border-start-0" (click)="showPassword = !showPassword">
+                                <i class="fas" [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword"></i>
+                            </button>
+                        </div>
+                        <div class="text-danger small mt-1" *ngIf="(f['password'].touched || submitted) && f['password'].errors?.['required']">Senha é obrigatória.</div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="button" class="btn btn-dark w-100 py-2.5 rounded-3 fw-semibold text-uppercase" [disabled]="loginForm.invalid" (click)="onSubmit()">
+                        Entrar <i class="fas fa-sign-in-alt ms-2"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Card Footer -->
+            <div class="card-footer border-top-0 d-flex justify-content-center align-items-center py-4 bg-transparent">
+                <span class="text-muted">Ainda não tem uma conta? <a class="text-dark fw-bold text-decoration-none" routerLink="/auth/register">Cadastre-se</a></span>
+            </div>
+        </div>
+
+        <!-- Footer (Responsive: absolute on desktop, relative on mobile below the card) -->
+        <div class="footer position-absolute bottom-0 w-100 text-center text-md-start ps-md-5 d-flex flex-column py-3">
+            <span class="text-muted small">Todos os direitos reservados à Agivys Tecnologia e Serviços</span>
+            <span class="text-muted small">&copy; 2026 Agivys</span>
+        </div>
+    </div>
+
+    <!-- Right panel (Decorative BG with Logo) -->
+    <div class="col-12 col-md-6 bg-dark d-flex justify-content-center align-items-center login-right">
+        <img src="logos/logo-nobg.png" alt="Logo">
+    </div>
+</div>

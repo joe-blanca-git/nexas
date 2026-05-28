@@ -1,0 +1,288 @@
+.login-right {
+    padding: 10rem;
+    background-image: url('../../../../../../public/backgrounds/header-dark.jpeg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+
+    img {
+        width: 100%;
+        height: auto;
+        max-width: 400px;
+    }
+
+    .card {
+        min-height: 10vh !important;
+    }
+}
+
+.login-left {
+    min-height: 100vh;
+    padding-top: 2rem;
+    padding-bottom: 4rem;
+
+    .card {
+        max-width: 600px;
+        min-height: 50vh !important;
+        border-radius: 2rem;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+    }
+}
+
+/* --- Stepper CSS --- */
+.stepper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    margin-bottom: 2rem;
+
+    .step-item {
+        z-index: 2;
+        text-align: center;
+        width: 100px;
+
+        .step-circle {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: #f8f9fa;
+            border: 2px solid #dee2e6;
+            color: #6c757d;
+            font-size: 1.1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .step-label {
+            color: #6c757d;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        /* Active Step */
+        &.active {
+            .step-circle {
+                background-color: #212529;
+                border-color: #212529;
+                color: #ffffff;
+                box-shadow: 0 0 0 4px rgba(33, 37, 41, 0.15);
+                transform: scale(1.1);
+            }
+            .step-label {
+                color: #212529;
+                font-weight: 700 !important;
+            }
+        }
+
+        /* Completed Step */
+        &.completed {
+            .step-circle {
+                background-color: #198754;
+                border-color: #198754;
+                color: #ffffff;
+            }
+            .step-label {
+                color: #198754;
+            }
+        }
+    }
+
+    .step-connector {
+        flex-grow: 1;
+        height: 3px;
+        background-color: #dee2e6;
+        margin: 0 -20px;
+        margin-top: -20px; /* Align line vertically with center of circles */
+        z-index: 1;
+        transition: background-color 0.4s ease;
+
+        &.active {
+            background-color: #198754;
+        }
+    }
+}
+
+/* --- Input Enhancements --- */
+.form-control, .form-select {
+    border-radius: 0.6rem; /* Arredondamento padrão para inputs normais */
+    border-color: #ced4da;
+    transition: all 0.2s ease-in-out;
+    
+    &.is-invalid {
+        border-color: #dc3545 !important;
+        &:focus {
+            border-color: #dc3545 !important;
+            box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.15) !important;
+        }
+    }
+    
+    &.is-valid {
+        border-color: #198754 !important;
+        &:focus {
+            border-color: #198754 !important;
+            box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.15) !important;
+        }
+    }
+    
+    &:focus {
+        box-shadow: none;
+        border-color: #212529;
+        background-color: #ffffff !important;
+    }
+}
+
+.input-group {
+    border-radius: 0; /* Desativa arredondamento no container pai */
+    
+    .input-group-text, .form-control, .form-select {
+        border-color: #ced4da;
+    }
+    
+    /* Arredonda apenas os cantos esquerdos do primeiro filho do input-group */
+    > :first-child {
+        border-top-left-radius: 0.6rem !important;
+        border-bottom-left-radius: 0.6rem !important;
+        border-top-right-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+    }
+    
+    /* Arredonda apenas os cantos direitos do último filho do input-group */
+    > :last-child {
+        border-top-right-radius: 0.6rem !important;
+        border-bottom-right-radius: 0.6rem !important;
+        border-top-left-radius: 0 !important;
+        border-bottom-left-radius: 0 !important;
+    }
+
+    /* Qualquer filho intermediário (ex: input quando há carregamento no final) fica quadrado */
+    > :not(:first-child):not(:last-child) {
+        border-radius: 0 !important;
+    }
+}
+
+/* Quando o input dentro do grupo fica inválido, pinta todo o grupo (ícone + borda do input) */
+.input-group:has(.is-invalid) {
+    .input-group-text, .form-control, .form-select {
+        border-color: #dc3545 !important;
+    }
+    .form-control:focus, .form-select:focus {
+        box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.15) !important;
+    }
+}
+
+/* Quando o input dentro do grupo fica válido, pinta todo o grupo de verde */
+.input-group:has(.is-valid) {
+    .input-group-text, .form-control, .form-select {
+        border-color: #198754 !important;
+    }
+    .form-control:focus, .form-select:focus {
+        box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.15) !important;
+    }
+}
+
+/* --- Animations --- */
+.animated {
+    animation-duration: 0.4s;
+    animation-fill-mode: both;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fadeIn {
+    animation-name: fadeIn;
+}
+
+/* --- Footer Positioning --- */
+.footer {
+    z-index: 10;
+    @media (max-width: 768px) {
+        position: relative !important;
+        margin-top: 3rem;
+        padding-top: 1rem;
+        padding-bottom: 2rem;
+    }
+}
+
+/* --- Responsive Media Queries --- */
+@media (max-width: 768px) {
+    .login-left {
+        background-image: url('../../../../../../public/backgrounds/header-light.jpeg');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        padding-top: 2rem;
+        padding-bottom: 4rem;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+
+        .card {
+            margin: 15px;
+            border-radius: 1.5rem;
+        }
+    }
+    .login-right {
+        display: none !important; /* Hide decorative column on small screens */
+    }
+}
+
+/* Extra small devices (phones, 576px and down) */
+@media (max-width: 576px) {
+    .stepper {
+        margin-bottom: 1.5rem;
+        
+        .step-item {
+            width: 75px;
+            
+            .step-circle {
+                width: 38px;
+                height: 38px;
+                font-size: 0.95rem;
+            }
+            .step-label {
+                font-size: 0.72rem;
+            }
+        }
+        .step-connector {
+            margin-top: -16px;
+        }
+    }
+
+    h4 {
+        font-size: 1.2rem !important;
+    }
+
+    .form-label {
+        font-size: 0.82rem !important;
+    }
+
+    .form-control, .form-select, .input-group-text {
+        font-size: 0.85rem !important;
+        padding: 0.45rem 0.75rem !important;
+    }
+
+    .btn {
+        font-size: 0.85rem !important;
+        padding: 0.5rem 1rem !important;
+    }
+
+    .card-body {
+        padding: 1.5rem 1rem !important;
+    }
+    
+    .login-left {
+        padding-top: 1rem;
+        padding-bottom: 2rem;
+    }
+}

@@ -1,0 +1,168 @@
+/* Custom Variables matching Nexas Portal Aluno Identity */
+$primary-glow: #6366f1;
+$bg-light-modern: #f8fafc;
+$transition-speed: 0.3s;
+$cubic-bezier: cubic-bezier(0.4, 0, 0.2, 1);
+
+:host {
+  display: block;
+  font-family: 'Outfit', 'Inter', sans-serif;
+  color: #0f172a;
+}
+
+/* --- Search input layout configurations --- */
+.search-wrapper {
+  .form-control {
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    background-color: #ffffff;
+    transition: all 0.25s ease;
+
+    &:focus {
+      border-color: rgba(99, 102, 241, 0.3) !important;
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.08) !important;
+      outline: none;
+    }
+  }
+
+  .search-icon-align {
+    color: #cbd5e1;
+    font-size: 0.88rem;
+  }
+}
+
+/* --- Stats Cards (Integrated smoothly) --- */
+.stat-card-clean {
+  background-color: #ffffff;
+  border: 1px solid rgba(0,0,0,0.03);
+  border-radius: 1rem;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+  transition: all 0.25s $cubic-bezier;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px -3px rgba(0,0,0,0.04);
+  }
+
+  .stat-icon {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+
+    &.bg-indigo-light { background-color: #e0e7ff; color: #4f46e5; }
+    &.bg-emerald-light { background-color: #d1fae5; color: #059669; }
+  }
+
+  .stat-info {
+    .stat-label {
+      font-size: 0.75rem;
+      color: #64748b;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.1;
+    }
+  }
+}
+
+/* --- Course/Certificate Interaction Grid Cards --- */
+.course-interactive-card {
+  transition: all $transition-speed $cubic-bezier;
+  border: 1px solid rgba(0, 0, 0, 0.02) !important;
+  cursor: pointer;
+
+  .active-hover-link {
+    i {
+      transition: transform 0.25s $cubic-bezier;
+    }
+  }
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 25px -4px rgba(0, 0, 0, 0.06), 0 8px 12px -3px rgba(0, 0, 0, 0.03) !important;
+    border-color: rgba(99, 102, 241, 0.08) !important;
+
+    .certificate-cover {
+      .bg-pattern {
+        transform: scale(1.06);
+      }
+    }
+
+    .active-hover-link {
+      i {
+        transform: translateX(4px);
+      }
+    }
+  }
+}
+
+.course-title-hover {
+  transition: color 0.2s ease;
+}
+
+/* --- Certificate Cover Decoration --- */
+.certificate-cover {
+  height: 160px;
+  min-height: 160px;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
+  .bg-pattern {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0.05;
+    background-image: radial-gradient(#0f172a 1px, transparent 1px);
+    background-size: 16px 16px;
+    transition: transform 0.5s $cubic-bezier;
+  }
+
+  i.certificate-watermark {
+    font-size: 5rem;
+    color: rgba(15, 23, 42, 0.1);
+    z-index: 1;
+    transition: transform 0.5s $cubic-bezier;
+  }
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.fs-8 {
+  font-size: 0.7rem;
+}
+
+/* --- Page Entrance Animation --- */
+.animated-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

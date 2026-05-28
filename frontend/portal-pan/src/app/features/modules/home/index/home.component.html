@@ -1,0 +1,181 @@
+<div class="d-flex min-vh-100 bg-light-modern" id="wrapper" (click)="closeDropdowns()">
+  <!-- Left Collapsible Sidebar -->
+  <aside class="bg-dark-sidebar text-white sidebar shadow-lg" [class.collapsed]="sidebarCollapsed" (click)="$event.stopPropagation()">
+
+    <!-- Brand / Logo Header -->
+    <div class="sidebar-brand-container d-flex align-items-center justify-content-between p-3 border-bottom border-secondary border-opacity-25">
+      <div class="d-flex justify-content-center align-items-center overflow-hidden w-100">
+        <div class="logo-wrapper">
+          <img src="logos/logo-nobg.png" alt="Nexas Logo" class="sidebar-logo" [class.collapsed-logo]="sidebarCollapsed">
+        </div>
+      </div>
+      <button class="btn btn-outline-light btn-sm border-0 d-md-none p-1" (click)="toggleSidebar()">
+        <i class="fas fa-times fs-5"></i>
+      </button>
+    </div>
+
+    <!-- Navigation List -->
+    <div class="sidebar-menu-list py-3 flex-grow-1">
+      <app-menu-side [sidebarCollapsed]="sidebarCollapsed" [activeTab]="activeTab" (tabChange)="setActiveTab($event)"></app-menu-side>
+    </div>
+
+    <!-- Bottom Sidebar Collapse Toggle button -->
+    <div class="border-top border-secondary border-opacity-25 p-2 text-center">
+      <button class="btn btn-sm btn-link text-muted text-decoration-none w-100 sidebar-collapse-trigger" (click)="toggleSidebar()">
+        <i class="fas" [class.fa-chevron-left]="!sidebarCollapsed" [class.fa-chevron-right]="sidebarCollapsed"></i>
+        <span class="ms-2 small fw-semibold" *ngIf="!sidebarCollapsed">Ocultar Menu</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main View Container -->
+  <div class="main-layout-wrapper d-flex flex-column flex-grow-1" [class.shifted]="sidebarCollapsed">
+    <!-- Header -->
+    <header class="navbar navbar-expand navbar-light bg-white border-bottom shadow-sm px-3 px-md-4 py-2 sticky-top justify-content-between">
+      <div class="d-flex align-items-center gap-2">
+        <!-- Sidebar Toggle Hamburger -->
+        <button class="btn btn-none border-0 rounded-circle bg-transparent p-2 d-flex align-items-center justify-content-center header-menu-toggle" (click)="toggleSidebar(); $event.stopPropagation()">
+          <i class="bi fs-5" [ngClass]="sidebarCollapsed ? 'bi-layout-sidebar-inset' : 'bi-layout-sidebar-inset-reverse'"></i>
+        </button>
+        <!-- Page Title Context -->
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0">
+            <ng-container *ngFor="let crumb of breadcrumbs; let last = last">
+              <li class="breadcrumb-item" [class.active]="last" [attr.aria-current]="last ? 'page' : null">
+                <a *ngIf="!last" [routerLink]="crumb.route">{{ crumb.title }}</a>
+                <span *ngIf="last">{{ crumb.title }}</span>
+              </li>
+            </ng-container>
+          </ol>
+        </nav>
+      </div>
+      <!-- Right Header Navigation Items -->
+      <div class="d-flex align-items-center gap-3">
+        <!-- Vertical Line Separation -->
+        <div class="vr bg-secondary bg-opacity-25 my-1 d-none d-sm-block" style="height: 24px; width: 1.5px;"></div>
+
+        <!-- Student Profile Dropdown -->
+        <div class="position-relative">
+
+          <button class="btn d-flex align-items-center gap-2 p-1 border-0 bg-transparent shadow-none" (click)="toggleProfile($event)">
+
+            <div [ngClass]="{'bg-loading': isLoadingPage, 'bg-gradient-avatar': !isLoadingPage}" class="avatar-circle-sm  text-white fw-bold d-flex align-items-center justify-content-center rounded-circle shadow-sm">
+              <span *ngIf="!isLoadingPage">{{ getInitials(studentName) }}</span>
+            </div>
+
+            <div class="text-start d-none d-md-block" style="line-height: 1.1;">
+              <div class="fw-bold text-dark small" [ngClass]="{'bg-loading': isLoadingPage}">
+                <span *ngIf="!isLoadingPage">{{ studentName }}</span>
+                <span *ngIf="isLoadingPage">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+              </div>
+            </div>
+
+            <i class="fas fa-chevron-down text-muted small d-none d-md-inline ms-1" style="font-size: 0.7rem;"></i>
+
+          </button>
+
+          <!-- Profile Dropdown Menu Card -->
+          <div class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-2 dropdown-menu-custom animated-fade-in show" *ngIf="showProfileDropdown" style="width: 270px; position: absolute; right: 0; top: 48px; z-index: 1050;" (click)="$event.stopPropagation()">
+            
+            <div class="p-3 border-bottom text-center">
+              <div [ngClass]="{'bg-loading': isLoadingPage, 'bg-gradient-avatar': !isLoadingPage}" class="avatar-circle-lg text-white fw-bold d-flex align-items-center justify-content-center rounded-circle mx-auto mb-2 fs-3 shadow">
+                <span *ngIf="!isLoadingPage">{{ getInitials(studentName) }}</span>
+              </div>
+              <h6 class="mb-1 fw-bold text-dark text-truncate" [ngClass]="{'bg-loading': isLoadingPage}">
+                 <span *ngIf="!isLoadingPage">{{ studentName }}</span>
+                 <span *ngIf="isLoadingPage">&nbsp;</span>
+              </h6>
+            </div>
+
+            <div class="py-1">
+              <button class="dropdown-item py-2 px-3 rounded-3 d-flex align-items-center gap-2.5 cursor-pointer text-muted-hover transition" [disabled]="isLoadingPage">
+                <i class="me-4 fa-regular fa-id-card text-muted" style="width: 16px;"></i>
+                <span class="small font-medium">Carteirinha Digital</span>
+              </button>
+              <button class="dropdown-item py-2 px-3 rounded-3 d-flex align-items-center gap-2.5 cursor-pointer text-muted-hover transition" [disabled]="isLoadingPage">
+                <i class="me-4 fa-regular fa-user text-muted" style="width: 16px;"></i>
+                <span class="small font-medium">Dados Cadastrais</span>
+              </button>
+              <button class="dropdown-item py-2 px-3 rounded-3 d-flex align-items-center gap-2.5 cursor-pointer text-muted-hover transition" [disabled]="isLoadingPage" (click)="setActiveTab('support')">
+                <i class="me-4 fa-regular fa-question-circle text-muted" style="width: 16px;"></i>
+                <span class="small font-medium">Central de Ajuda</span>
+              </button>
+              <div class="dropdown-divider border-opacity-10 my-1"></div>
+              <button class="dropdown-item py-2 px-3 rounded-3 text-danger d-flex align-items-center gap-2.5 cursor-pointer transition-bg-danger" routerLink="/auth">
+                <i class="me-4 fas fa-sign-out-alt" style="width: 16px;"></i>
+                <span class="small fw-semibold">Sair do PAN</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </header>
+    <!-- Main Content Outlet Area -->
+    <main class="page-content-canvas flex-grow-1 overflow-auto p-3 p-md-4">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
+
+<!-- ============================================== -->
+<!-- DIALOG MODALS                                  -->
+<!-- ============================================== -->
+<!-- Interactive Requerimento Modal popup backdrop -->
+<div class="custom-modal-backdrop animated-fade-in" *ngIf="showProtocolModal" (click)="closeProtocolModal()">
+  <!-- Modal box -->
+  <div class="custom-modal-box rounded-5 bg-white p-4 shadow-2xl animate-scale-up" (click)="$event.stopPropagation()">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-3.5 pb-2 border-bottom border-secondary border-opacity-10">
+      <h5 class="fw-extrabold text-dark mb-0">
+        <i class="fas fa-file-invoice text-indigo me-2"></i>Novo Requerimento
+      </h5>
+      <button class="btn btn-outline-dark border-0 rounded-circle p-1.5" (click)="closeProtocolModal()">
+        <i class="fas fa-times fs-5"></i>
+      </button>
+    </div>
+    <!-- Modal Form body -->
+    <form (submit)="submitProtocol($event)">
+      <div class="mb-3">
+        <label class="form-label fw-bold text-muted small" style="font-size: 0.72rem;">Tipo de Requerimento</label>
+        <select class="form-select rounded-3 bg-light border-0 shadow-none py-2" [(ngModel)]="newProtocolType" name="newType" style="font-size: 0.85rem;">
+          <option value="Declaração de Matrícula">Declaração de Matrícula (Automatizada)</option>
+          <option value="Histórico Acadêmico Parcial">Histórico Acadêmico Parcial (Análise em 48h)</option>
+          <option value="Dispensa de Disciplina (EAD)">Dispensa de Disciplina por Equivalência</option>
+          <option value="Declaração para Imposto de Renda">Declaração Financeira de Mensalidades</option>
+          <option value="Revisão de Nota / Frequência">Revisão de Prova ou Trabalho de Disciplina</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-bold text-muted small" style="font-size: 0.72rem;">Grau de Urgência</label>
+        <div class="d-flex gap-4">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="urgency" id="urgNormal" value="Normal" [(ngModel)]="newProtocolUrgency" checked>
+            <label class="form-check-label small text-dark fw-medium" for="urgNormal">Normal</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="urgency" id="urgUrgente" value="Urgente" [(ngModel)]="newProtocolUrgency">
+            <label class="form-check-label small text-danger fw-bold" for="urgUrgente">Urgente</label>
+          </div>
+        </div>
+      </div>
+      <div class="mb-4">
+        <label class="form-label fw-bold text-muted small" style="font-size: 0.72rem;">Observações / Descrição da Necessidade</label>
+        <textarea class="form-control rounded-3 bg-light border-0 shadow-none py-2" rows="3.5" placeholder="Escreva brevemente os motivos ou detalhes extras deste requerimento..." [(ngModel)]="newProtocolObs" name="newObs" style="font-size: 0.82rem;"></textarea>
+      </div>
+      <!-- Action buttons -->
+      <div class="d-flex gap-2 justify-content-end">
+        <button type="button" class="btn btn-outline-dark rounded-3 px-4 py-2 small fw-bold" (click)="closeProtocolModal()" style="font-size: 0.82rem;">Cancelar</button>
+        <button type="submit" class="btn btn-dark rounded-3 px-4 py-2 small fw-bold text-uppercase" style="font-size: 0.82rem;">Protocolar Requerimento</button>
+      </div>
+    </form>
+  </div>
+</div>
+<!-- ============================================== -->
+<!-- INTERACTIVE DYNAMIC TOAST / ALERTS             -->
+<!-- ============================================== -->
+<!-- Copy Code Floating toast notification -->
+<div class="custom-floating-toast rounded-4 p-3 shadow-lg border-0 text-white d-flex align-items-center gap-2.5 animated-slide-in" *ngIf="showToast" style="background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px);">
+  <i class="fas fa-check-circle text-success fs-5"></i>
+  <span class="small fw-semibold">{{ toastMessage }}</span>
+</div>

@@ -1,0 +1,98 @@
+/* Custom SCSS declarations for CourseDetailComponent */
+$transition-speed: 0.3s;
+$cubic-bezier: cubic-bezier(0.4, 0, 0.2, 1);
+
+:host {
+  display: block;
+  font-family: 'Outfit', 'Inter', sans-serif;
+  color: #0f172a;
+}
+
+/* --- Back navigation link hover shifts --- */
+.back-btn {
+  font-size: 0.8rem;
+  letter-spacing: 0.01rem;
+  
+  &:hover {
+    color: #0f172a !important;
+    transform: translateX(-4px);
+  }
+}
+
+/* --- Dynamic checklist row variables --- */
+.lesson-row {
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  transition: all 0.25s $cubic-bezier;
+
+  .lesson-title {
+    color: #334155;
+    transition: color 0.2s ease;
+  }
+
+  &.completed-row {
+    background-color: rgba(16, 185, 129, 0.015);
+    border-color: rgba(16, 185, 129, 0.08);
+
+    .lesson-title {
+      color: #94a3b8;
+    }
+  }
+
+  &.pending-row {
+    background-color: #ffffff;
+    border-color: rgba(0, 0, 0, 0.04);
+
+    &:hover {
+      background-color: #f8fafc;
+      border-color: rgba(99, 102, 241, 0.1);
+      transform: translateY(-1px);
+    }
+  }
+}
+
+.bg-success-light {
+  background-color: rgba(16, 185, 129, 0.08) !important;
+  color: #10b981 !important;
+}
+
+.bg-light-gray {
+  background-color: #f1f5f9 !important;
+  color: #64748b !important;
+}
+
+.bg-warning-light {
+  background-color: rgba(245, 158, 11, 0.08) !important;
+  color: #d97706 !important;
+}
+
+.bg-gradient-avatar {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+}
+
+/* --- Sticky Sidebar CTA course actions --- */
+.action-course-btn {
+  transition: all 0.25s $cubic-bezier;
+
+  &:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+/* --- Custom Animations --- */
+.animated-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

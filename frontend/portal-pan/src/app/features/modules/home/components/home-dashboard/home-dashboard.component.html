@@ -1,0 +1,52 @@
+<div class="tab-pane-content animated-fade-in">
+
+  <!-- Welcome Hero Card Banner -->
+  <div class="welcome-hero-banner rounded-5 p-4 p-md-5 mb-4 text-white shadow border-0 position-relative overflow-hidden"
+       style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);">
+    
+    <!-- Decorative geometric absolute circles -->
+    <div class="hero-bg-circle circle-1"></div>
+    <div class="hero-bg-circle circle-2"></div>
+
+    <div class="row align-items-center position-relative" style="z-index: 2;">
+      <div class="col-12 col-lg-8 text-center text-lg-start mb-3 mb-lg-0">
+        <span class="badge bg-blur text-uppercase tracking-wider px-3 py-2 mb-3" style="font-size: 0.72rem; font-weight: 600;">
+          <span>Painel do Aluno Nexas (PAN)</span>
+        </span>
+        <h2 class="fw-extrabold text-white mb-2 leading-tight">Olá, {{ studentName }}!</h2>
+        <p class="text-light-muted mb-0 lead" style="font-size: 0.95rem;">
+          Seja bem-vindo de volta! Você já concluiu 100% do curso Mestres do Operations Center. Clique abaixo para
+          acessar seus certificados.
+        </p>
+        <div class="mt-3 d-flex flex-wrap gap-2 justify-content-center justify-content-lg-start">
+          <button class="btn btn-outline-light fw-bold shadow-sm px-4 py-2 rounded-4 d-flex align-items-center gap-2"
+                  (click)="setActiveTab('certificates')">
+            <i class="fas fa-certificate"></i> Ver Meus Certificados
+          </button>
+        </div>
+      </div>
+      <div class="col-12 col-lg-4 d-flex justify-content-center justify-content-lg-end">
+        <div class="hero-quick-card bg-blur rounded-4 p-3 border border-white border-opacity-10 d-flex gap-3 text-start shadow-sm" [ngClass]="{'bg-loading bg-blur': isLoadingPage}"style="max-width: 280px; min-height: 120px;">
+          <div *ngIf="!isLoadingPage" class="rounded-circle bg-white text-dark d-flex align-items-center justify-content-center shadow"
+               style="width: 50px; height: 50px; flex-shrink: 0;">
+            <i class="fas fa-book-open fs-4 text-indigo"></i>
+          </div>
+          <div *ngIf="!isLoadingPage" >
+            <div class="text-uppercase fw-bold text-light-muted"
+                 style="font-size: 0.65rem; letter-spacing: 0.05rem;">
+              Continue de onde parou...
+            </div>
+            <div class="fw-bold text-white small mt-1">Mestres do Operations Center</div>
+            <div class="text-light-muted small font-monospace mt-0.5" style="font-size: 0.75rem;">Terça-feira às 19:00</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Responsive Dashboard Stats Cards -->
+  <app-dashboard (tabChange)="setActiveTab($event)"></app-dashboard>
+
+  <!-- Responsive Blog External Component -->
+  <app-blog-external></app-blog-external>
+</div>

@@ -34,7 +34,7 @@ public class AsaasService : IAsaasService
             externalReference = user.Id.ToString()
         };
 
-        var response = await _httpClient.PostAsJsonAsync("v3/customers", requestData, cancellationToken);
+        var response = await _httpClient.PostAsJsonAsync("customers", requestData, cancellationToken);
         response.EnsureSuccessStatusCode();
 
         var result = await response.Content.ReadFromJsonAsync<AsaasResponse>(cancellationToken);
@@ -68,7 +68,7 @@ public class AsaasService : IAsaasService
             } : null
         };
 
-        var response = await _httpClient.PostAsJsonAsync("v3/payments", requestData, ct);
+        var response = await _httpClient.PostAsJsonAsync("payments", requestData, ct);
         response.EnsureSuccessStatusCode();
         
         var asaasData = await response.Content.ReadFromJsonAsync<AsaasPaymentResult>(ct)
@@ -77,7 +77,7 @@ public class AsaasService : IAsaasService
         // Se for PIX, busca os dados de QR Code e Copia e Cola
         string? qrCode = null, copyPaste = null;
         if (purchase.PaymentMethod == "PIX") {
-            var pixResp = await _httpClient.GetAsync($"v3/payments/{asaasData.Id}/pixQrCode", ct);
+            var pixResp = await _httpClient.GetAsync($"payments/{asaasData.Id}/pixQrCode", ct);
             pixResp.EnsureSuccessStatusCode();
             var pixData = await pixResp.Content.ReadFromJsonAsync<AsaasPixResult>(ct)
                 ?? throw new Exception("Falha ao obter dados PIX do pagamento Asaas.");
@@ -122,7 +122,7 @@ public class AsaasService : IAsaasService
             } : null
         };
 
-        var response = await _httpClient.PostAsJsonAsync("v3/subscriptions", requestData, ct);
+        var response = await _httpClient.PostAsJsonAsync("subscriptions", requestData, ct);
         response.EnsureSuccessStatusCode();
 
         var asaasData = await response.Content.ReadFromJsonAsync<AsaasSubscriptionResponse>(ct);
@@ -135,7 +135,7 @@ public class AsaasService : IAsaasService
 
     public async Task<string> GetPaymentStatusAsync(string asaasPaymentId, CancellationToken ct)
     {
-        var response = await _httpClient.GetAsync($"v3/payments/{asaasPaymentId}", ct);
+        var response = await _httpClient.GetAsync($"payments/{asaasPaymentId}", ct);
         response.EnsureSuccessStatusCode();
         var result = await response.Content.ReadFromJsonAsync<AsaasPaymentResult>(ct);
         return result?.Status ?? "UNKNOWN";

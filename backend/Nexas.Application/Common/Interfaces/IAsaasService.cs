@@ -1,31 +1,16 @@
-using Nexas.Domain.Entities;
 using Nexas.Application.Purchases.Commands;
+using Nexas.Application.Subscriptions.Commands;
+using Nexas.Domain.Entities;
 
 namespace Nexas.Application.Common.Interfaces;
 
-/// <summary>
-/// Contrato para integração com o gateway de pagamentos Asaas.
-/// </summary>
 public interface IAsaasService
 {
+    Task<string> CreateCustomerAsync(User user, CancellationToken ct);
+    
+    Task<PurchaseResponseDto> CreatePaymentAsync(Purchase purchase, CreditCardInfo? card, CancellationToken ct);
 
-    /// <summary>
-    /// Cria um novo cliente no Asaas com base nos dados do usuário Nexas.
-    /// </summary>
-    Task<string> CreateCustomerAsync(User user, CancellationToken cancellationToken);
+    Task<SubscriptionResponseDto> CreateSubscriptionAsync(Subscription subscription, decimal amount, CreditCardInfo? card, CancellationToken ct);
 
-    /// <summary>
-    /// Cria uma nova cobrança (compra avulsa) no Asaas.
-    /// </summary>
-    Task<PurchaseResponseDto> CreatePaymentAsync(Purchase purchase, CreditCardInfo? card, CancellationToken cancellationToken);
-
-    /// <summary>
-    /// Cria uma assinatura recorrente no Asaas.
-    /// </summary>
-    Task<string> CreateSubscriptionAsync(Subscription subscription, decimal amount, CancellationToken cancellationToken);
-
-    /// <summary>
-    /// Verifica o status de um pagamento específico.
-    /// </summary>
-    Task<string> GetPaymentStatusAsync(string asaasPaymentId, CancellationToken cancellationToken);
+    Task<string> GetPaymentStatusAsync(string asaasPaymentId, CancellationToken ct);
 }

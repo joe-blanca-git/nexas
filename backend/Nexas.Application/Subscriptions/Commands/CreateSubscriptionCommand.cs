@@ -1,17 +1,24 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Nexas.Application.Common.Interfaces;
+using Nexas.Application.Purchases.Commands; 
 using Nexas.Domain.Entities;
 using Nexas.Domain.Enums;
 
 namespace Nexas.Application.Subscriptions.Commands;
 
-/// <summary>
-/// Comando para criar uma nova assinatura recorrente.
-/// </summary>
-public record CreateSubscriptionCommand(string PlanName, decimal Amount) : IRequest<int>;
+public record SubscriptionResponseDto(
+    int SubscriptionId, 
+    string Status, 
+    string? AsaasSubscriptionId = null);
 
-public class CreateSubscriptionCommandHandler : IRequestHandler<CreateSubscriptionCommand, int>
+public record CreateSubscriptionCommand(
+    string PlanName, 
+    decimal Amount, 
+    string PaymentMethod, 
+    CreditCardInfo? Card = null) : IRequest<SubscriptionResponseDto>;
+
+public class CreateSubscriptionCommandHandler : IRequestHandler<CreateSubscriptionCommand, SubscriptionResponseDto>
 {
     private readonly INexasDbContext _context;
     private readonly IAsaasService _asaasService;
@@ -27,55 +34,41 @@ public class CreateSubscriptionCommandHandler : IRequestHandler<CreateSubscripti
         _userContext = userContext;
     }
 
-    public async Task<int> Handle(CreateSubscriptionCommand request, CancellationToken cancellationToken)
+    public async Task<SubscriptionResponseDto> Handle(CreateSubscriptionCommand request, CancellationToken cancellationToken)
     {
-        // 1. Busca Usuário logado
-        var user = await _userContext.GetCurrentUserAsync();
-
-        var dbUser = await _context.Users
-            .FirstOrDefaultAsync(u => u.Id == user.Id, cancellationToken)
+        var currentUser = await _userContext.GetCurrentUserAsync();
+        
+        var user = await _context.Users
+            .FirstOrDefaultAsync(u => u.Id == currentUser.Id, cancellationToken)
             ?? throw new Exception("Usuário não encontrado.");
 
-        // 2. VERIFICAÇÃO/CRIAÇÃO DO CLIENTE NO ASAAS
-        if (string.IsNullOrEmpty(dbUser.AsaasCustomerId))
+        if (string.IsNullOrEmpty(user.AsaasCustomerId))
         {
-            var customerId = await _asaasService.CreateCustomerAsync(dbUser, cancellationToken);
-            dbUser.UpdateAsaasCustomerId(customerId);
+            var customerId = await _asaasService.CreateCustomerAsync(user, cancellationToken);
+            user.UpdateAsaasCustomerId(customerId);
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        // 3. Criar a assinatura no banco (inicia inativa/pendente)
+        // 1. CORREÇÃO DO ERRO CS7036: Fornecendo os 7 argumentos exigidos pela Factory do Domínio
+        // A ordem deve ser: userId, planName, startDate, endDate, active, status, asaasSubscriptionId
         var subscription = Subscription.Create(
-            dbUser.Id, 
+            user.Id, 
             request.PlanName, 
-            DateTime.UtcNow, 
             null, 
-            false, 
-            SubscriptionStatus.Pending);
+            null, 
+            true, 
+            SubscriptionStatus.Pending, 
+            null); 
 
-        subscription.SetUser(dbUser);
         _context.Subscriptions.Add(subscription);
         await _context.SaveChangesAsync(cancellationToken);
 
-        // 4. Gerar a assinatura recorrente no Asaas
-        var asaasSubId = await _asaasService.CreateSubscriptionAsync(subscription, request.Amount, cancellationToken);
+        var result = await _asaasService.CreateSubscriptionAsync(subscription, request.Amount, request.Card, cancellationToken);
 
-        // 5. Atualizar assinatura com ID do Asaas e ativar
-        subscription.UpdateAsaasSubscriptionId(asaasSubId);
-        subscription.Activate();
+        // 2. CORREÇÃO DO AVISO CS8604: Garantindo que o ID não seja nulo (usa ?? string.Empty)
+        subscription.UpdateAsaasSubscriptionId(result.AsaasSubscriptionId ?? string.Empty);
         await _context.SaveChangesAsync(cancellationToken);
 
-        // 6. Registrar o pagamento da mensalidade correspondente no banco
-        var payment = SubscriptionPayment.Create(
-            subscription.Id,
-            request.Amount,
-            DateTime.UtcNow,
-            SubscriptionPaymentStatus.Pending,
-            null);
-
-        _context.SubscriptionPayments.Add(payment);
-        await _context.SaveChangesAsync(cancellationToken);
-
-        return subscription.Id;
+        return result;
     }
 }

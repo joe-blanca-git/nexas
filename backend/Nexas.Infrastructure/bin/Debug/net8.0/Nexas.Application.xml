@@ -4,31 +4,6 @@
         <name>Nexas.Application</name>
     </assembly>
     <members>
-        <member name="T:Nexas.Application.Common.Interfaces.IAsaasService">
-            <summary>
-            Contrato para integração com o gateway de pagamentos Asaas.
-            </summary>
-        </member>
-        <member name="M:Nexas.Application.Common.Interfaces.IAsaasService.CreateCustomerAsync(Nexas.Domain.Entities.User,System.Threading.CancellationToken)">
-            <summary>
-            Cria um novo cliente no Asaas com base nos dados do usuário Nexas.
-            </summary>
-        </member>
-        <member name="M:Nexas.Application.Common.Interfaces.IAsaasService.CreatePaymentAsync(Nexas.Domain.Entities.Purchase,Nexas.Application.Purchases.Commands.CreditCardInfo,System.Threading.CancellationToken)">
-            <summary>
-            Cria uma nova cobrança (compra avulsa) no Asaas.
-            </summary>
-        </member>
-        <member name="M:Nexas.Application.Common.Interfaces.IAsaasService.CreateSubscriptionAsync(Nexas.Domain.Entities.Subscription,System.Decimal,System.Threading.CancellationToken)">
-            <summary>
-            Cria uma assinatura recorrente no Asaas.
-            </summary>
-        </member>
-        <member name="M:Nexas.Application.Common.Interfaces.IAsaasService.GetPaymentStatusAsync(System.String,System.Threading.CancellationToken)">
-            <summary>
-            Verifica o status de um pagamento específico.
-            </summary>
-        </member>
         <member name="T:Nexas.Application.Courses.Commands.CreateCourse.CreateCourseCommand">
             <summary>
             Comando para criação de um novo curso completo com módulos e aulas.
@@ -317,16 +292,6 @@
         <member name="T:Nexas.Application.Purchases.Commands.CreatePurchaseCommandValidator">
             <summary>
             Validador para o comando de criação de compra.
-            </summary>
-        </member>
-        <member name="T:Nexas.Application.Subscriptions.Commands.CreateSubscriptionCommand">
-            <summary>
-            Comando para criar uma nova assinatura recorrente.
-            </summary>
-        </member>
-        <member name="M:Nexas.Application.Subscriptions.Commands.CreateSubscriptionCommand.#ctor(System.String,System.Decimal)">
-            <summary>
-            Comando para criar uma nova assinatura recorrente.
             </summary>
         </member>
         <member name="T:Nexas.Application.Subscriptions.Commands.CreateSubscriptionCommandValidator">

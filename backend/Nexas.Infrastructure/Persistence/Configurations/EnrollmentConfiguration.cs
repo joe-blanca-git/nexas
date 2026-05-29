@@ -13,13 +13,21 @@ public class EnrollmentConfiguration : IEntityTypeConfiguration<Enrollment>
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).HasColumnName("EnrollmentId");
 
+        builder.Property(e => e.UserId)
+            .HasColumnName("UserId");
+
+        builder.Property(e => e.CourseId)
+            .HasColumnName("CourseId");
+
         // Mapeamento do novo campo Origin (Enum para String no BD)
         builder.Property(e => e.Origin)
+            .HasColumnName("Origin")
             .HasConversion<string>()
             .HasMaxLength(20)
             .IsRequired();
 
         builder.Property(e => e.Active)
+            .HasColumnName("Active")
             .HasDefaultValue(true);
 
         // Índice Único (Garante que um aluno não tenha duas matrículas no mesmo curso)
@@ -30,6 +38,12 @@ public class EnrollmentConfiguration : IEntityTypeConfiguration<Enrollment>
         builder.Property(e => e.SubscriptionId)
             .HasColumnName("SubscriptionId")
             .IsRequired(false);
+
+        builder.Property(e => e.CreatedAt)
+            .HasColumnName("CreatedAt")
+            .IsRequired();
+
+        builder.Ignore(e => e.UpdatedAt);
 
         // Relacionamentos
         builder.HasOne(e => e.User)

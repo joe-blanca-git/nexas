@@ -71,18 +71,21 @@ public class AsaasService : IAsaasService
         var response = await _httpClient.PostAsJsonAsync("v3/payments", requestData, ct);
         response.EnsureSuccessStatusCode();
         
-        var asaasData = await response.Content.ReadFromJsonAsync<AsaasPaymentResult>(ct);
+        var asaasData = await response.Content.ReadFromJsonAsync<AsaasPaymentResult>(ct)
+            ?? throw new Exception("Falha ao obter dados de pagamento do Asaas.");
 
         // Se for PIX, busca os dados de QR Code e Copia e Cola
         string? qrCode = null, copyPaste = null;
         if (purchase.PaymentMethod == "PIX") {
-            var pixResp = await _httpClient.GetAsync($"v3/payments/{asaasData!.Id}/pixQrCode", ct);
-            var pixData = await pixResp.Content.ReadFromJsonAsync<AsaasPixResult>(ct);
-            qrCode = pixData?.EncodedImage;
-            copyPaste = pixData?.Payload;
+            var pixResp = await _httpClient.GetAsync($"v3/payments/{asaasData.Id}/pixQrCode", ct);
+            pixResp.EnsureSuccessStatusCode();
+            var pixData = await pixResp.Content.ReadFromJsonAsync<AsaasPixResult>(ct)
+                ?? throw new Exception("Falha ao obter dados PIX do pagamento Asaas.");
+            qrCode = pixData.EncodedImage;
+            copyPaste = pixData.Payload;
         }
 
-        return new PurchaseResponseDto(purchase.Id, asaasData!.Status, asaasData.Id, qrCode, copyPaste);
+        return new PurchaseResponseDto(purchase.Id, asaasData.Status, qrCode, copyPaste, asaasData.Id);
     }
 
     /// <summary>

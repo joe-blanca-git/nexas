@@ -4,12 +4,18 @@ namespace Nexas.Domain.Entities;
 
 public class User : BaseEntity
 {
-    public int UserId { get; private set; }
+    // REMOVIDO: public int UserId { get; private set; } 
+    // MOTIVO: O 'Id' herdado de BaseEntity já será mapeado para a coluna UserId do banco.
+
     public string ExternalId { get; private set; } = null!;
     public string? FullName { get; private set; }
     public string? Email { get; private set; }
     public string? CpfCnpj { get; private set; }
     public string? AsaasCustomerId { get; private set; }
+
+    // Relacionamentos (Necessários para o EF não se perder nas consultas de compra/matrícula)
+    public virtual ICollection<Enrollment> Enrollments { get; private set; } = new List<Enrollment>();
+    public virtual ICollection<Purchase> Purchases { get; private set; } = new List<Purchase>();
 
     private User() { }
 

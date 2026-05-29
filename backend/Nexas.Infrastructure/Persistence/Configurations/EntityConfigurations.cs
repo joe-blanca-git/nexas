@@ -31,6 +31,10 @@ namespace Nexas.Infrastructure.Persistence.Configurations
             
             builder.Property(u => u.UpdatedAt)
                 .HasColumnName("UpdatedAt");
+
+            builder.Ignore(u => u.FullName);
+            builder.Ignore(u => u.CpfCnpj);
+            builder.Ignore(u => u.AsaasCustomerId);
         }
     }
 

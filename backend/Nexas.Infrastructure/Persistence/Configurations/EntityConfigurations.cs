@@ -108,35 +108,4 @@ namespace Nexas.Infrastructure.Persistence.Configurations
         }
     }
 
-    public class EnrollmentConfiguration : IEntityTypeConfiguration<Enrollment>
-    {
-        public void Configure(EntityTypeBuilder<Enrollment> builder)
-        {
-            builder.HasKey(e => e.Id);
-
-            builder.HasOne(e => e.User)
-                .WithMany(u => u.Enrollments)
-                .HasForeignKey(e => e.UserId);
-
-            builder.HasOne(e => e.Course)
-                .WithMany(c => c.Enrollments)
-                .HasForeignKey(e => e.CourseId);
-        }
-    }
-
-    public class SubscriptionConfiguration : IEntityTypeConfiguration<Subscription>
-    {
-        public void Configure(EntityTypeBuilder<Subscription> builder)
-        {
-            builder.HasKey(s => s.Id);
-
-            builder.HasOne(s => s.User)
-                .WithMany(u => u.Subscriptions)
-                .HasForeignKey(s => s.UserId);
-
-            builder.Property(s => s.PlanName)
-                .IsRequired()
-                .HasMaxLength(50);
-        }
-    }
 }

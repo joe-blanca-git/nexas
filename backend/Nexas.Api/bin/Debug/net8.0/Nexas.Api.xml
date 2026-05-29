@@ -135,5 +135,29 @@
             </remarks>
             <param name="id">ID da aula a ser deletada.</param>
         </member>
+        <member name="T:Nexas.Api.Controllers.PurchasesController">
+            <summary>
+            Controller responsável pelas operações de compra no Painel do Aluno (PAN).
+            </summary>
+        </member>
+        <member name="M:Nexas.Api.Controllers.PurchasesController.Create(Nexas.Application.Purchases.Commands.CreatePurchaseCommand)">
+            <summary>
+            Inicia o processo de compra de um curso (postComprarCurso).
+            </summary>
+            <param name="command">Dados da compra (CourseId, Valor, Método)</param>
+            <returns>ID da compra gerada no sistema</returns>
+        </member>
+        <member name="T:Nexas.Api.Controllers.SubscriptionsController">
+            <summary>
+            Controller responsável pelas operações de assinatura recorrente no Painel do Aluno (PAN).
+            </summary>
+        </member>
+        <member name="M:Nexas.Api.Controllers.SubscriptionsController.Create(Nexas.Application.Subscriptions.Commands.CreateSubscriptionCommand)">
+            <summary>
+            Inicia o processo de assinatura recorrente (postAssinarPlano).
+            </summary>
+            <param name="command">Dados da assinatura (Nome do Plano, Valor)</param>
+            <returns>ID da assinatura gerada no sistema</returns>
+        </member>
     </members>
 </doc>

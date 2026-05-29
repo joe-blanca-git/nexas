@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Nexas.Application.Common.Interfaces;
 using Nexas.Infrastructure.Persistence;
+using Nexas.Infrastructure.ExternalServices.Asaas;
 
 namespace Nexas.Infrastructure
 {
@@ -19,6 +20,12 @@ namespace Nexas.Infrastructure
                 b => b.MigrationsAssembly(typeof(NexasDbContext).Assembly.FullName)));
 
             services.AddScoped<INexasDbContext>(provider => provider.GetRequiredService<NexasDbContext>());
+
+            services.AddHttpClient<IAsaasService, AsaasService>(client =>
+            {
+                var baseUrl = configuration["Asaas:BaseUrl"] ?? "https://sandbox.asaas.com/api/v3/";
+                client.BaseAddress = new Uri(baseUrl);
+            });
                                 
             return services;
         }

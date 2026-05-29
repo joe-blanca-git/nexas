@@ -14,7 +14,7 @@
             Cria um novo cliente no Asaas com base nos dados do usuário Nexas.
             </summary>
         </member>
-        <member name="M:Nexas.Application.Common.Interfaces.IAsaasService.CreatePaymentAsync(Nexas.Domain.Entities.Purchase,System.Threading.CancellationToken)">
+        <member name="M:Nexas.Application.Common.Interfaces.IAsaasService.CreatePaymentAsync(Nexas.Domain.Entities.Purchase,Nexas.Application.Purchases.Commands.CreditCardInfo,System.Threading.CancellationToken)">
             <summary>
             Cria uma nova cobrança (compra avulsa) no Asaas.
             </summary>
@@ -312,16 +312,6 @@
         <member name="T:Nexas.Application.Courses.Queries.GetCourses.LessonDto">
             <summary>
             DTO representando uma aula.
-            </summary>
-        </member>
-        <member name="T:Nexas.Application.Purchases.Commands.CreatePurchaseCommand">
-            <summary>
-            Comando para criar uma nova compra.
-            </summary>
-        </member>
-        <member name="M:Nexas.Application.Purchases.Commands.CreatePurchaseCommand.#ctor(System.Int32,System.Decimal,System.String)">
-            <summary>
-            Comando para criar uma nova compra.
             </summary>
         </member>
         <member name="T:Nexas.Application.Purchases.Commands.CreatePurchaseCommandValidator">

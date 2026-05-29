@@ -1,4 +1,5 @@
 using Nexas.Domain.Entities;
+using Nexas.Application.Purchases.Commands;
 
 namespace Nexas.Application.Common.Interfaces;
 
@@ -16,7 +17,7 @@ public interface IAsaasService
     /// <summary>
     /// Cria uma nova cobrança (compra avulsa) no Asaas.
     /// </summary>
-    Task<string> CreatePaymentAsync(Purchase purchase, CancellationToken cancellationToken);
+    Task<PurchaseResponseDto> CreatePaymentAsync(Purchase purchase, CreditCardInfo? card, CancellationToken cancellationToken);
 
     /// <summary>
     /// Cria uma assinatura recorrente no Asaas.

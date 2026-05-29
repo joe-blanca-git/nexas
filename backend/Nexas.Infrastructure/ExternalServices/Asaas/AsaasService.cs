@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Nexas.Application.Common.Interfaces;
+using Nexas.Application.Purchases.Commands;
 using Nexas.Domain.Entities;
 using System.Net.Http.Json;
 
@@ -34,22 +35,7 @@ public class AsaasService : IAsaasService
         return result?.Id ?? throw new Exception("Falha ao obter ID do cliente no Asaas.");
     }
 
-    public async Task<string> CreatePaymentAsync(Purchase purchase, CancellationToken cancellationToken)
-    {
-        var requestData = new { 
-            customer = purchase.User.AsaasCustomerId, 
-            billingType = "CREDIT_CARD",
-            value = purchase.Amount,
-            externalReference = purchase.Id.ToString(),
-            description = $"Compra do curso: {purchase.Course.Name}"
-        };
-
-        var response = await _httpClient.PostAsJsonAsync("v3/payments", requestData, cancellationToken);
-        response.EnsureSuccessStatusCode();
-
-        var result = await response.Content.ReadFromJsonAsync<AsaasResponse>(cancellationToken);
-        return result?.Id ?? throw new Exception("Falha ao obter ID de pagamento do Asaas.");
-    }
+    // NOTE: CreatePaymentAsync now accepts optional card info and returns a PurchaseResponseDto
 
     public async Task<string> CreateSubscriptionAsync(Subscription subscription, decimal amount, CancellationToken cancellationToken)
     {
@@ -104,6 +90,7 @@ public class AsaasService : IAsaasService
         response.EnsureSuccessStatusCode();
         
         var asaasData = await response.Content.ReadFromJsonAsync<AsaasPaymentResult>(ct);
+        if (asaasData == null) throw new Exception("Falha ao obter dados de pagamento do Asaas.");
 
         // Se for PIX, busca o QR Code
         string? qrCode = null, copyPaste = null;
@@ -114,9 +101,13 @@ public class AsaasService : IAsaasService
             copyPaste = pixData.Payload;
         }
 
-        return new PurchaseResponseDto(purchase.Id, asaasData.Status, qrCode, copyPaste);
+        return new PurchaseResponseDto(purchase.Id, asaasData.Status, qrCode, copyPaste, asaasData.Id);
     }
 
     // Record genérico para capturar Ids e Status da API
     private record AsaasResponse(string Id, string Status);
+
+    // Tipos específicos para resultados de pagamentos
+    private record AsaasPaymentResult(string Id, string Status);
+    private record AsaasPixResult(string EncodedImage, string Payload);
 }

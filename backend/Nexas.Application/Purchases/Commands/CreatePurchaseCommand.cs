@@ -16,10 +16,11 @@ public record CreditCardInfo(
 
 // DTO de retorno com dados para o front (ex: PIX)
 public record PurchaseResponseDto(
-    int PurchaseId, 
-    string Status, 
-    string? PixQrCode = null, 
-    string? PixCopyPaste = null);
+    int PurchaseId,
+    string Status,
+    string? PixQrCode = null,
+    string? PixCopyPaste = null,
+    string AsaasPaymentId = "");
 
 public record CreatePurchaseCommand(
     int CourseId, 
@@ -45,7 +46,8 @@ public class CreatePurchaseCommandHandler : IRequestHandler<CreatePurchaseComman
 
     public async Task<PurchaseResponseDto> Handle(CreatePurchaseCommand request, CancellationToken cancellationToken)
     {
-        var userId = _userContext.GetUserId();
+        var currentUser = await _userContext.GetCurrentUserAsync();
+        var userId = currentUser.Id;
 
         // 1. Busca Usuário e Curso (Garante dados para o Asaas como FullName e CpfCnpj)
         var user = await _context.Users

@@ -99,7 +99,7 @@ public class AsaasService : IAsaasService
             customer = subscription.User.AsaasCustomerId,
             billingType = card != null ? "CREDIT_CARD" : "PIX",
             value = amount,
-            nextDueDate = DateTime.UtcNow.AddDays(1).ToString("yyyy-MM-dd"), // Vencimento imediato
+            nextDueDate = DateTime.UtcNow.AddDays(1).ToString("yyyy-MM-dd"),
             cycle = "MONTHLY",
             externalReference = subscription.Id.ToString(),
             description = "Assinatura Mensal Nexas",

@@ -9,6 +9,7 @@ namespace Nexas.Api.Extensions
             services.AddSwaggerGen(c =>
             {
                 c.EnableAnnotations();
+                c.OperationFilter<SwaggerExamplesOperationFilter>();
                 c.SwaggerDoc("v1", new OpenApiInfo 
                 { 
                     Title = "Nexas API", 

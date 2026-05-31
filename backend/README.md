@@ -1951,12 +1951,25 @@ Content-Type: application/json
 }
 ```
 
+Curl example (create course):
+```bash
+curl -X POST "http://localhost:5000/courses" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -d '{"name":"C# Advanced","description":"Masterclass de C# avançado","priceSingle":199.9}'
+```
+
 ### 2. Listar Todos os Cursos
 
 **Request:**
 ```http
 GET /courses HTTP/1.1
 Accept: application/json
+```
+
+Curl example (list courses):
+```bash
+curl "http://localhost:5000/courses" -H "Accept: application/json"
 ```
 
 **Response:**
@@ -1989,6 +2002,11 @@ Content-Type: application/json
     ]
   }
 ]
+```
+
+Curl example (get course by id):
+```bash
+curl "http://localhost:5000/courses/1" -H "Accept: application/json"
 ```
 
 ### 3. Atualizar um Curso
@@ -2079,6 +2097,100 @@ Content-Type: application/json
 ```
 
 ---
+
+### 7. Criar Compra (Endpoint: POST /purchases)
+
+Requer autenticação: `Authorization: Bearer <token>`
+
+Request (JSON):
+```http
+POST /purchases HTTP/1.1
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+    "courseId": 1,
+    "amount": 197.90,
+    "paymentMethod": "CREDIT_CARD",
+    "card": {
+        "holderName": "JOEDER BLANCA TESTE",
+        "number": "4444444444444444",
+        "expiryMonth": "12",
+        "expiryYear": "2030",
+        "ccv": "123",
+        "holderCpfCnpj": "39395533870"
+    }
+}
+```
+
+Response (201 Created):
+```http
+HTTP/1.1 201 Created
+Location: /purchases/3
+Content-Type: application/json
+
+{
+    "purchaseId": 3,
+    "status": "CONFIRMED",
+    "pixQrCode": null,
+    "pixCopyPaste": null,
+    "asaasPaymentId": "pay_yiygnzqwo7syi2o3"
+}
+```
+
+Curl example:
+```bash
+curl -X POST "http://localhost:5000/purchases" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -d '{"courseId":1,"amount":197.9,"paymentMethod":"CREDIT_CARD","card":{"holderName":"Test","number":"4444444444444444","expiryMonth":"12","expiryYear":"2030","ccv":"123","holderCpfCnpj":"39395533870"}}'
+```
+
+---
+
+### 8. Criar Assinatura (Endpoint: POST /subscriptions)
+
+Requer autenticação: `Authorization: Bearer <token>`
+
+Request (JSON):
+```http
+POST /subscriptions HTTP/1.1
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+    "planName": "Premium",
+    "value": 49.90
+}
+```
+
+Response (201 Created):
+```http
+HTTP/1.1 201 Created
+Location: /subscriptions/7
+Content-Type: application/json
+
+{
+    "subscriptionId": 7
+}
+```
+
+Curl example:
+```bash
+curl -X POST "http://localhost:5000/subscriptions" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -d '{"planName":"Premium","value":49.9}'
+```
+
+Curl example:
+```bash
+curl -X POST "http://localhost:5000/purchases" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -d '{"courseId":1,"amount":197.9,"paymentMethod":"CREDIT_CARD","card":{"holderName":"Test","number":"4444444444444444","expiryMonth":"12","expiryYear":"2030","ccv":"123","holderCpfCnpj":"39395533870"}}'
+```
+
 
 ## Guia para IA
 
@@ -2640,9 +2752,114 @@ Este documento fornece documentação técnica profunda e completa do projeto Ne
 
 O projeto é escalável, mantível e segue Best Practices de .NET.
 
----
 
-**Última atualização**: Maio 2026  
+
+
+### 1) Estorno de Compra (Direito de Arrependimento - 7 dias)
+
+Rota: `POST /api/purchases/{purchaseId}/refund`
+
+Autenticação: Obrigatória (`Authorization: Bearer <token>`)
+
+Request: Body vazio. O `purchaseId` é passado via rota e o usuário é identificado pelo claim do JWT.
+
+Response (200 OK):
+
+```json
+{
+    "success": true,
+    "message": "Estorno processado e matrícula cancelada com sucesso."
+}
+```
+
+Regras: o handler valida que a compra existe, pertence ao usuário autenticado e que a data de criação da compra é menor ou igual a 7 dias (direito de arrependimento). Em caso afirmativo o sistema chama o serviço Asaas para estornar o pagamento e remove a matrícula associada.
+
+### 2) Assinatura com Trial de 7 Dias
+
+Rota de criação: `POST /api/subscriptions`
+
+Autenticação: Obrigatória
+
+Request: JSON com `planName`, `amount` e dados de pagamento (se necessário).
+
+Comportamento: ao criar a assinatura o sistema grava a `Subscription` com `IsActive = true` e `StartDate = now`. Na integração com Asaas a chamada de criação inclui `nextDueDate = now + 7 days` para que a primeira cobrança ocorra apenas no oitavo dia do trial. O ciclo subsequente continua mensalmente.
+
+Response (201 Created): exemplo já documentado na seção "Criar Assinatura".
+
+### 3) Cancelamento de Assinatura (dentro do trial)
+
+Rota: `POST /api/subscriptions/{subscriptionId}/cancel`
+
+Autenticação: Obrigatória
+
+Request: Body vazio. O `subscriptionId` é passado via rota e o usuário é identificado pelo claim do JWT.
+
+Response (200 OK):
+
+```json
+{
+    "success": true,
+    "message": "Assinatura cancelada com sucesso."
+}
+```
+
+Regras: o handler valida que a assinatura pertence ao usuário e que o cancelamento ocorre dentro dos primeiros 7 dias a partir de `StartDate`. Se válido, a API chama o Asaas para cancelar a assinatura e inativa a assinatura no banco (`IsActive = false`, `EndDate` preenchida).
+
+### 4) Listar Compras do Usuário Autenticado
+
+Rota: `GET /api/purchases/my-purchases`
+
+Autenticação: Obrigatória
+
+Response (200 OK):
+
+```json
+[
+    {
+        "purchaseId": 152,
+        "courseId": 42,
+        "courseTitle": "Desenvolvimento Web Avançado com Angular",
+        "amount": 197.90,
+        "purchasedAt": "2026-05-20T14:30:00Z",
+        "status": "APPROVED"
+    }
+]
+```
+
+O handler identifica o usuário pelo token e retorna compras/matrículas ativas associadas, incluindo dados básicos do curso.
+
+### 5) Obter Detalhes da Assinatura do Usuário Autenticado
+
+Rota: `GET /api/subscriptions/my-subscription`
+
+Autenticação: Obrigatória
+
+Response (200 OK):
+
+```json
+{
+    "subscriptionId": "sub_83hd82jns8",
+    "status": "ACTIVE",
+    "startDate": "2026-05-01T10:00:00Z",
+    "nextDueDate": "2026-06-01T10:00:00Z",
+    "planName": "Plano Premium Mensal",
+    "lastCharges": [
+        {
+            "chargeId": "pay_92jd73j",
+            "amount": 89.90,
+            "status": "CONFIRMED",
+            "paymentDate": "2026-05-01T10:05:00Z"
+        }
+    ]
+}
+```
+
+O handler retorna a assinatura ativa ou a mais recente do usuário, juntamente com o histórico de cobranças (se houver) e a estimativa de `nextDueDate` gerada a partir do último pagamento ou do `StartDate`.
+
+### Observações Técnicas
+
+O projeto utiliza o `CurrentUserService` e o `UserContextService` para extrair o `ExternalId`/ID do usuário a partir dos claims do JWT e materializar o `User` no banco, garantindo que todos os handlers identifiquem corretamente o usuário autenticado.
+
 **Versão do .NET**: 8.0  
 **Banco de Dados**: MySQL 8.0+  
 **ORM**: Entity Framework Core 8.0

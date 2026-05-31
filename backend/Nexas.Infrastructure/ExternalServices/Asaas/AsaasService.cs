@@ -3,7 +3,9 @@ using Nexas.Application.Common.Interfaces;
 using Nexas.Application.Purchases.Commands;
 using Nexas.Application.Subscriptions.Commands;
 using Nexas.Domain.Entities;
+using System.Linq;
 using System.Net.Http.Json;
+using System.Net.Mail;
 
 namespace Nexas.Infrastructure.ExternalServices.Asaas;
 
@@ -26,16 +28,40 @@ public class AsaasService : IAsaasService
     /// </summary>
     public async Task<string> CreateCustomerAsync(User user, CancellationToken cancellationToken)
     {
-        var requestData = new
+        var name = !string.IsNullOrWhiteSpace(user.FullName)
+            ? user.FullName!
+            : user.ExternalId;
+
+        var email = NormalizeEmail(user.Email);
+        var cpfCnpj = SanitizeCpfCnpj(user.CpfCnpj);
+
+        var requestData = new Dictionary<string, object?>
         {
-            name = user.FullName ?? user.Email, 
-            email = user.Email,
-            cpfCnpj = user.CpfCnpj,
-            externalReference = user.Id.ToString()
+            ["name"] = name,
+            ["externalReference"] = user.Id.ToString()
         };
 
+        if (!string.IsNullOrWhiteSpace(email))
+        {
+            requestData["email"] = email;
+        }
+
+        if (!string.IsNullOrWhiteSpace(cpfCnpj))
+        {
+            requestData["cpfCnpj"] = cpfCnpj;
+        }
+
+        if (!requestData.ContainsKey("email") && !requestData.ContainsKey("cpfCnpj"))
+        {
+            throw new InvalidOperationException("Usuário precisa ter email válido ou CPF/CNPJ válido para criar cliente no Asaas.");
+        }
+
         var response = await _httpClient.PostAsJsonAsync("customers", requestData, cancellationToken);
-        response.EnsureSuccessStatusCode();
+        if (!response.IsSuccessStatusCode)
+        {
+            var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
+            throw new InvalidOperationException($"Asaas.CreateCustomerAsync failed ({(int)response.StatusCode}): {response.ReasonPhrase}. Response body: {responseBody}");
+        }
 
         var result = await response.Content.ReadFromJsonAsync<AsaasResponse>(cancellationToken);
         return result?.Id ?? throw new Exception("Falha ao obter ID do cliente no Asaas.");
@@ -46,10 +72,38 @@ public class AsaasService : IAsaasService
     /// </summary>
     public async Task<PurchaseResponseDto> CreatePaymentAsync(Purchase purchase, CreditCardInfo? card, CancellationToken ct)
     {
+        if (purchase.User == null || string.IsNullOrWhiteSpace(purchase.User.AsaasCustomerId))
+        {
+            throw new InvalidOperationException("Purchase.User or Purchase.User.AsaasCustomerId is required before creating a payment.");
+        }
+
+        var creditCardHolderInfo = card != null ? new Dictionary<string, object?>
+        {
+            ["name"] = card.HolderName,
+            ["email"] = NormalizeEmail(purchase.User.Email),
+            ["cpfCnpj"] = SanitizeCpfCnpj(card.HolderCpfCnpj),
+            ["postalCode"] = "00000000", // Padrão se não coletado
+            ["addressNumber"] = "0"
+        } : null;
+
+        if (creditCardHolderInfo != null)
+        {
+            if (creditCardHolderInfo["email"] == null)
+            {
+                creditCardHolderInfo.Remove("email");
+            }
+
+            if (creditCardHolderInfo["cpfCnpj"] == null)
+            {
+                creditCardHolderInfo.Remove("cpfCnpj");
+            }
+        }
+
         var requestData = new {
             customer = purchase.User.AsaasCustomerId,
             billingType = purchase.PaymentMethod == "PIX" ? "PIX" : "CREDIT_CARD",
             value = purchase.Amount,
+            dueDate = DateTime.UtcNow.AddDays(1).ToString("yyyy-MM-dd"),
             externalReference = purchase.Id.ToString(),
             // Dados do cartão se fornecidos (Checkout Transparente)
             creditCard = card != null ? new {
@@ -59,18 +113,17 @@ public class AsaasService : IAsaasService
                 expiryYear = card.ExpiryYear,
                 ccv = card.Ccv
             } : null,
-            creditCardHolderInfo = card != null ? new {
-                name = card.HolderName,
-                email = purchase.User.Email,
-                cpfCnpj = card.HolderCpfCnpj,
-                postalCode = "00000000", // Padrão se não coletado
-                addressNumber = "0"
-            } : null
+            creditCardHolderInfo = creditCardHolderInfo
         };
 
         var response = await _httpClient.PostAsJsonAsync("payments", requestData, ct);
-        response.EnsureSuccessStatusCode();
-        
+        if (!response.IsSuccessStatusCode)
+        {
+            var responseBody = await response.Content.ReadAsStringAsync(ct);
+            var requestBody = System.Text.Json.JsonSerializer.Serialize(requestData);
+            throw new InvalidOperationException($"Asaas.CreatePaymentAsync failed ({(int)response.StatusCode}): {response.ReasonPhrase}. Response body: {responseBody}. Request body: {requestBody}");
+        }
+
         var asaasData = await response.Content.ReadFromJsonAsync<AsaasPaymentResult>(ct)
             ?? throw new Exception("Falha ao obter dados de pagamento do Asaas.");
 
@@ -95,14 +148,37 @@ public class AsaasService : IAsaasService
         Subscription subscription, 
         decimal amount, 
         CreditCardInfo? card, 
-        CancellationToken ct)
+        CancellationToken ct,
+        int trialDays = 1)
     {
-        var requestData = new
+        var creditCardHolderInfo = card != null ? new Dictionary<string, object?>
+        {
+            ["name"] = card.HolderName,
+            ["email"] = NormalizeEmail(subscription.User.Email),
+            ["cpfCnpj"] = SanitizeCpfCnpj(card.HolderCpfCnpj),
+            ["postalCode"] = "00000000",
+            ["addressNumber"] = "0"
+        } : null;
+
+        if (creditCardHolderInfo != null)
+        {
+            if (creditCardHolderInfo["email"] == null)
+            {
+                creditCardHolderInfo.Remove("email");
+            }
+
+            if (creditCardHolderInfo["cpfCnpj"] == null)
+            {
+                creditCardHolderInfo.Remove("cpfCnpj");
+            }
+        }
+
+            var requestData = new
         {
             customer = subscription.User.AsaasCustomerId,
             billingType = card != null ? "CREDIT_CARD" : "PIX",
             value = amount,
-            nextDueDate = DateTime.UtcNow.AddDays(1).ToString("yyyy-MM-dd"),
+            nextDueDate = DateTime.UtcNow.AddDays(trialDays).ToString("yyyy-MM-dd"),
             cycle = "MONTHLY",
             externalReference = subscription.Id.ToString(),
             description = "Assinatura Mensal Nexas",
@@ -113,13 +189,7 @@ public class AsaasService : IAsaasService
                 expiryYear = card.ExpiryYear,
                 ccv = card.Ccv
             } : null,
-            creditCardHolderInfo = card != null ? new {
-                name = card.HolderName,
-                email = subscription.User.Email,
-                cpfCnpj = card.HolderCpfCnpj,
-                postalCode = "00000000",
-                addressNumber = "0"
-            } : null
+            creditCardHolderInfo = creditCardHolderInfo
         };
 
         var response = await _httpClient.PostAsJsonAsync("subscriptions", requestData, ct);
@@ -133,12 +203,70 @@ public class AsaasService : IAsaasService
             asaasData?.Id);
     }
 
+    public async Task RefundPaymentAsync(string asaasPaymentId, CancellationToken ct)
+    {
+        if (string.IsNullOrWhiteSpace(asaasPaymentId)) throw new ArgumentException("asaasPaymentId is required");
+
+        var response = await _httpClient.PostAsync($"payments/{asaasPaymentId}/refund", null, ct);
+        if (!response.IsSuccessStatusCode)
+        {
+            var body = await response.Content.ReadAsStringAsync(ct);
+            throw new InvalidOperationException($"Asaas.RefundPaymentAsync failed: {(int)response.StatusCode} - {response.ReasonPhrase}. Body: {body}");
+        }
+    }
+
+    public async Task CancelSubscriptionAsync(string asaasSubscriptionId, CancellationToken ct)
+    {
+        if (string.IsNullOrWhiteSpace(asaasSubscriptionId)) throw new ArgumentException("asaasSubscriptionId is required");
+
+        var response = await _httpClient.DeleteAsync($"subscriptions/{asaasSubscriptionId}", ct);
+        if (!response.IsSuccessStatusCode)
+        {
+            var body = await response.Content.ReadAsStringAsync(ct);
+            throw new InvalidOperationException($"Asaas.CancelSubscriptionAsync failed: {(int)response.StatusCode} - {response.ReasonPhrase}. Body: {body}");
+        }
+    }
+
     public async Task<string> GetPaymentStatusAsync(string asaasPaymentId, CancellationToken ct)
     {
         var response = await _httpClient.GetAsync($"payments/{asaasPaymentId}", ct);
         response.EnsureSuccessStatusCode();
         var result = await response.Content.ReadFromJsonAsync<AsaasPaymentResult>(ct);
         return result?.Status ?? "UNKNOWN";
+    }
+
+    private static string? NormalizeEmail(string? email)
+    {
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            return null;
+        }
+
+        try
+        {
+            var address = new MailAddress(email);
+            return address.Address;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private static string? SanitizeCpfCnpj(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return null;
+        }
+
+        var digits = new string(value.Where(char.IsDigit).ToArray());
+        return digits.Length switch
+        {
+            11 => digits,
+            14 => digits,
+            _ => null
+        };
     }
 
     // Mapeamentos internos das respostas do Gateway

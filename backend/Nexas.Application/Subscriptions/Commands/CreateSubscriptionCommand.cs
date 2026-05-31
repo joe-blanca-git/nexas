@@ -44,6 +44,22 @@ public class CreateSubscriptionCommandHandler : IRequestHandler<CreateSubscripti
 
         if (string.IsNullOrEmpty(user.AsaasCustomerId))
         {
+            if (request.Card != null)
+            {
+                var profileName = string.IsNullOrWhiteSpace(user.FullName)
+                    ? request.Card.HolderName
+                    : user.FullName!;
+
+                var profileCpfCnpj = string.IsNullOrWhiteSpace(user.CpfCnpj)
+                    ? request.Card.HolderCpfCnpj
+                    : user.CpfCnpj!;
+
+                if (!string.IsNullOrWhiteSpace(profileName) && !string.IsNullOrWhiteSpace(profileCpfCnpj))
+                {
+                    user.UpdateProfile(profileName, profileCpfCnpj);
+                }
+            }
+
             var customerId = await _asaasService.CreateCustomerAsync(user, cancellationToken);
             user.UpdateAsaasCustomerId(customerId);
             await _context.SaveChangesAsync(cancellationToken);
@@ -52,18 +68,18 @@ public class CreateSubscriptionCommandHandler : IRequestHandler<CreateSubscripti
         // 1. CORREÇÃO DO ERRO CS7036: Fornecendo os 7 argumentos exigidos pela Factory do Domínio
         // A ordem deve ser: userId, planName, startDate, endDate, active, status, asaasSubscriptionId
         var subscription = Subscription.Create(
-            user.Id, 
-            request.PlanName, 
-            null, 
-            null, 
-            true, 
-            SubscriptionStatus.Pending, 
-            null); 
+            user.Id,
+            request.PlanName,
+            DateTime.UtcNow,
+            null,
+            true,
+            SubscriptionStatus.Pending,
+            null);
 
         _context.Subscriptions.Add(subscription);
         await _context.SaveChangesAsync(cancellationToken);
 
-        var result = await _asaasService.CreateSubscriptionAsync(subscription, request.Amount, request.Card, cancellationToken);
+        var result = await _asaasService.CreateSubscriptionAsync(subscription, request.Amount, request.Card, cancellationToken, 7);
 
         // 2. CORREÇÃO DO AVISO CS8604: Garantindo que o ID não seja nulo (usa ?? string.Empty)
         subscription.UpdateAsaasSubscriptionId(result.AsaasSubscriptionId ?? string.Empty);

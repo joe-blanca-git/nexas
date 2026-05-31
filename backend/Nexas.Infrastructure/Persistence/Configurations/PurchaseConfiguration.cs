@@ -43,7 +43,7 @@ public class PurchaseConfiguration : IEntityTypeConfiguration<Purchase>
 
         // Relacionamentos
         builder.HasOne(p => p.User)
-            .WithMany()
+            .WithMany(u => u.Purchases)
             .HasForeignKey(p => p.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 

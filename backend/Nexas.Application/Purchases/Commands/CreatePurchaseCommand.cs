@@ -61,6 +61,22 @@ public class CreatePurchaseCommandHandler : IRequestHandler<CreatePurchaseComman
         // 2. VERIFICAÇÃO/CRIAÇÃO DO CLIENTE NO ASAAS
         if (string.IsNullOrEmpty(user.AsaasCustomerId))
         {
+            if (request.Card != null)
+            {
+                var profileName = string.IsNullOrWhiteSpace(user.FullName)
+                    ? request.Card.HolderName
+                    : user.FullName!;
+
+                var profileCpfCnpj = string.IsNullOrWhiteSpace(user.CpfCnpj)
+                    ? request.Card.HolderCpfCnpj
+                    : user.CpfCnpj!;
+
+                if (!string.IsNullOrWhiteSpace(profileName) && !string.IsNullOrWhiteSpace(profileCpfCnpj))
+                {
+                    user.UpdateProfile(profileName, profileCpfCnpj);
+                }
+            }
+
             var customerId = await _asaasService.CreateCustomerAsync(user, cancellationToken);
             user.UpdateAsaasCustomerId(customerId);
             await _context.SaveChangesAsync(cancellationToken);

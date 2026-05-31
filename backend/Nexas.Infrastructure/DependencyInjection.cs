@@ -25,6 +25,7 @@ namespace Nexas.Infrastructure
             {
                 var baseUrl = configuration["Asaas:BaseUrl"] ?? "https://sandbox.asaas.com/api/v3/";
                 client.BaseAddress = new Uri(baseUrl);
+                client.DefaultRequestHeaders.UserAgent.ParseAdd("Nexas.Backend/1.0");
             });
                                 
             return services;

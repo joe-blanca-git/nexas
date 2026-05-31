@@ -38,7 +38,7 @@ public class SubscriptionPaymentConfiguration : IEntityTypeConfiguration<Subscri
 
         // Relacionamento N:1 (Vários pagamentos pertencem a uma assinatura)
         builder.HasOne(sp => sp.Subscription)
-            .WithMany()
+            .WithMany(s => s.Payments)
             .HasForeignKey(sp => sp.SubscriptionId)
             .OnDelete(DeleteBehavior.Cascade);
     }

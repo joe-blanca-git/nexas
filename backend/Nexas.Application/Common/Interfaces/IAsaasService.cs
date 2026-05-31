@@ -10,7 +10,11 @@ public interface IAsaasService
     
     Task<PurchaseResponseDto> CreatePaymentAsync(Purchase purchase, CreditCardInfo? card, CancellationToken ct);
 
-    Task<SubscriptionResponseDto> CreateSubscriptionAsync(Subscription subscription, decimal amount, CreditCardInfo? card, CancellationToken ct);
+    Task<SubscriptionResponseDto> CreateSubscriptionAsync(Subscription subscription, decimal amount, CreditCardInfo? card, CancellationToken ct, int trialDays = 1);
+
+    Task RefundPaymentAsync(string asaasPaymentId, CancellationToken ct);
+
+    Task CancelSubscriptionAsync(string asaasSubscriptionId, CancellationToken ct);
 
     Task<string> GetPaymentStatusAsync(string asaasPaymentId, CancellationToken ct);
 }

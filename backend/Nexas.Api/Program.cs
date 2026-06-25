@@ -30,34 +30,33 @@ builder.Services.AddSwaggerSetup();
 
 var app = builder.Build();
 
-if (!app.Environment.IsDevelopment())
+// Removida a verificação IsDevelopment() para garantir que a correção do proxy 
+// seja aplicada mesmo rodando como Development no Docker.
+app.UseSwagger(c =>
 {
-    app.UseSwagger(c =>
+    c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
     {
-        c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
+        swaggerDoc.Servers = new List<OpenApiServer>
         {
-            swaggerDoc.Servers = new List<OpenApiServer> 
-            { 
-                new OpenApiServer { Url = $"https://{httpReq.Host.Value}/nexas-api" } 
-            };
-        });
+            // Força o Swagger a usar a URL externa real em todas as requisições (Try it out)
+            new OpenApiServer { Url = "https://joederblanca.com.br/nexas-api" }
+        };
     });
+});
 
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/nexas-api/swagger/v1/swagger.json", "Nexas API V1");
-        c.RoutePrefix = "swagger";
-    });
-}
-else 
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    // Caminho relativo para encontrar o JSON do Swagger de forma segura
+    c.SwaggerEndpoint("v1/swagger.json", "Nexas API V1");
+    c.RoutePrefix = "swagger";
+});
 
 app.UseCors("DevelopmentCors");
 app.UseGlobalExceptionHandler();
-app.UseHttpsRedirection();
+
+// Desativado pois o Nginx já gerencia o HTTPS na VPS (evita avisos no log)
+// app.UseHttpsRedirection(); 
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

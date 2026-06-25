@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: nexas_api
+    restart: always
+    ports:
+      - "5001:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=mysql_banco;Port=3306;Database=nexas_bd;Uid=root;Pwd=LikeABoss@1970;Charset=utf8;SslMode=none
+    networks:
+      - agivys_default
+
+  landing:
+    build:
+      context: ./frontend/landing
+      dockerfile: Dockerfile
+    container_name: nexas_landing
+    restart: always
+    ports:
+      - "8081:80"
+    networks:
+      - agivys_default
+
+networks:
+  agivys_default:
+    external: true

@@ -23,7 +23,7 @@ namespace Nexas.Api.Controllers
     /// </summary>
     [Authorize]
     [ApiController]
-    [Route("[controller]")]
+    [Route("v1/api/[controller]")]
     [Produces("application/json")]
     public class CoursesController : ControllerBase
     {

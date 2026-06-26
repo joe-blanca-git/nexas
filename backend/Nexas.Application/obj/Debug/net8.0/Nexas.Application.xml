@@ -279,6 +279,11 @@
             DTO representando um curso completo com módulos e aulas.
             </summary>
         </member>
+        <member name="T:Nexas.Application.Courses.Queries.GetCourses.CourseDomainDto">
+            <summary>
+            DTO representando um domínio/benefício de um curso.
+            </summary>
+        </member>
         <member name="T:Nexas.Application.Courses.Queries.GetCourses.ModuleDto">
             <summary>
             DTO representando um módulo com suas aulas.

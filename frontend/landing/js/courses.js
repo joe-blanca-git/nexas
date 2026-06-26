@@ -45,7 +45,7 @@ async function fetchCursos() {
                         <div>
                             <span class="course-tag">${curso.level || 'Intermediário'}</span>
                             <h4 class="card-title">${curso.name}</h4>
-                            <p class="card-text text-muted small">${curso.description}</p>
+                            <p class="card-text text-muted small text-justify">${curso.description.length > 150 ? curso.description.substring(0, 150) + '...' : curso.description}</p>
                         </div>
                         <div>
                             <hr class="my-4 opacity-10">
@@ -72,10 +72,10 @@ async function fetchCursoDetalhes() {
     const urlParams = new URLSearchParams(window.location.search);
     let id = urlParams.get("id");
 
-    // Fallback to course 2 (Mestres do Operations Center) if no specific ID is provided
+    // Redireciona para a home caso o ID não seja fornecido na URL
     if (!id) {
-        console.warn("ID do curso não fornecido. Utilizando ID padrão: 2");
-        id = "2";
+        window.location.href = "index.html#home";
+        return;
     }
 
     try {
@@ -152,11 +152,11 @@ async function fetchCursoDetalhes() {
 
         const priceInstallmentsEl = document.getElementById("price-installments");
         if (priceInstallmentsEl && curso.priceSingle) {
-            const installmentVal = (curso.priceSingle / 12).toLocaleString('pt-BR', {
+            const installmentVal = (curso.priceSingle / 10).toLocaleString('pt-BR', {
                 style: 'currency',
                 currency: 'BRL'
             });
-            priceInstallmentsEl.textContent = `ou 12x de ${installmentVal}`;
+            priceInstallmentsEl.textContent = `ou 10x de ${installmentVal}`;
         }
 
         const priceCourseNameEl = document.getElementById("price-course-name");

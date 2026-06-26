@@ -27,6 +27,7 @@ namespace Nexas.Application.Courses.Queries.GetCourseById
         {
             return await _context.Courses
                 .Where(c => c.Id == request.Id && c.Active)
+                .Include(c => c.Domains)
                 .Include(c => c.Modules.Where(m => m.Active))
                     .ThenInclude(m => m.Lessons.Where(l => l.Active))
                 .Select(c => new CourseDto
@@ -55,6 +56,12 @@ namespace Nexas.Application.Courses.Queries.GetCourseById
                             DurationSeconds = l.DurationSeconds,
                             BunnyVideoId = l.BunnyVideoId
                         }).ToList()
+                    }).ToList(),
+                    Domains = c.Domains.Select(d => new CourseDomainDto
+                    {
+                        Id = d.Id,
+                        Title = d.Title,
+                        Description = d.Description
                     }).ToList()
                 })
                 .FirstOrDefaultAsync(cancellationToken);

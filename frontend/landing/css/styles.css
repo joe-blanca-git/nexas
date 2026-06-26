@@ -402,3 +402,7 @@ img {
     opacity: 0;
     visibility: hidden;
 }
+
+.text-justify{
+  text-align: justify;
+}

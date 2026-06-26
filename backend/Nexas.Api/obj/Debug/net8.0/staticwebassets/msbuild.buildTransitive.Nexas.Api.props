@@ -1,3 +1,3 @@
 ﻿<Project>
-  <Import Project="../buildMultiTargeting/Nexas.Api.props" />
+  <Import Project="..\buildMultiTargeting\Nexas.Api.props" />
 </Project>

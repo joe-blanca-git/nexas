@@ -18,6 +18,7 @@ namespace Nexas.Domain.Entities
         // Relations
         public virtual ICollection<Module> Modules { get; set; } = new List<Module>();
         public virtual ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
+        public virtual ICollection<CourseDomain> Domains { get; set; } = new List<CourseDomain>();
 
         public static Course Create(string name, string? description, string? descriptionSub, string? level, decimal? priceSingle, string? imgCoverLink, string? bunnyLibraryId, int? createdBy)
         {

@@ -3647,19 +3647,19 @@
     ]
   },
   "packageFolders": {
-    "/root/.nuget/packages/": {}
+    "C:\\Users\\joeder-blanca\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/src/Nexas.Api/Nexas.Api.csproj",
+      "projectUniqueName": "C:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Api\\Nexas.Api.csproj",
       "projectName": "Nexas.Api",
-      "projectPath": "/src/Nexas.Api/Nexas.Api.csproj",
-      "packagesPath": "/root/.nuget/packages/",
-      "outputPath": "/src/Nexas.Api/obj/",
+      "projectPath": "C:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Api\\Nexas.Api.csproj",
+      "packagesPath": "C:\\Users\\joeder-blanca\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Api\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/root/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\joeder-blanca\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -3671,11 +3671,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "/src/Nexas.Application/Nexas.Application.csproj": {
-              "projectPath": "/src/Nexas.Application/Nexas.Application.csproj"
+            "C:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Application\\Nexas.Application.csproj": {
+              "projectPath": "C:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Application\\Nexas.Application.csproj"
             },
-            "/src/Nexas.Infrastructure/Nexas.Infrastructure.csproj": {
-              "projectPath": "/src/Nexas.Infrastructure/Nexas.Infrastructure.csproj"
+            "C:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Infrastructure\\Nexas.Infrastructure.csproj": {
+              "projectPath": "C:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Infrastructure\\Nexas.Infrastructure.csproj"
             }
           }
         }
@@ -3737,7 +3737,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.422/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.414/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

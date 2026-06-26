@@ -23,6 +23,17 @@ namespace Nexas.Application.Courses.Queries.GetCourses
         public string? ImgCoverLink { get; init; }
         public string? BunnyLibraryId { get; init; }
         public List<ModuleDto> Modules { get; init; } = new();
+        public List<CourseDomainDto> Domains { get; init; } = new();
+    }
+
+    /// <summary>
+    /// DTO representando um domínio/benefício de um curso.
+    /// </summary>
+    public record CourseDomainDto
+    {
+        public int Id { get; init; }
+        public string Title { get; init; } = string.Empty;
+        public string? Description { get; init; }
     }
 
     /// <summary>
@@ -64,6 +75,7 @@ namespace Nexas.Application.Courses.Queries.GetCourses
         {
             return await _context.Courses
                 .Where(c => c.Active)
+                .Include(c => c.Domains)
                 .Include(c => c.Modules.Where(m => m.Active))
                     .ThenInclude(m => m.Lessons.Where(l => l.Active))
                 .Select(c => new CourseDto
@@ -92,6 +104,12 @@ namespace Nexas.Application.Courses.Queries.GetCourses
                             DurationSeconds = l.DurationSeconds,
                             BunnyVideoId = l.BunnyVideoId
                         }).ToList()
+                    }).ToList(),
+                    Domains = c.Domains.Select(d => new CourseDomainDto
+                    {
+                        Id = d.Id,
+                        Title = d.Title,
+                        Description = d.Description
                     }).ToList()
                 })
                 .ToListAsync(cancellationToken);

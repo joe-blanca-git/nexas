@@ -14,6 +14,9 @@ using Nexas.Application.Courses.Commands.UpdateCourse;
 using Nexas.Application.Courses.Commands.DeactivateCourse;
 using Nexas.Application.Courses.Queries.GetCourses;
 using Nexas.Application.Courses.Queries.GetCourseById;
+using Nexas.Application.Courses.Commands.CreateCourseDomain;
+using Nexas.Application.Courses.Commands.UpdateCourseDomain;
+using Nexas.Application.Courses.Commands.DeleteCourseDomain;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Nexas.Api.Controllers
@@ -329,6 +332,55 @@ namespace Nexas.Api.Controllers
         public async Task<IActionResult> DeleteLesson(int id)
         {
             await _mediator.Send(new DeleteLessonCommand { Id = id });
+            return NoContent();
+        }
+
+        #endregion
+
+        #region CourseDomains
+
+        /// <summary>
+        /// Cria um novo domínio/benefício para um curso.
+        /// </summary>
+        [Authorize(Roles = "Teacher")]
+        [HttpPost("{courseId}/domains")]
+        [SwaggerOperation(Summary = "Cria um novo domínio/benefício", Description = "Cria um novo domínio/benefício associado a um curso existente.")]
+        [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
+        public async Task<IActionResult> CreateCourseDomain(int courseId, [FromBody] CreateCourseDomainCommand command)
+        {
+            if (courseId != command.CourseId)
+                return BadRequest(new { message = "O CourseId da URL não corresponde ao do corpo da requisição." });
+
+            var result = await _mediator.Send(command);
+            return CreatedAtAction(nameof(GetById), new { id = result }, new { message = "Domínio criado com sucesso!", id = result });
+        }
+
+        /// <summary>
+        /// Atualiza os dados de um domínio/benefício existente.
+        /// </summary>
+        [Authorize(Roles = "Teacher")]
+        [HttpPut("{courseId}/domains/{id}")]
+        [SwaggerOperation(Summary = "Atualiza um domínio", Description = "Atualiza os dados de um domínio existente de um curso.")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> UpdateCourseDomain(int courseId, int id, [FromBody] UpdateCourseDomainCommand command)
+        {
+            if (courseId != command.CourseId || id != command.Id)
+                return BadRequest(new { message = "Os IDs da URL não correspondem aos do corpo da requisição." });
+
+            await _mediator.Send(command);
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Deleta permanentemente um domínio de um curso.
+        /// </summary>
+        [Authorize(Roles = "Teacher")]
+        [HttpDelete("{courseId}/domains/{id}")]
+        [SwaggerOperation(Summary = "Deleta um domínio", Description = "Remove permanentemente um domínio de um curso.")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> DeleteCourseDomain(int courseId, int id)
+        {
+            await _mediator.Send(new DeleteCourseDomainCommand { CourseId = courseId, Id = id });
             return NoContent();
         }
 

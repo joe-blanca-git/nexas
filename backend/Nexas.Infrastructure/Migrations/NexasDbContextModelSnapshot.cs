@@ -89,6 +89,37 @@ namespace Nexas.Infrastructure.Migrations
                     b.ToTable("Courses", (string)null);
                 });
 
+            modelBuilder.Entity("Nexas.Domain.Entities.CourseDomain", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("CourseDomains");
+                });
+
             modelBuilder.Entity("Nexas.Domain.Entities.Enrollment", b =>
                 {
                     b.Property<int>("Id")
@@ -444,6 +475,17 @@ namespace Nexas.Infrastructure.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
+            modelBuilder.Entity("Nexas.Domain.Entities.CourseDomain", b =>
+                {
+                    b.HasOne("Nexas.Domain.Entities.Course", "Course")
+                        .WithMany("Domains")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+                });
+
             modelBuilder.Entity("Nexas.Domain.Entities.Enrollment", b =>
                 {
                     b.HasOne("Nexas.Domain.Entities.Course", "Course")
@@ -543,6 +585,8 @@ namespace Nexas.Infrastructure.Migrations
 
             modelBuilder.Entity("Nexas.Domain.Entities.Course", b =>
                 {
+                    b.Navigation("Domains");
+
                     b.Navigation("Enrollments");
 
                     b.Navigation("Modules");

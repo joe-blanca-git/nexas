@@ -135,6 +135,21 @@
             </remarks>
             <param name="id">ID da aula a ser deletada.</param>
         </member>
+        <member name="M:Nexas.Api.Controllers.CoursesController.CreateCourseDomain(System.Int32,Nexas.Application.Courses.Commands.CreateCourseDomain.CreateCourseDomainCommand)">
+            <summary>
+            Cria um novo domínio/benefício para um curso.
+            </summary>
+        </member>
+        <member name="M:Nexas.Api.Controllers.CoursesController.UpdateCourseDomain(System.Int32,System.Int32,Nexas.Application.Courses.Commands.UpdateCourseDomain.UpdateCourseDomainCommand)">
+            <summary>
+            Atualiza os dados de um domínio/benefício existente.
+            </summary>
+        </member>
+        <member name="M:Nexas.Api.Controllers.CoursesController.DeleteCourseDomain(System.Int32,System.Int32)">
+            <summary>
+            Deleta permanentemente um domínio de um curso.
+            </summary>
+        </member>
         <member name="T:Nexas.Api.Controllers.PurchasesController">
             <summary>
             Controller responsável pelas operações de compra no Painel do Aluno (PAN).

@@ -19,6 +19,7 @@ namespace Nexas.Infrastructure.Persistence
         public DbSet<Subscription> Subscriptions => Set<Subscription>();
         public DbSet<Purchase> Purchases => Set<Purchase>();
         public DbSet<SubscriptionPayment> SubscriptionPayments => Set<SubscriptionPayment>();
+        public DbSet<CourseDomain> CourseDomains => Set<CourseDomain>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

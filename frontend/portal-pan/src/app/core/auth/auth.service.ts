@@ -77,6 +77,7 @@ export class AuthService extends BaseService {
       return true;
     } catch (error) {
       console.error('Falha ao verificar dados do usuário:', error);
+      this.logOut();
       return false;
     }
   }
@@ -93,5 +94,23 @@ export class AuthService extends BaseService {
     } catch (e) {
       return false;
     }
+  }
+
+  forgotPassword(email: string): Observable<any> {
+    const url = `${this.urlApiServiceAuth}forgot-password`;
+    const body = { email };
+
+    return this.http
+      .post(url, body, this.GetAuthHeaderJson())
+      .pipe(map(this.extractData));
+  }
+
+  resetPassword(email: string, token: string, newPassword: string): Observable<any> {
+    const url = `${this.urlApiServiceAuth}reset-password`;
+    const body = { email, token, newPassword };
+
+    return this.http
+      .post(url, body, this.GetAuthHeaderJson())
+      .pipe(map(this.extractData));
   }
 }

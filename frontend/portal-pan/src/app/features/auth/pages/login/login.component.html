@@ -47,8 +47,13 @@
                     </div>
 
                     <!-- Submit Button -->
-                    <button type="button" class="btn btn-dark w-100 py-2.5 rounded-3 fw-semibold text-uppercase" [disabled]="loginForm.invalid" (click)="onSubmit()">
-                        Entrar <i class="fas fa-sign-in-alt ms-2"></i>
+                    <button type="button" class="btn btn-dark w-100 py-2.5 rounded-3 fw-semibold text-uppercase" [disabled]="loginForm.invalid || isLoading" (click)="onSubmit()">
+                        <ng-container *ngIf="!isLoading">
+                            Entrar <i class="fas fa-sign-in-alt ms-2"></i>
+                        </ng-container>
+                        <ng-container *ngIf="isLoading">
+                            Aguarde... <span class="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>
+                        </ng-container>
                     </button>
                 </form>
             </div>

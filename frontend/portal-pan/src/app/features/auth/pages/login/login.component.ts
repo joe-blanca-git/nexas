@@ -17,6 +17,7 @@ export class LoginComponent {
   loginForm: FormGroup;
   submitted = false;
   showPassword = false;
+  isLoading = false;
 
   private authService = inject(AuthService);
   private authUtil = inject(AuthService).authUtil;
@@ -38,8 +39,9 @@ export class LoginComponent {
       return;
     }
 
-    const email = this.loginForm.value.email;
-    const password = this.loginForm.value.password;
+    this.isLoading = true;
+    const { email, password } = this.loginForm.getRawValue();
+    this.loginForm.disable();
 
     this.authService.logIn(email, password).subscribe({
       next: (successResponse) => this.processSuccessfulLogin(successResponse),
@@ -57,10 +59,14 @@ export class LoginComponent {
 
     }catch(error){
       console.error('Erro ao processar login:', error);
+      this.isLoading = false;
+      this.loginForm.enable();
     }
   }
 
   async processFailedLogin(error: any) {
     console.error('Erro ao processar login:', error);
+    this.isLoading = false;
+    this.loginForm.enable();
   }
 }

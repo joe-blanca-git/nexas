@@ -3,6 +3,7 @@ import { AuthAppComponent } from "./auth.app.component";
 import { LoginComponent } from "./pages/login/login.component";
 import { RecoveryPasswordComponent } from "./pages/recovery-password/recovery-password.component";
 import { RegisterComponent } from "./pages/register/register.component";
+import { UpdatePasswordComponent } from "./pages/update-password/update-password.component";
 
 export const AUTH_ROUTES: Routes = [
     {
@@ -22,6 +23,11 @@ export const AUTH_ROUTES: Routes = [
             {
                 path: 'recovery-password',
                 component: RecoveryPasswordComponent,
+                // canActivate: [AuthGuardService],
+            },
+            {
+                path: 'reset-password',
+                component: UpdatePasswordComponent,
                 // canActivate: [AuthGuardService],
             },
             {

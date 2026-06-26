@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
+import { AuthService } from '../../../../core/auth/auth.service';
 
 @Component({
   selector: 'app-recovery-password',
@@ -14,8 +15,9 @@ export class RecoveryPasswordComponent {
   recoveryForm: FormGroup;
   submitted = false;
   emailSent = false; // To show success feedback when form is submitted
+  isLoading = false;
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(private fb: FormBuilder, private router: Router, private authService: AuthService) {
     this.recoveryForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]]
     });
@@ -31,8 +33,20 @@ export class RecoveryPasswordComponent {
       return;
     }
 
-    console.log('Recovery Password Payload:', this.recoveryForm.value);
-    // Simulate sending recovery link
-    this.emailSent = true;
+    this.isLoading = true;
+    const { email } = this.recoveryForm.getRawValue();
+    this.recoveryForm.disable();
+
+    this.authService.forgotPassword(email).subscribe({
+      next: () => {
+        this.emailSent = true;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Erro ao solicitar recuperação de senha', err);
+        this.isLoading = false;
+        this.recoveryForm.enable();
+      }
+    });
   }
 }

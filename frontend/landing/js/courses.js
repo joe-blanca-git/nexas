@@ -1,5 +1,5 @@
 // Configuração do endpoint da API (Altere para localhost se estiver desenvolvendo localmente)
-const API_BASE = "https://joederblanca.com.br/nexas-api/Courses";
+const API_BASE = "https://joederblanca.com.br/nexas-api/v1/api/Courses";
 
 document.addEventListener("DOMContentLoaded", () => {
     if (document.getElementById("container-cursos")) {

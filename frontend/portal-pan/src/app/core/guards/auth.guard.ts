@@ -29,7 +29,7 @@ export class AuthGuardService {
     state: RouterStateSnapshot
   ): boolean {
     const isLoggedIn = this.authService.loggedIn;    
-    const isAuthForm = ['login', 'recovery-password', 'update-password'].includes(route.routeConfig?.path || '');
+    const isAuthForm = ['login', 'recovery-password', 'update-password', 'register'].includes(route.routeConfig?.path || '');
 
     if (isLoggedIn && !this.authService.isTokenValid()) {      
       this.authService.logOut();

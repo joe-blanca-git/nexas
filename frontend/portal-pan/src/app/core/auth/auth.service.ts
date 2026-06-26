@@ -113,4 +113,14 @@ export class AuthService extends BaseService {
       .post(url, body, this.GetAuthHeaderJson())
       .pipe(map(this.extractData));
   }
+
+  checkEmail(email: string): Observable<any> {
+    const url = `${this.urlApiServiceAuth}check-email/${encodeURIComponent(email)}`;
+    return this.http.get(url, this.GetAuthHeaderJson());
+  }
+
+  registerSystemUser(payload: any): Observable<any> {
+    const url = `${this.urlApiServiceAuth}register-system-user`;
+    return this.http.post(url, payload, this.GetAuthHeaderJson());
+  }
 }

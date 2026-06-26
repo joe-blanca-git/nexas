@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { MenuSideComponent } from '../../../shared/components/menu-side/menu-side.component';
 import { MenuService } from '../../../../core/services/menu.service';
 import { StateUtil } from '../../../../core/utils/UserState.util';
+import { AuthService } from '../../../../core/auth/auth.service';
 
 interface Course {
   id: number;
@@ -374,7 +375,7 @@ export class HomeComponent implements OnInit {
     }
   ];
 
-  constructor(private menuService: MenuService) { }
+  constructor(private menuService: MenuService, private atuhService: AuthService) { }
 
   get breadcrumbs() {
     return this.menuService.getBreadCrumb();
@@ -396,6 +397,10 @@ export class HomeComponent implements OnInit {
     this.loadDataPage();
 
     
+  }
+
+  logOut(){
+    this.atuhService.logOut();
   }
 
   async loadDataPage(){

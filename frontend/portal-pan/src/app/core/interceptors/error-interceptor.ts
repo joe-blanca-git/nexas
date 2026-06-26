@@ -51,27 +51,47 @@ export const errorInterceptor: HttpInterceptorFn = (
       if (err instanceof HttpErrorResponse) {
 
         if (err.status === 400) {
+          let handled = false;
+
           //erro de senha menor ou maior que o permitido.
           if (err.error?.errors?.Senha) {
             toastService.error(err.error.errors.Senha, 5000);
-          };
+            handled = true;
+          }
 
           //outros erros
           if (err.error?.errors?.Mensagens) {
             toastService.error(err.error.errors.Mensagens, 5000);
-          };
+            handled = true;
+          }
 
           if (err.error?.detail) {
             toastService.error(err.error.detail, 5000);
-          };
+            handled = true;
+          }
 
-          if (!err.error?.errors?.Senha || !err.error?.errors?.Mensagens || !err.error?.detail) {
-            toastService.error('Erro interno, por favor solicite suporte!', 5000);
-          };
+          // Erros com a chave message direto no corpo (ex: AuthController)
+          if (err.error?.message) {
+            toastService.error(err.error.message, 5000);
+            handled = true;
+          }
 
-          console.error(err)
+          // Erros do Identity (array de erros)
+          if (Array.isArray(err.error)) {
+            err.error.forEach((e: any) => {
+              if (e.description) {
+                toastService.error(e.description, 7000);
+                handled = true;
+              }
+            });
+          }
 
-        };
+          if (!handled) {
+            toastService.error('Erro de validação, verifique os dados informados!', 5000);
+          }
+
+          console.error(err);
+        }
 
         if (err.status === 404) {
           toastService.error(err.error.detail, 5000);
@@ -79,7 +99,8 @@ export const errorInterceptor: HttpInterceptorFn = (
 
         //erro de autenticação
         if (err.status === 401) {
-          toastService.error('Seu acesso expirou, por favor faça Login novamente!', 5000);
+          const msg = err.error?.message || 'Seu acesso expirou, por favor faça Login novamente!';
+          toastService.error(msg, 5000);
           stateUtil.clearState();
           router.navigate(['/auth/login']);
         }

@@ -12,6 +12,7 @@ export const routes: Routes = [
     {
         path: '',
         component: HomeComponent,
+        canActivate: [AuthGuardService],
         children: [
             {
                 path: '',
@@ -20,8 +21,7 @@ export const routes: Routes = [
             },
             {
                 path: 'home',
-                component: HomeDashboardComponent,
-                canActivate: [AuthGuardService]
+                component: HomeDashboardComponent
             },
             {
                 path: 'courses',

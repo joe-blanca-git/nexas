@@ -1,7 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors, AsyncValidatorFn } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
+import { AuthService } from '../../../../core/auth/auth.service';
+import { Observable, of, timer } from 'rxjs';
+import { map, switchMap, catchError } from 'rxjs/operators';
+import { ToastService } from '../../../../core/services/toast.service';
 
 @Component({
   selector: 'app-register',
@@ -11,44 +15,58 @@ import { RouterModule, Router } from '@angular/router';
   styleUrl: './register.component.scss'
 })
 export class RegisterComponent {
-  steps = [
-    { label: 'Dados pessoais', icon: 'fa-user' },
-    { label: 'Endereço', icon: 'fa-map-marker-alt' }
-  ];
-
-  currentStep: number = 0;
   registerForm: FormGroup;
-  isLoadingCep: boolean = false;
   submitted: boolean = false;
+  showPassword = false;
+  showConfirmPassword = false;
+  isLoading = false;
+  isCheckingEmail = false;
 
-  showPassword: boolean = false;
-  showConfirmPassword: boolean = false;
+  private authService = inject(AuthService);
+  private toastService = inject(ToastService);
 
   constructor(private fb: FormBuilder, private router: Router) {
     this.registerForm = this.fb.group({
-      // Dados Pessoais
       name: ['', [Validators.required, Validators.minLength(3)]],
-      document: ['', [Validators.required, Validators.pattern(/^\d{11}$|^\d{14}$|^\d{3}\.\d{3}\.\d{3}-\d{2}$|^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/)]],
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email], [this.emailValidator()]],
       password: ['', [
         Validators.required, 
         Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&._\-#^()*+=\[\]{}|\\:<>,?~/`~]).{6,}$/)
       ]],
       confirmPassword: ['', [Validators.required]],
       birthDate: ['', [Validators.required]],
-
-      // Endereço
-      zipCode: ['', [Validators.required, Validators.pattern(/^\d{5}-?\d{3}$/)]],
-      street: ['', [Validators.required]],
-      number: ['', [Validators.required]],
-      complement: [''],
-      neighborhood: ['', [Validators.required]],
-      city: ['', [Validators.required]],
-      state: ['', [Validators.required, Validators.maxLength(2)]],
-      addressDescription: ['Casa', [Validators.required]]
     }, {
       validators: this.passwordMatchValidator
     });
+  }
+
+  // Validador customizado para verificar disponibilidade do e-mail
+  emailValidator(): AsyncValidatorFn {
+    return (control: AbstractControl): Observable<ValidationErrors | null> => {
+      if (!control.value) {
+        return of(null);
+      }
+      
+      this.isCheckingEmail = true;
+      return timer(500).pipe(
+        switchMap(() => this.authService.checkEmail(control.value)),
+        map((res: any) => {
+          this.isCheckingEmail = false;
+          // Se a API retornar indícios de que o e-mail está em uso
+          if (res === true || res?.exists || res?.inUse) {
+            return { emailTaken: true };
+          }
+          return null; // OK
+        }),
+        catchError((err) => {
+          this.isCheckingEmail = false;
+          if (err?.error?.message?.toLowerCase().includes('já existe') || err?.error?.message?.toLowerCase().includes('already exists')) {
+             return of({ emailTaken: true });
+          }
+          return of(null);
+        })
+      );
+    };
   }
 
   // Validador customizado para verificar se as senhas coincidem
@@ -58,81 +76,19 @@ export class RegisterComponent {
     return password === confirmPassword ? null : { mismatch: true };
   }
 
-  // Getters para validações fáceis no HTML
   get f() { return this.registerForm.controls; }
-
-  isStepValid(stepIndex: number): boolean {
-    if (stepIndex === 0) {
-      const personalFields = ['name', 'document', 'birthDate', 'email', 'password', 'confirmPassword'];
-      return personalFields.every(field => this.registerForm.get(field)?.valid) && !this.registerForm.errors?.['mismatch'];
-    } else if (stepIndex === 1) {
-      const addressFields = ['zipCode', 'street', 'number', 'neighborhood', 'city', 'state', 'addressDescription'];
-      return addressFields.every(field => this.registerForm.get(field)?.valid);
-    }
-    return false;
-  }
-
-  nextStep() {
-    this.submitted = true;
-    if (this.currentStep === 0) {
-      const personalFields = ['name', 'document', 'birthDate', 'email', 'password'];
-      let stepValid = true;
-      personalFields.forEach(field => {
-        const control = this.registerForm.get(field);
-        control?.markAsTouched();
-        if (control?.invalid) {
-          stepValid = false;
-        }
-      });
-      if (stepValid) {
-        this.currentStep = 1;
-        this.submitted = false;
-      }
-    }
-  }
-
-  prevStep() {
-    if (this.currentStep > 0) {
-      this.currentStep--;
-      this.submitted = false;
-    }
-  }
-
-  searchCep() {
-    const cep = this.registerForm.get('zipCode')?.value?.replace(/\D/g, '');
-    if (cep && cep.length === 8) {
-      this.isLoadingCep = true;
-      fetch(`https://viacep.com.br/ws/${cep}/json/`)
-        .then(res => res.json())
-        .then(data => {
-          if (!data.erro) {
-            this.registerForm.patchValue({
-              street: data.logradouro,
-              neighborhood: data.bairro,
-              city: data.localidade,
-              state: data.uf
-            });
-            ['street', 'neighborhood', 'city', 'state'].forEach(field => {
-              this.registerForm.get(field)?.markAsTouched();
-            });
-          }
-          this.isLoadingCep = false;
-        })
-        .catch(() => {
-          this.isLoadingCep = false;
-        });
-    }
-  }
 
   onSubmit() {
     this.submitted = true;
-    this.registerForm.markAllAsTouched();
 
     if (this.registerForm.invalid) {
       return;
     }
 
-    const formVal = this.registerForm.value;
+    this.isLoading = true;
+    const formVal = this.registerForm.getRawValue();
+    this.registerForm.disable();
+
     let isoBirthDate = formVal.birthDate;
     if (isoBirthDate) {
       try {
@@ -143,23 +99,24 @@ export class RegisterComponent {
     }
 
     const payload = {
+      idSystem: 2147483647,
       name: formVal.name,
-      document: formVal.document.replace(/\D/g, ''),
       email: formVal.email,
       password: formVal.password,
-      birthDate: isoBirthDate,
-      addressDescription: formVal.addressDescription,
-      zipCode: formVal.zipCode.replace(/\D/g, ''),
-      street: formVal.street,
-      number: formVal.number,
-      complement: formVal.complement || '',
-      neighborhood: formVal.neighborhood,
-      city: formVal.city,
-      state: formVal.state.toUpperCase()
+      birthDate: isoBirthDate
     };
 
-    console.log('API Payload:', payload);
-    alert('Cadastro realizado com sucesso! (Veja o payload enviado no console do navegador)');
-    this.router.navigate(['/auth/login']);
+    this.authService.registerSystemUser(payload).subscribe({
+      next: () => {
+         this.toastService.success('Cadastro realizado com sucesso!', 5000);
+         this.router.navigate(['/auth/login']);
+      },
+      error: (err) => {
+         // O interceptor de erro já exibe o toast com a mensagem,
+         // então apenas removemos o loading state.
+         this.isLoading = false;
+         this.registerForm.enable();
+      }
+    });
   }
 }

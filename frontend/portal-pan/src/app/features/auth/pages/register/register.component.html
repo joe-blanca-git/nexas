@@ -1,254 +1,121 @@
 <div class="row p-0 m-0 min-vh-100">
     <!-- Left panel (Form) -->
-    <div class="col-12 col-md-6 h-100 d-flex flex-column gap-3 justify-content-center align-items-center login-left px-2 px-md-5">
+    <div class="col-12 col-md-6 d-flex flex-column gap-3 justify-content-center align-items-center login-left px-2 px-md-5">
         <div class="card w-100 rounded-5 shadow border-0">
-            <!-- Mobile Header Logo -->
+            <!-- Mobile Header Logo (visible only on mobile) -->
             <div class="card-header rounded-top-5 d-md-none mb-2 bg-dark d-flex justify-content-center align-items-center py-4">
-                <img width="150" height="auto" src="logos/logo-nobg.png" alt="Logo">
+                <img width="150" height="auto" src="logos/logo-nobg.png" alt="Logo Mobile">
             </div>
-            
+
             <div class="card-body p-4 p-md-5">
-                <!-- Stepper Progress Header -->
-                <div class="stepper mb-4 d-flex justify-content-center align-items-center">
-                    <!-- Step 1 Indicator -->
-                    <div class="step-item d-flex flex-column align-items-center" [class.active]="currentStep === 0" [class.completed]="currentStep > 0">
-                        <div class="step-circle d-flex justify-content-center align-items-center">
-                            <i class="fas fa-user"></i>
-                        </div>
-                        <span class="step-label mt-2 small fw-semibold">Dados Pessoais</span>
-                    </div>
-                    
-                    <!-- Line Connector -->
-                    <div class="step-connector" [class.active]="currentStep > 0"></div>
-                    
-                    <!-- Step 2 Indicator -->
-                    <div class="step-item d-flex flex-column align-items-center" [class.active]="currentStep === 1" [class.completed]="currentStep > 1">
-                        <div class="step-circle d-flex justify-content-center align-items-center">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <span class="step-label mt-2 small fw-semibold">Endereço</span>
-                    </div>
+                <!-- Title -->
+                <div class="text-center text-md-start mb-4">
+                    <h3 class="fw-bold text-dark mb-1">Crie sua conta</h3>
+                    <p class="text-muted small">Preencha os dados abaixo para se cadastrar no portal.</p>
                 </div>
 
-                <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-                    <ng-container [ngSwitch]="currentStep">
-                        
-                        <!-- STEP 1: Dados Pessoais -->
-                        <div *ngSwitchCase="0" class="step-content animated fadeIn">
-                            <h4 class="mb-4 text-dark fw-bold border-bottom pb-2">Informações Pessoais</h4>
-                            
-                            <!-- Nome Completo -->
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold text-muted">Nome Completo</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light text-muted border-end-0"><i class="fas fa-signature"></i></span>
-                                    <input type="text" class="form-control bg-light border-start-0" formControlName="name" placeholder="Ex: João da Silva"
-                                        [class.is-invalid]="(f['name'].touched || submitted) && f['name'].invalid"
-                                        [class.is-valid]="f['name'].touched && f['name'].valid">
-                                </div>
-                                <div class="text-danger small mt-1" *ngIf="(f['name'].touched || submitted) && f['name'].errors?.['required']">Nome completo é obrigatório.</div>
-                                <div class="text-danger small mt-1" *ngIf="(f['name'].touched || submitted) && f['name'].errors?.['minlength']">Nome deve ter pelo menos 3 caracteres.</div>
-                            </div>
+                <form [formGroup]="registerForm">
+                    <!-- Nome Completo -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-muted">Nome Completo</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-muted border-end-0"><i class="fas fa-signature"></i></span>
+                            <input type="text" class="form-control bg-light border-start-0" formControlName="name" placeholder="Ex: João da Silva"
+                                [class.is-invalid]="(f['name'].touched || submitted) && f['name'].invalid"
+                                [class.is-valid]="f['name'].touched && f['name'].valid">
+                        </div>
+                        <div class="text-danger small mt-1" *ngIf="(f['name'].touched || submitted) && f['name'].errors?.['required']">Nome completo é obrigatório.</div>
+                        <div class="text-danger small mt-1" *ngIf="(f['name'].touched || submitted) && f['name'].errors?.['minlength']">Nome deve ter pelo menos 3 caracteres.</div>
+                    </div>
 
-                            <div class="row">
-                                <!-- Documento -->
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-semibold text-muted">CPF ou CNPJ</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text bg-light text-muted border-end-0"><i class="fas fa-id-card"></i></span>
-                                        <input type="text" class="form-control bg-light border-start-0" formControlName="document" placeholder="Somente números"
-                                            [class.is-invalid]="(f['document'].touched || submitted) && f['document'].invalid"
-                                            [class.is-valid]="f['document'].touched && f['document'].valid">
-                                    </div>
-                                    <div class="text-danger small mt-1" *ngIf="(f['document'].touched || submitted) && f['document'].errors?.['required']">Documento é obrigatório.</div>
-                                    <div class="text-danger small mt-1" *ngIf="(f['document'].touched || submitted) && f['document'].errors?.['pattern']">Digite um CPF ou CNPJ válido.</div>
-                                </div>
+                    <!-- Data de Nascimento -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-muted">Data de Nascimento</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-muted border-end-0"><i class="fas fa-calendar-alt"></i></span>
+                            <input type="date" class="form-control bg-light border-start-0" formControlName="birthDate"
+                                [class.is-invalid]="(f['birthDate'].touched || submitted) && f['birthDate'].invalid"
+                                [class.is-valid]="f['birthDate'].touched && f['birthDate'].valid">
+                        </div>
+                        <div class="text-danger small mt-1" *ngIf="(f['birthDate'].touched || submitted) && f['birthDate'].errors?.['required']">Data de nascimento é obrigatória.</div>
+                    </div>
 
-                                <!-- Data de Nascimento -->
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-semibold text-muted">Data de Nascimento</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text bg-light text-muted border-end-0"><i class="fas fa-calendar-alt"></i></span>
-                                        <input type="date" class="form-control bg-light border-start-0" formControlName="birthDate"
-                                            [class.is-invalid]="(f['birthDate'].touched || submitted) && f['birthDate'].invalid"
-                                            [class.is-valid]="f['birthDate'].touched && f['birthDate'].valid">
-                                    </div>
-                                    <div class="text-danger small mt-1" *ngIf="(f['birthDate'].touched || submitted) && f['birthDate'].errors?.['required']">Data de nascimento é obrigatória.</div>
-                                </div>
-                            </div>
+                    <!-- E-mail -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-muted">E-mail</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-muted border-end-0"><i class="fas fa-envelope"></i></span>
+                            <input type="email" class="form-control bg-light border-start-0" formControlName="email" placeholder="nome@exemplo.com"
+                                [class.is-invalid]="(f['email'].touched || submitted) && (f['email'].invalid || registerForm.get('email')?.errors?.['emailTaken'])"
+                                [class.is-valid]="f['email'].touched && f['email'].valid && !isCheckingEmail">
+                            <span class="input-group-text bg-light border-start-0" *ngIf="isCheckingEmail">
+                                <span class="spinner-border spinner-border-sm text-dark" role="status"></span>
+                            </span>
+                        </div>
+                        <div class="text-danger small mt-1" *ngIf="(f['email'].touched || submitted) && f['email'].errors?.['required']">E-mail é obrigatório.</div>
+                        <div class="text-danger small mt-1" *ngIf="(f['email'].touched || submitted) && f['email'].errors?.['email']">Digite um e-mail válido.</div>
+                        <div class="text-danger small mt-1" *ngIf="(f['email'].touched || submitted) && registerForm.get('email')?.errors?.['emailTaken']">Este e-mail já está em uso.</div>
+                    </div>
 
-                            <!-- E-mail -->
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold text-muted">E-mail</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light text-muted border-end-0"><i class="fas fa-envelope"></i></span>
-                                    <input type="email" class="form-control bg-light border-start-0" formControlName="email" placeholder="nome@exemplo.com"
-                                        [class.is-invalid]="(f['email'].touched || submitted) && f['email'].invalid"
-                                        [class.is-valid]="f['email'].touched && f['email'].valid">
-                                </div>
-                                <div class="text-danger small mt-1" *ngIf="(f['email'].touched || submitted) && f['email'].errors?.['required']">E-mail é obrigatório.</div>
-                                <div class="text-danger small mt-1" *ngIf="(f['email'].touched || submitted) && f['email'].errors?.['email']">Digite um e-mail válido.</div>
-                            </div>
-
-                            <!-- Senha -->
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold text-muted">Senha de Acesso</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light text-muted border-end-0"><i class="fas fa-lock"></i></span>
-                                    <input [type]="showPassword ? 'text' : 'password'" class="form-control bg-light border-start-0 border-end-0" formControlName="password" placeholder="Digite sua senha"
-                                        [class.is-invalid]="(f['password'].touched || submitted) && f['password'].invalid"
-                                        [class.is-valid]="f['password'].touched && f['password'].valid">
-                                    <button type="button" class="input-group-text bg-light text-muted border-start-0" (click)="showPassword = !showPassword">
-                                        <i class="fas" [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword"></i>
-                                    </button>
-                                </div>
-                                <div class="text-danger small mt-1" *ngIf="(f['password'].touched || submitted) && f['password'].errors?.['required']">Senha é obrigatória.</div>
-                                <div class="text-danger small mt-1" *ngIf="(f['password'].touched || submitted) && f['password'].errors?.['pattern']">
-                                    Mínimo de 6 caracteres contendo: 1 letra maiúscula, 1 minúscula, 1 número e 1 caractere especial.
-                                </div>
-                            </div>
-
-                            <!-- Confirmar Senha -->
-                            <div class="mb-4">
-                                <label class="form-label fw-semibold text-muted">Confirmar Senha</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light text-muted border-end-0"><i class="fas fa-lock"></i></span>
-                                    <input [type]="showConfirmPassword ? 'text' : 'password'" class="form-control bg-light border-start-0 border-end-0" formControlName="confirmPassword" placeholder="Confirme sua senha"
-                                        [class.is-invalid]="(f['confirmPassword'].touched || submitted) && (f['confirmPassword'].invalid || registerForm.errors?.['mismatch'])"
-                                        [class.is-valid]="f['confirmPassword'].touched && f['confirmPassword'].valid && !registerForm.errors?.['mismatch']">
-                                    <button type="button" class="input-group-text bg-light text-muted border-start-0" (click)="showConfirmPassword = !showConfirmPassword">
-                                        <i class="fas" [class.fa-eye]="!showConfirmPassword" [class.fa-eye-slash]="showConfirmPassword"></i>
-                                    </button>
-                                </div>
-                                <div class="text-danger small mt-1" *ngIf="(f['confirmPassword'].touched || submitted) && f['confirmPassword'].errors?.['required']">Confirmação de senha é obrigatória.</div>
-                                <div class="text-danger small mt-1" *ngIf="(f['confirmPassword'].touched || submitted) && !f['confirmPassword'].errors?.['required'] && registerForm.errors?.['mismatch']">As senhas não coincidem.</div>
-                            </div>
-
-                            <!-- Next Button -->
-                            <button type="button" class="btn btn-dark w-100 py-2.5 rounded-3 fw-semibold text-uppercase" (click)="nextStep()">
-                                Avançar <i class="fas fa-arrow-right ms-2"></i>
+                    <!-- Senha -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-muted mb-1">Senha de Acesso</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-muted border-end-0"><i class="fas fa-lock"></i></span>
+                            <input [type]="showPassword ? 'text' : 'password'" class="form-control bg-light border-start-0 border-end-0" formControlName="password" placeholder="Crie uma senha forte"
+                                [class.is-invalid]="(f['password'].touched || submitted) && f['password'].invalid"
+                                [class.is-valid]="f['password'].touched && f['password'].valid">
+                            <button type="button" class="input-group-text bg-light text-muted border-start-0" (click)="showPassword = !showPassword">
+                                <i class="fas" [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword"></i>
                             </button>
                         </div>
-
-                        <!-- STEP 2: Endereço -->
-                        <div *ngSwitchCase="1" class="step-content animated fadeIn">
-                            <h4 class="mb-4 text-dark fw-bold border-bottom pb-2">Endereço Residencial</h4>
-
-                            <div class="row">
-                                <!-- CEP -->
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-semibold text-muted">CEP</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text bg-light text-muted border-end-0"><i class="fas fa-map-pin"></i></span>
-                                        <input type="text" class="form-control bg-light border-start-0" formControlName="zipCode" placeholder="00000-000" (keyup)="searchCep()"
-                                            [class.is-invalid]="(f['zipCode'].touched || submitted) && f['zipCode'].invalid"
-                                            [class.is-valid]="f['zipCode'].touched && f['zipCode'].valid">
-                                        <span class="input-group-text bg-light border-start-0" *ngIf="isLoadingCep">
-                                            <span class="spinner-border spinner-border-sm text-dark" role="status"></span>
-                                        </span>
-                                    </div>
-                                    <div class="text-danger small mt-1" *ngIf="(f['zipCode'].touched || submitted) && f['zipCode'].errors?.['required']">CEP é obrigatório.</div>
-                                    <div class="text-danger small mt-1" *ngIf="(f['zipCode'].touched || submitted) && f['zipCode'].errors?.['pattern']">Digite um CEP válido.</div>
-                                </div>
-
-                                <!-- Tipo / Descrição do Endereço -->
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-semibold text-muted">Tipo de Endereço</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text bg-light text-muted border-end-0"><i class="fas fa-tag"></i></span>
-                                        <select class="form-select bg-light border-start-0" formControlName="addressDescription"
-                                            [class.is-invalid]="(f['addressDescription'].touched || submitted) && f['addressDescription'].invalid"
-                                            [class.is-valid]="f['addressDescription'].touched && f['addressDescription'].valid">
-                                            <option value="Casa">Casa</option>
-                                            <option value="Trabalho">Trabalho</option>
-                                            <option value="Outro">Outro</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Rua -->
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold text-muted">Rua / Logradouro</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light text-muted border-end-0"><i class="fas fa-road"></i></span>
-                                    <input type="text" class="form-control bg-light border-start-0" formControlName="street" placeholder="Rua, Avenida, etc."
-                                        [class.is-invalid]="(f['street'].touched || submitted) && f['street'].invalid"
-                                        [class.is-valid]="f['street'].touched && f['street'].valid">
-                                </div>
-                                <div class="text-danger small mt-1" *ngIf="(f['street'].touched || submitted) && f['street'].errors?.['required']">Rua/Logradouro é obrigatório.</div>
-                            </div>
-
-                            <div class="row">
-                                <!-- Número -->
-                                <div class="col-md-4 mb-3">
-                                    <label class="form-label fw-semibold text-muted">Número</label>
-                                    <input type="text" class="form-control bg-light" formControlName="number" placeholder="Nº"
-                                        [class.is-invalid]="(f['number'].touched || submitted) && f['number'].invalid"
-                                        [class.is-valid]="f['number'].touched && f['number'].valid">
-                                    <div class="text-danger small mt-1" *ngIf="(f['number'].touched || submitted) && f['number'].errors?.['required']">Obrigatório.</div>
-                                </div>
-
-                                <!-- Complemento -->
-                                <div class="col-md-8 mb-3">
-                                    <label class="form-label fw-semibold text-muted">Complemento <span class="text-muted font-monospace small">(Opcional)</span></label>
-                                    <input type="text" class="form-control bg-light" formControlName="complement" placeholder="Apto, Bloco, etc.">
-                                </div>
-                            </div>
-
-                            <!-- Bairro -->
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold text-muted">Bairro</label>
-                                <input type="text" class="form-control bg-light" formControlName="neighborhood" placeholder="Seu bairro"
-                                    [class.is-invalid]="(f['neighborhood'].touched || submitted) && f['neighborhood'].invalid"
-                                    [class.is-valid]="f['neighborhood'].touched && f['neighborhood'].valid">
-                                <div class="text-danger small mt-1" *ngIf="(f['neighborhood'].touched || submitted) && f['neighborhood'].errors?.['required']">Bairro é obrigatório.</div>
-                            </div>
-
-                            <div class="row mb-4">
-                                <!-- Cidade -->
-                                <div class="col-md-8 mb-3">
-                                    <label class="form-label fw-semibold text-muted">Cidade</label>
-                                    <input type="text" class="form-control bg-light" formControlName="city" placeholder="Ex: São Paulo"
-                                        [class.is-invalid]="(f['city'].touched || submitted) && f['city'].invalid"
-                                        [class.is-valid]="f['city'].touched && f['city'].valid">
-                                    <div class="text-danger small mt-1" *ngIf="(f['city'].touched || submitted) && f['city'].errors?.['required']">Cidade é obrigatória.</div>
-                                </div>
-
-                                <!-- Estado -->
-                                <div class="col-md-4 mb-3">
-                                    <label class="form-label fw-semibold text-muted">UF</label>
-                                    <input type="text" class="form-control bg-light text-uppercase" formControlName="state" placeholder="UF" maxlength="2"
-                                        [class.is-invalid]="(f['state'].touched || submitted) && f['state'].invalid"
-                                        [class.is-valid]="f['state'].touched && f['state'].valid">
-                                    <div class="text-danger small mt-1" *ngIf="(f['state'].touched || submitted) && f['state'].errors?.['required']">UF é obrigatória.</div>
-                                    <div class="text-danger small mt-1" *ngIf="(f['state'].touched || submitted) && f['state'].errors?.['maxlength']">Máximo 2 letras.</div>
-                                </div>
-                            </div>
-
-                            <!-- Control Buttons -->
-                            <div class="d-flex gap-3 mt-4">
-                                <button type="button" class="btn btn-outline-dark w-50 py-2.5 rounded-3 fw-semibold text-uppercase" (click)="prevStep()">
-                                    <i class="fas fa-arrow-left me-2"></i> Voltar
-                                </button>
-                                <button type="submit" class="btn btn-dark w-50 py-2.5 rounded-3 fw-semibold text-uppercase" [disabled]="registerForm.invalid">
-                                    Cadastrar <i class="fas fa-check ms-2"></i>
-                                </button>
-                            </div>
+                        <div class="text-danger small mt-1" *ngIf="(f['password'].touched || submitted) && f['password'].errors?.['required']">Senha é obrigatória.</div>
+                        <div class="text-danger small mt-1" *ngIf="(f['password'].touched || submitted) && f['password'].errors?.['pattern']">
+                            Mínimo de 6 caracteres contendo: 1 letra maiúscula, 1 minúscula, 1 número e 1 caractere especial.
                         </div>
+                    </div>
 
-                    </ng-container>
+                    <!-- Confirmar Senha -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold text-muted">Confirmar Senha</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-muted border-end-0"><i class="fas fa-lock"></i></span>
+                            <input [type]="showConfirmPassword ? 'text' : 'password'" class="form-control bg-light border-start-0 border-end-0" formControlName="confirmPassword" placeholder="Confirme sua senha"
+                                [class.is-invalid]="(f['confirmPassword'].touched || submitted) && (f['confirmPassword'].invalid || registerForm.errors?.['mismatch'])"
+                                [class.is-valid]="f['confirmPassword'].touched && f['confirmPassword'].valid && !registerForm.errors?.['mismatch']">
+                            <button type="button" class="input-group-text bg-light text-muted border-start-0" (click)="showConfirmPassword = !showConfirmPassword">
+                                <i class="fas" [class.fa-eye]="!showConfirmPassword" [class.fa-eye-slash]="showConfirmPassword"></i>
+                            </button>
+                        </div>
+                        <div class="text-danger small mt-1" *ngIf="(f['confirmPassword'].touched || submitted) && f['confirmPassword'].errors?.['required']">Confirmação de senha é obrigatória.</div>
+                        <div class="text-danger small mt-1" *ngIf="(f['confirmPassword'].touched || submitted) && !f['confirmPassword'].errors?.['required'] && registerForm.errors?.['mismatch']">As senhas não coincidem.</div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="button" class="btn btn-dark w-100 py-2.5 rounded-3 fw-semibold text-uppercase" [disabled]="registerForm.invalid || isLoading || isCheckingEmail" (click)="onSubmit()">
+                        <ng-container *ngIf="!isLoading">
+                            Cadastrar <i class="fas fa-user-plus ms-2"></i>
+                        </ng-container>
+                        <ng-container *ngIf="isLoading">
+                            Aguarde... <span class="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>
+                        </ng-container>
+                    </button>
                 </form>
-
             </div>
-            
+
             <!-- Card Footer -->
             <div class="card-footer border-top-0 d-flex justify-content-center align-items-center py-4 bg-transparent">
                 <span class="text-muted">Já tem uma conta? <a class="text-dark fw-bold text-decoration-none" routerLink="/auth/login">Faça Login</a></span>
             </div>
         </div>
+
+        <!-- Footer -->
+        <div class="footer position-absolute bottom-0 w-100 text-center text-md-start ps-md-5 d-flex flex-column py-3">
+            <span class="text-muted small">Todos os direitos reservados à Agivys Tecnologia e Serviços</span>
+            <span class="text-muted small">&copy; 2026 Agivys</span>
+        </div>
     </div>
-    
+
     <!-- Right panel (Decorative BG with Logo) -->
     <div class="col-12 col-md-6 bg-dark d-flex justify-content-center align-items-center login-right">
         <img src="logos/logo-nobg.png" alt="Logo">

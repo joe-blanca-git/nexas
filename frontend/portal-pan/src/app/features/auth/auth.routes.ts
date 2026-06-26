@@ -4,6 +4,7 @@ import { LoginComponent } from "./pages/login/login.component";
 import { RecoveryPasswordComponent } from "./pages/recovery-password/recovery-password.component";
 import { RegisterComponent } from "./pages/register/register.component";
 import { UpdatePasswordComponent } from "./pages/update-password/update-password.component";
+import { AuthGuardService } from "../../core/guards/auth.guard";
 
 export const AUTH_ROUTES: Routes = [
     {
@@ -18,22 +19,22 @@ export const AUTH_ROUTES: Routes = [
             {
                 path: 'login',
                 component: LoginComponent,
-                // canActivate: [AuthGuardService],
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'recovery-password',
                 component: RecoveryPasswordComponent,
-                // canActivate: [AuthGuardService],
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'reset-password',
                 component: UpdatePasswordComponent,
-                // canActivate: [AuthGuardService],
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'register',
                 component: RegisterComponent,
-                // canActivate: [AuthGuardService],
+                canActivate: [AuthGuardService],
             },
         ]
     }

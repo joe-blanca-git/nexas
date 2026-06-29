@@ -1,9 +1,13 @@
 // Configuração do endpoint da API (Altere para localhost se estiver desenvolvendo localmente)
 const API_BASE = "https://joederblanca.com.br/nexas-api/v1/api/Courses";
+const API_TEACHERS = "https://joederblanca.com.br/nexas-api/v1/api/Teachers";
 
 document.addEventListener("DOMContentLoaded", () => {
     if (document.getElementById("container-cursos")) {
         fetchCursos();
+    }
+    if (document.getElementById("teachers-container")) {
+        fetchTeachers();
     }
     if (document.getElementById("course-name") || document.getElementById("curso-hero")) {
         fetchCursoDetalhes();
@@ -65,6 +69,61 @@ async function fetchCursos() {
         container.innerHTML = `<p class="text-center py-5 text-muted">Não foi possível carregar os cursos. Tente novamente mais tarde.</p>`;
     } finally {
         hidePreloader();
+    }
+}
+
+async function fetchTeachers() {
+    const container = document.getElementById("teachers-container");
+    if (!container) return;
+
+    try {
+        const response = await fetch(API_TEACHERS);
+        if (!response.ok) throw new Error("Erro ao buscar professores");
+        
+        const teachers = await response.json();
+        container.innerHTML = "";
+
+        teachers.forEach((teacher, index) => {
+            const col = document.createElement("div");
+            col.className = `col-lg-5 col-md-10 text-center reveal ${index > 0 ? 'delay-' + (index % 3) : ''}`;
+            
+            const avatar = teacher.avatar ? teacher.avatar : "https://joederblanca.com.br/assets/img/profile/default-avatar.png";
+            
+            // Format role and position separated by <br>
+            let roleHtml = "";
+            if (teacher.role && teacher.position) {
+                roleHtml = `${teacher.role} <br> ${teacher.position}`;
+            } else if (teacher.role) {
+                roleHtml = teacher.role;
+            } else if (teacher.position) {
+                roleHtml = teacher.position;
+            }
+
+            let socialLinks = "";
+            if (teacher.linkedinLink) {
+                socialLinks += `<a href="${teacher.linkedinLink}" target="_blank" class="text-primary me-3 fs-5"><i class="fab fa-linkedin"></i></a>`;
+            }
+            if (teacher.instagramLink) {
+                socialLinks += `<a href="${teacher.instagramLink}" target="_blank" class="text-primary fs-5"><i class="fab fa-instagram"></i></a>`;
+            }
+
+            col.innerHTML = `
+                <div class="mb-4">
+                    <img src="${avatar}" class="rounded-circle shadow-lg mb-3" style="width: 180px; height: 180px; object-fit: cover; border: 6px solid var(--bg-light);" alt="${teacher.name}">
+                </div>
+                <h4 class="fw-bold mb-1">${teacher.name}</h4>
+                <p class="text-primary fw-bold mb-3">${roleHtml}</p>
+                <p class="text-muted px-lg-5">${teacher.bio || ''}</p>
+                <div class="mt-3">
+                    ${socialLinks}
+                </div>
+            `;
+            container.appendChild(col);
+        });
+
+    } catch (error) {
+        console.error("Erro ao buscar professores:", error);
+        container.innerHTML = `<p class="text-center py-5 text-muted">Não foi possível carregar o time de professores no momento.</p>`;
     }
 }
 
@@ -221,6 +280,46 @@ async function fetchCursoDetalhes() {
                             <div>
                                 <h6 class="fw-bold mb-1">${domain.title}</h6>
                                 <p class="small text-muted">${domain.description}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // 6. Renderizar os professores
+        const teachersContainer = document.getElementById("course-teachers-container");
+        if (teachersContainer && curso.teachers && curso.teachers.length > 0) {
+            teachersContainer.innerHTML = "";
+            curso.teachers.forEach(teacher => {
+                // Se Avatar for base64 ou URL usa ele, senao default
+                const avatar = teacher.avatar ? teacher.avatar : "https://joederblanca.com.br/assets/img/profile/default-avatar.png";
+                
+                // Concatena Role e Position se os dois existirem
+                const rolePosition = [teacher.role, teacher.position].filter(Boolean).join(" & ");
+                
+                let socialLinks = "";
+                if (teacher.linkedinLink) {
+                    socialLinks += `<a href="${teacher.linkedinLink}" target="_blank" class="text-primary me-3 fs-4"><i class="fab fa-linkedin"></i></a>`;
+                }
+                if (teacher.instagramLink) {
+                    socialLinks += `<a href="${teacher.instagramLink}" target="_blank" class="text-primary fs-4"><i class="fab fa-instagram"></i></a>`;
+                }
+
+                teachersContainer.innerHTML += `
+                    <div class="card p-5 border-0 bg-light-agro rounded-5 mb-4 shadow-sm reveal">
+                        <div class="row align-items-center g-5">
+                            <div class="col-md-4 text-center">
+                                <img src="${avatar}" class="rounded-circle shadow-lg mb-3" style="width: 200px; height: 200px; object-fit: cover; border: 8px solid white;" alt="${teacher.name}">
+                            </div>
+                            <div class="col-md-8">
+                                <span class="text-primary fw-bold text-uppercase d-block mb-2">Seu Professor</span>
+                                <h3 class="fw-bold mb-3">${teacher.name}</h3>
+                                <p class="text-primary fw-bold mb-4">${rolePosition}</p>
+                                <p class="text-muted fs-5 text-justify">${teacher.bio || ''}</p>
+                                <div class="mt-4">
+                                    ${socialLinks}
+                                </div>
                             </div>
                         </div>
                     </div>

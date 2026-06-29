@@ -24,7 +24,30 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddAuthenticationSetup(builder.Configuration);
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .ConfigureApiBehaviorOptions(options =>
+    {
+        options.InvalidModelStateResponseFactory = context =>
+        {
+            var errors = context.ModelState
+                .Where(e => e.Value.Errors.Count > 0)
+                .Select(e => new
+                {
+                    PropertyName = e.Key,
+                    ErrorMessage = e.Value.Errors.First().ErrorMessage
+                }).ToList();
+
+            var response = new
+            {
+                StatusCode = 400,
+                Message = "Um ou mais erros de validação ocorreram na sua requisição. Verifique o formato dos dados enviados.",
+                Errors = errors,
+                StackTrace = (string)null
+            };
+
+            return new Microsoft.AspNetCore.Mvc.BadRequestObjectResult(response);
+        };
+    });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerSetup();
 

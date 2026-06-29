@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Nexas.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("v1/api/[controller]")]
 public abstract class ApiControllerBase : ControllerBase
 {
     private ISender? _mediator;

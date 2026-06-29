@@ -25,6 +25,8 @@ namespace Nexas.Application.Teachers.Queries.GetTeachers
                     Id = t.Id,
                     Name = t.Name,
                     Role = t.Role,
+                    Position = t.Position,
+                    Avatar = t.Avatar,
                     Bio = t.Bio,
                     InstagramLink = t.InstagramLink,
                     LinkedinLink = t.LinkedinLink,

@@ -8,6 +8,8 @@ namespace Nexas.Application.Teachers.Commands.CreateTeacher
     {
         public string Name { get; init; } = string.Empty;
         public string? Role { get; init; }
+        public string? Position { get; init; }
+        public string? Avatar { get; init; }
         public string? Bio { get; init; }
         public string? InstagramLink { get; init; }
         public string? LinkedinLink { get; init; }
@@ -29,6 +31,8 @@ namespace Nexas.Application.Teachers.Commands.CreateTeacher
             var teacher = Teacher.Create(
                 request.Name,
                 request.Role,
+                request.Position,
+                request.Avatar,
                 request.Bio,
                 request.InstagramLink,
                 request.LinkedinLink,

@@ -119,6 +119,8 @@ namespace Nexas.Application.Courses.Queries.GetCourses
                         Id = ct.Teacher.Id,
                         Name = ct.Teacher.Name,
                         Role = ct.Teacher.Role,
+                        Position = ct.Teacher.Position,
+                        Avatar = ct.Teacher.Avatar,
                         Bio = ct.Teacher.Bio,
                         InstagramLink = ct.Teacher.InstagramLink,
                         LinkedinLink = ct.Teacher.LinkedinLink,

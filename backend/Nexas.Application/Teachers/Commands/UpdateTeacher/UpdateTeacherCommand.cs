@@ -8,6 +8,8 @@ namespace Nexas.Application.Teachers.Commands.UpdateTeacher
         public int Id { get; init; }
         public string Name { get; init; } = string.Empty;
         public string? Role { get; init; }
+        public string? Position { get; init; }
+        public string? Avatar { get; init; }
         public string? Bio { get; init; }
         public string? InstagramLink { get; init; }
         public string? LinkedinLink { get; init; }
@@ -35,6 +37,8 @@ namespace Nexas.Application.Teachers.Commands.UpdateTeacher
 
             teacher.Name = request.Name;
             teacher.Role = request.Role;
+            teacher.Position = request.Position;
+            teacher.Avatar = request.Avatar;
             teacher.Bio = request.Bio;
             teacher.InstagramLink = request.InstagramLink;
             teacher.LinkedinLink = request.LinkedinLink;

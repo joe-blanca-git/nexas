@@ -9,6 +9,8 @@ using Nexas.Application.Teachers.Common;
 
 namespace Nexas.Api.Controllers;
 
+[ApiController]
+[Route("v1/api/[controller]")]
 public class TeachersController : ApiControllerBase
 {
     /// <summary>

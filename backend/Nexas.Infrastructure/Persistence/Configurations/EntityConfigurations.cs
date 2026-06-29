@@ -123,7 +123,7 @@ namespace Nexas.Infrastructure.Persistence.Configurations
             builder.Property(t => t.Name).HasColumnName("Name").IsRequired().HasMaxLength(255);
             builder.Property(t => t.Role).HasColumnName("Role").HasMaxLength(200);
             builder.Property(t => t.Position).HasColumnName("Position").HasMaxLength(200);
-            builder.Property(t => t.Avatar).HasColumnName("Avatar").HasColumnType("nvarchar(max)");
+            builder.Property(t => t.Avatar).HasColumnName("Avatar").HasColumnType("longtext");
             builder.Property(t => t.Bio).HasColumnName("Bio").HasMaxLength(1000);
             builder.Property(t => t.InstagramLink).HasColumnName("InstagramLink").HasMaxLength(500);
             builder.Property(t => t.LinkedinLink).HasColumnName("LinkedinLink").HasMaxLength(500);

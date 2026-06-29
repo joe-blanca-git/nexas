@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -13,8 +13,9 @@ namespace Nexas.Infrastructure.Migrations
             migrationBuilder.AddColumn<string>(
                 name: "Avatar",
                 table: "Teachers",
-                type: "nvarchar(max)",
-                nullable: true);
+                type: "longtext",
+                nullable: true)
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.AddColumn<string>(
                 name: "Position",

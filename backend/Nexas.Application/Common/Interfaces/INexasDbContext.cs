@@ -14,6 +14,8 @@ namespace Nexas.Application.Common.Interfaces
         DbSet<Purchase> Purchases { get; }
         DbSet<SubscriptionPayment> SubscriptionPayments { get; }
         DbSet<CourseDomain> CourseDomains { get; }
+        DbSet<Teacher> Teachers { get; }
+        DbSet<CourseTeacher> CourseTeachers { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

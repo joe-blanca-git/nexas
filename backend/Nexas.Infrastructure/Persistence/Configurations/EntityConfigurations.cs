@@ -112,4 +112,44 @@ namespace Nexas.Infrastructure.Persistence.Configurations
         }
     }
 
+    public class TeacherConfiguration : IEntityTypeConfiguration<Teacher>
+    {
+        public void Configure(EntityTypeBuilder<Teacher> builder)
+        {
+            builder.ToTable("Teachers");
+            builder.HasKey(t => t.Id);
+            builder.Property(t => t.Id).HasColumnName("TeacherId");
+
+            builder.Property(t => t.Name).HasColumnName("Name").IsRequired().HasMaxLength(255);
+            builder.Property(t => t.Role).HasColumnName("Role").HasMaxLength(200);
+            builder.Property(t => t.Bio).HasColumnName("Bio").HasMaxLength(1000);
+            builder.Property(t => t.InstagramLink).HasColumnName("InstagramLink").HasMaxLength(500);
+            builder.Property(t => t.LinkedinLink).HasColumnName("LinkedinLink").HasMaxLength(500);
+            builder.Property(t => t.IdAgivys).HasColumnName("IdAgivys").HasMaxLength(100);
+
+            builder.Property(t => t.Active).HasColumnName("Active");
+            builder.Property(t => t.CreatedAt).HasColumnName("CreatedAt");
+            builder.Property(t => t.CreatedBy).HasColumnName("CreatedBy");
+            builder.Property(t => t.UpdatedAt).HasColumnName("UpdatedAt");
+            builder.Property(t => t.UpdatedBy).HasColumnName("UpdatedBy");
+        }
+    }
+
+    public class CourseTeacherConfiguration : IEntityTypeConfiguration<CourseTeacher>
+    {
+        public void Configure(EntityTypeBuilder<CourseTeacher> builder)
+        {
+            builder.ToTable("CourseTeachers");
+            
+            builder.HasKey(ct => new { ct.CourseId, ct.TeacherId });
+
+            builder.HasOne(ct => ct.Course)
+                .WithMany(c => c.CourseTeachers)
+                .HasForeignKey(ct => ct.CourseId);
+
+            builder.HasOne(ct => ct.Teacher)
+                .WithMany(t => t.CourseTeachers)
+                .HasForeignKey(ct => ct.TeacherId);
+        }
+    }
 }

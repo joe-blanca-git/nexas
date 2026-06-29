@@ -209,6 +209,25 @@ async function fetchCursoDetalhes() {
             });
         }
 
+        // 5. Renderizar os domínios (O que você vai dominar)
+        const domainsContainer = document.getElementById("course-domains-container");
+        if (domainsContainer && curso.domains && curso.domains.length > 0) {
+            domainsContainer.innerHTML = "";
+            curso.domains.forEach(domain => {
+                domainsContainer.innerHTML += `
+                    <div class="col-md-6">
+                        <div class="d-flex gap-3">
+                            <i class="bi bi-check-circle-fill text-primary fs-4"></i>
+                            <div>
+                                <h6 class="fw-bold mb-1">${domain.title}</h6>
+                                <p class="small text-muted">${domain.description}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
     } catch (error) {
         console.error("Erro ao carregar detalhes do curso:", error);
         const nameEl = document.getElementById("course-name");

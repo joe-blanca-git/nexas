@@ -28,6 +28,8 @@ namespace Nexas.Application.Courses.Queries.GetCourseById
             return await _context.Courses
                 .Where(c => c.Id == request.Id && c.Active)
                 .Include(c => c.Domains)
+                .Include(c => c.CourseTeachers)
+                    .ThenInclude(ct => ct.Teacher)
                 .Include(c => c.Modules.Where(m => m.Active))
                     .ThenInclude(m => m.Lessons.Where(l => l.Active))
                 .Select(c => new CourseDto
@@ -62,6 +64,16 @@ namespace Nexas.Application.Courses.Queries.GetCourseById
                         Id = d.Id,
                         Title = d.Title,
                         Description = d.Description
+                    }).ToList(),
+                    Teachers = c.CourseTeachers.Where(ct => ct.Teacher.Active).Select(ct => new Nexas.Application.Teachers.Common.TeacherDto
+                    {
+                        Id = ct.Teacher.Id,
+                        Name = ct.Teacher.Name,
+                        Role = ct.Teacher.Role,
+                        Bio = ct.Teacher.Bio,
+                        InstagramLink = ct.Teacher.InstagramLink,
+                        LinkedinLink = ct.Teacher.LinkedinLink,
+                        IdAgivys = ct.Teacher.IdAgivys
                     }).ToList()
                 })
                 .FirstOrDefaultAsync(cancellationToken);

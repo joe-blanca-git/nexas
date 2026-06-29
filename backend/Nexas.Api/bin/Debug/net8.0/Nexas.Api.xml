@@ -244,5 +244,35 @@
             </remarks>
             <returns>Detalhes da assinatura do usuário.</returns>
         </member>
+        <member name="M:Nexas.Api.Controllers.TeachersController.GetTeachers">
+            <summary>
+            Lista todos os professores ativos.
+            </summary>
+        </member>
+        <member name="M:Nexas.Api.Controllers.TeachersController.GetTeacherById(System.Int32)">
+            <summary>
+            Obtém detalhes de um professor pelo ID.
+            </summary>
+        </member>
+        <member name="M:Nexas.Api.Controllers.TeachersController.CreateTeacher(Nexas.Application.Teachers.Commands.CreateTeacher.CreateTeacherCommand)">
+            <summary>
+            Cadastra um novo professor.
+            </summary>
+        </member>
+        <member name="M:Nexas.Api.Controllers.TeachersController.UpdateTeacher(System.Int32,Nexas.Application.Teachers.Commands.UpdateTeacher.UpdateTeacherCommand)">
+            <summary>
+            Atualiza os dados de um professor existente.
+            </summary>
+        </member>
+        <member name="M:Nexas.Api.Controllers.TeachersController.DeleteTeacher(System.Int32)">
+            <summary>
+            Remove (inativa) um professor.
+            </summary>
+        </member>
+        <member name="M:Nexas.Api.Controllers.TeachersController.AssignTeacher(Nexas.Application.Teachers.Commands.AssignTeacher.AssignTeacherCommand)">
+            <summary>
+            Vincula um professor a um curso específico.
+            </summary>
+        </member>
     </members>
 </doc>

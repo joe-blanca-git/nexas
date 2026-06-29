@@ -120,6 +120,21 @@ namespace Nexas.Infrastructure.Migrations
                     b.ToTable("CourseDomains");
                 });
 
+            modelBuilder.Entity("Nexas.Domain.Entities.CourseTeacher", b =>
+                {
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TeacherId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CourseId", "TeacherId");
+
+                    b.HasIndex("TeacherId");
+
+                    b.ToTable("CourseTeachers", (string)null);
+                });
+
             modelBuilder.Entity("Nexas.Domain.Entities.Enrollment", b =>
                 {
                     b.Property<int>("Id")
@@ -438,6 +453,71 @@ namespace Nexas.Infrastructure.Migrations
                     b.ToTable("SubscriptionPayments", (string)null);
                 });
 
+            modelBuilder.Entity("Nexas.Domain.Entities.Teacher", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("TeacherId");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("Active");
+
+                    b.Property<string>("Bio")
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)")
+                        .HasColumnName("Bio");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("CreatedAt");
+
+                    b.Property<int?>("CreatedBy")
+                        .HasColumnType("int")
+                        .HasColumnName("CreatedBy");
+
+                    b.Property<string>("IdAgivys")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("IdAgivys");
+
+                    b.Property<string>("InstagramLink")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)")
+                        .HasColumnName("InstagramLink");
+
+                    b.Property<string>("LinkedinLink")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)")
+                        .HasColumnName("LinkedinLink");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("Name");
+
+                    b.Property<string>("Role")
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)")
+                        .HasColumnName("Role");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("UpdatedAt");
+
+                    b.Property<int?>("UpdatedBy")
+                        .HasColumnType("int")
+                        .HasColumnName("UpdatedBy");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Teachers", (string)null);
+                });
+
             modelBuilder.Entity("Nexas.Domain.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -484,6 +564,25 @@ namespace Nexas.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Course");
+                });
+
+            modelBuilder.Entity("Nexas.Domain.Entities.CourseTeacher", b =>
+                {
+                    b.HasOne("Nexas.Domain.Entities.Course", "Course")
+                        .WithMany("CourseTeachers")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Nexas.Domain.Entities.Teacher", "Teacher")
+                        .WithMany("CourseTeachers")
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("Nexas.Domain.Entities.Enrollment", b =>
@@ -585,6 +684,8 @@ namespace Nexas.Infrastructure.Migrations
 
             modelBuilder.Entity("Nexas.Domain.Entities.Course", b =>
                 {
+                    b.Navigation("CourseTeachers");
+
                     b.Navigation("Domains");
 
                     b.Navigation("Enrollments");
@@ -600,6 +701,11 @@ namespace Nexas.Infrastructure.Migrations
             modelBuilder.Entity("Nexas.Domain.Entities.Subscription", b =>
                 {
                     b.Navigation("Payments");
+                });
+
+            modelBuilder.Entity("Nexas.Domain.Entities.Teacher", b =>
+                {
+                    b.Navigation("CourseTeachers");
                 });
 
             modelBuilder.Entity("Nexas.Domain.Entities.User", b =>

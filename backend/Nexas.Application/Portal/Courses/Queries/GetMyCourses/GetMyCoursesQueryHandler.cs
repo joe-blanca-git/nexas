@@ -20,7 +20,7 @@ public class GetMyCoursesQueryHandler : IRequestHandler<GetMyCoursesQuery, List<
         var user = await _userContextService.GetCurrentUserAsync();
         
         bool hasActiveSubscription = await _context.Subscriptions
-            .AnyAsync(s => s.UserId == user.Id && s.IsActive, cancellationToken);
+            .AnyAsync(s => s.UserId == user.Id && s.Status == Nexas.Domain.Enums.SubscriptionStatus.Active, cancellationToken);
             
         var enrolledCourseIds = await _context.Enrollments
             .Where(e => e.UserId == user.Id && e.Active)
@@ -29,6 +29,8 @@ public class GetMyCoursesQueryHandler : IRequestHandler<GetMyCoursesQuery, List<
             
         var courses = await _context.Courses
             .AsNoTracking()
+            .Include(c => c.CourseCategories)
+                .ThenInclude(cc => cc.Category)
             .Where(c => c.Active)
             .Select(c => new {
                 Course = c,
@@ -43,7 +45,8 @@ public class GetMyCoursesQueryHandler : IRequestHandler<GetMyCoursesQuery, List<
             x.Course.Name,
             x.Course.Description,
             x.Course.ImgCoverLink,
-            x.Released
+            x.Released,
+            x.Course.CourseCategories.Select(cc => new Nexas.Application.Courses.Common.CourseCategoryBasicDto(cc.Category.Id, cc.Category.Name)).ToList()
         )).ToList();
         
         return result;

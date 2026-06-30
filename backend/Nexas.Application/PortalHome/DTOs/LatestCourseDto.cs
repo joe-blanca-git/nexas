@@ -6,5 +6,6 @@ public record LatestCourseDto(
     string? Description,
     string? HeaderImageUrl,
     decimal Rating,
-    int VoteCount
+    int VoteCount,
+    List<Nexas.Application.Courses.Common.CourseCategoryBasicDto>? Categories = null
 );

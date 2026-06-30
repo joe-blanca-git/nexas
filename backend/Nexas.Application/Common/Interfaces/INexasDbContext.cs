@@ -17,6 +17,8 @@ namespace Nexas.Application.Common.Interfaces
         DbSet<Teacher> Teachers { get; }
         DbSet<CourseTeacher> CourseTeachers { get; }
         DbSet<BlogPost> BlogPosts { get; }
+        DbSet<CourseCategory> CourseCategories { get; }
+        DbSet<CourseCourseCategory> CourseCourseCategories { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

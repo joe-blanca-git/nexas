@@ -25,6 +25,7 @@ namespace Nexas.Application.Courses.Queries.GetCourses
         public List<ModuleDto> Modules { get; init; } = new();
         public List<CourseDomainDto> Domains { get; init; } = new();
         public List<Nexas.Application.Teachers.Common.TeacherDto> Teachers { get; init; } = new();
+        public List<Nexas.Application.Courses.Common.CourseCategoryBasicDto> Categories { get; init; } = new();
     }
 
     /// <summary>
@@ -125,7 +126,8 @@ namespace Nexas.Application.Courses.Queries.GetCourses
                         InstagramLink = ct.Teacher.InstagramLink,
                         LinkedinLink = ct.Teacher.LinkedinLink,
                         IdAgivys = ct.Teacher.IdAgivys
-                    }).ToList()
+                    }).ToList(),
+                    Categories = c.CourseCategories.Select(cc => new Nexas.Application.Courses.Common.CourseCategoryBasicDto(cc.Category.Id, cc.Category.Name)).ToList()
                 })
                 .ToListAsync(cancellationToken);
         }

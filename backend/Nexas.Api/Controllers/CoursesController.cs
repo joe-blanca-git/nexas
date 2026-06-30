@@ -143,6 +143,20 @@ namespace Nexas.Api.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Atualiza as categorias de um curso.
+        /// </summary>
+        [Authorize(Roles = "Teacher")]
+        [HttpPatch("{id}/categories")]
+        [SwaggerOperation(Summary = "Atualiza categorias do curso", Description = "Remove categorias antigas e vincula as novas informadas no array.")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> AssignCategories(int id, [FromBody] List<int> categoryIds)
+        {
+            var command = new Nexas.Application.Courses.Commands.AssignCategories.AssignCourseCategoriesCommand(id, categoryIds);
+            await _mediator.Send(command);
+            return NoContent();
+        }
+
         #endregion
 
         #region Modules

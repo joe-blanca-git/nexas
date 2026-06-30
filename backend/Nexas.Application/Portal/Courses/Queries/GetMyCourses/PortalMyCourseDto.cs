@@ -5,5 +5,6 @@ public record PortalMyCourseDto(
     string Title,
     string? Description,
     string? ImgCoverLink,
-    bool Released
+    bool Released,
+    List<Nexas.Application.Courses.Common.CourseCategoryBasicDto>? Categories = null
 );

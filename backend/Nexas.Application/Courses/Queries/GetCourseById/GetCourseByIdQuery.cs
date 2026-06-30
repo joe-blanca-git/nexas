@@ -76,7 +76,8 @@ namespace Nexas.Application.Courses.Queries.GetCourseById
                         InstagramLink = ct.Teacher.InstagramLink,
                         LinkedinLink = ct.Teacher.LinkedinLink,
                         IdAgivys = ct.Teacher.IdAgivys
-                    }).ToList()
+                    }).ToList(),
+                    Categories = c.CourseCategories.Select(cc => new Nexas.Application.Courses.Common.CourseCategoryBasicDto(cc.Category.Id, cc.Category.Name)).ToList()
                 })
                 .FirstOrDefaultAsync(cancellationToken);
         }

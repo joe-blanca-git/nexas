@@ -18,6 +18,8 @@ public class GetHomeQueryHandler : IRequestHandler<GetHomeQuery, PortalHomeDto>
     {
         var lastCourse = await _context.Courses
             .AsNoTracking()
+            .Include(c => c.CourseCategories)
+                .ThenInclude(cc => cc.Category)
             .Where(c => c.Active)
             .OrderByDescending(c => c.CreatedAt)
             .FirstOrDefaultAsync(cancellationToken);
@@ -31,7 +33,8 @@ public class GetHomeQueryHandler : IRequestHandler<GetHomeQuery, PortalHomeDto>
                 lastCourse.Description,
                 lastCourse.ImgCoverLink, // HeaderImageUrl
                 0m, // Rating
-                0   // VoteCount
+                0,  // VoteCount
+                lastCourse.CourseCategories.Select(cc => new Nexas.Application.Courses.Common.CourseCategoryBasicDto(cc.Category.Id, cc.Category.Name)).ToList()
             );
         }
 

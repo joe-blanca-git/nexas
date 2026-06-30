@@ -23,6 +23,8 @@ namespace Nexas.Infrastructure.Persistence
         public DbSet<Teacher> Teachers => Set<Teacher>();
         public DbSet<CourseTeacher> CourseTeachers => Set<CourseTeacher>();
         public DbSet<BlogPost> BlogPosts => Set<BlogPost>();
+        public DbSet<CourseCategory> CourseCategories => Set<CourseCategory>();
+        public DbSet<CourseCourseCategory> CourseCourseCategories => Set<CourseCourseCategory>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

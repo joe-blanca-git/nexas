@@ -1,45 +1,189 @@
-<div class="news-detail-container animated-fade-in p-4 p-md-5">
-  
-  <button class="btn btn-link text-decoration-none text-muted p-0 mb-4 d-flex align-items-center gap-2 go-back-btn" (click)="goBack()">
-    <i class="fas fa-arrow-left"></i> Voltar para Home
-  </button>
-
-  <div *ngIf="isLoading" class="d-flex justify-content-center py-5">
-    <div class="spinner-border text-indigo" role="status">
-      <span class="visually-hidden">Carregando...</span>
-    </div>
-  </div>
-
-  <div *ngIf="error && !isLoading" class="alert alert-danger rounded-4 border-0 shadow-sm">
-    <i class="fas fa-exclamation-triangle me-2"></i> Não foi possível carregar a notícia. Ela pode não existir ou houve um erro no servidor.
-  </div>
-
-  <div *ngIf="!isLoading && newsDetail" class="card border-0 rounded-4 shadow-sm overflow-hidden bg-white">
-    <!-- Header Image -->
-    <div class="news-header-img position-relative" style="height: 340px;" *ngIf="newsDetail.headerImageUrl">
-      <img [src]="newsDetail.headerImageUrl" class="w-100 h-100 object-fit-cover" alt="Header">
-      <div class="position-absolute start-0 end-0 top-0 bottom-0" style="background: linear-gradient(to top, rgba(15, 23, 42, 0.8), transparent);"></div>
-      <div class="position-absolute bottom-0 start-0 p-4 p-md-5">
-        <span class="badge text-uppercase px-3 py-1.5 mb-3" style="background: #6366f1; font-size: 0.72rem;" [innerHTML]="newsDetail.subject"></span>
-        <h2 class="text-white fw-extrabold mb-0 leading-tight">{{ newsDetail.title }}</h2>
+<div class="news-detail-container animated-fade-in pt-2 pb-4">
+  <div class="container-fluid px-lg-5">
+    
+    <!-- Breadcrumb -->
+    <div class="row mb-3">
+      <div class="col-12">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0 align-items-center" style="font-size: 0.9rem;">
+            <li class="breadcrumb-item">
+              <a href="javascript:void(0)" class="text-decoration-none text-indigo d-inline-flex align-items-center gap-1 transition" style="color: #6366f1;" (click)="goBack()">
+                <i class="fas fa-home"></i> Home
+              </a>
+            </li>
+            <li class="breadcrumb-item text-muted">Blog</li>
+            <li class="breadcrumb-item active fw-bold text-dark text-truncate" aria-current="page" style="max-width: 400px;" *ngIf="newsDetail">{{ newsDetail.title }}</li>
+          </ol>
+        </nav>
       </div>
     </div>
 
-    <!-- No Image Fallback Header -->
-    <div class="p-4 p-md-5 border-bottom bg-light" *ngIf="!newsDetail.headerImageUrl">
-      <span class="badge text-uppercase px-3 py-1.5 mb-3" style="background: #6366f1; font-size: 0.72rem;" [innerHTML]="newsDetail.subject"></span>
-      <h2 class="text-dark fw-extrabold mb-0 leading-tight">{{ newsDetail.title }}</h2>
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="d-flex justify-content-center align-items-center py-5" style="min-height: 50vh;">
+      <div class="spinner-border text-indigo" role="status" style="width: 3rem; height: 3rem; color: #6366f1;">
+        <span class="visually-hidden">Carregando...</span>
+      </div>
     </div>
 
-    <div class="card-body p-4 p-md-5">
-      <div class="d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom border-secondary border-opacity-10">
-        <span class="text-muted small font-monospace"><i class="far fa-calendar me-2"></i>{{ newsDetail.publishDate | date:'dd/MM/yyyy HH:mm' }}</span>
-        <span class="text-muted small font-monospace" *ngIf="newsDetail.tags"><i class="fas fa-tags me-2"></i>{{ newsDetail.tags }}</span>
+    <!-- Error State -->
+    <div *ngIf="error && !isLoading" class="alert alert-danger rounded-4 border-0 shadow-sm p-4 d-flex align-items-center gap-3">
+      <i class="fas fa-exclamation-triangle fs-3"></i> 
+      <div>
+        <h5 class="fw-bold mb-1">Ops, algo deu errado!</h5>
+        <span>Não foi possível carregar a notícia. Ela pode não existir ou houve um erro no servidor.</span>
+      </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="row g-5" *ngIf="!isLoading && newsDetail">
+      
+      <!-- LEFT COLUMN: The Article -->
+      <div class="col-12 col-lg-8">
+        <article class="card border-0 rounded-4 shadow-sm overflow-hidden bg-white mb-4">
+          
+          <!-- Article Cover Image -->
+          <div class="position-relative" style="height: 400px;" *ngIf="newsDetail.headerImageUrl">
+            <img [src]="newsDetail.headerImageUrl" class="w-100 h-100 object-fit-cover" alt="Capa da Notícia">
+            <!-- Gradient Overlay -->
+            <div class="position-absolute start-0 end-0 bottom-0 top-50" style="background: linear-gradient(to top, rgba(15, 23, 42, 0.9) 0%, transparent 100%);"></div>
+            <!-- Badges on Image -->
+            <div class="position-absolute bottom-0 start-0 p-4 p-md-5 w-100">
+              <span class="badge rounded-pill text-uppercase px-3 py-2 mb-3 shadow-sm border border-light border-opacity-25" style="background: #6366f1; font-size: 0.75rem; letter-spacing: 0.5px;" [innerHTML]="newsDetail.subject"></span>
+              <h1 class="text-white fw-extrabold mb-0 lh-sm display-6" style="text-shadow: 0 2px 4px rgba(0,0,0,0.3);">{{ newsDetail.title }}</h1>
+            </div>
+          </div>
+
+          <!-- No Image Fallback Header -->
+          <div class="p-4 p-md-5 border-bottom bg-light" *ngIf="!newsDetail.headerImageUrl">
+            <span class="badge rounded-pill text-uppercase px-3 py-2 mb-3" style="background: #6366f1; font-size: 0.75rem; letter-spacing: 0.5px;" [innerHTML]="newsDetail.subject"></span>
+            <h1 class="text-dark fw-extrabold mb-0 lh-sm display-6">{{ newsDetail.title }}</h1>
+          </div>
+
+          <div class="card-body p-4 p-md-5">
+            
+            <!-- Article Meta Info -->
+            <div class="d-flex flex-wrap align-items-center gap-4 mb-5 pb-4 border-bottom border-secondary border-opacity-10">
+              <!-- Author (Se houver no backend no futuro, por enquanto mockado como Admin ou omitido, mas vou adicionar um avatar genérico pra dar cara de blog) -->
+              <div class="d-flex align-items-center gap-2">
+                <div class="rounded-circle bg-light d-flex align-items-center justify-content-center text-indigo" style="width: 40px; height: 40px; border: 2px solid #e2e8f0;">
+                  <i class="fas fa-user"></i>
+                </div>
+                <div class="d-flex flex-column">
+                  <span class="small fw-bold text-dark">Portal Pan</span>
+                  <span class="text-muted" style="font-size: 0.7rem;">Redação</span>
+                </div>
+              </div>
+
+              <!-- Publish Date -->
+              <div class="d-flex align-items-center gap-2 text-muted">
+                <div class="rounded-circle bg-light d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                  <i class="far fa-calendar-alt"></i>
+                </div>
+                <div class="d-flex flex-column">
+                  <span class="small fw-bold text-dark">Publicado em</span>
+                  <span class="text-muted font-monospace" style="font-size: 0.7rem;">{{ newsDetail.publishDate | date:'dd/MM/yyyy HH:mm' }}</span>
+                </div>
+              </div>
+
+              <!-- Tags -->
+              <div class="d-flex align-items-center gap-2 text-muted ms-auto" *ngIf="newsDetail.tags">
+                <i class="fas fa-tags text-indigo"></i>
+                <span class="small font-monospace bg-light px-2 py-1 rounded text-dark">{{ newsDetail.tags }}</span>
+              </div>
+            </div>
+
+            <!-- Article Body -->
+            <div class="news-content text-dark" style="line-height: 1.85; font-size: 1.1rem; color: #334155 !important; text-align: justify;" [innerHTML]="newsDetail.content">
+            </div>
+
+            <!-- Footer Share / Actions -->
+            <div class="mt-5 pt-4 border-top border-secondary border-opacity-10 d-flex align-items-center justify-content-between">
+              <span class="fw-bold text-muted small">Gostou deste artigo? Compartilhe:</span>
+              <div class="d-flex gap-2">
+                <button class="btn btn-light rounded-circle shadow-sm" style="width: 40px; height: 40px;" (click)="share('linkedin')" title="Compartilhar no LinkedIn"><i class="fab fa-linkedin-in" style="color: #0077b5;"></i></button>
+                <button class="btn btn-light rounded-circle shadow-sm" style="width: 40px; height: 40px;" (click)="share('x')" title="Compartilhar no X (Twitter)"><i class="fab fa-x-twitter text-dark"></i></button>
+                <button class="btn btn-light rounded-circle shadow-sm" style="width: 40px; height: 40px;" (click)="share('whatsapp')" title="Compartilhar no WhatsApp"><i class="fab fa-whatsapp" style="color: #25D366;"></i></button>
+                <button class="btn btn-light rounded-circle shadow-sm" style="width: 40px; height: 40px;" (click)="share('instagram')" title="Compartilhar no Instagram"><i class="fab fa-instagram" style="color: #E1306C;"></i></button>
+              </div>
+            </div>
+
+          </div>
+        </article>
       </div>
 
-      <div class="news-content text-dark" style="line-height: 1.85; font-size: 1.05rem;" [innerHTML]="newsDetail.content">
+      <!-- RIGHT COLUMN: Sidebar -->
+      <div class="col-12 col-lg-4">
+        <div class="position-sticky" style="top: 2rem;">
+          
+          <!-- Search Widget -->
+          <div class="card border-0 rounded-4 shadow-sm bg-white mb-4">
+            <div class="card-body p-4">
+              <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
+                <i class="fas fa-search text-indigo"></i> Pesquisar no Blog
+              </h5>
+              <form (submit)="onSearch($event)">
+                <div class="input-group">
+                  <input type="text" class="form-control form-control-lg bg-light border-0 shadow-none fs-6" placeholder="Digite uma palavra-chave..." name="searchQuery" [(ngModel)]="searchQuery">
+                  <button class="btn text-white px-4" type="submit" style="background: #6366f1;">
+                    <i class="fas fa-arrow-right"></i>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Recent Posts Widget -->
+          <div class="card border-0 rounded-4 shadow-sm bg-white mb-4">
+            <div class="card-header bg-white border-bottom-0 pt-4 pb-0 px-4">
+              <h5 class="fw-bold d-flex align-items-center gap-2 mb-0">
+                <i class="far fa-newspaper text-indigo"></i> Últimas Notícias
+              </h5>
+            </div>
+            <div class="card-body p-4">
+              
+              <div *ngIf="recentPosts.length === 0" class="text-muted small text-center py-3 bg-light rounded-3">
+                Não há outras notícias recentes.
+              </div>
+
+              <!-- List of Recent Posts -->
+              <div class="d-flex flex-column gap-3">
+                <div *ngFor="let post of recentPosts" class="d-flex gap-3 align-items-center sidebar-post-card p-2 rounded-3 transition cursor-pointer" [routerLink]="['/news-detail', post.id]">
+                  <div class="sidebar-post-img rounded-3 overflow-hidden flex-shrink-0 bg-light" style="width: 80px; height: 80px;">
+                    <img *ngIf="post.headerImageUrl" [src]="post.headerImageUrl" class="w-100 h-100 object-fit-cover transition-transform" alt="Thumbnail">
+                    <div *ngIf="!post.headerImageUrl" class="w-100 h-100 d-flex justify-content-center align-items-center text-muted">
+                      <i class="fas fa-image"></i>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-column flex-grow-1">
+                    <span class="badge text-uppercase mb-1 align-self-start" style="font-size: 0.6rem; background: rgba(99, 102, 241, 0.1); color: #6366f1;" [innerHTML]="post.subject || 'Notícia'"></span>
+                    <h6 class="fw-bold text-dark mb-1 lh-sm text-truncate-2" style="font-size: 0.85rem; height: 2.2em; overflow: hidden;">{{ post.title }}</h6>
+                    <span class="small font-monospace text-muted" style="font-size: 0.65rem;">{{ post.publishDate | date:'dd/MM/yyyy' }}</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Categories/Topics Widget -->
+          <div class="card border-0 rounded-4 shadow-sm bg-white">
+            <div class="card-body p-4">
+              <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
+                <i class="fas fa-folder-open text-indigo"></i> Tópicos Frequentes
+              </h5>
+              <div class="d-flex flex-wrap gap-2">
+                <span class="badge bg-light text-dark border px-3 py-2 rounded-pill fw-normal cursor-pointer transition topic-badge">Agricultura 4.0</span>
+                <span class="badge bg-light text-dark border px-3 py-2 rounded-pill fw-normal cursor-pointer transition topic-badge">Sustentabilidade</span>
+                <span class="badge bg-light text-dark border px-3 py-2 rounded-pill fw-normal cursor-pointer transition topic-badge">Tecnologia</span>
+                <span class="badge bg-light text-dark border px-3 py-2 rounded-pill fw-normal cursor-pointer transition topic-badge">Mercado</span>
+                <span class="badge bg-light text-dark border px-3 py-2 rounded-pill fw-normal cursor-pointer transition topic-badge">Gestão</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
+
     </div>
   </div>
-
 </div>

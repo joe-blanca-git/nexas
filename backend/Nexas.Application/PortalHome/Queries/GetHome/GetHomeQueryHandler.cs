@@ -29,6 +29,7 @@ public class GetHomeQueryHandler : IRequestHandler<GetHomeQuery, PortalHomeDto>
                 lastCourse.Id,
                 lastCourse.Name,
                 lastCourse.Description,
+                lastCourse.ImgCoverLink, // HeaderImageUrl
                 0m, // Rating
                 0   // VoteCount
             );

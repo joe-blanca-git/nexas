@@ -9,6 +9,7 @@ export interface ILatestCourse {
   description: string;
   rating: number;
   voteCount: number;
+  headerImageUrl: string | null;
 }
 
 export interface ILatestNews {

@@ -72,7 +72,7 @@ export class DashboardComponent implements OnChanges {
       lastCourse: this.latestCourse ? {
         title: this.latestCourse.title,
         description: this.latestCourse.description || '',
-        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQY5JRi1qnVrXkmfdZGtvwU__qfPnrsVZqIVg&s',
+        image: this.latestCourse.headerImageUrl || 'https://i.pinimg.com/1200x/29/dd/db/29dddbb74db0c68adc5358271281e03a.jpg',
         rating: this.latestCourse.rating,
         reviews: this.latestCourse.voteCount,
         btnText: 'Saiba Mais',
@@ -84,7 +84,7 @@ export class DashboardComponent implements OnChanges {
       } : {
         title: 'Nenhum curso disponível',
         description: 'Aguarde novos lançamentos!',
-        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQY5JRi1qnVrXkmfdZGtvwU__qfPnrsVZqIVg&s',
+        image: 'https://i.pinimg.com/736x/a1/f1/43/a1f143a671136781b11120884da9e77d.jpg',
         rating: 0,
         reviews: 0,
         btnText: 'Saiba Mais',

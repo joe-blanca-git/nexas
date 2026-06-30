@@ -44,8 +44,8 @@
   </div>
 
   <!-- Responsive Dashboard Stats Cards -->
-  <app-dashboard (tabChange)="setActiveTab($event)"></app-dashboard>
+  <app-dashboard (tabChange)="setActiveTab($event)" [isLoadingPage]="isLoadingPage" [latestCourse]="homeData?.latestCourse || null"></app-dashboard>
 
   <!-- Responsive Blog External Component -->
-  <app-blog-external></app-blog-external>
+  <app-blog-external [isLoadingPage]="isLoadingPage" [news]="homeData?.latestNews || []"></app-blog-external>
 </div>

@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { BlogExternalComponent } from '../../../../shared/components/blog-external/blog-external.component';
 import { StateUtil } from '../../../../../core/utils/UserState.util';
+import { HomeService } from '../../services/home.service';
+import { IPortalHomeData } from '../../models/home.model';
 
 @Component({
   selector: 'app-home-dashboard',
@@ -15,9 +17,11 @@ import { StateUtil } from '../../../../../core/utils/UserState.util';
 export class HomeDashboardComponent implements OnInit {
   private readonly stateUtil = inject(StateUtil);
 
-  studentName = '';
+  private readonly homeService = inject(HomeService);
 
+  studentName = '';
   isLoadingPage = true;
+  homeData: IPortalHomeData | null = null;
 
   constructor(private router: Router) { }
 
@@ -35,8 +39,10 @@ export class HomeDashboardComponent implements OnInit {
         };
       });
 
-    } catch (error) {
+      this.homeData = await this.homeService.getHomeData();
 
+    } catch (error) {
+      console.error('Erro ao carregar os dados da Home:', error);
     } finally {
       this.isLoadingPage = false;
     }

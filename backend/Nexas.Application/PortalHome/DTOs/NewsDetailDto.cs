@@ -8,5 +8,6 @@ public record NewsDetailDto(
     string? Tags,
     string? HeaderImageUrl,
     DateTime PublishDate,
-    int AuthorId
+    int AuthorId,
+    string? AuthorName
 );

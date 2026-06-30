@@ -16,14 +16,24 @@ public class GetNewsDetailQueryHandler : IRequestHandler<GetNewsDetailQuery, New
 
     public async Task<NewsDetailDto> Handle(GetNewsDetailQuery request, CancellationToken cancellationToken)
     {
-        var blogPost = await _context.BlogPosts
-            .AsNoTracking()
-            .FirstOrDefaultAsync(b => b.Id == request.Id, cancellationToken);
+        var result = await (from b in _context.BlogPosts
+                            join u in _context.Users on b.AuthorId equals u.Id into userGroup
+                            from u in userGroup.DefaultIfEmpty()
+                            where b.Id == request.Id
+                            select new
+                            {
+                                Post = b,
+                                AuthorName = u != null ? u.FullName : null
+                            })
+                            .AsNoTracking()
+                            .FirstOrDefaultAsync(cancellationToken);
 
-        if (blogPost == null)
+        if (result == null)
         {
             throw new InvalidOperationException($"Notícia com ID {request.Id} não encontrada.");
         }
+
+        var blogPost = result.Post;
 
         return new NewsDetailDto(
             blogPost.Id,
@@ -33,7 +43,8 @@ public class GetNewsDetailQueryHandler : IRequestHandler<GetNewsDetailQuery, New
             blogPost.Tags,
             blogPost.HeaderImageUrl,
             blogPost.CreatedAt,
-            blogPost.AuthorId
+            blogPost.AuthorId,
+            result.AuthorName
         );
     }
 }

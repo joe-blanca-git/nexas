@@ -30,12 +30,11 @@
         <h3 class="fw-extrabold leading-tight mb-3 text-white blog-title-hover">
           {{ featuredPost.title }}
         </h3>
-        <p class="text-white-50 mb-4 line-clamp-3" style="font-size: 0.92rem; line-height: 1.5;">
-          {{ featuredPost.excerpt }}
+        <p class="text-white-50 mb-4 line-clamp-3" style="font-size: 0.92rem; line-height: 1.5;" [innerHTML]="featuredPost.excerpt">
         </p>
         <div class="d-flex align-items-center justify-content-between pt-3 border-top border-white border-opacity-10">
           <span class="small font-monospace text-white-50"><i class="far fa-clock me-1.5"></i>{{ featuredPost.date }}</span>
-          <a class="btn btn-light btn-sm rounded-pill fw-bold px-3.5 py-1.5 d-flex align-items-center gap-1.5 text-uppercase cursor-pointer transition shadow-sm" style="font-size: 0.7rem;">
+          <a *ngIf="featuredPost.id" [routerLink]="['/news-detail', featuredPost.id]" class="btn btn-light btn-sm rounded-pill fw-bold px-3.5 py-1.5 d-flex align-items-center gap-1.5 text-uppercase cursor-pointer transition shadow-sm" style="font-size: 0.7rem;">
             Ler Artigo Completo <i class="fas fa-arrow-right fs-8"></i>
           </a>
         </div>
@@ -62,12 +61,11 @@
             <h6 class="fw-bold text-dark mb-2 text-truncate-2" style="font-size: 0.92rem; line-height: 1.35; height: 2.6rem;">
               {{ post.title }}
             </h6>
-            <p class="text-muted small mb-4 line-clamp-2 flex-grow-1" style="font-size: 0.78rem; line-height: 1.4; height: 2.2rem;">
-              {{ post.excerpt }}
+            <p class="text-muted small mb-4 line-clamp-2 flex-grow-1" style="font-size: 0.78rem; line-height: 1.4; height: 2.2rem;" [innerHTML]="post.excerpt">
             </p>
             <div class="d-flex align-items-center justify-content-between mt-auto pt-2 border-top border-secondary border-opacity-10">
               <span class="small font-monospace text-muted" style="font-size: 0.68rem;"><i class="far fa-calendar me-1"></i>{{ post.date }}</span>
-              <a class="text-indigo fw-bold text-decoration-none small d-flex align-items-center gap-1 cursor-pointer" style="font-size: 0.72rem; color: #6366f1;">
+              <a *ngIf="post.id" [routerLink]="['/news-detail', post.id]" class="text-indigo fw-bold text-decoration-none small d-flex align-items-center gap-1 cursor-pointer" style="font-size: 0.72rem; color: #6366f1;">
                 Ler Mais <i class="fas fa-chevron-right fs-8"></i>
               </a>
             </div>
@@ -77,7 +75,7 @@
 
       <!-- Four Compact Small Grid Cards -->
       <div class="col-6 col-md-3 d-flex" *ngFor="let post of smallPosts">
-        <div class="card blog-card-small border-0 rounded-4 shadow-sm w-100 overflow-hidden bg-white transition-all d-flex flex-column" [ngClass]="{'bg-loading': isLoadingPage, 'bg-white': !isLoadingPage}" style="min-height: 120px;">
+        <div class="card blog-card-small border-0 rounded-4 shadow-sm w-100 overflow-hidden bg-white transition-all d-flex flex-column" [ngClass]="{'bg-loading': isLoadingPage, 'bg-white': !isLoadingPage}" style="min-height: 120px; cursor: pointer;" [routerLink]="post.id ? ['/news-detail', post.id] : null">
           <!-- Thumbnail Header -->
           <div class="position-relative overflow-hidden" style="height: 90px;" *ngIf="!isLoadingPage">
             <img [src]="post.image" class="card-img-top w-100 h-100 object-fit-cover transition-transform" alt="Grid Thumbnail">

@@ -20,14 +20,14 @@
       <img [src]="newsDetail.headerImageUrl" class="w-100 h-100 object-fit-cover" alt="Header">
       <div class="position-absolute start-0 end-0 top-0 bottom-0" style="background: linear-gradient(to top, rgba(15, 23, 42, 0.8), transparent);"></div>
       <div class="position-absolute bottom-0 start-0 p-4 p-md-5">
-        <span class="badge text-uppercase px-3 py-1.5 mb-3" style="background: #6366f1; font-size: 0.72rem;">{{ newsDetail.subject }}</span>
+        <span class="badge text-uppercase px-3 py-1.5 mb-3" style="background: #6366f1; font-size: 0.72rem;" [innerHTML]="newsDetail.subject"></span>
         <h2 class="text-white fw-extrabold mb-0 leading-tight">{{ newsDetail.title }}</h2>
       </div>
     </div>
 
     <!-- No Image Fallback Header -->
     <div class="p-4 p-md-5 border-bottom bg-light" *ngIf="!newsDetail.headerImageUrl">
-      <span class="badge text-uppercase px-3 py-1.5 mb-3" style="background: #6366f1; font-size: 0.72rem;">{{ newsDetail.subject }}</span>
+      <span class="badge text-uppercase px-3 py-1.5 mb-3" style="background: #6366f1; font-size: 0.72rem;" [innerHTML]="newsDetail.subject"></span>
       <h2 class="text-dark fw-extrabold mb-0 leading-tight">{{ newsDetail.title }}</h2>
     </div>
 

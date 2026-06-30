@@ -16,18 +16,29 @@ public class GetBlogPostByIdQueryHandler : IRequestHandler<GetBlogPostByIdQuery,
 
     public async Task<BlogPostDto> Handle(GetBlogPostByIdQuery request, CancellationToken cancellationToken)
     {
-        var blogPost = await _context.BlogPosts
-            .AsNoTracking()
-            .FirstOrDefaultAsync(b => b.Id == request.Id, cancellationToken);
+        var result = await (from b in _context.BlogPosts
+                            join u in _context.Users on b.AuthorId equals u.Id into userGroup
+                            from u in userGroup.DefaultIfEmpty()
+                            where b.Id == request.Id
+                            select new
+                            {
+                                Post = b,
+                                AuthorName = u != null ? u.FullName : null
+                            })
+                            .AsNoTracking()
+                            .FirstOrDefaultAsync(cancellationToken);
 
-        if (blogPost == null)
+        if (result == null)
         {
             throw new InvalidOperationException($"Post de blog com ID {request.Id} não encontrado.");
         }
 
+        var blogPost = result.Post;
+
         return new BlogPostDto(
             blogPost.Id,
             blogPost.AuthorId,
+            result.AuthorName,
             blogPost.Title,
             blogPost.Subject,
             blogPost.Content,

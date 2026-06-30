@@ -1,5 +1,6 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ILatestCourse } from '../../models/home.model';
 
 export interface IInfo {
   myCourses: number;
@@ -30,45 +31,70 @@ export interface ILastCourse{
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnChanges {
   @Output() tabChange = new EventEmitter<string>();
+  
+  @Input() isLoadingPage: boolean = false;
+  @Input() latestCourse: ILatestCourse | null = null;
 
-  isLoadingPage = false;
+  info: IInfo = {
+    myCourses: 0,
+    progressMyCourses: 0,
+    myForums: 0,
+    myCertificates: 0,
+    lastCourse: {
+      title: '',
+      description: '',
+      image: '',
+      rating: 0,
+      reviews: 0,
+      btnText: '',
+      btnAction: '',
+      btnIcon: '',
+      badgeText: '',
+      badgeColor: '',
+      percentage: 0
+    }
+  };
 
-  info!: IInfo
-
-  ngOnInit() {
-    this.loadData();
+  ngOnChanges(changes: SimpleChanges) {
+    if ((changes['latestCourse'] || changes['isLoadingPage']) && !this.isLoadingPage) {
+      this.buildInfo();
+    }
   }
 
-  async loadData() {
-    this.isLoadingPage = true;
-    try {
-      this.info = {
-        myCourses: 0,
-        progressMyCourses: 0,
-        myForums: 0,
-        myCertificates: 0,
-        lastCourse:{
-          title: 'Mestres do Operations Center',
-          description: 'Aprenda a monitorar infraestruturas complexas de nuvem e gerenciar incidentes em tempo real utilizando as melhores ferramentas do mercado de DevOps.',
-          image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQY5JRi1qnVrXkmfdZGtvwU__qfPnrsVZqIVg&s',
-          rating: 4.9,
-          reviews: 120,
-          btnText: 'Saiba Mais',
-          btnAction: 'courses',
-          btnIcon: 'fas fa-arrow-right',
-          badgeText: 'NOVO LANÇAMENTO',
-          badgeColor: 'bg-success',
-          percentage: 100
-        }
+  buildInfo() {
+    this.info = {
+      myCourses: 0,
+      progressMyCourses: 0,
+      myForums: 0,
+      myCertificates: 0,
+      lastCourse: this.latestCourse ? {
+        title: this.latestCourse.title,
+        description: this.latestCourse.description || '',
+        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQY5JRi1qnVrXkmfdZGtvwU__qfPnrsVZqIVg&s',
+        rating: this.latestCourse.rating,
+        reviews: this.latestCourse.voteCount,
+        btnText: 'Saiba Mais',
+        btnAction: 'courses',
+        btnIcon: 'fas fa-arrow-right',
+        badgeText: 'NOVO LANÇAMENTO',
+        badgeColor: 'bg-success',
+        percentage: 0
+      } : {
+        title: 'Nenhum curso disponível',
+        description: 'Aguarde novos lançamentos!',
+        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQY5JRi1qnVrXkmfdZGtvwU__qfPnrsVZqIVg&s',
+        rating: 0,
+        reviews: 0,
+        btnText: 'Saiba Mais',
+        btnAction: 'courses',
+        btnIcon: 'fas fa-arrow-right',
+        badgeText: '-',
+        badgeColor: 'bg-secondary',
+        percentage: 0
       }
-      
-    } catch (error) {
-      
-    } finally {
-        this.isLoadingPage = false;
-    }
+    };
   }
 
   setActiveTab(tab: string) {

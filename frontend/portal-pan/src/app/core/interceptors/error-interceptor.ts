@@ -24,6 +24,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { StateUtil } from '../utils/UserState.util';
 import { ToastService } from '../services/toast.service';
+import { AuthUtil } from '../auth/auth.util';
 
 export const errorInterceptor: HttpInterceptorFn = (
   req: HttpRequest<any>,
@@ -33,6 +34,7 @@ export const errorInterceptor: HttpInterceptorFn = (
   const router = inject(Router);
   const toastService = inject(ToastService);
   const stateUtil = inject(StateUtil);
+  const authUtil = inject(AuthUtil);
 
   return next(req).pipe(
     map((event: HttpEvent<any>) => {
@@ -102,6 +104,8 @@ export const errorInterceptor: HttpInterceptorFn = (
           const msg = err.error?.message || 'Seu acesso expirou, por favor faça Login novamente!';
           toastService.error(msg, 5000);
           stateUtil.clearState();
+          authUtil.removeCookieAuth();
+          sessionStorage.removeItem('nexas_user');
           router.navigate(['/auth/login']);
         }
 

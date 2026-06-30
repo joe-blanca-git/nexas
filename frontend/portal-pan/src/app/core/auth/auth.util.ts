@@ -7,7 +7,15 @@ export class AuthUtil {
 
     public saveCookieAuth(response: any): void {
         const token = response.token;
-        document.cookie = `accessToken=${token}; path=/; samesite=strict; secure`;
+        let expiresStr = '';
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            if (payload && payload.exp) {
+                const expDate = new Date(payload.exp * 1000);
+                expiresStr = `; expires=${expDate.toUTCString()}`;
+            }
+        } catch (e) {}
+        document.cookie = `accessToken=${token}; path=/${expiresStr}; samesite=strict; secure`;
     }
 
     public getCookieAuth(): string {

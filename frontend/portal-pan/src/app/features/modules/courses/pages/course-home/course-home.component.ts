@@ -28,6 +28,8 @@ export class CourseHomeComponent implements OnInit {
 
   courses: ICourse[] = [];
 
+  isLoading: boolean = true;
+
   constructor(
     private router: Router, 
     private coursesService: CoursesService,
@@ -39,11 +41,14 @@ export class CourseHomeComponent implements OnInit {
   }
 
   async loadCourses() {
+    this.isLoading = true;
     try {
       this.courses = await this.coursesService.getMyCourses();
-      this.cdr.detectChanges();
     } catch (error) {
       console.error('Erro ao carregar cursos', error);
+    } finally {
+      this.isLoading = false;
+      this.cdr.detectChanges();
     }
   }
 

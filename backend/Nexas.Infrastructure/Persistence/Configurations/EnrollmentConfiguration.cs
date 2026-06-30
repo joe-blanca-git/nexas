@@ -47,12 +47,12 @@ public class EnrollmentConfiguration : IEntityTypeConfiguration<Enrollment>
 
         // Relacionamentos
         builder.HasOne(e => e.User)
-            .WithMany()
+            .WithMany(u => u.Enrollments)
             .HasForeignKey(e => e.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(e => e.Course)
-            .WithMany()
+            .WithMany(c => c.Enrollments)
             .HasForeignKey(e => e.CourseId)
             .OnDelete(DeleteBehavior.Restrict);
 

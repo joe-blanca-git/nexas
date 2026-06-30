@@ -15,12 +15,12 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("DevelopmentCors", policy =>
     {
-        policy.WithOrigins(
-                "http://localhost:4200",
-                "https://joederblanca.com.br"
-              )
+        policy.SetIsOriginAllowed(origin => 
+                new Uri(origin).Host == "localhost" || 
+                new Uri(origin).Host.EndsWith("joederblanca.com.br"))
               .AllowAnyMethod()
-              .AllowAnyHeader();
+              .AllowAnyHeader()
+              .AllowCredentials();
     });
 });
 

@@ -1,7 +1,6 @@
 using MediatR;
 using FluentValidation;
 using Nexas.Application.Common.Interfaces;
-using Nexas.Application.Common.Exceptions;
 using Nexas.Domain.Entities;
 
 namespace Nexas.Application.CourseCategories.Commands.UpdateCourseCategory;
@@ -33,7 +32,7 @@ public class UpdateCourseCategoryCommandHandler : IRequestHandler<UpdateCourseCa
 
         if (entity == null)
         {
-            throw new NotFoundException(nameof(CourseCategory), request.Id);
+            throw new InvalidOperationException($"CourseCategory with ID {request.Id} not found.");
         }
 
         entity.Update(request.Name, request.Description, request.Active);

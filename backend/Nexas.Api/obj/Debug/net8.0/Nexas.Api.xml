@@ -55,6 +55,11 @@
             </remarks>
             <param name="command">Dados com o ID do curso a ser inativado.</param>
         </member>
+        <member name="M:Nexas.Api.Controllers.CoursesController.AssignCategories(System.Int32,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Atualiza as categorias de um curso.
+            </summary>
+        </member>
         <member name="M:Nexas.Api.Controllers.CoursesController.CreateModule(Nexas.Application.Courses.Commands.CreateModule.CreateModuleCommand)">
             <summary>
             Cria um novo módulo em um curso existente.

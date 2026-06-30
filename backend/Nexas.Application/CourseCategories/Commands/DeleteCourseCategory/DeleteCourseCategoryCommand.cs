@@ -1,6 +1,5 @@
 using MediatR;
 using Nexas.Application.Common.Interfaces;
-using Nexas.Application.Common.Exceptions;
 using Nexas.Domain.Entities;
 
 namespace Nexas.Application.CourseCategories.Commands.DeleteCourseCategory;
@@ -22,7 +21,7 @@ public class DeleteCourseCategoryCommandHandler : IRequestHandler<DeleteCourseCa
 
         if (entity == null)
         {
-            throw new NotFoundException(nameof(CourseCategory), request.Id);
+            throw new InvalidOperationException($"CourseCategory with ID {request.Id} not found.");
         }
 
         _context.CourseCategories.Remove(entity);

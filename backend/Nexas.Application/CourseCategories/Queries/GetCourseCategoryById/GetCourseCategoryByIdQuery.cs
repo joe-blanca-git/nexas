@@ -1,14 +1,13 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Nexas.Application.Common.Interfaces;
-using Nexas.Application.Common.Exceptions;
 using Nexas.Domain.Entities;
 
 namespace Nexas.Application.CourseCategories.Queries.GetCourseCategoryById;
 
-public record GetCourseCategoryByIdQuery(int Id) : IRequest<CourseCategoryDto>;
+public record GetCourseCategoryByIdQuery(int Id) : IRequest<CourseCategoryDto?>;
 
-public class GetCourseCategoryByIdQueryHandler : IRequestHandler<GetCourseCategoryByIdQuery, CourseCategoryDto>
+public class GetCourseCategoryByIdQueryHandler : IRequestHandler<GetCourseCategoryByIdQuery, CourseCategoryDto?>
 {
     private readonly INexasDbContext _context;
 
@@ -17,7 +16,7 @@ public class GetCourseCategoryByIdQueryHandler : IRequestHandler<GetCourseCatego
         _context = context;
     }
 
-    public async Task<CourseCategoryDto> Handle(GetCourseCategoryByIdQuery request, CancellationToken cancellationToken)
+    public async Task<CourseCategoryDto?> Handle(GetCourseCategoryByIdQuery request, CancellationToken cancellationToken)
     {
         var entity = await _context.CourseCategories
             .AsNoTracking()
@@ -25,7 +24,7 @@ public class GetCourseCategoryByIdQueryHandler : IRequestHandler<GetCourseCatego
 
         if (entity == null)
         {
-            throw new NotFoundException(nameof(CourseCategory), request.Id);
+            return null;
         }
 
         return new CourseCategoryDto(entity.Id, entity.Name, entity.Description, entity.Active);

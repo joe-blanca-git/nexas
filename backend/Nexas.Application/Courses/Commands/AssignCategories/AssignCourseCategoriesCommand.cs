@@ -1,7 +1,6 @@
 using MediatR;
 using FluentValidation;
 using Nexas.Application.Common.Interfaces;
-using Nexas.Application.Common.Exceptions;
 using Nexas.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,7 +34,7 @@ public class AssignCourseCategoriesCommandHandler : IRequestHandler<AssignCourse
 
         if (course == null)
         {
-            throw new NotFoundException(nameof(Course), request.CourseId);
+            throw new InvalidOperationException($"Course with ID {request.CourseId} not found.");
         }
 
         // Remove old relations

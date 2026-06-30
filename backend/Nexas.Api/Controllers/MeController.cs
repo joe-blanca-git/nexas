@@ -7,6 +7,7 @@ namespace Nexas.Api.Controllers
     [Authorize]
     [ApiController]
     [Route("[controller]")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class MeController : ControllerBase
     {
         private readonly IUserContextService _userContextService;

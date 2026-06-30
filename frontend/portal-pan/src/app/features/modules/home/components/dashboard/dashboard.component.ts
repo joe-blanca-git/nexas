@@ -45,10 +45,10 @@ export class DashboardComponent {
     this.isLoadingPage = true;
     try {
       this.info = {
-        myCourses: 1,
-        progressMyCourses: 89.2,
-        myForums: 4,
-        myCertificates: 2,
+        myCourses: 0,
+        progressMyCourses: 0,
+        myForums: 0,
+        myCertificates: 0,
         lastCourse:{
           title: 'Mestres do Operations Center',
           description: 'Aprenda a monitorar infraestruturas complexas de nuvem e gerenciar incidentes em tempo real utilizando as melhores ferramentas do mercado de DevOps.',

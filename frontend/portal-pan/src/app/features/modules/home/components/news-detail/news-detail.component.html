@@ -1,0 +1,45 @@
+<div class="news-detail-container animated-fade-in p-4 p-md-5">
+  
+  <button class="btn btn-link text-decoration-none text-muted p-0 mb-4 d-flex align-items-center gap-2 go-back-btn" (click)="goBack()">
+    <i class="fas fa-arrow-left"></i> Voltar para Home
+  </button>
+
+  <div *ngIf="isLoading" class="d-flex justify-content-center py-5">
+    <div class="spinner-border text-indigo" role="status">
+      <span class="visually-hidden">Carregando...</span>
+    </div>
+  </div>
+
+  <div *ngIf="error && !isLoading" class="alert alert-danger rounded-4 border-0 shadow-sm">
+    <i class="fas fa-exclamation-triangle me-2"></i> Não foi possível carregar a notícia. Ela pode não existir ou houve um erro no servidor.
+  </div>
+
+  <div *ngIf="!isLoading && newsDetail" class="card border-0 rounded-4 shadow-sm overflow-hidden bg-white">
+    <!-- Header Image -->
+    <div class="news-header-img position-relative" style="height: 340px;" *ngIf="newsDetail.headerImageUrl">
+      <img [src]="newsDetail.headerImageUrl" class="w-100 h-100 object-fit-cover" alt="Header">
+      <div class="position-absolute start-0 end-0 top-0 bottom-0" style="background: linear-gradient(to top, rgba(15, 23, 42, 0.8), transparent);"></div>
+      <div class="position-absolute bottom-0 start-0 p-4 p-md-5">
+        <span class="badge text-uppercase px-3 py-1.5 mb-3" style="background: #6366f1; font-size: 0.72rem;">{{ newsDetail.subject }}</span>
+        <h2 class="text-white fw-extrabold mb-0 leading-tight">{{ newsDetail.title }}</h2>
+      </div>
+    </div>
+
+    <!-- No Image Fallback Header -->
+    <div class="p-4 p-md-5 border-bottom bg-light" *ngIf="!newsDetail.headerImageUrl">
+      <span class="badge text-uppercase px-3 py-1.5 mb-3" style="background: #6366f1; font-size: 0.72rem;">{{ newsDetail.subject }}</span>
+      <h2 class="text-dark fw-extrabold mb-0 leading-tight">{{ newsDetail.title }}</h2>
+    </div>
+
+    <div class="card-body p-4 p-md-5">
+      <div class="d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom border-secondary border-opacity-10">
+        <span class="text-muted small font-monospace"><i class="far fa-calendar me-2"></i>{{ newsDetail.publishDate | date:'dd/MM/yyyy HH:mm' }}</span>
+        <span class="text-muted small font-monospace" *ngIf="newsDetail.tags"><i class="fas fa-tags me-2"></i>{{ newsDetail.tags }}</span>
+      </div>
+
+      <div class="news-content text-dark" style="line-height: 1.85; font-size: 1.05rem;" [innerHTML]="newsDetail.content">
+      </div>
+    </div>
+  </div>
+
+</div>

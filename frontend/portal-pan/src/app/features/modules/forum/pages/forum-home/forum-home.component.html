@@ -1,8 +1,5 @@
-<div class="animated-fade-in">
+<!-- <div class="animated-fade-in">
 
-  <!-- ════════════════════════════════════════════════════════════ -->
-  <!-- PAGE HEADER                                                  -->
-  <!-- ════════════════════════════════════════════════════════════ -->
   <div class="row mb-4 align-items-center">
     <div class="col-12 col-md-8">
       <h3 class="fw-extrabold text-dark mb-1" style="font-size: 1.4rem; letter-spacing: -0.01rem;">
@@ -21,9 +18,7 @@
     </div>
   </div>
 
-  <!-- ════════════════════════════════════════════════════════════ -->
-  <!-- STATS CARDS (Skeleton)                                      -->
-  <!-- ════════════════════════════════════════════════════════════ -->
+
   <div class="row g-3 mb-4" *ngIf="isLoading">
     <div class="col-6 col-lg" *ngFor="let i of [1,2,3,4,5]">
       <div class="card border-0 rounded-4 shadow-sm p-3 skeleton-card">
@@ -33,9 +28,7 @@
     </div>
   </div>
 
-  <!-- ════════════════════════════════════════════════════════════ -->
-  <!-- STATS CARDS                                                 -->
-  <!-- ════════════════════════════════════════════════════════════ -->
+
   <div class="row g-3 mb-4" *ngIf="!isLoading">
 
     <div class="col-6 col-lg">
@@ -105,9 +98,7 @@
 
   </div>
 
-  <!-- ════════════════════════════════════════════════════════════ -->
-  <!-- SEARCH & CATEGORY FILTER                                    -->
-  <!-- ════════════════════════════════════════════════════════════ -->
+
   <div class="card border-0 rounded-4 shadow-sm p-3 mb-3">
     <div class="row g-2 align-items-center">
       <div class="col-12 col-md-7">
@@ -134,9 +125,7 @@
     </div>
   </div>
 
-  <!-- ════════════════════════════════════════════════════════════ -->
-  <!-- NAVIGATION TABS                                             -->
-  <!-- ════════════════════════════════════════════════════════════ -->
+
   <div class="forum-tabs d-flex gap-1 mb-4">
     <button class="forum-tab-btn rounded-pill px-4 py-2 border-0 fw-semibold"
             [class.active]="activeTab === 'forums'"
@@ -161,12 +150,8 @@
     </button>
   </div>
 
-  <!-- ════════════════════════════════════════════════════════════ -->
-  <!-- TAB: FORUMS GRID (Category Cards)                           -->
-  <!-- ════════════════════════════════════════════════════════════ -->
   <div *ngIf="activeTab === 'forums'">
 
-    <!-- Skeleton -->
     <div class="row g-3" *ngIf="isLoading">
       <div class="col-12 col-md-6" *ngFor="let i of [1,2,3,4]">
         <div class="card border-0 rounded-4 shadow-sm p-4 skeleton-card" style="min-height: 130px;">
@@ -181,18 +166,15 @@
       </div>
     </div>
 
-    <!-- Forum Category Cards Grid -->
     <div class="row g-3" *ngIf="!isLoading">
       <div class="col-12 col-md-6" *ngFor="let cat of categories">
         <div class="card border-0 rounded-4 shadow-sm forum-category-card p-4 h-100"
              (click)="setTab('recent'); selectedCategory = cat.name">
           <div class="d-flex align-items-start gap-3">
-            <!-- Category Icon -->
             <div class="forum-cat-icon rounded-3 flex-shrink-0 d-flex align-items-center justify-content-center"
                  [style.background]="cat.color + '18'">
               <i class="fas" [ngClass]="cat.icon" [style.color]="cat.color" style="font-size: 1.1rem;"></i>
             </div>
-            <!-- Info -->
             <div class="flex-grow-1 min-w-0">
               <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
                 <h6 class="fw-extrabold text-dark mb-0" style="font-size: 0.9rem;">{{ cat.name }}</h6>
@@ -216,12 +198,8 @@
     </div>
   </div>
 
-  <!-- ════════════════════════════════════════════════════════════ -->
-  <!-- TAB: RECENT TOPICS LIST                                     -->
-  <!-- ════════════════════════════════════════════════════════════ -->
   <div *ngIf="activeTab === 'recent' || activeTab === 'mine'">
 
-    <!-- Skeleton Rows -->
     <div class="card border-0 rounded-4 shadow-sm overflow-hidden" *ngIf="isLoading">
       <div class="p-4">
         <div class="mb-4" *ngFor="let i of [1,2,3]">
@@ -236,9 +214,7 @@
       </div>
     </div>
 
-    <!-- Topics List -->
     <div class="card border-0 rounded-4 shadow-sm overflow-hidden" *ngIf="!isLoading">
-      <!-- Header -->
       <div class="card-header bg-white border-bottom border-secondary border-opacity-10 px-4 py-3 d-flex align-items-center justify-content-between">
         <span class="fw-bold text-dark small">
           {{ activeTab === 'mine' ? 'Meus Tópicos' : 'Tópicos Recentes' }}
@@ -248,7 +224,6 @@
         </span>
       </div>
 
-      <!-- Empty State -->
       <div class="text-center py-5 px-4" *ngIf="filteredTopics.length === 0">
         <div class="py-3">
           <div class="mx-auto mb-3 d-flex align-items-center justify-content-center rounded-circle"
@@ -265,19 +240,16 @@
         </div>
       </div>
 
-      <!-- Topics Loop -->
       <div class="topic-list-item px-4 py-3"
            *ngFor="let topic of paginatedTopics; let last = last"
            [class.border-bottom]="!last"
            style="border-color: rgba(0,0,0,0.04) !important;">
         <div class="d-flex align-items-start gap-3">
-          <!-- Author Avatar -->
           <div class="author-avatar rounded-circle d-flex align-items-center justify-content-center fw-bold text-white flex-shrink-0"
                [style.background]="topic.authorColor"
                style="width: 38px; height: 38px; font-size: 0.72rem;">
             {{ topic.authorInitials }}
           </div>
-          <!-- Topic Content -->
           <div class="flex-grow-1 min-w-0">
             <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
               <span class="fw-extrabold text-dark topic-title-link" style="font-size: 0.88rem; cursor: pointer;">
@@ -313,7 +285,6 @@
         </div>
       </div>
 
-      <!-- Pagination -->
       <div class="card-footer bg-white border-top border-secondary border-opacity-10 px-4 py-3 d-flex align-items-center justify-content-between"
            *ngIf="totalPages > 1">
         <span class="text-muted" style="font-size: 0.78rem;">Página {{ currentPage }} de {{ totalPages }}</span>
@@ -333,9 +304,7 @@
 
 </div>
 
-<!-- ════════════════════════════════════════════════════════════ -->
-<!-- NEW TOPIC MODAL                                             -->
-<!-- ════════════════════════════════════════════════════════════ -->
+
 <div class="custom-modal-backdrop animated-fade-in" *ngIf="showNewTopicModal" (click)="closeNewTopic()">
   <div class="custom-modal-box rounded-5 bg-white p-4 shadow-2xl animate-scale-up"
        style="max-width: 520px; width: 94vw;"
@@ -387,12 +356,9 @@
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════════════════════ -->
-<!-- FLOATING TOAST                                              -->
-<!-- ════════════════════════════════════════════════════════════ -->
 <div class="custom-floating-toast rounded-4 p-3 shadow-lg border-0 text-white d-flex align-items-center gap-2.5 animated-slide-in"
      *ngIf="showToast"
      style="background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px);">
   <i class="fas fa-check-circle text-success fs-5"></i>
   <span class="small fw-semibold">{{ toastMessage }}</span>
-</div>
+</div> -->

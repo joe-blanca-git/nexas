@@ -24,6 +24,16 @@ export const routes: Routes = [
                 component: HomeDashboardComponent
             },
             {
+                path: 'news-detail',
+                redirectTo: 'home',
+                pathMatch: 'full'
+            },
+            {
+                path: 'news-detail/:id',
+                loadComponent: () =>
+                    import('./features/modules/home/components/news-detail/news-detail.component').then(c => c.NewsDetailComponent)
+            },
+            {
                 path: 'courses',
                 loadChildren: () =>
                     import('./features/modules/courses/courses.routes').then((r) => r.coursesRoutes),

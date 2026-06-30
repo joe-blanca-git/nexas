@@ -1,4 +1,5 @@
 using Microsoft.OpenApi.Models;
+using Nexas.Api.Filters;
 
 namespace Nexas.Api.Extensions
 {
@@ -9,6 +10,7 @@ namespace Nexas.Api.Extensions
             services.AddSwaggerGen(c =>
             {
                 c.EnableAnnotations();
+                c.DocumentFilter<SwaggerOrderingFilter>();
                 c.OperationFilter<SwaggerExamplesOperationFilter>();
                 c.SwaggerDoc("v1", new OpenApiInfo 
                 { 

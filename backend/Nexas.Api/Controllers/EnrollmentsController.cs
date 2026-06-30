@@ -7,6 +7,7 @@ namespace Nexas.Api.Controllers;
 
 [Authorize]
 [Route("api/enrollments")]
+[ApiExplorerSettings(IgnoreApi = true)]
 public class EnrollmentsController : ApiControllerBase
 {
     [HttpPost("{enrollmentId}/refund")]

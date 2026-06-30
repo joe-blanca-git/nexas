@@ -1,12 +1,10 @@
-<div class="animated-fade-in">
-  <!-- Courses Page Header -->
+<!-- <div class="animated-fade-in">
   <div class="row mb-4 align-items-center">
     <div class="col-12 col-md-8">
       <h3 class="fw-extrabold text-dark-title tracking-tight mb-1">Meus Cursos</h3>
       <p class="text-muted small mb-0">Gerencie e acesse suas disciplinas, acompanhe seu progresso e assista suas aulas.</p>
     </div>
     <div class="col-12 col-md-4 mt-3 mt-md-0 d-flex justify-content-md-end">
-      <!-- Global Quick Search Box -->
       <div class="position-relative w-100 search-wrapper">
         <span class="position-absolute start-0 top-50 translate-middle-y ps-3 text-muted search-icon-align">
           <i class="fas fa-search"></i>
@@ -20,7 +18,6 @@
     </div>
   </div>
 
-  <!-- Category Filters Bar -->
   <div class="row mb-4">
     <div class="col-12">
       <div class="d-flex flex-wrap gap-2 py-1 scroll-x-mobile">
@@ -35,9 +32,7 @@
     </div>
   </div>
 
-  <!-- Grid List of Active Courses -->
   <div class="row g-4">
-    <!-- No Results Found State -->
     <div class="col-12 text-center py-5" *ngIf="getFilteredCourses().length === 0">
       <div class="py-4">
         <i class="fas fa-search-minus text-muted mb-3" style="font-size: 3rem; opacity: 0.35;"></i>
@@ -49,12 +44,10 @@
       </div>
     </div>
 
-    <!-- Cards Rendering Loop -->
     <div class="col-12 col-md-6 col-lg-4 d-flex" *ngFor="let course of getFilteredCourses()">
       <div class="card h-100 border-0 rounded-4 shadow-sm overflow-hidden course-interactive-card bg-white w-100 d-flex flex-column transition-all"
            (click)="navigateDetail(course.id)">
         
-        <!-- Card Image Thumbnail Header -->
         <div class="position-relative overflow-hidden" style="height: 160px; min-height: 160px;">
           <img [src]="course.image" class="w-100 h-100 object-fit-cover course-thumbnail" alt="Course Cover Image">
           <span class="badge position-absolute start-3 top-3 px-3 py-1.5 rounded-pill shadow-sm"
@@ -64,10 +57,8 @@
           </span>
         </div>
 
-        <!-- Card Description Body -->
         <div class="card-body p-4 d-flex flex-column flex-grow-1 justify-content-between">
           <div>
-            <!-- Title & Code Details -->
             <div class="d-flex align-items-center justify-content-between mb-2">
               <span class="font-monospace text-muted small" style="font-size: 0.68rem; letter-spacing: 0.02rem;">{{ course.code }}</span>
               <div class="d-flex align-items-center gap-1 small text-muted" style="font-size: 0.72rem;">
@@ -86,7 +77,6 @@
           </div>
 
           <div>
-            <!-- Progress Bar Section -->
             <div class="pt-3 border-top border-secondary border-opacity-10">
               <div class="d-flex justify-content-between align-items-center mb-1.5" style="font-size: 0.72rem;">
                 <span class="text-muted">Progresso</span>
@@ -102,7 +92,6 @@
                 </div>
               </div>
 
-              <!-- Card Bottom Lesson Status details & CTA -->
               <div class="d-flex justify-content-between align-items-center mt-3 pt-1">
                 <span class="text-muted font-monospace" style="font-size: 0.65rem;">
                   <i class="far fa-play-circle me-1"></i>{{ course.completedLessons }}/{{ course.totalLessons }} aulas
@@ -121,4 +110,4 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->

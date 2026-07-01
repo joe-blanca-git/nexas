@@ -7,7 +7,7 @@ namespace Nexas.Api.Controllers;
 
 [Authorize]
 [ApiController]
-[Route("api/financeiro/checkout")]
+[Route("api/v1/financeiro/checkout")]
 public class FinancialCheckoutController : ApiControllerBase
 {
     private readonly IMediator _mediator;

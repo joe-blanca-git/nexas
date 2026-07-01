@@ -38,16 +38,7 @@
           <i class="bi fs-5" [ngClass]="sidebarCollapsed ? 'bi-layout-sidebar-inset' : 'bi-layout-sidebar-inset-reverse'"></i>
         </button>
         <!-- Page Title Context -->
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb mb-0">
-            <ng-container *ngFor="let crumb of breadcrumbs; let last = last">
-              <li class="breadcrumb-item" [class.active]="last" [attr.aria-current]="last ? 'page' : null">
-                <a *ngIf="!last" [routerLink]="crumb.route">{{ crumb.title }}</a>
-                <span *ngIf="last">{{ crumb.title }}</span>
-              </li>
-            </ng-container>
-          </ol>
-        </nav>
+        <h5 class="fw-bold mb-0 text-dark ms-2">{{ pageTitle }}</h5>
       </div>
       <!-- Right Header Navigation Items -->
       <div class="d-flex align-items-center gap-3">
@@ -112,7 +103,9 @@
       </div>
     </header>
     <!-- Main Content Outlet Area -->
+    <app-breadcrumb></app-breadcrumb>
     <main class="page-content-canvas flex-grow-1 overflow-auto p-3 p-md-4">
+      
       <router-outlet></router-outlet>
     </main>
   </div>

@@ -35,26 +35,31 @@ export const routes: Routes = [
             },
             {
                 path: 'courses',
+                title: 'Cursos',
                 loadChildren: () =>
                     import('./features/modules/courses/courses.routes').then((r) => r.coursesRoutes),
             },
             {
                 path: 'certificates',
+                title: 'Certificados',
                 loadChildren: () =>
                     import('./features/modules/certificates/certificates.routes').then((r) => r.certificatesRoutes),
             },
             {
                 path: 'financial',
+                title: 'Financeiro',
                 loadChildren: () =>
                     import('./features/modules/financial/financial.routes').then((r) => r.financialRoutes),
             },
             {
                 path: 'forum',
+                title: 'Fórum',
                 loadChildren: () =>
                     import('./features/modules/forum/forum.routes').then((r) => r.forumRoutes),
             },
             {
                 path: 'support',
+                title: 'Suporte',
                 loadChildren: () =>
                     import('./features/modules/support/support.routes').then((r) => r.supportRoutes),
             }

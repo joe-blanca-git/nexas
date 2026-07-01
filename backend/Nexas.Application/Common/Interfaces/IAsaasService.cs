@@ -12,6 +12,9 @@ public interface IAsaasService
 
     Task<SubscriptionResponseDto> CreateSubscriptionAsync(Subscription subscription, decimal amount, CreditCardInfo? card, CancellationToken ct, int trialDays = 1);
 
+    Task<string> CreatePixPaymentAsync(string asaasCustomerId, decimal amount, string description, CancellationToken ct);
+    Task<PixQrCodeResponseDto> GetPixQrCodeAsync(string asaasPaymentId, CancellationToken ct);
+
     Task RefundPaymentAsync(string asaasPaymentId, CancellationToken ct);
 
     Task CancelSubscriptionAsync(string asaasSubscriptionId, CancellationToken ct);

@@ -1,23 +1,6 @@
 <div class="animated-fade-in">
 
-  <!-- Breadcrumb -->
-  <div class="row mb-4 align-items-center">
-    <div class="col-12">
-      <nav aria-label="breadcrumb">
-        <ol class="breadcrumb mb-0 align-items-center" style="font-size: 0.9rem;">
-          <li class="breadcrumb-item">
-            <a routerLink="/home" class="text-decoration-none d-inline-flex align-items-center gap-1 transition" style="color: #6366f1;">
-              <i class="fas fa-home"></i> Home
-            </a>
-          </li>
-          <li class="breadcrumb-item">
-            <a routerLink="/courses" class="text-decoration-none transition" style="color: #6366f1;">Cursos</a>
-          </li>
-          <li class="breadcrumb-item active fw-bold text-dark" aria-current="page">Carrinho</li>
-        </ol>
-      </nav>
-    </div>
-  </div>
+
 
   <!-- Loading State -->
   <div *ngIf="isLoading" class="d-flex justify-content-center align-items-center py-5" style="min-height: 50vh;">
@@ -113,7 +96,7 @@
                   </div>
                 </div>
                 <span class="fw-extrabold" style="font-size: 1.15rem; color: #0f172a;">
-                  {{ course.priceSingle | currency:'BRL':'symbol':'1.2-2' }}
+                  {{ formatPrice(course.priceSingle) }}
                 </span>
               </div>
             </div>
@@ -139,7 +122,7 @@
                 </div>
                 <div class="text-end">
                   <span class="fw-extrabold d-block" style="font-size: 1.15rem; color: #10b981;">
-                    {{ course.priceSubscription | currency:'BRL':'symbol':'1.2-2' }}
+                    {{ formatPrice(course.priceSubscription) }}
                   </span>
                   <span class="text-muted" style="font-size: 0.62rem;">/mês</span>
                 </div>
@@ -165,7 +148,7 @@
             <div class="d-flex justify-content-between align-items-center mb-4">
               <span class="fw-bold text-dark" style="font-size: 1rem;">Total</span>
               <span class="fw-extrabold" style="font-size: 1.35rem; color: #0f172a;">
-                {{ selectedPrice | currency:'BRL':'symbol':'1.2-2' }}
+                {{ formatPrice(selectedPrice) }}
               </span>
             </div>
             <button class="btn w-100 fw-bold rounded-pill py-2 shadow-sm checkout-btn transition-all"

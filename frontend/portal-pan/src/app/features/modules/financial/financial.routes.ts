@@ -1,6 +1,7 @@
 import { Routes } from "@angular/router";
 import { FinancialHomeComponent } from "./pages/financial-home/financial-home.component";
 import { FinancialCartComponent } from "./pages/financial-cart/financial-cart.component";
+import { FinancialPaymentComponent } from "./pages/financial-payment/financial-payment.component";
 
 export const financialRoutes: Routes = [
     {
@@ -12,5 +13,10 @@ export const financialRoutes: Routes = [
         path: 'cart/:id',
         component: FinancialCartComponent,
         title: 'Carrinho de Compras'
+    },
+    {
+        path: 'payment/:id',
+        component: FinancialPaymentComponent,
+        title: 'Pagamento'
     }
 ];

@@ -1,8 +1,10 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router, ActivatedRoute, NavigationEnd, Event as RouterEvent } from '@angular/router';
+import { filter } from 'rxjs';
 import { MenuSideComponent } from '../../../shared/components/menu-side/menu-side.component';
+import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 import { MenuService } from '../../../../core/services/menu.service';
 import { StateUtil } from '../../../../core/utils/UserState.util';
 import { AuthService } from '../../../../core/auth/auth.service';
@@ -79,7 +81,7 @@ interface FaqItem {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, MenuSideComponent,],
+  imports: [CommonModule, FormsModule, RouterModule, MenuSideComponent, BreadcrumbComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
@@ -375,10 +377,21 @@ export class HomeComponent implements OnInit {
     }
   ];
 
-  constructor(private menuService: MenuService, private atuhService: AuthService) { }
+  pageTitle: string = 'Página Inicial';
 
-  get breadcrumbs() {
-    return this.menuService.getBreadCrumb();
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private authService: AuthService) {
+    this.router.events.pipe(
+      filter((event: RouterEvent) => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.pageTitle = this.getChildTitle(this.activatedRoute.root);
+    });
+  }
+
+  private getChildTitle(route: ActivatedRoute): string {
+    if (route.firstChild) {
+      return this.getChildTitle(route.firstChild);
+    }
+    return route.routeConfig?.title as string || (route.routeConfig?.data ? route.routeConfig.data['title'] : 'Navegação');
   }
 
   ngOnInit() {
@@ -395,12 +408,11 @@ export class HomeComponent implements OnInit {
     }
 
     this.loadDataPage();
-
     
   }
 
   logOut(){
-    this.atuhService.logOut();
+    this.authService.logOut();
   }
 
   async loadDataPage(){

@@ -68,4 +68,12 @@ export class CourseHomeComponent implements OnInit {
   navigateDetail(courseId: number) {
     this.router.navigate(['courses/course-detail', courseId]);
   }
+
+  onCourseAction(course: ICourse) {
+    if (course.released) {
+      this.navigateDetail(course.id);
+    } else {
+      this.router.navigate(['financial/cart', course.id]);
+    }
+  }
 }

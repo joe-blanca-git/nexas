@@ -9,8 +9,8 @@ export const financialRoutes: Routes = [
         title: 'Financeiro',
     },
     {
-        path: 'cart',
+        path: 'cart/:id',
         component: FinancialCartComponent,
-        title: 'Minhas Compras'
+        title: 'Carrinho de Compras'
     }
 ];

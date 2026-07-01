@@ -68,6 +68,32 @@ export class MenuService {
       return breadcrumbs;
     }
 
+    // --- Blog / Notícias: Quando a rota inclui news-detail, exibe "Blog" na navbar ---
+    if (currentUrl.includes('news-detail')) {
+      breadcrumbs.push({
+        title: 'Página Inicial',
+        route: '/home'
+      });
+      breadcrumbs.push({
+        title: 'Blog',
+        route: '/home'
+      });
+      return breadcrumbs;
+    }
+
+    // --- Carrinho: Quando a rota inclui financial/cart, exibe o caminho completo ---
+    if (currentUrl.includes('financial/cart')) {
+      breadcrumbs.push({
+        title: 'Cursos',
+        route: '/courses'
+      });
+      breadcrumbs.push({
+        title: 'Carrinho',
+        route: currentUrl
+      });
+      return breadcrumbs;
+    }
+
     const matchedItem = menuItems.find(item =>
       item.route !== '/home' && currentUrl.startsWith(item.route)
     );

@@ -22,4 +22,16 @@ export class CoursesService extends BaseService {
       throw error;
     }
   }
+
+  async getCourseCheckoutSummary(id: number): Promise<any> {
+    try {
+      let url = `${this.urlApiNexas}portal/courses/${id}/checkout-summary`;
+      const response = await firstValueFrom(
+        this.httpClient.get<any>(url, this.GetAuthHeaderJson())
+      );
+      return this.extractData(response);
+    } catch (error) {
+      throw error;
+    }
+  }
 }

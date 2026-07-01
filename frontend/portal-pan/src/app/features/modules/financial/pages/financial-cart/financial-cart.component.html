@@ -1,1 +1,194 @@
-<p>financial-cart works!</p>
+<div class="animated-fade-in">
+
+  <!-- Breadcrumb -->
+  <div class="row mb-4 align-items-center">
+    <div class="col-12">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0 align-items-center" style="font-size: 0.9rem;">
+          <li class="breadcrumb-item">
+            <a routerLink="/home" class="text-decoration-none d-inline-flex align-items-center gap-1 transition" style="color: #6366f1;">
+              <i class="fas fa-home"></i> Home
+            </a>
+          </li>
+          <li class="breadcrumb-item">
+            <a routerLink="/courses" class="text-decoration-none transition" style="color: #6366f1;">Cursos</a>
+          </li>
+          <li class="breadcrumb-item active fw-bold text-dark" aria-current="page">Carrinho</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="d-flex justify-content-center align-items-center py-5" style="min-height: 50vh;">
+    <div class="spinner-border" role="status" style="width: 3rem; height: 3rem; color: #6366f1;">
+      <span class="visually-hidden">Carregando...</span>
+    </div>
+  </div>
+
+  <!-- Cart Content -->
+  <div class="row g-4 g-lg-5" *ngIf="!isLoading && course">
+
+    <!-- LEFT: Course Info -->
+    <div class="col-12 col-lg-7">
+      <div class="card border-0 rounded-4 shadow-sm overflow-hidden bg-white">
+
+        <!-- Course Image -->
+        <div class="position-relative" style="height: 260px;">
+          <img [src]="course.imgCoverLink" class="w-100 h-100 object-fit-cover" [alt]="course.title">
+          <div class="position-absolute start-0 end-0 bottom-0" style="height: 50%; background: linear-gradient(to top, rgba(15,23,42,0.85) 0%, transparent 100%);"></div>
+          <div class="position-absolute bottom-0 start-0 p-4 w-100">
+            <span class="badge rounded-pill px-3 py-2 mb-2 shadow-sm" style="background: rgba(99,102,241,0.9); font-size: 0.7rem; letter-spacing: 0.5px;">
+              <i class="fas fa-graduation-cap me-1"></i> {{ course.category }}
+            </span>
+            <h2 class="text-white fw-extrabold mb-0 lh-sm" style="text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+              {{ course.title }}
+            </h2>
+          </div>
+        </div>
+
+        <!-- Course Details -->
+        <div class="card-body p-4">
+          <p class="text-muted mb-4" style="font-size: 0.92rem; line-height: 1.7; text-align: justify;">
+            {{ course.description }}
+          </p>
+
+          <div class="d-flex flex-wrap gap-4 pt-3 border-top border-secondary border-opacity-10">
+            <div class="d-flex align-items-center gap-2">
+              <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; background: rgba(99,102,241,0.08);">
+                <i class="fas fa-play-circle" style="color: #6366f1; font-size: 0.85rem;"></i>
+              </div>
+              <div>
+                <span class="d-block fw-bold text-dark" style="font-size: 0.82rem;">{{ course.totalLessons }} aulas</span>
+                <span class="text-muted" style="font-size: 0.68rem;">Conteúdo completo</span>
+              </div>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; background: rgba(16,185,129,0.08);">
+                <i class="fas fa-clock" style="color: #10b981; font-size: 0.85rem;"></i>
+              </div>
+              <div>
+                <span class="d-block fw-bold text-dark" style="font-size: 0.82rem;">{{ course.totalHours }} horas</span>
+                <span class="text-muted" style="font-size: 0.68rem;">Carga horária</span>
+              </div>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; background: rgba(245,158,11,0.08);">
+                <i class="fas fa-infinity" style="color: #f59e0b; font-size: 0.85rem;"></i>
+              </div>
+              <div>
+                <span class="d-block fw-bold text-dark" style="font-size: 0.82rem;">Vitalício</span>
+                <span class="text-muted" style="font-size: 0.68rem;">Acesso ilimitado</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Checkout -->
+    <div class="col-12 col-lg-5">
+      <div class="position-lg-sticky" style="top: 2rem;">
+
+        <!-- Purchase Options -->
+        <div class="card border-0 rounded-4 shadow-sm bg-white mb-4">
+          <div class="card-body p-4">
+            <h5 class="fw-bold mb-1 d-flex align-items-center gap-2">
+              <i class="fas fa-shopping-cart" style="color: #6366f1;"></i> Opções de Compra
+            </h5>
+            <p class="text-muted small mb-4" style="font-size: 0.78rem;">Escolha o plano que melhor se encaixa para você.</p>
+
+            <!-- Option 1: Single Purchase -->
+            <div class="purchase-option-card p-3 rounded-4 mb-3 transition-all cursor-pointer"
+                 [class.selected]="selectedOption === 'single'"
+                 (click)="selectOption('single')">
+              <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="option-radio">
+                    <div class="option-radio-inner" *ngIf="selectedOption === 'single'"></div>
+                  </div>
+                  <div>
+                    <span class="d-block fw-bold text-dark" style="font-size: 0.9rem;">Compra Avulsa</span>
+                    <span class="text-muted" style="font-size: 0.72rem;">Acesso vitalício a este curso</span>
+                  </div>
+                </div>
+                <span class="fw-extrabold" style="font-size: 1.15rem; color: #0f172a;">
+                  {{ course.priceSingle | currency:'BRL':'symbol':'1.2-2' }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Option 2: Subscription -->
+            <div class="purchase-option-card p-3 rounded-4 mb-3 transition-all cursor-pointer position-relative overflow-hidden"
+                 [class.selected]="selectedOption === 'subscription'"
+                 (click)="selectOption('subscription')">
+              <!-- Best Value Badge -->
+              <span class="position-absolute top-0 end-0 badge rounded-0 rounded-bl-3 px-2 py-1 shadow-sm"
+                    style="background: linear-gradient(135deg, #10b981, #059669); font-size: 0.6rem; letter-spacing: 0.3px;">
+                <i class="fas fa-star me-1"></i>MELHOR VALOR
+              </span>
+              <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="option-radio">
+                    <div class="option-radio-inner" *ngIf="selectedOption === 'subscription'"></div>
+                  </div>
+                  <div>
+                    <span class="d-block fw-bold text-dark" style="font-size: 0.9rem;">Assinatura Mensal</span>
+                    <span class="text-muted" style="font-size: 0.72rem;">Acesso a <strong>todos</strong> os cursos da plataforma</span>
+                  </div>
+                </div>
+                <div class="text-end">
+                  <span class="fw-extrabold d-block" style="font-size: 1.15rem; color: #10b981;">
+                    {{ course.priceSubscription | currency:'BRL':'symbol':'1.2-2' }}
+                  </span>
+                  <span class="text-muted" style="font-size: 0.62rem;">/mês</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="card border-0 rounded-4 shadow-sm bg-white">
+          <div class="card-body p-4">
+            <h6 class="fw-bold mb-3 text-dark">
+              <i class="fas fa-receipt me-2" style="color: #6366f1;"></i>Resumo do Pedido
+            </h6>
+            <div class="d-flex justify-content-between align-items-center mb-2" style="font-size: 0.85rem;">
+              <span class="text-muted">{{ course.title }}</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-2" style="font-size: 0.82rem;">
+              <span class="text-muted">Plano</span>
+              <span class="fw-semibold text-dark font-monospace" style="font-size: 0.78rem;">{{ selectedLabel }}</span>
+            </div>
+            <hr class="border-secondary border-opacity-15 my-3">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <span class="fw-bold text-dark" style="font-size: 1rem;">Total</span>
+              <span class="fw-extrabold" style="font-size: 1.35rem; color: #0f172a;">
+                {{ selectedPrice | currency:'BRL':'symbol':'1.2-2' }}
+              </span>
+            </div>
+            <button class="btn w-100 fw-bold rounded-pill py-2 shadow-sm checkout-btn transition-all"
+                    (click)="onCheckout()">
+              <i class="fas fa-lock me-2"></i>Finalizar Compra
+            </button>
+            <div class="text-center mt-3">
+              <span class="text-muted d-flex align-items-center justify-content-center gap-1" style="font-size: 0.68rem;">
+                <i class="fas fa-shield-alt" style="color: #10b981;"></i> Pagamento 100% seguro · 7 dias de garantia
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Back link -->
+        <div class="text-center mt-3">
+          <a class="btn btn-link text-decoration-none text-muted small fw-semibold d-inline-flex align-items-center gap-1 transition"
+             (click)="goBack()" style="cursor: pointer; font-size: 0.78rem;">
+            <i class="fas fa-arrow-left"></i> Voltar para Cursos
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

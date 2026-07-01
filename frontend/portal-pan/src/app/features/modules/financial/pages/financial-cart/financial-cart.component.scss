@@ -1,0 +1,141 @@
+/* Nexas Portal — Cart Page Styles */
+$primary-glow: #6366f1;
+$success-glow: #10b981;
+$bg-light-modern: #f8fafc;
+$transition-speed: 0.3s;
+$cubic-bezier: cubic-bezier(0.4, 0, 0.2, 1);
+
+:host {
+  display: block;
+  font-family: 'Outfit', 'Inter', sans-serif;
+  color: #0f172a;
+}
+
+/* --- Page Entrance Animation --- */
+.animated-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- Purchase Option Cards --- */
+.purchase-option-card {
+  border: 2px solid rgba(0, 0, 0, 0.06);
+  background-color: #fafbfc;
+  transition: all $transition-speed $cubic-bezier;
+
+  &:hover {
+    border-color: rgba($primary-glow, 0.2);
+    background-color: rgba($primary-glow, 0.02);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  }
+
+  &.selected {
+    border-color: $primary-glow;
+    background-color: rgba($primary-glow, 0.04);
+    box-shadow: 0 0 0 3px rgba($primary-glow, 0.1), 0 4px 12px rgba(0, 0, 0, 0.04);
+
+    .option-radio {
+      border-color: $primary-glow;
+    }
+  }
+}
+
+/* --- Custom Radio Button --- */
+.option-radio {
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  border-radius: 50%;
+  border: 2px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s $cubic-bezier;
+
+  .option-radio-inner {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: $primary-glow;
+    animation: radioPopIn 0.25s $cubic-bezier forwards;
+  }
+}
+
+@keyframes radioPopIn {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* --- Checkout Button --- */
+.checkout-btn {
+  background: linear-gradient(135deg, $primary-glow 0%, #4f46e5 100%);
+  color: #ffffff;
+  font-size: 0.92rem;
+  letter-spacing: 0.02rem;
+  border: none;
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    transition: left 0.5s ease;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba($primary-glow, 0.3);
+
+    &::after {
+      left: 100%;
+    }
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+/* --- Sticky sidebar for desktop --- */
+.position-lg-sticky {
+  @media (min-width: 992px) {
+    position: sticky;
+    top: 2rem;
+  }
+}
+
+/* --- Cursor utilities --- */
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.transition-all {
+  transition: all $transition-speed $cubic-bezier;
+}
+
+/* --- Rounded bottom-left for badge --- */
+.rounded-bl-3 {
+  border-bottom-left-radius: 0.75rem !important;
+}

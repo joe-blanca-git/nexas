@@ -61,7 +61,7 @@
 
     <div class="col-12 col-md-6 col-lg-4 d-flex" *ngFor="let course of getFilteredCourses()">
       <div class="card h-100 border-0 rounded-4 shadow-sm overflow-hidden course-interactive-card bg-white w-100 d-flex flex-column transition-all"
-           (click)="navigateDetail(course.id)">
+           (click)="onCourseAction(course)">
         
         <div class="position-relative overflow-hidden" style="height: 160px; min-height: 160px;">
           <img [src]="course.imgCoverLink || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQY5JRi1qnVrXkmfdZGtvwU__qfPnrsVZqIVg&s'" class="w-100 h-100 object-fit-cover course-thumbnail" alt="Course Cover Image">
@@ -120,7 +120,7 @@
                 -->
                 <a class="btn btn-link ms-auto text-decoration-none fw-bold p-0 d-flex align-items-center gap-1.5 transition active-hover-link"
                    style="color: #6366f1; font-size: 0.72rem;">
-                  Acessar
+                  {{course.released ? 'Acessar' : 'Comprar Agora'}}
                   <i class="fas fa-arrow-right fs-8"></i>
                 </a>
               </div>

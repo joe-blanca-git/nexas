@@ -1,7 +1,7 @@
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Nexas.Application.Common.Interfaces;
 using Nexas.Domain.Entities;
-using Nexas.Application.Common.Exceptions;
 
 namespace Nexas.Application.Checkout.Commands;
 
@@ -32,26 +32,27 @@ public class ProcessPixCheckoutCommandHandler : IRequestHandler<ProcessPixChecko
 
         // Validations
         if (string.IsNullOrWhiteSpace(dto.Cpf))
-            throw new ValidationException(new Dictionary<string, string[]> { { "Cpf", new[] { "CPF é obrigatório" } } });
+            throw new ArgumentException("CPF é obrigatório");
 
-        var userId = _currentUserService.UserId;
-        if (userId == null)
+        var externalId = _currentUserService.ExternalId;
+        if (externalId == null)
             throw new UnauthorizedAccessException("Usuário não autenticado.");
 
-        var user = await _context.Users.FindAsync(new object[] { userId }, cancellationToken)
-            ?? throw new NotFoundException(nameof(User), userId);
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.ExternalId == externalId, cancellationToken)
+            ?? throw new InvalidOperationException($"Usuário {externalId} não encontrado.");
 
         // Update CPF if necessary
         if (string.IsNullOrWhiteSpace(user.CpfCnpj) || user.CpfCnpj != dto.Cpf)
         {
-            user.CpfCnpj = dto.Cpf;
+            user.UpdateProfile(user.FullName ?? string.Empty, dto.Cpf);
             await _context.SaveChangesAsync(cancellationToken);
         }
 
         // Get or Create Asaas Customer
         if (string.IsNullOrWhiteSpace(user.AsaasCustomerId))
         {
-            user.AsaasCustomerId = await _asaasService.CreateCustomerAsync(user, cancellationToken);
+            var customerId = await _asaasService.CreateCustomerAsync(user, cancellationToken);
+            user.UpdateAsaasCustomerId(customerId);
             await _context.SaveChangesAsync(cancellationToken);
         }
 

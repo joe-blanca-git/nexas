@@ -235,6 +235,48 @@ public class AsaasService : IAsaasService
         return result?.Status ?? "UNKNOWN";
     }
 
+    public async Task<string> CreatePixPaymentAsync(string asaasCustomerId, decimal amount, string description, CancellationToken ct)
+    {
+        var requestData = new {
+            customer = asaasCustomerId,
+            billingType = "PIX",
+            value = amount,
+            dueDate = DateTime.UtcNow.AddDays(1).ToString("yyyy-MM-dd"),
+            description = description
+        };
+
+        var response = await _httpClient.PostAsJsonAsync("payments", requestData, ct);
+        if (!response.IsSuccessStatusCode)
+        {
+            var responseBody = await response.Content.ReadAsStringAsync(ct);
+            throw new InvalidOperationException($"Asaas.CreatePixPaymentAsync failed ({(int)response.StatusCode}): {responseBody}");
+        }
+
+        var asaasData = await response.Content.ReadFromJsonAsync<AsaasPaymentResult>(ct)
+            ?? throw new Exception("Falha ao obter dados de pagamento do Asaas.");
+
+        return asaasData.Id;
+    }
+
+    public async Task<PixQrCodeResponseDto> GetPixQrCodeAsync(string asaasPaymentId, CancellationToken ct)
+    {
+        var pixResp = await _httpClient.GetAsync($"payments/{asaasPaymentId}/pixQrCode", ct);
+        if (!pixResp.IsSuccessStatusCode)
+        {
+            var responseBody = await pixResp.Content.ReadAsStringAsync(ct);
+            throw new InvalidOperationException($"Asaas.GetPixQrCodeAsync failed ({(int)pixResp.StatusCode}): {responseBody}");
+        }
+        
+        var pixData = await pixResp.Content.ReadFromJsonAsync<AsaasPixResult>(ct)
+            ?? throw new Exception("Falha ao obter dados PIX do pagamento Asaas.");
+
+        return new PixQrCodeResponseDto
+        {
+            EncodedImage = pixData.EncodedImage,
+            Payload = pixData.Payload
+        };
+    }
+
     private static string? NormalizeEmail(string? email)
     {
         if (string.IsNullOrWhiteSpace(email))

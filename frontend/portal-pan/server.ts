@@ -19,16 +19,14 @@ export function app(): express.Express {
 
   // Example Express Rest API endpoints
   // server.get('/api/**', (req, res) => { });
-  const portalRouter = express.Router();
-
   // Serve static files from /browser
-  portalRouter.get('**', express.static(browserDistFolder, {
+  server.get('**', express.static(browserDistFolder, {
     maxAge: '1y',
     index: 'index.html',
   }));
 
   // All regular routes use the Angular engine
-  portalRouter.get('**', (req, res, next) => {
+  server.get('**', (req, res, next) => {
     const { protocol, originalUrl, baseUrl, headers } = req;
 
     commonEngine
@@ -42,8 +40,6 @@ export function app(): express.Express {
       .then((html) => res.send(html))
       .catch((err) => next(err));
   });
-
-  server.use('/portal-pan', portalRouter);
 
   return server;
 }

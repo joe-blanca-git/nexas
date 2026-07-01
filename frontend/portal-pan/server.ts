@@ -5,7 +5,6 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
 import bootstrap from './src/main.server';
 
-// The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
   const serverDistFolder = dirname(fileURLToPath(import.meta.url));
@@ -17,17 +16,19 @@ export function app(): express.Express {
   server.set('view engine', 'html');
   server.set('views', browserDistFolder);
 
-  // Example Express Rest API endpoints
-  // server.get('/api/**', (req, res) => { });
-  // Serve static files from /browser
-  server.get('**', express.static(browserDistFolder, {
+  // CRÍTICO 1: Confia no Nginx. Evita que o Angular trave por causa de HTTPS -> HTTP.
+  server.set('trust proxy', true);
+
+  // CRÍTICO 2: Entrega o main.js e o styles.css perfeitamente.
+  // 'index: false' impede que ele sirva o HTML em branco no lugar do SSR.
+  server.use('/portal-pan', express.static(browserDistFolder, {
     maxAge: '1y',
-    index: 'index.html',
+    index: false 
   }));
 
-  // All regular routes use the Angular engine
+  // CRÍTICO 3: SSR captura todas as rotas e manda para o Angular processar.
   server.get('**', (req, res, next) => {
-    const { protocol, originalUrl, baseUrl, headers } = req;
+    const { protocol, originalUrl, headers } = req;
 
     commonEngine
       .render({
@@ -46,8 +47,6 @@ export function app(): express.Express {
 
 function run(): void {
   const port = process.env['PORT'] || 4000;
-
-  // Start up the Node server
   const server = app();
   server.listen(port, () => {
     console.log(`Node Express server listening on http://localhost:${port}`);

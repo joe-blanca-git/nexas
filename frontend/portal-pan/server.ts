@@ -5,7 +5,15 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
 import bootstrap from './src/main.server';
 
-// The Express app is exported so that it can be used by serverless Functions.
+// =====================================================================
+// O Nginx envia os pedidos SEM o prefixo /portal-pan/ (faz strip).
+// Exemplo: /portal-pan/auth/login chega aqui como /auth/login
+//
+// Por isso o Express trabalha com rotas "normais" (sem sub-pasta),
+// mas dizemos ao Angular SSR que o APP_BASE_HREF é /portal-pan/
+// para que ele saiba reconstruir as URLs corretamente.
+// =====================================================================
+
 export function app(): express.Express {
   const server = express();
   const serverDistFolder = dirname(fileURLToPath(import.meta.url));
@@ -17,33 +25,29 @@ export function app(): express.Express {
   server.set('view engine', 'html');
   server.set('views', browserDistFolder);
 
-  // Example Express Rest API endpoints
-  // server.get('/api/**', (req, res) => { });
-  const portalRouter = express.Router();
-
-  // Serve static files from /browser
-  portalRouter.get('**', express.static(browserDistFolder, {
+  // Serve static files from /browser (CSS, JS, images, etc.)
+  server.get('**', express.static(browserDistFolder, {
     maxAge: '1y',
     index: 'index.html',
   }));
 
   // All regular routes use the Angular engine
-  portalRouter.get('**', (req, res, next) => {
-    const { protocol, originalUrl, baseUrl, headers } = req;
+  server.get('**', (req, res, next) => {
+    const { protocol, originalUrl, headers } = req;
 
     commonEngine
       .render({
         bootstrap,
         documentFilePath: indexHtml,
-        url: `${protocol}://${headers.host}${originalUrl}`,
+        // Reconstrói a URL completa com /portal-pan para o Angular SSR
+        url: `${protocol}://${headers.host}/portal-pan${originalUrl}`,
         publicPath: browserDistFolder,
-        providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
+        // Diz ao Angular que a base é /portal-pan/ (igual ao <base href> do index.html)
+        providers: [{ provide: APP_BASE_HREF, useValue: '/portal-pan/' }],
       })
       .then((html) => res.send(html))
       .catch((err) => next(err));
   });
-
-  server.use('/portal-pan', portalRouter);
 
   return server;
 }

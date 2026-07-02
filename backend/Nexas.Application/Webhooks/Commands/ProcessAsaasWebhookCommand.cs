@@ -61,6 +61,15 @@ public class ProcessAsaasWebhookCommandHandler : IRequestHandler<ProcessAsaasWeb
             if (purchase.Status == PurchaseStatus.Approved) return true; // Idempotência
 
             purchase.Approve();
+
+            // Garantir que a matrícula (Enrollment) seja criada
+            bool enrollmentExists = await _context.Enrollments.AnyAsync(e => e.UserId == purchase.UserId && e.CourseId == purchase.CourseId, cancellationToken);
+            if (!enrollmentExists)
+            {
+                var enrollment = Nexas.Domain.Entities.Enrollment.Create(purchase.UserId, purchase.CourseId, EnrollmentOrigin.Purchase);
+                _context.Enrollments.Add(enrollment);
+            }
+
             await _context.SaveChangesAsync(cancellationToken);
 
             if (externalUserId != null)
@@ -74,6 +83,14 @@ public class ProcessAsaasWebhookCommandHandler : IRequestHandler<ProcessAsaasWeb
             if (purchase.Status == PurchaseStatus.Refunded) return true;
 
             purchase.Refund();
+
+            // Desativar matrícula
+            var enrollment = await _context.Enrollments.FirstOrDefaultAsync(e => e.UserId == purchase.UserId && e.CourseId == purchase.CourseId, cancellationToken);
+            if (enrollment != null)
+            {
+                enrollment.Deactivate();
+            }
+
             await _context.SaveChangesAsync(cancellationToken);
 
             if (externalUserId != null)

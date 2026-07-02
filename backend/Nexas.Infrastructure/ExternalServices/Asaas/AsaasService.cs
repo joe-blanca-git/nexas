@@ -196,11 +196,47 @@ public class AsaasService : IAsaasService
         response.EnsureSuccessStatusCode();
 
         var asaasData = await response.Content.ReadFromJsonAsync<AsaasSubscriptionResponse>(ct);
+        var subId = asaasData?.Id ?? string.Empty;
+        var subStatus = asaasData?.Status ?? "pending";
+
+        string? asaasPaymentId = null;
+        string? pixQrCode = null;
+        string? pixCopyPaste = null;
+
+        if (card == null && !string.IsNullOrEmpty(subId)) // É PIX
+        {
+            // Busca o primeiro pagamento gerado para esta assinatura
+            var paymentsResp = await _httpClient.GetAsync($"subscriptions/{subId}/payments", ct);
+            if (paymentsResp.IsSuccessStatusCode)
+            {
+                var paymentsData = await paymentsResp.Content.ReadFromJsonAsync<AsaasPaymentListResult>(ct);
+                var firstPayment = paymentsData?.Data?.FirstOrDefault();
+                if (firstPayment != null)
+                {
+                    asaasPaymentId = firstPayment.Id;
+                    
+                    // Busca o QR Code desse primeiro pagamento
+                    var pixResp = await _httpClient.GetAsync($"payments/{asaasPaymentId}/pixQrCode", ct);
+                    if (pixResp.IsSuccessStatusCode)
+                    {
+                        var pixData = await pixResp.Content.ReadFromJsonAsync<AsaasPixResult>(ct);
+                        if (pixData != null)
+                        {
+                            pixQrCode = pixData.EncodedImage;
+                            pixCopyPaste = pixData.Payload;
+                        }
+                    }
+                }
+            }
+        }
 
         return new SubscriptionResponseDto(
             subscription.Id, 
-            asaasData?.Status ?? "pending", 
-            asaasData?.Id);
+            subStatus, 
+            subId,
+            pixQrCode,
+            pixCopyPaste,
+            asaasPaymentId ?? string.Empty);
     }
 
     public async Task RefundPaymentAsync(string asaasPaymentId, CancellationToken ct)
@@ -316,4 +352,5 @@ public class AsaasService : IAsaasService
     private record AsaasPaymentResult(string Id, string Status);
     private record AsaasPixResult(string EncodedImage, string Payload);
     private record AsaasSubscriptionResponse(string Id, string Status);
+    private record AsaasPaymentListResult(System.Collections.Generic.List<AsaasPaymentResult> Data);
 }

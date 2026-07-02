@@ -10,7 +10,10 @@ namespace Nexas.Application.Subscriptions.Commands;
 public record SubscriptionResponseDto(
     int SubscriptionId, 
     string Status, 
-    string? AsaasSubscriptionId = null);
+    string? AsaasSubscriptionId = null,
+    string? PixQrCode = null,
+    string? PixCopyPaste = null,
+    string AsaasPaymentId = "");
 
 public record CreateSubscriptionCommand(
     string PlanName, 
@@ -117,8 +120,21 @@ public class CreateSubscriptionCommandHandler : IRequestHandler<CreateSubscripti
 
         var result = await _asaasService.CreateSubscriptionAsync(subscription, request.Amount, request.Card, cancellationToken, 7);
 
-        // 2. CORREÇÃO DO AVISO CS8604: Garantindo que o ID não seja nulo (usa ?? string.Empty)
+        // CORREÇÃO DO AVISO CS8604: Garantindo que o ID não seja nulo (usa ?? string.Empty)
         subscription.UpdateAsaasSubscriptionId(result.AsaasSubscriptionId ?? string.Empty);
+        
+        if (!string.IsNullOrEmpty(result.AsaasPaymentId))
+        {
+            var subPayment = SubscriptionPayment.Create(
+                subscription.Id, 
+                request.Amount,
+                DateTime.UtcNow,
+                Nexas.Domain.Enums.SubscriptionPaymentStatus.Pending,
+                result.AsaasPaymentId);
+            
+            _context.SubscriptionPayments.Add(subPayment);
+        }
+
         await _context.SaveChangesAsync(cancellationToken);
 
         return result;

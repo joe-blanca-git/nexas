@@ -80,7 +80,7 @@ public class GetCheckoutPendenciasQueryHandler : IRequestHandler<GetCheckoutPend
         {
             // Verifica se a assinatura JÁ ESTÁ ATIVA
             var assinaturaAtiva = await _context.Subscriptions
-                .AnyAsync(s => s.UserId == user.Id && s.IsActive, cancellationToken);
+                .AnyAsync(s => s.UserId == user.Id && s.Status == Nexas.Domain.Enums.SubscriptionStatus.Active, cancellationToken);
             
             if (assinaturaAtiva)
             {

@@ -12,7 +12,7 @@ using Nexas.Infrastructure.Persistence;
 namespace Nexas.Infrastructure.Migrations
 {
     [DbContext(typeof(NexasDbContext))]
-    [Migration("20260702114518_AddAsaasAndSignalRFeatures")]
+    [Migration("20260702125212_AddAsaasAndSignalRFeatures")]
     partial class AddAsaasAndSignalRFeatures
     {
         /// <inheritdoc />

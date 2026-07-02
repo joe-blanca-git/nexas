@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FinancialService } from '../../services/financial.service';
-import { SignalRService } from '../../../../core/services/signalr.service';
+import { SignalRService, PaymentNotification } from '../../../../../core/services/signalr.service';
 import { forkJoin, Subscription } from 'rxjs';
 
 // ─── Interfaces ────────────────────────────────────────────────────────────────
@@ -87,7 +87,7 @@ export class FinancialHomeComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadTransactions();
 
-    this.signalRSub = this.signalRService.paymentConfirmed$.subscribe(notification => {
+    this.signalRSub = this.signalRService.paymentConfirmed$.subscribe((notification: PaymentNotification) => {
       if (notification.sucesso) {
         this.triggerToast('Pagamento confirmado em tempo real!');
         this.loadTransactions();

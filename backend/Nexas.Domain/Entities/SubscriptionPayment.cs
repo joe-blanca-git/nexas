@@ -48,6 +48,18 @@ namespace Nexas.Domain.Entities
             UpdatedAt = DateTime.UtcNow;
         }
 
+        public void Cancel()
+        {
+            Status = SubscriptionPaymentStatus.Canceled;
+            UpdatedAt = DateTime.UtcNow;
+        }
+
+        public void Expire()
+        {
+            Status = SubscriptionPaymentStatus.Expired;
+            UpdatedAt = DateTime.UtcNow;
+        }
+
         public void SetAsaasPaymentId(string asaasPaymentId)
         {
             AsaasPaymentId = asaasPaymentId;

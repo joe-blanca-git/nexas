@@ -21,6 +21,9 @@ export class SignalRService {
   private paymentRefundedSource = new Subject<PaymentNotification>();
   paymentRefunded$ = this.paymentRefundedSource.asObservable();
 
+  private reconnectedSource = new Subject<void>();
+  reconnected$ = this.reconnectedSource.asObservable();
+
   constructor() { }
 
   public startConnection(token: string, baseUrl: string) {
@@ -40,6 +43,15 @@ export class SignalRService {
       .start()
       .then(() => console.log('SignalR Connection started'))
       .catch(err => console.error('Error while starting SignalR connection: ' + err));
+
+    this.hubConnection.onreconnected((connectionId) => {
+      console.log(`SignalR reconnected. ConnectionId: ${connectionId}`);
+      this.reconnectedSource.next();
+    });
+
+    this.hubConnection.onclose((error) => {
+      console.warn(`SignalR disconnected. Error: ${error}`);
+    });
 
     this.addReceivePaymentListener();
   }

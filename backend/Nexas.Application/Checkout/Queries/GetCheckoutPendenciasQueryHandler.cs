@@ -67,7 +67,13 @@ public class GetCheckoutPendenciasQueryHandler : IRequestHandler<GetCheckoutPend
                     }
                     catch
                     {
-                        // Se falhar na API do Asaas, continua com a pendência mas sem imagem
+                        // Falha ao recuperar QR Code do Asaas (pode ter sido expirado ou deletado)
+                        pendencia.Cancel();
+                        await _context.SaveChangesAsync(cancellationToken);
+                        
+                        response.TemPendencia = false;
+                        response.Status = null;
+                        response.MetodoPagamento = null;
                     }
                 }
                 else if (pendencia.PaymentMethod.Contains("CREDIT") || pendencia.PaymentMethod.Contains("DEBIT"))
@@ -112,6 +118,13 @@ public class GetCheckoutPendenciasQueryHandler : IRequestHandler<GetCheckoutPend
                     }
                     catch
                     {
+                        // Falha ao recuperar QR Code do Asaas (pode ter sido expirado ou deletado)
+                        pendencia.Cancel();
+                        await _context.SaveChangesAsync(cancellationToken);
+                        
+                        response.TemPendencia = false;
+                        response.Status = null;
+                        response.MetodoPagamento = null;
                     }
                 }
             }

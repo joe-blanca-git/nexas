@@ -5,6 +5,8 @@ namespace Nexas.Domain.Enums
         Pending = 1,
         Paid = 2,
         Failed = 3,
-        Refunded = 4
+        Refunded = 4,
+        Canceled = 5,
+        Expired = 6
     }
 }

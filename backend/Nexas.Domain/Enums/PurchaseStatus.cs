@@ -4,6 +4,8 @@ namespace Nexas.Domain.Enums
     {
         Pending,
         Approved,
-        Refunded
+        Refunded,
+        Canceled,
+        Expired
     }
 }

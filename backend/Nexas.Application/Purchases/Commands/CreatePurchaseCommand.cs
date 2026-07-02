@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Nexas.Application.Common.Interfaces;
 using Nexas.Domain.Entities;
+using Nexas.Domain.Enums;
 
 namespace Nexas.Application.Purchases.Commands;
 
@@ -57,6 +58,41 @@ public class CreatePurchaseCommandHandler : IRequestHandler<CreatePurchaseComman
         var course = await _context.Courses
             .FirstOrDefaultAsync(c => c.Id == request.CourseId, cancellationToken)
             ?? throw new Exception("Curso não encontrado.");
+
+        // VERIFICAÇÕES DE REGRAS DE NEGÓCIO (FLUXO 4 e 5)
+        var jaPossui = await _context.Purchases
+            .AnyAsync(p => p.UserId == user.Id && p.CourseId == request.CourseId && p.Status == PurchaseStatus.Approved, cancellationToken);
+        if (jaPossui)
+            throw new Exception("Você já possui acesso a este curso.");
+
+        var pendente = await _context.Purchases
+            .Where(p => p.UserId == user.Id && p.CourseId == request.CourseId && p.Status == PurchaseStatus.Pending)
+            .OrderByDescending(p => p.CreatedAt)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (pendente != null)
+        {
+            if (pendente.PaymentMethod == "PIX" && !string.IsNullOrEmpty(pendente.AsaasPaymentId))
+            {
+                // Tenta reaproveitar o PIX
+                try
+                {
+                    var qrCodeData = await _asaasService.GetPixQrCodeAsync(pendente.AsaasPaymentId, cancellationToken);
+                    return new PurchaseResponseDto(pendente.Id, "PENDING", qrCodeData.EncodedImage, qrCodeData.Payload, pendente.AsaasPaymentId);
+                }
+                catch
+                {
+                    // Falhou em recuperar, possivelmente expirado, mas vamos cancelar e seguir para criar um novo
+                    pendente.Cancel();
+                    await _context.SaveChangesAsync(cancellationToken);
+                }
+            }
+            else
+            {
+                // Se for cartão ou falhou, lança erro para usuário tratar na tela
+                throw new Exception("Você já possui uma transação em andamento para este curso.");
+            }
+        }
 
         // 2. VERIFICAÇÃO/CRIAÇÃO DO CLIENTE NO ASAAS
         if (string.IsNullOrEmpty(user.AsaasCustomerId))

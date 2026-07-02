@@ -58,6 +58,8 @@ public class ProcessAsaasWebhookCommandHandler : IRequestHandler<ProcessAsaasWeb
         
         if (eventType == "PAYMENT_RECEIVED" || eventType == "PAYMENT_CONFIRMED")
         {
+            if (purchase.Status == PurchaseStatus.Approved) return true; // Idempotência
+
             purchase.Approve();
             await _context.SaveChangesAsync(cancellationToken);
 
@@ -67,8 +69,10 @@ public class ProcessAsaasWebhookCommandHandler : IRequestHandler<ProcessAsaasWeb
             }
             return true;
         }
-        else if (eventType == "PAYMENT_REFUNDED" || eventType == "PAYMENT_DELETED")
+        else if (eventType == "PAYMENT_REFUNDED")
         {
+            if (purchase.Status == PurchaseStatus.Refunded) return true;
+
             purchase.Refund();
             await _context.SaveChangesAsync(cancellationToken);
 
@@ -76,6 +80,20 @@ public class ProcessAsaasWebhookCommandHandler : IRequestHandler<ProcessAsaasWeb
             {
                 await _paymentEventPublisher.PublishPaymentRefundedAsync(externalUserId, "AVULSO", purchase.CourseId);
             }
+            return true;
+        }
+        else if (eventType == "PAYMENT_DELETED" || eventType == "PAYMENT_CANCELED")
+        {
+            if (purchase.Status == PurchaseStatus.Canceled) return true;
+            purchase.Cancel();
+            await _context.SaveChangesAsync(cancellationToken);
+            return true;
+        }
+        else if (eventType == "PAYMENT_OVERDUE")
+        {
+            if (purchase.Status == PurchaseStatus.Expired) return true;
+            purchase.Expire();
+            await _context.SaveChangesAsync(cancellationToken);
             return true;
         }
 
@@ -89,6 +107,8 @@ public class ProcessAsaasWebhookCommandHandler : IRequestHandler<ProcessAsaasWeb
 
         if (eventType == "PAYMENT_RECEIVED" || eventType == "PAYMENT_CONFIRMED")
         {
+            if (payment.Status == SubscriptionPaymentStatus.Paid) return true; // Idempotência
+
             payment.UpdateStatus(SubscriptionPaymentStatus.Paid);
             subscription.Activate();
             await _context.SaveChangesAsync(cancellationToken);
@@ -99,10 +119,11 @@ public class ProcessAsaasWebhookCommandHandler : IRequestHandler<ProcessAsaasWeb
             }
             return true;
         }
-        else if (eventType == "PAYMENT_REFUNDED" || eventType == "PAYMENT_DELETED")
+        else if (eventType == "PAYMENT_REFUNDED")
         {
-            payment.UpdateStatus(SubscriptionPaymentStatus.Failed);
-            // IMPORTANTE: Aqui revogamos APENAS a assinatura. O acesso avulso a outros cursos permanece inalterado.
+            if (payment.Status == SubscriptionPaymentStatus.Refunded) return true;
+
+            payment.UpdateStatus(SubscriptionPaymentStatus.Refunded);
             subscription.Deactivate(SubscriptionStatus.Canceled);
             
             await _context.SaveChangesAsync(cancellationToken);
@@ -111,6 +132,20 @@ public class ProcessAsaasWebhookCommandHandler : IRequestHandler<ProcessAsaasWeb
             {
                 await _paymentEventPublisher.PublishPaymentRefundedAsync(externalUserId, "ANUAL", 0);
             }
+            return true;
+        }
+        else if (eventType == "PAYMENT_DELETED" || eventType == "PAYMENT_CANCELED")
+        {
+            if (payment.Status == SubscriptionPaymentStatus.Canceled) return true;
+            payment.Cancel();
+            await _context.SaveChangesAsync(cancellationToken);
+            return true;
+        }
+        else if (eventType == "PAYMENT_OVERDUE")
+        {
+            if (payment.Status == SubscriptionPaymentStatus.Expired) return true;
+            payment.Expire();
+            await _context.SaveChangesAsync(cancellationToken);
             return true;
         }
 

@@ -68,4 +68,16 @@ public class Purchase : BaseEntity
         Status = PurchaseStatus.Refunded;
         UpdatedAt = DateTime.UtcNow;
     }
+
+    public void Cancel()
+    {
+        Status = PurchaseStatus.Canceled;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void Expire()
+    {
+        Status = PurchaseStatus.Expired;
+        UpdatedAt = DateTime.UtcNow;
+    }
 }

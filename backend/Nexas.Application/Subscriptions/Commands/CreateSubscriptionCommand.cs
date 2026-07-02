@@ -42,6 +42,42 @@ public class CreateSubscriptionCommandHandler : IRequestHandler<CreateSubscripti
             .FirstOrDefaultAsync(u => u.Id == currentUser.Id, cancellationToken)
             ?? throw new Exception("Usuário não encontrado.");
 
+        // VERIFICAÇÕES DE REGRAS DE NEGÓCIO (FLUXO 4 e 5)
+        var jaPossui = await _context.Subscriptions
+            .AnyAsync(s => s.UserId == user.Id && s.Status == SubscriptionStatus.Active, cancellationToken);
+        
+        if (jaPossui)
+            throw new Exception("Você já possui uma assinatura ativa.");
+
+        var pendente = await _context.SubscriptionPayments
+            .Include(sp => sp.Subscription)
+            .Where(sp => sp.Subscription.UserId == user.Id && sp.Status == SubscriptionPaymentStatus.Pending)
+            .OrderByDescending(sp => sp.Id)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (pendente != null)
+        {
+            if (!string.IsNullOrEmpty(pendente.AsaasPaymentId))
+            {
+                // Tenta reaproveitar a pendência (Assinatura PIX/Cartão que está aguardando algo)
+                try
+                {
+                    // Como não tem método de pagamento na entidade no momento, assumimos PIX para tentar pegar QR
+                    var qrCodeData = await _asaasService.GetPixQrCodeAsync(pendente.AsaasPaymentId, cancellationToken);
+                    return new SubscriptionResponseDto(pendente.SubscriptionId, "PENDING", pendente.AsaasPaymentId);
+                }
+                catch
+                {
+                    pendente.Cancel();
+                    await _context.SaveChangesAsync(cancellationToken);
+                }
+            }
+            else
+            {
+                throw new Exception("Você já possui uma transação em andamento para sua assinatura.");
+            }
+        }
+
         if (string.IsNullOrEmpty(user.AsaasCustomerId))
         {
             if (request.Card != null)

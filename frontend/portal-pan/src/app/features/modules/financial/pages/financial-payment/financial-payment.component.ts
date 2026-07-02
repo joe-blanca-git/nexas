@@ -46,6 +46,8 @@ export class FinancialPaymentComponent implements OnInit {
   // Mock data for installments
   installments: { value: number, label: string }[] = [];
 
+  private broadcastChannel: BroadcastChannel;
+
   constructor(
     private fb: FormBuilder, 
     private router: Router, 
@@ -54,7 +56,18 @@ export class FinancialPaymentComponent implements OnInit {
     private coursesService: CoursesService,
     private signalRService: SignalRService,
     private authUtil: AuthUtil
-  ) {}
+  ) {
+    this.broadcastChannel = new BroadcastChannel('payment_sync_channel');
+    this.broadcastChannel.onmessage = (event) => {
+      if (event.data === 'payment_confirmed') {
+        this.redirectOnSuccess(this.tipoCompra, this.cursoId);
+      }
+    };
+  }
+
+  ngOnDestroy() {
+    this.broadcastChannel.close();
+  }
 
   ngOnInit() {
     this.initForm();
@@ -86,17 +99,27 @@ export class FinancialPaymentComponent implements OnInit {
 
       this.signalRService.paymentConfirmed$.subscribe((notification: PaymentNotification) => {
         if (notification.sucesso) {
+          this.broadcastChannel.postMessage('payment_confirmed');
           alert('Pagamento processado e aprovado com sucesso!');
-          if (notification.tipoCompra === 'ANUAL') {
-            this.router.navigate(['/courses']);
-          } else {
-            this.router.navigate(['/courses/details', notification.cursoId]);
-          }
+          this.redirectOnSuccess(notification.tipoCompra, notification.cursoId);
         }
+      });
+
+      this.signalRService.reconnected$.subscribe(() => {
+        console.log('WebSocket reconectado, verificando pendências atualizadas...');
+        this.verificarPendencias();
       });
     }
 
     this.verificarPendencias();
+  }
+
+  redirectOnSuccess(tipoCompra: string, cursoId: number) {
+    if (tipoCompra === 'ANUAL') {
+      this.router.navigate(['/courses']);
+    } else {
+      this.router.navigate(['/courses/details', cursoId]);
+    }
   }
 
   verificarPendencias() {
@@ -116,6 +139,13 @@ export class FinancialPaymentComponent implements OnInit {
         if (res && res.temPendencia) {
           this.transacaoPendente = res;
           this.tratarPendencia(res);
+        } else {
+          // Se backend disser que não tem pendência (foi cancelado ou expirou), liberamos a UI
+          this.transacaoPendente = null;
+          this.bloquearOutrosMetodos = false;
+          this.qrCodeGenerated = false;
+          this.pixCopiaECola = '';
+          this.qrCodeUrl = '';
         }
       },
       error: (err) => console.error('Erro ao verificar pendências', err)

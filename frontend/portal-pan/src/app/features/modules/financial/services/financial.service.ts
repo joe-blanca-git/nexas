@@ -16,6 +16,15 @@ export interface PixResponse {
   pixCopiaECola: string;
   qrCode: string;
 }
+export interface PendenciaDTO {
+  temPendencia: boolean;
+  status: string;
+  metodoPagamento: string;
+  pixCopiaECola?: string;
+  qrCodeBase64?: string;
+  mensagem?: string;
+  jaPago?: boolean;
+}
 
 // Essa interface pode ser mantida aqui para tipar o que vem do CoursesService
 export interface CheckoutSummary {
@@ -36,5 +45,17 @@ export class FinancialService extends BaseService {
 
   gerarPixAsaas(payload: PixRequest): Observable<PixResponse> {
     return this.http.post<PixResponse>(`${this.urlApiNexas}financeiro/checkout/pix`, payload, this.GetAuthHeaderJson());
+  }
+
+  verificarPendencias(cursoId: number | undefined, tipoCompra: string): Observable<PendenciaDTO> {
+    let url = `${this.urlApiNexas}financeiro/checkout/pendencias?tipoCompra=${tipoCompra}`;
+    if (cursoId) {
+      url += `&cursoId=${cursoId}`;
+    }
+    return this.http.get<PendenciaDTO>(url, this.GetAuthHeaderJson());
+  }
+
+  getApiUrl(): string {
+    return this.urlApiNexas;
   }
 }

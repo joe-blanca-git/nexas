@@ -36,4 +36,18 @@ public class FinancialCheckoutController : ApiControllerBase
             return BadRequest(new { Message = "Erro ao processar checkout PIX", Detalhe = ex.Message });
         }
     }
+
+    [HttpGet("pendencias")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Nexas.Application.Checkout.Queries.CheckoutPendenciasResponseDto))]
+    public async Task<IActionResult> GetPendencias([FromQuery] int? cursoId, [FromQuery] string tipoCompra)
+    {
+        var query = new Nexas.Application.Checkout.Queries.GetCheckoutPendenciasQuery
+        {
+            CursoId = cursoId,
+            TipoCompra = tipoCompra ?? "AVULSO"
+        };
+
+        var result = await _mediator.Send(query);
+        return Ok(result);
+    }
 }

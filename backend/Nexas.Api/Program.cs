@@ -1,6 +1,7 @@
 using Nexas.Api.Extensions;
 using Nexas.Api.Middlewares;
 using Nexas.Api.Services;
+using Nexas.Api.Hubs;
 using Nexas.Application;
 using Nexas.Application.Common.Interfaces;
 using Nexas.Infrastructure;
@@ -28,7 +29,9 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddAuthenticationSetup(builder.Configuration);
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddScoped<IPaymentEventPublisher, PaymentEventPublisher>();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddSignalR();
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(options =>
     {
@@ -88,5 +91,6 @@ app.UseGlobalExceptionHandler();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHub<PaymentHub>("/hubs/payment");
 
 app.Run();

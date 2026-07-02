@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FinancialService, CheckoutSummary, PixResponse } from '../../services/financial.service';
+import { FinancialService, CheckoutSummary, PixResponse, PendenciaDTO } from '../../services/financial.service';
 import { CoursesService } from '../../../courses/services/courses.service';
+import { SignalRService, PaymentNotification } from '../../../../../core/services/signalr.service';
+import { AuthUtil } from '../../../../../core/auth/auth.util';
 
 @Component({
   selector: 'app-financial-payment',
@@ -32,6 +34,9 @@ export class FinancialPaymentComponent implements OnInit {
   isLoadingPix = false;
 
   // Business Rules States
+  transacaoPendente: PendenciaDTO | null = null;
+  bloquearOutrosMetodos = false;
+
   cursoId: number = 0;
   checkoutSummary?: CheckoutSummary;
   tipoCompra: 'AVULSO' | 'ANUAL' = 'ANUAL';
@@ -46,7 +51,9 @@ export class FinancialPaymentComponent implements OnInit {
     private router: Router, 
     private route: ActivatedRoute,
     private financialService: FinancialService,
-    private coursesService: CoursesService
+    private coursesService: CoursesService,
+    private signalRService: SignalRService,
+    private authUtil: AuthUtil
   ) {}
 
   ngOnInit() {
@@ -69,6 +76,64 @@ export class FinancialPaymentComponent implements OnInit {
       this.loadCourseData();
     } else {
       this.router.navigate(['/courses']);
+    }
+
+    // Inicializar o WebSocket (SignalR)
+    const token = this.authUtil.getCookieAuth();
+    if (token) {
+      // Como SignalR precisa apenas da base URL
+      this.signalRService.startConnection(token, this.financialService.getApiUrl());
+
+      this.signalRService.paymentConfirmed$.subscribe((notification: PaymentNotification) => {
+        if (notification.sucesso) {
+          alert('Pagamento processado e aprovado com sucesso!');
+          if (notification.tipoCompra === 'ANUAL') {
+            this.router.navigate(['/courses']);
+          } else {
+            this.router.navigate(['/courses/details', notification.cursoId]);
+          }
+        }
+      });
+    }
+
+    this.verificarPendencias();
+  }
+
+  verificarPendencias() {
+    this.financialService.verificarPendencias(this.cursoId, this.tipoCompra).subscribe({
+      next: (res: PendenciaDTO) => {
+        // Regra de Roteamento (Proteção de Rota)
+        if (res && res.jaPago) {
+          alert('Você já possui acesso ativo a este conteúdo!');
+          if (this.tipoCompra === 'ANUAL') {
+            this.router.navigate(['/courses']);
+          } else {
+            this.router.navigate(['/courses/details', this.cursoId]);
+          }
+          return;
+        }
+
+        if (res && res.temPendencia) {
+          this.transacaoPendente = res;
+          this.tratarPendencia(res);
+        }
+      },
+      error: (err) => console.error('Erro ao verificar pendências', err)
+    });
+  }
+
+  tratarPendencia(pendencia: PendenciaDTO) {
+    if (pendencia.metodoPagamento === 'PIX' && pendencia.status === 'PENDING') {
+      this.bloquearOutrosMetodos = true;
+      this.setPaymentMethod('PIX');
+      if (pendencia.pixCopiaECola && pendencia.qrCodeBase64) {
+        this.qrCodeGenerated = true;
+        this.pixCopiaECola = pendencia.pixCopiaECola;
+        this.qrCodeUrl = pendencia.qrCodeBase64;
+      }
+    } else if (['CREDIT', 'DEBIT'].includes(pendencia.metodoPagamento) && pendencia.status === 'REJECTED') {
+      this.bloquearOutrosMetodos = true;
+      this.setPaymentMethod(pendencia.metodoPagamento as 'CREDIT' | 'DEBIT');
     }
   }
 
@@ -144,10 +209,12 @@ export class FinancialPaymentComponent implements OnInit {
   }
 
   setPaymentMethod(method: 'PIX' | 'CREDIT' | 'DEBIT') {
+    if (this.bloquearOutrosMetodos && this.transacaoPendente?.metodoPagamento !== method) {
+      return;
+    }
     this.paymentMethod = method;
     this.paymentError = false;
     this.paymentSuccess = false;
-    this.qrCodeGenerated = false;
     this.errorMessage = '';
   }
 
@@ -168,6 +235,18 @@ export class FinancialPaymentComponent implements OnInit {
             this.qrCodeGenerated = true;
             this.qrCodeUrl = res.qrCode;
             this.pixCopiaECola = res.pixCopiaECola;
+            
+            // Regra: Bloquear outras abas
+            this.transacaoPendente = {
+              temPendencia: true,
+              status: 'PENDING',
+              metodoPagamento: 'PIX',
+              pixCopiaECola: res.pixCopiaECola,
+              qrCodeBase64: res.qrCode,
+              mensagem: 'Você gerou um PIX e ele está aguardando pagamento.'
+            };
+            this.bloquearOutrosMetodos = true;
+
           } else {
             this.errorMessage = 'Ocorreu um erro ao gerar o PIX.';
           }

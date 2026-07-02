@@ -11,12 +11,32 @@
           </div>
           
           <div class="card-body p-4">
+
+            <!-- BANNER ALERTA: PENDÊNCIA PIX -->
+            <div *ngIf="transacaoPendente?.metodoPagamento === 'PIX' && transacaoPendente?.status === 'PENDING'" 
+                 class="alert alert-warning d-flex align-items-center mb-4" role="alert">
+              <i class="fas fa-exclamation-triangle flex-shrink-0 me-2 text-warning fs-5"></i>
+              <div>
+                <strong>Aviso:</strong> {{ transacaoPendente?.mensagem || 'Você já possui um PIX aguardando pagamento.' }}
+              </div>
+            </div>
+
+            <!-- BANNER ALERTA: CARTÃO REJEITADO -->
+            <div *ngIf="['CREDIT', 'DEBIT'].includes(transacaoPendente?.metodoPagamento || '') && transacaoPendente?.status === 'REJECTED'" 
+                 class="alert alert-danger d-flex align-items-center mb-4" role="alert">
+              <i class="fas fa-times-circle flex-shrink-0 me-2 text-danger fs-5"></i>
+              <div>
+                <strong>Falha no Pagamento:</strong> {{ transacaoPendente?.mensagem || 'O último pagamento falhou, insira novos dados.' }}
+              </div>
+            </div>
             
             <!-- ETAPA 1: Payment Method Selection -->
             <div class="payment-methods d-flex flex-wrap gap-3 mb-5">
               
               <div class="payment-card flex-grow-1" 
                    [class.active]="paymentMethod === 'PIX'" 
+                   [class.opacity-50]="bloquearOutrosMetodos && transacaoPendente?.metodoPagamento !== 'PIX'"
+                   [style.pointer-events]="(bloquearOutrosMetodos && transacaoPendente?.metodoPagamento !== 'PIX') ? 'none' : 'auto'"
                    (click)="setPaymentMethod('PIX')">
                 <div class="d-flex align-items-center gap-3 p-3 border rounded-3 transition-all cursor-pointer method-wrapper">
                   <div class="icon-circle bg-light d-flex align-items-center justify-content-center rounded-circle" style="width: 40px; height: 40px;">
@@ -36,6 +56,8 @@
               
               <div class="payment-card flex-grow-1" 
                    [class.active]="paymentMethod === 'CREDIT'" 
+                   [class.opacity-50]="bloquearOutrosMetodos && transacaoPendente?.metodoPagamento !== 'CREDIT'"
+                   [style.pointer-events]="(bloquearOutrosMetodos && transacaoPendente?.metodoPagamento !== 'CREDIT') ? 'none' : 'auto'"
                    (click)="setPaymentMethod('CREDIT')">
                 <div class="d-flex align-items-center gap-3 p-3 border rounded-3 transition-all cursor-pointer method-wrapper">
                   <div class="icon-circle bg-light d-flex align-items-center justify-content-center rounded-circle" style="width: 40px; height: 40px;">
@@ -55,6 +77,8 @@
 
               <div class="payment-card flex-grow-1" 
                    [class.active]="paymentMethod === 'DEBIT'" 
+                   [class.opacity-50]="bloquearOutrosMetodos && transacaoPendente?.metodoPagamento !== 'DEBIT'"
+                   [style.pointer-events]="(bloquearOutrosMetodos && transacaoPendente?.metodoPagamento !== 'DEBIT') ? 'none' : 'auto'"
                    (click)="setPaymentMethod('DEBIT')">
                 <div class="d-flex align-items-center gap-3 p-3 border rounded-3 transition-all cursor-pointer method-wrapper">
                   <div class="icon-circle bg-light d-flex align-items-center justify-content-center rounded-circle" style="width: 40px; height: 40px;">
@@ -118,7 +142,11 @@
 
             <!-- CREDIT / DEBIT CARD FORM -->
             <div *ngIf="paymentMethod === 'CREDIT' || paymentMethod === 'DEBIT'" class="animated-slide-in">
-              <form [formGroup]="cardForm" (ngSubmit)="processPayment()">
+              <form [formGroup]="cardForm" (ngSubmit)="processPayment()" 
+                    [class.border]="transacaoPendente?.status === 'REJECTED'" 
+                    [class.border-danger]="transacaoPendente?.status === 'REJECTED'" 
+                    [class.rounded]="transacaoPendente?.status === 'REJECTED'" 
+                    [class.p-3]="transacaoPendente?.status === 'REJECTED'">
                 <div class="row g-3">
                   <div class="col-12">
                     <label class="form-label small fw-semibold text-muted">Número do Cartão</label>

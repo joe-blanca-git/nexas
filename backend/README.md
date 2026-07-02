@@ -2863,3 +2863,20 @@ O projeto utiliza o `CurrentUserService` e o `UserContextService` para extrair o
 **Versão do .NET**: 8.0  
 **Banco de Dados**: MySQL 8.0+  
 **ORM**: Entity Framework Core 8.0
+
+### Integração Asaas e SignalR (Novas Funcionalidades)
+
+#### 1) Verificação de Pendências no Checkout
+Rota: GET /api/v1/financeiro/checkout/pendencias
+- **Função**: Retorna se o usuário possui pendências de pagamento (PIX ou cartão rejeitado) e trava o checkout no frontend, ou retorna se o usuário já possui o curso/assinatura ativo, protegendo a rota.
+
+#### 2) Webhook do Asaas
+Rota: POST /api/v1/webhooks/asaas
+- **Função**: Recebe os payloads do Asaas (PAYMENT_RECEIVED, PAYMENT_CONFIRMED, PAYMENT_REFUNDED, PAYMENT_DELETED).
+- **Regra de Negócio**: Utiliza CQRS (ProcessAsaasWebhookCommand) para atualizar o status das tabelas Purchases ou SubscriptionPayments.
+- **Regra de Revogação**: Estornos de assinaturas apenas removem a flag IsActive do usuário na tabela Subscriptions, preservando cursos avulsos antigos.
+
+#### 3) WebSockets em Tempo Real
+Hub: /hubs/payment
+- **Função**: Integrado nativamente no backend via **SignalR**.
+- **Comportamento**: Assim que o Webhook do Asaas aprova/cancela um pagamento, o servidor dispara mensagens WebSocket (PaymentConfirmed ou PaymentRefunded) diretamente e de forma exclusiva para o UserId autenticado.

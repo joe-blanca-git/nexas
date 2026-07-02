@@ -7,6 +7,7 @@ namespace Nexas.Application.Common.Interfaces;
 public interface IAsaasService
 {
     Task<string> CreateCustomerAsync(User user, CancellationToken ct);
+    Task UpdateCustomerAsync(User user, CancellationToken ct);
     
     Task<PurchaseResponseDto> CreatePaymentAsync(Purchase purchase, CreditCardInfo? card, CancellationToken ct);
 

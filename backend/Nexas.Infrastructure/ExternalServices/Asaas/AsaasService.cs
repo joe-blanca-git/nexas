@@ -67,6 +67,42 @@ public class AsaasService : IAsaasService
         return result?.Id ?? throw new Exception("Falha ao obter ID do cliente no Asaas.");
     }
 
+    public async Task UpdateCustomerAsync(User user, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(user.AsaasCustomerId)) return;
+
+        var name = !string.IsNullOrWhiteSpace(user.FullName)
+            ? user.FullName!
+            : user.ExternalId;
+
+        var email = NormalizeEmail(user.Email);
+        var cpfCnpj = SanitizeCpfCnpj(user.CpfCnpj);
+
+        var requestData = new Dictionary<string, object?>
+        {
+            ["name"] = name,
+            ["externalReference"] = user.Id.ToString()
+        };
+
+        if (!string.IsNullOrWhiteSpace(email))
+        {
+            requestData["email"] = email;
+        }
+
+        if (!string.IsNullOrWhiteSpace(cpfCnpj))
+        {
+            requestData["cpfCnpj"] = cpfCnpj;
+        }
+
+        var response = await _httpClient.PostAsJsonAsync($"customers/{user.AsaasCustomerId}", requestData, cancellationToken);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
+            throw new InvalidOperationException($"Asaas.UpdateCustomerAsync failed ({(int)response.StatusCode}): {response.ReasonPhrase}. Response body: {responseBody}");
+        }
+    }
+
     /// <summary>
     /// Gera uma cobrança única (Curso) via PIX ou Cartão de Crédito.
     /// </summary>

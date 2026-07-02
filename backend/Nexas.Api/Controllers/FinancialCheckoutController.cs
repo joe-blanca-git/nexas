@@ -21,7 +21,7 @@ public class FinancialCheckoutController : ApiControllerBase
         {
             if (request.TipoCompra == "AVULSO")
             {
-                var command = new CreatePurchaseCommand(request.CursoId, request.Valor, "PIX");
+                var command = new CreatePurchaseCommand(request.CursoId, request.Valor, "PIX", request.Cpf);
                 var result = await Mediator.Send(command);
                 return Ok(new CheckoutPixResponseDto
                 {
@@ -33,7 +33,7 @@ public class FinancialCheckoutController : ApiControllerBase
             }
             else if (request.TipoCompra == "ANUAL")
             {
-                var command = new CreateSubscriptionCommand("Assinatura Anual", request.Valor, "PIX");
+                var command = new CreateSubscriptionCommand("Assinatura Anual", request.Valor, "PIX", request.Cpf);
                 var result = await Mediator.Send(command);
                 return Ok(new CheckoutPixResponseDto
                 {

@@ -27,6 +27,7 @@ public record CreatePurchaseCommand(
     int CourseId, 
     decimal Amount, 
     string PaymentMethod, 
+    string? Cpf = null,
     CreditCardInfo? Card = null) : IRequest<PurchaseResponseDto>;
 
 public class CreatePurchaseCommandHandler : IRequestHandler<CreatePurchaseCommand, PurchaseResponseDto>
@@ -94,17 +95,16 @@ public class CreatePurchaseCommandHandler : IRequestHandler<CreatePurchaseComman
             }
         }
 
-        // 2. VERIFICAÇÃO/CRIAÇÃO DO CLIENTE NO ASAAS
         if (string.IsNullOrEmpty(user.AsaasCustomerId))
         {
-            if (request.Card != null)
+            if (request.Card != null || !string.IsNullOrWhiteSpace(request.Cpf))
             {
                 var profileName = string.IsNullOrWhiteSpace(user.FullName)
-                    ? request.Card.HolderName
+                    ? (request.Card?.HolderName ?? user.ExternalId)
                     : user.FullName!;
 
                 var profileCpfCnpj = string.IsNullOrWhiteSpace(user.CpfCnpj)
-                    ? request.Card.HolderCpfCnpj
+                    ? (request.Cpf ?? request.Card?.HolderCpfCnpj)
                     : user.CpfCnpj!;
 
                 if (!string.IsNullOrWhiteSpace(profileName) && !string.IsNullOrWhiteSpace(profileCpfCnpj))
@@ -115,6 +115,13 @@ public class CreatePurchaseCommandHandler : IRequestHandler<CreatePurchaseComman
 
             var customerId = await _asaasService.CreateCustomerAsync(user, cancellationToken);
             user.UpdateAsaasCustomerId(customerId);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+        else if (!string.IsNullOrWhiteSpace(request.Cpf) && string.IsNullOrWhiteSpace(user.CpfCnpj))
+        {
+            // O cliente jÃ¡ existe no Asaas, mas nÃ£o tinha CPF e agora foi informado
+            user.UpdateProfile(user.FullName ?? user.ExternalId, request.Cpf);
+            await _asaasService.UpdateCustomerAsync(user, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
         }
 

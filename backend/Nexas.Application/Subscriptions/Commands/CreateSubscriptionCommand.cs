@@ -19,6 +19,7 @@ public record CreateSubscriptionCommand(
     string PlanName, 
     decimal Amount, 
     string PaymentMethod, 
+    string? Cpf = null,
     CreditCardInfo? Card = null) : IRequest<SubscriptionResponseDto>;
 
 public class CreateSubscriptionCommandHandler : IRequestHandler<CreateSubscriptionCommand, SubscriptionResponseDto>
@@ -83,14 +84,14 @@ public class CreateSubscriptionCommandHandler : IRequestHandler<CreateSubscripti
 
         if (string.IsNullOrEmpty(user.AsaasCustomerId))
         {
-            if (request.Card != null)
+            if (request.Card != null || !string.IsNullOrWhiteSpace(request.Cpf))
             {
                 var profileName = string.IsNullOrWhiteSpace(user.FullName)
-                    ? request.Card.HolderName
+                    ? (request.Card?.HolderName ?? user.ExternalId)
                     : user.FullName!;
 
                 var profileCpfCnpj = string.IsNullOrWhiteSpace(user.CpfCnpj)
-                    ? request.Card.HolderCpfCnpj
+                    ? (request.Cpf ?? request.Card?.HolderCpfCnpj)
                     : user.CpfCnpj!;
 
                 if (!string.IsNullOrWhiteSpace(profileName) && !string.IsNullOrWhiteSpace(profileCpfCnpj))
@@ -101,6 +102,13 @@ public class CreateSubscriptionCommandHandler : IRequestHandler<CreateSubscripti
 
             var customerId = await _asaasService.CreateCustomerAsync(user, cancellationToken);
             user.UpdateAsaasCustomerId(customerId);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+        else if (!string.IsNullOrWhiteSpace(request.Cpf) && string.IsNullOrWhiteSpace(user.CpfCnpj))
+        {
+            // O cliente jÃ¡ existe no Asaas, mas nÃ£o tinha CPF e agora foi informado
+            user.UpdateProfile(user.FullName ?? user.ExternalId, request.Cpf);
+            await _asaasService.UpdateCustomerAsync(user, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
         }
 

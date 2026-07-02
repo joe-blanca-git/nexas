@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { FinancialService } from '../../services/financial.service';
+import { SignalRService } from '../../../../core/services/signalr.service';
+import { forkJoin, Subscription } from 'rxjs';
 
 // ─── Interfaces ────────────────────────────────────────────────────────────────
 
@@ -39,11 +42,13 @@ export interface IFinancialSummary {
   templateUrl: './financial-home.component.html',
   styleUrl: './financial-home.component.scss'
 })
-export class FinancialHomeComponent implements OnInit {
+export class FinancialHomeComponent implements OnInit, OnDestroy {
 
   // ─── State ────────────────────────────────────────────────────────────────
   isLoading = true;
   searchTerm = '';
+  private broadcastChannel: BroadcastChannel;
+  private signalRSub?: Subscription;
   selectedType: string = 'Todos';
   selectedStatus: string = 'Todos';
   sortField: keyof ITransaction = 'chargeDate';
@@ -72,125 +77,122 @@ export class FinancialHomeComponent implements OnInit {
   // ─── Mock Data ────────────────────────────────────────────────────────────
   transactions: ITransaction[] = [];
 
-  ngOnInit(): void {
-    // Simula carregamento assíncrono dos dados mockados
-    setTimeout(() => {
-      this.transactions = [
-        {
-          id: 'TXN-2026-0001',
-          name: 'Plano Nexas Premium — Assinatura Mensal',
-          type: 'Assinatura',
-          value: 89.90,
-          paymentMethod: 'Cartão de Crédito',
-          status: 'Pago',
-          chargeDate: '05/05/2026',
-          nextRenewal: '05/06/2026',
-          transactionCode: 'NXS-SUB-2026-MAI-A9F2',
-          icon: 'fa-crown',
-          color: '#6366f1'
-        },
-        {
-          id: 'TXN-2026-0002',
-          name: 'Desenvolvimento Web com Angular',
-          type: 'Curso',
-          value: 297.00,
-          paymentMethod: 'PIX',
-          status: 'Pago',
-          chargeDate: '15/03/2026',
-          nextRenewal: null,
-          transactionCode: 'NXS-CRS-2026-MAR-C1D8',
-          icon: 'fa-laptop-code',
-          color: '#6366f1',
-          relatedCourseId: 1
-        },
-        {
-          id: 'TXN-2026-0003',
-          name: 'Banco de Dados NoSQL',
-          type: 'Curso',
-          value: 247.00,
-          paymentMethod: 'Cartão de Crédito',
-          status: 'Pago',
-          chargeDate: '02/04/2026',
-          nextRenewal: null,
-          transactionCode: 'NXS-CRS-2026-ABR-E3F5',
-          icon: 'fa-database',
-          color: '#06b6d4',
-          relatedCourseId: 2
-        },
-        {
-          id: 'TXN-2026-0004',
-          name: 'Plano Nexas Premium — Assinatura Mensal',
-          type: 'Assinatura',
-          value: 89.90,
-          paymentMethod: 'Cartão de Crédito',
-          status: 'Pago',
-          chargeDate: '05/04/2026',
-          nextRenewal: '05/05/2026',
-          transactionCode: 'NXS-SUB-2026-ABR-B7G4',
-          icon: 'fa-crown',
-          color: '#6366f1'
-        },
-        {
-          id: 'TXN-2026-0005',
-          name: 'Estrutura de Dados em C#',
-          type: 'Curso',
-          value: 267.00,
-          paymentMethod: 'Boleto',
-          status: 'Pago',
-          chargeDate: '10/02/2026',
-          nextRenewal: null,
-          transactionCode: 'NXS-CRS-2026-FEV-H2K9',
-          icon: 'fa-code',
-          color: '#10b981',
-          relatedCourseId: 3
-        },
-        {
-          id: 'TXN-2026-0006',
-          name: 'Plano Nexas Premium — Assinatura Mensal',
-          type: 'Assinatura',
-          value: 89.90,
-          paymentMethod: 'Cartão de Crédito',
-          status: 'Pendente',
-          chargeDate: '05/06/2026',
-          nextRenewal: '05/07/2026',
-          transactionCode: 'NXS-SUB-2026-JUN-P4L1',
-          icon: 'fa-crown',
-          color: '#6366f1'
-        },
-        {
-          id: 'TXN-2026-0007',
-          name: 'Arquitetura de Softwares Cloud',
-          type: 'Curso',
-          value: 317.00,
-          paymentMethod: 'PIX',
-          status: 'Reembolsado',
-          chargeDate: '20/01/2026',
-          nextRenewal: null,
-          transactionCode: 'NXS-CRS-2026-JAN-R6M3',
-          icon: 'fa-cloud',
-          color: '#f59e0b',
-          relatedCourseId: 4
-        },
-        {
-          id: 'TXN-2026-0008',
-          name: 'Introdução à Inteligência Artificial',
-          type: 'Curso',
-          value: 347.00,
-          paymentMethod: 'Cartão de Débito',
-          status: 'Cancelado',
-          chargeDate: '18/04/2026',
-          nextRenewal: null,
-          transactionCode: 'NXS-CRS-2026-ABR-C9N7',
-          icon: 'fa-robot',
-          color: '#8b5cf6',
-          relatedCourseId: 5
-        }
-      ];
+  constructor(
+    private financialService: FinancialService,
+    private signalRService: SignalRService
+  ) {
+    this.broadcastChannel = new BroadcastChannel('payment_sync_channel');
+  }
 
-      // Calcula o resumo financeiro a partir dos dados mockados
-      this.calculateSummary();
-      this.isLoading = false;
-    }, 1200);
+  ngOnInit(): void {
+    this.loadTransactions();
+
+    this.signalRSub = this.signalRService.paymentConfirmed$.subscribe(notification => {
+      if (notification.sucesso) {
+        this.triggerToast('Pagamento confirmado em tempo real!');
+        this.loadTransactions();
+      }
+    });
+
+    this.broadcastChannel.onmessage = (event) => {
+      if (event.data === 'payment_confirmed') {
+        this.loadTransactions();
+      }
+    };
+  }
+
+  ngOnDestroy(): void {
+    this.broadcastChannel.close();
+    if (this.signalRSub) {
+      this.signalRSub.unsubscribe();
+    }
+  }
+
+  mapStatus(backendStatus: string): TransactionStatus {
+    const s = backendStatus?.toUpperCase();
+    if (s === 'APPROVED' || s === 'PAID' || s === 'ACTIVE') return 'Pago';
+    if (s === 'PENDING') return 'Pendente';
+    if (s === 'CANCELED' || s === 'EXPIRED') return 'Cancelado';
+    if (s === 'REFUNDED') return 'Reembolsado';
+    return 'Pendente';
+  }
+
+  loadTransactions(): void {
+    this.isLoading = true;
+    forkJoin({
+      purchases: this.financialService.getMyPurchases(),
+      subscription: this.financialService.getMySubscription()
+    }).subscribe({
+      next: (res) => {
+        const txs: ITransaction[] = [];
+
+        // Mapear Purchases
+        if (res.purchases && Array.isArray(res.purchases)) {
+          res.purchases.forEach(p => {
+            txs.push({
+              id: `PUR-${p.purchaseId}`,
+              name: p.courseTitle,
+              type: 'Curso',
+              value: p.amount,
+              paymentMethod: (p.paymentMethod === 'PIX' ? 'PIX' : 'Cartão de Crédito') as PaymentMethod,
+              status: this.mapStatus(p.status),
+              chargeDate: new Date(p.purchasedAt).toLocaleDateString(),
+              nextRenewal: null,
+              transactionCode: `NXS-PUR-${p.purchaseId}`,
+              icon: 'fa-book',
+              color: '#06b6d4',
+              relatedCourseId: p.courseId
+            });
+          });
+        }
+
+        // Mapear Subscription
+        if (res.subscription && res.subscription.subscriptionId) {
+          const sub = res.subscription;
+          
+          if (sub.lastCharges && Array.isArray(sub.lastCharges)) {
+            sub.lastCharges.forEach((c: any) => {
+              txs.push({
+                id: `SUB-CHG-${c.chargeId}`,
+                name: sub.planName,
+                type: 'Assinatura',
+                value: c.amount,
+                paymentMethod: 'PIX', // ou c.paymentMethod se existir no backend
+                status: this.mapStatus(c.status),
+                chargeDate: c.paymentDate ? new Date(c.paymentDate).toLocaleDateString() : 'N/A',
+                nextRenewal: sub.nextDueDate ? new Date(sub.nextDueDate).toLocaleDateString() : null,
+                transactionCode: `NXS-CHG-${c.chargeId}`,
+                icon: 'fa-crown',
+                color: '#6366f1'
+              });
+            });
+          } else {
+             // Caso não tenha cobranças listadas mas tenha assinatura
+             txs.push({
+              id: `SUB-${sub.subscriptionId}`,
+              name: sub.planName,
+              type: 'Assinatura',
+              value: 0,
+              paymentMethod: 'PIX',
+              status: this.mapStatus(sub.status),
+              chargeDate: sub.startDate ? new Date(sub.startDate).toLocaleDateString() : 'N/A',
+              nextRenewal: sub.nextDueDate ? new Date(sub.nextDueDate).toLocaleDateString() : null,
+              transactionCode: `NXS-SUB-${sub.subscriptionId}`,
+              icon: 'fa-crown',
+              color: '#6366f1'
+            });
+          }
+        }
+
+        this.transactions = txs;
+        this.calculateSummary();
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Erro ao carregar compras', err);
+        this.isLoading = false;
+      }
+    });
   }
 
   // ─── Summary Calculation ──────────────────────────────────────────────────

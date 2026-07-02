@@ -35,7 +35,8 @@ public class GetMyPurchasesQueryHandler : IRequestHandler<GetMyPurchasesQuery, L
             CourseTitle = p.Course?.Name ?? string.Empty,
             Amount = p.Amount,
             PurchasedAt = p.CreatedAt,
-            Status = p.Status.ToString().ToUpper()
+            Status = p.Status.ToString().ToUpper(),
+            PaymentMethod = p.PaymentMethod
         }).ToList();
     }
 }

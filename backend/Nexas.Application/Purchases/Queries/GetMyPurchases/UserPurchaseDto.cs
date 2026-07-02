@@ -10,4 +10,5 @@ public class UserPurchaseDto
     public decimal Amount { get; set; }
     public DateTime PurchasedAt { get; set; }
     public string Status { get; set; } = string.Empty;
+    public string PaymentMethod { get; set; } = string.Empty;
 }

@@ -55,6 +55,14 @@ export class FinancialService extends BaseService {
     return this.http.get<PendenciaDTO>(url, this.GetAuthHeaderJson());
   }
 
+  getMyPurchases(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.urlApiNexas}Purchases/my-purchases`, this.GetAuthHeaderJson());
+  }
+
+  getMySubscription(): Observable<any> {
+    return this.http.get<any>(`${this.urlApiNexas}Subscriptions/my-subscription`, this.GetAuthHeaderJson());
+  }
+
   getApiUrl(): string {
     return this.urlApiNexas;
   }

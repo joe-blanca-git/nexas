@@ -91,7 +91,7 @@ public class GetCheckoutPendenciasQueryHandler : IRequestHandler<GetCheckoutPend
             var pendencia = await _context.SubscriptionPayments
                 .Include(p => p.Subscription)
                 .Where(p => p.Subscription.UserId == user.Id && p.Status == SubscriptionPaymentStatus.Pending)
-                .OrderByDescending(p => p.CreatedAt)
+                .OrderByDescending(p => p.Id)
                 .FirstOrDefaultAsync(cancellationToken);
 
             if (pendencia != null)

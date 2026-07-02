@@ -47,33 +47,44 @@ public class CreateSubscriptionCommandHandler : IRequestHandler<CreateSubscripti
             ?? throw new Exception("Usuário não encontrado.");
 
         // VERIFICAÇÕES DE REGRAS DE NEGÓCIO (FLUXO 4 e 5)
-        var jaPossui = await _context.Subscriptions
+        var hasActiveSubscription = await _context.Subscriptions
             .AnyAsync(s => s.UserId == user.Id && s.Status == SubscriptionStatus.Active, cancellationToken);
         
-        if (jaPossui)
+        if (hasActiveSubscription)
             throw new Exception("Você já possui uma assinatura ativa.");
 
-        var pendente = await _context.SubscriptionPayments
+        var pendingPayment = await _context.SubscriptionPayments
             .Include(sp => sp.Subscription)
             .Where(sp => sp.Subscription.UserId == user.Id && sp.Status == SubscriptionPaymentStatus.Pending)
             .OrderByDescending(sp => sp.Id)
             .FirstOrDefaultAsync(cancellationToken);
 
-        if (pendente != null)
+        if (pendingPayment != null)
         {
-            if (!string.IsNullOrEmpty(pendente.AsaasPaymentId))
+            if (!string.IsNullOrEmpty(pendingPayment.AsaasPaymentId))
             {
-                // Tenta reaproveitar a pendência (Assinatura PIX/Cartão que está aguardando algo)
                 try
                 {
-                    // Como não tem método de pagamento na entidade no momento, assumimos PIX para tentar pegar QR
-                    var qrCodeData = await _asaasService.GetPixQrCodeAsync(pendente.AsaasPaymentId, cancellationToken);
-                    return new SubscriptionResponseDto(pendente.SubscriptionId, "PENDING", pendente.AsaasPaymentId);
+                    var qrCodeData = await _asaasService.GetPixQrCodeAsync(pendingPayment.AsaasPaymentId, cancellationToken);
+                    return new SubscriptionResponseDto(
+                        pendingPayment.SubscriptionId, 
+                        "PENDING", 
+                        pendingPayment.Subscription.AsaasSubscriptionId,
+                        qrCodeData.EncodedImage,
+                        qrCodeData.Payload,
+                        pendingPayment.AsaasPaymentId);
                 }
-                catch
+                catch (Exception ex)
                 {
-                    pendente.Cancel();
-                    await _context.SaveChangesAsync(cancellationToken);
+                    // Failed to retrieve QR code from Asaas.
+                    // DO NOT cancel the subscription. Just return without QR code.
+                    return new SubscriptionResponseDto(
+                        pendingPayment.SubscriptionId, 
+                        "PENDING", 
+                        pendingPayment.Subscription.AsaasSubscriptionId,
+                        null,
+                        null,
+                        pendingPayment.AsaasPaymentId);
                 }
             }
             else

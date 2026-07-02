@@ -61,31 +61,31 @@ public class CreatePurchaseCommandHandler : IRequestHandler<CreatePurchaseComman
             ?? throw new Exception("Curso não encontrado.");
 
         // VERIFICAÇÕES DE REGRAS DE NEGÓCIO (FLUXO 4 e 5)
-        var jaPossui = await _context.Purchases
+        var isAlreadyPaid = await _context.Purchases
             .AnyAsync(p => p.UserId == user.Id && p.CourseId == request.CourseId && p.Status == PurchaseStatus.Approved, cancellationToken);
-        if (jaPossui)
+        if (isAlreadyPaid)
             throw new Exception("Você já possui acesso a este curso.");
 
-        var pendente = await _context.Purchases
+        var pendingPurchase = await _context.Purchases
             .Where(p => p.UserId == user.Id && p.CourseId == request.CourseId && p.Status == PurchaseStatus.Pending)
             .OrderByDescending(p => p.CreatedAt)
             .FirstOrDefaultAsync(cancellationToken);
 
-        if (pendente != null)
+        if (pendingPurchase != null)
         {
-            if (pendente.PaymentMethod == "PIX" && !string.IsNullOrEmpty(pendente.AsaasPaymentId))
+            if (pendingPurchase.PaymentMethod == "PIX" && !string.IsNullOrEmpty(pendingPurchase.AsaasPaymentId))
             {
                 // Tenta reaproveitar o PIX
                 try
                 {
-                    var qrCodeData = await _asaasService.GetPixQrCodeAsync(pendente.AsaasPaymentId, cancellationToken);
-                    return new PurchaseResponseDto(pendente.Id, "PENDING", qrCodeData.EncodedImage, qrCodeData.Payload, pendente.AsaasPaymentId);
+                    var qrCodeData = await _asaasService.GetPixQrCodeAsync(pendingPurchase.AsaasPaymentId, cancellationToken);
+                    return new PurchaseResponseDto(pendingPurchase.Id, "PENDING", qrCodeData.EncodedImage, qrCodeData.Payload, pendingPurchase.AsaasPaymentId);
                 }
-                catch
+                catch (Exception ex)
                 {
-                    // Falhou em recuperar, possivelmente expirado, mas vamos cancelar e seguir para criar um novo
-                    pendente.Cancel();
-                    await _context.SaveChangesAsync(cancellationToken);
+                    // Failed to retrieve QR code from Asaas.
+                    // DO NOT cancel the purchase. Just return without QR code.
+                    return new PurchaseResponseDto(pendingPurchase.Id, "PENDING", null, null, pendingPurchase.AsaasPaymentId);
                 }
             }
             else

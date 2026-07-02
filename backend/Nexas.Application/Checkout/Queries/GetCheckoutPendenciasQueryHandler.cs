@@ -35,48 +35,45 @@ public class GetCheckoutPendenciasQueryHandler : IRequestHandler<GetCheckoutPend
 
         if (request.TipoCompra == "AVULSO" && request.CursoId.HasValue)
         {
-            // Verifica se JÁ ESTÁ PAGO
-            var jaPago = await _context.Purchases
+            // Check if ALREADY PAID
+            var isAlreadyPaid = await _context.Purchases
                 .AnyAsync(p => p.UserId == user.Id && p.CourseId == request.CursoId.Value && p.Status == PurchaseStatus.Approved, cancellationToken);
             
-            if (jaPago)
+            if (isAlreadyPaid)
             {
                 response.JaPago = true;
                 return response;
             }
 
-            var pendencia = await _context.Purchases
+            var pendingPurchase = await _context.Purchases
                 .Where(p => p.UserId == user.Id && p.CourseId == request.CursoId.Value && p.Status == PurchaseStatus.Pending)
                 .OrderByDescending(p => p.CreatedAt)
                 .FirstOrDefaultAsync(cancellationToken);
 
-            if (pendencia != null)
+            if (pendingPurchase != null)
             {
                 response.TemPendencia = true;
                 response.Status = "PENDING";
-                response.MetodoPagamento = pendencia.PaymentMethod;
+                response.MetodoPagamento = pendingPurchase.PaymentMethod;
 
-                if (pendencia.PaymentMethod == "PIX" && !string.IsNullOrEmpty(pendencia.AsaasPaymentId))
+                if (pendingPurchase.PaymentMethod == "PIX" && !string.IsNullOrEmpty(pendingPurchase.AsaasPaymentId))
                 {
                     try
                     {
-                        var qrCodeData = await _asaasService.GetPixQrCodeAsync(pendencia.AsaasPaymentId, cancellationToken);
+                        var qrCodeData = await _asaasService.GetPixQrCodeAsync(pendingPurchase.AsaasPaymentId, cancellationToken);
                         response.PixCopiaECola = qrCodeData.Payload;
                         response.QrCodeBase64 = qrCodeData.EncodedImage;
                         response.Mensagem = "Você já possui um PIX aguardando pagamento para este item.";
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        // Falha ao recuperar QR Code do Asaas (pode ter sido expirado ou deletado)
-                        pendencia.Cancel();
-                        await _context.SaveChangesAsync(cancellationToken);
-                        
-                        response.TemPendencia = false;
-                        response.Status = null;
-                        response.MetodoPagamento = null;
+                        // Failed to retrieve QR Code from Asaas (might be expired, deleted, or API error)
+                        // We DO NOT cancel the purchase here automatically anymore. 
+                        // The user will just see that it is pending but without a QR Code.
+                        response.Mensagem = $"Houve um erro ao recuperar o QR Code do PIX. (Erro: {ex.Message})";
                     }
                 }
-                else if (pendencia.PaymentMethod.Contains("CREDIT") || pendencia.PaymentMethod.Contains("DEBIT"))
+                else if (pendingPurchase.PaymentMethod.Contains("CREDIT") || pendingPurchase.PaymentMethod.Contains("DEBIT"))
                 {
                     response.Mensagem = "Pagamento com cartão em processamento ou aguardando ação.";
                 }
@@ -84,47 +81,43 @@ public class GetCheckoutPendenciasQueryHandler : IRequestHandler<GetCheckoutPend
         }
         else if (request.TipoCompra == "ANUAL")
         {
-            // Verifica se a assinatura JÁ ESTÁ ATIVA
-            var assinaturaAtiva = await _context.Subscriptions
+            // Check if subscription is ALREADY ACTIVE
+            var hasActiveSubscription = await _context.Subscriptions
                 .AnyAsync(s => s.UserId == user.Id && s.Status == Nexas.Domain.Enums.SubscriptionStatus.Active, cancellationToken);
             
-            if (assinaturaAtiva)
+            if (hasActiveSubscription)
             {
                 response.JaPago = true;
                 return response;
             }
 
-            var pendencia = await _context.SubscriptionPayments
+            var pendingSubscriptionPayment = await _context.SubscriptionPayments
                 .Include(p => p.Subscription)
                 .Where(p => p.Subscription.UserId == user.Id && p.Status == SubscriptionPaymentStatus.Pending)
                 .OrderByDescending(p => p.Id)
                 .FirstOrDefaultAsync(cancellationToken);
 
-            if (pendencia != null)
+            if (pendingSubscriptionPayment != null)
             {
                 response.TemPendencia = true;
                 response.Status = "PENDING";
-                // Assumindo PIX se tiver AsaasPaymentId, já que SubscriptionPayment não tem PaymentMethod no momento
+                // Assuming PIX if it has AsaasPaymentId, since SubscriptionPayment has no PaymentMethod entity right now
                 response.MetodoPagamento = "PIX";
 
-                if (!string.IsNullOrEmpty(pendencia.AsaasPaymentId))
+                if (!string.IsNullOrEmpty(pendingSubscriptionPayment.AsaasPaymentId))
                 {
                     try
                     {
-                        var qrCodeData = await _asaasService.GetPixQrCodeAsync(pendencia.AsaasPaymentId, cancellationToken);
+                        var qrCodeData = await _asaasService.GetPixQrCodeAsync(pendingSubscriptionPayment.AsaasPaymentId, cancellationToken);
                         response.PixCopiaECola = qrCodeData.Payload;
                         response.QrCodeBase64 = qrCodeData.EncodedImage;
                         response.Mensagem = "Você já possui um PIX aguardando pagamento para sua assinatura.";
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        // Falha ao recuperar QR Code do Asaas (pode ter sido expirado ou deletado)
-                        pendencia.Cancel();
-                        await _context.SaveChangesAsync(cancellationToken);
-                        
-                        response.TemPendencia = false;
-                        response.Status = null;
-                        response.MetodoPagamento = null;
+                        // Failed to retrieve QR Code from Asaas (might be expired, deleted, or API error)
+                        // DO NOT cancel the payment. 
+                        response.Mensagem = $"Houve um erro ao recuperar o QR Code do PIX. (Erro: {ex.Message})";
                     }
                 }
             }

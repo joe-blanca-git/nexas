@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
@@ -12,29 +12,6 @@ namespace Nexas.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Enrollments_Courses_CourseId1",
-                table: "Enrollments");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Enrollments_Users_UserId1",
-                table: "Enrollments");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Enrollments_CourseId1",
-                table: "Enrollments");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Enrollments_UserId1",
-                table: "Enrollments");
-
-            migrationBuilder.DropColumn(
-                name: "CourseId1",
-                table: "Enrollments");
-
-            migrationBuilder.DropColumn(
-                name: "UserId1",
-                table: "Enrollments");
 
             migrationBuilder.CreateTable(
                 name: "CourseCategories",
@@ -104,42 +81,6 @@ namespace Nexas.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "CourseCategories");
-
-            migrationBuilder.AddColumn<int>(
-                name: "CourseId1",
-                table: "Enrollments",
-                type: "int",
-                nullable: true);
-
-            migrationBuilder.AddColumn<int>(
-                name: "UserId1",
-                table: "Enrollments",
-                type: "int",
-                nullable: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Enrollments_CourseId1",
-                table: "Enrollments",
-                column: "CourseId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Enrollments_UserId1",
-                table: "Enrollments",
-                column: "UserId1");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Enrollments_Courses_CourseId1",
-                table: "Enrollments",
-                column: "CourseId1",
-                principalTable: "Courses",
-                principalColumn: "CourseId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Enrollments_Users_UserId1",
-                table: "Enrollments",
-                column: "UserId1",
-                principalTable: "Users",
-                principalColumn: "UserId");
         }
     }
 }

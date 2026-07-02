@@ -58,8 +58,43 @@ public class ProcessPixCheckoutCommandHandler : IRequestHandler<ProcessPixChecko
 
         var description = $"{(dto.TipoCompra == "ANUAL" ? "Assinatura Anual" : "Curso Avulso")} - Curso ID: {dto.CursoId}";
 
-        // 1. Create Payment in Asaas
+        // Create Payment in Asaas
         var cobrancaId = await _asaasService.CreatePixPaymentAsync(user.AsaasCustomerId, dto.Valor, description, cancellationToken);
+
+        // GRAVAR A PENDÊNCIA NO BANCO PARA O GETPENDENCIAS FUNCIONAR
+        if (dto.TipoCompra == "AVULSO")
+        {
+            var course = await _context.Courses.FirstOrDefaultAsync(c => c.Id == dto.CursoId, cancellationToken)
+                ?? throw new Exception("Curso não encontrado.");
+
+            var purchase = Purchase.Create(user.Id, course.Id, dto.Valor, "PIX");
+            purchase.UpdateAsaasPaymentId(cobrancaId);
+            _context.Purchases.Add(purchase);
+        }
+        else if (dto.TipoCompra == "ANUAL")
+        {
+            var subscription = Subscription.Create(
+                user.Id,
+                "Assinatura Anual",
+                DateTime.UtcNow,
+                null,
+                true,
+                Nexas.Domain.Enums.SubscriptionStatus.Pending,
+                null); 
+            _context.Subscriptions.Add(subscription);
+            await _context.SaveChangesAsync(cancellationToken);
+
+            var subPayment = SubscriptionPayment.Create(
+                subscription.Id, 
+                dto.Valor,
+                DateTime.UtcNow,
+                Nexas.Domain.Enums.SubscriptionPaymentStatus.Pending,
+                cobrancaId);
+            
+            _context.SubscriptionPayments.Add(subPayment);
+        }
+
+        await _context.SaveChangesAsync(cancellationToken);
 
         // 2. Get QR Code details
         var qrCodeData = await _asaasService.GetPixQrCodeAsync(cobrancaId, cancellationToken);

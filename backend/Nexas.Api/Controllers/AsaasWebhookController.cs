@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Nexas.Application.Webhooks.Commands;
 using System.Text.Json;
@@ -5,6 +6,7 @@ using System.Text.Json;
 namespace Nexas.Api.Controllers;
 
 [ApiController]
+[AllowAnonymous]
 [Route("api/v1/webhooks/asaas")]
 public class AsaasWebhookController : ApiControllerBase
 {

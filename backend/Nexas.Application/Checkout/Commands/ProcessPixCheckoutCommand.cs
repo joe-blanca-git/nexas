@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Nexas.Application.Common.Interfaces;
 using Nexas.Domain.Entities;
+using Nexas.Domain.Enums;
 
 namespace Nexas.Application.Checkout.Commands;
 
@@ -54,6 +55,76 @@ public class ProcessPixCheckoutCommandHandler : IRequestHandler<ProcessPixChecko
             var customerId = await _asaasService.CreateCustomerAsync(user, cancellationToken);
             user.UpdateAsaasCustomerId(customerId);
             await _context.SaveChangesAsync(cancellationToken);
+        }
+
+        // VERIFICAÇÕES DE REGRAS DE NEGÓCIO (FLUXO 4 e 5)
+        if (dto.TipoCompra == "AVULSO")
+        {
+            var jaPossui = await _context.Purchases
+                .AnyAsync(p => p.UserId == user.Id && p.CourseId == dto.CursoId && p.Status == PurchaseStatus.Approved, cancellationToken);
+            if (jaPossui)
+                throw new Exception("Você já possui acesso a este curso.");
+
+            var pendente = await _context.Purchases
+                .Where(p => p.UserId == user.Id && p.CourseId == dto.CursoId && p.Status == PurchaseStatus.Pending)
+                .OrderByDescending(p => p.CreatedAt)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            if (pendente != null)
+            {
+                if (!string.IsNullOrEmpty(pendente.AsaasPaymentId))
+                {
+                    try
+                    {
+                        var qrData = await _asaasService.GetPixQrCodeAsync(pendente.AsaasPaymentId, cancellationToken);
+                        return new CheckoutPixResponseDto
+                        {
+                            Sucesso = true,
+                            CobrancaId = pendente.AsaasPaymentId,
+                            PixCopiaECola = qrData.Payload,
+                            QrCode = qrData.EncodedImage
+                        };
+                    }
+                    catch
+                    {
+                        pendente.Cancel();
+                        await _context.SaveChangesAsync(cancellationToken);
+                    }
+                }
+            }
+        }
+        else if (dto.TipoCompra == "ANUAL")
+        {
+            var jaPossui = await _context.Subscriptions
+                .AnyAsync(s => s.UserId == user.Id && s.Status == Nexas.Domain.Enums.SubscriptionStatus.Active, cancellationToken);
+            if (jaPossui)
+                throw new Exception("Você já possui uma assinatura ativa.");
+
+            var pendente = await _context.SubscriptionPayments
+                .Include(sp => sp.Subscription)
+                .Where(sp => sp.Subscription.UserId == user.Id && sp.Status == Nexas.Domain.Enums.SubscriptionPaymentStatus.Pending)
+                .OrderByDescending(sp => sp.Id)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            if (pendente != null && !string.IsNullOrEmpty(pendente.AsaasPaymentId))
+            {
+                try
+                {
+                    var qrData = await _asaasService.GetPixQrCodeAsync(pendente.AsaasPaymentId, cancellationToken);
+                    return new CheckoutPixResponseDto
+                    {
+                        Sucesso = true,
+                        CobrancaId = pendente.AsaasPaymentId,
+                        PixCopiaECola = qrData.Payload,
+                        QrCode = qrData.EncodedImage
+                    };
+                }
+                catch
+                {
+                    pendente.Cancel();
+                    await _context.SaveChangesAsync(cancellationToken);
+                }
+            }
         }
 
         var description = $"{(dto.TipoCompra == "ANUAL" ? "Assinatura Anual" : "Curso Avulso")} - Curso ID: {dto.CursoId}";

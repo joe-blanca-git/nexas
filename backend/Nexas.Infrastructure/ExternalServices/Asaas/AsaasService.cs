@@ -27,12 +27,39 @@ public class AsaasService : IAsaasService
     /// </summary>
     public async Task<string> CreateCustomerAsync(User user, CancellationToken cancellationToken)
     {
+        var email = NormalizeEmail(user.Email);
+        var cpfCnpj = SanitizeCpfCnpj(user.CpfCnpj);
+
+        // Verifica se já existe cliente com este CPF/CNPJ
+        if (!string.IsNullOrWhiteSpace(cpfCnpj))
+        {
+            var existingResponse = await _httpClient.GetAsync($"customers?cpfCnpj={cpfCnpj}", cancellationToken);
+            if (existingResponse.IsSuccessStatusCode)
+            {
+                var existingData = await existingResponse.Content.ReadFromJsonAsync<AsaasCustomerListResponse>(cancellationToken);
+                if (existingData?.data != null && existingData.data.Any())
+                {
+                    return existingData.data.First().Id;
+                }
+            }
+        }
+        else if (!string.IsNullOrWhiteSpace(email))
+        {
+            // Se não encontrou por CPF e tem email, tenta por E-mail
+            var existingResponse = await _httpClient.GetAsync($"customers?email={email}", cancellationToken);
+            if (existingResponse.IsSuccessStatusCode)
+            {
+                var existingData = await existingResponse.Content.ReadFromJsonAsync<AsaasCustomerListResponse>(cancellationToken);
+                if (existingData?.data != null && existingData.data.Any())
+                {
+                    return existingData.data.First().Id;
+                }
+            }
+        }
+
         var name = !string.IsNullOrWhiteSpace(user.FullName)
             ? user.FullName!
             : user.ExternalId;
-
-        var email = NormalizeEmail(user.Email);
-        var cpfCnpj = SanitizeCpfCnpj(user.CpfCnpj);
 
         var requestData = new Dictionary<string, object?>
         {
@@ -278,6 +305,7 @@ public class AsaasService : IAsaasService
 
     // Mapeamentos internos das respostas do Gateway
     private record AsaasResponse(string Id);
+    private record AsaasCustomerListResponse(List<AsaasResponse> data);
     private record AsaasPaymentResult(string Id, string Status);
     private record AsaasPixResult(string EncodedImage, string Payload);
 }

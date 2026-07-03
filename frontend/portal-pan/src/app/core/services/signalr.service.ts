@@ -35,7 +35,11 @@ export class SignalRService {
     const hubUrl = baseUrl.replace('api/v1/', '') + 'hubs/payment';
 
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(hubUrl, { accessTokenFactory: () => token })
+      .withUrl(hubUrl, { 
+        accessTokenFactory: () => token,
+        skipNegotiation: true,
+        transport: signalR.HttpTransportType.WebSockets
+      })
       .withAutomaticReconnect()
       .build();
 

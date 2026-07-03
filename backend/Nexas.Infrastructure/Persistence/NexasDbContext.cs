@@ -16,9 +16,7 @@ namespace Nexas.Infrastructure.Persistence
         public DbSet<Module> Modules => Set<Module>();
         public DbSet<Lesson> Lessons => Set<Lesson>();
         public DbSet<Enrollment> Enrollments => Set<Enrollment>();
-        public DbSet<Subscription> Subscriptions => Set<Subscription>();
         public DbSet<Purchase> Purchases => Set<Purchase>();
-        public DbSet<SubscriptionPayment> SubscriptionPayments => Set<SubscriptionPayment>();
         public DbSet<CourseDomain> CourseDomains => Set<CourseDomain>();
         public DbSet<Teacher> Teachers => Set<Teacher>();
         public DbSet<CourseTeacher> CourseTeachers => Set<CourseTeacher>();

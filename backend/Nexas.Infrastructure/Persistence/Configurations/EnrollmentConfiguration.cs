@@ -35,10 +35,6 @@ public class EnrollmentConfiguration : IEntityTypeConfiguration<Enrollment>
             .IsUnique()
             .HasDatabaseName("IdxUniqueUserIdCourseId");
 
-        builder.Property(e => e.SubscriptionId)
-            .HasColumnName("SubscriptionId")
-            .IsRequired(false);
-
         builder.Property(e => e.CreatedAt)
             .HasColumnName("CreatedAt")
             .IsRequired();
@@ -56,9 +52,5 @@ public class EnrollmentConfiguration : IEntityTypeConfiguration<Enrollment>
             .HasForeignKey(e => e.CourseId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(e => e.Subscription)
-            .WithMany()
-            .HasForeignKey(e => e.SubscriptionId)
-            .OnDelete(DeleteBehavior.Restrict);
     }
 }

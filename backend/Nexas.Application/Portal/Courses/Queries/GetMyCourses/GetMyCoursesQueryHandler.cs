@@ -19,9 +19,6 @@ public class GetMyCoursesQueryHandler : IRequestHandler<GetMyCoursesQuery, List<
     {
         var user = await _userContextService.GetCurrentUserAsync();
         
-        bool hasActiveSubscription = await _context.Subscriptions
-            .AnyAsync(s => s.UserId == user.Id && s.Status == Nexas.Domain.Enums.SubscriptionStatus.Active, cancellationToken);
-            
         var enrolledCourseIds = await _context.Enrollments
             .Where(e => e.UserId == user.Id && e.Active)
             .Select(e => e.CourseId)
@@ -34,7 +31,7 @@ public class GetMyCoursesQueryHandler : IRequestHandler<GetMyCoursesQuery, List<
             .Where(c => c.Active)
             .Select(c => new {
                 Course = c,
-                Released = hasActiveSubscription || enrolledCourseIds.Contains(c.Id)
+                Released = enrolledCourseIds.Contains(c.Id)
             })
             .OrderByDescending(x => x.Released)
             .ThenByDescending(x => x.Course.CreatedAt)

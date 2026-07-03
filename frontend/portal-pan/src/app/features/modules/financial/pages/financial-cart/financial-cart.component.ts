@@ -10,13 +10,10 @@ export interface ICartCourse {
   description: string;
   imgCoverLink: string;
   priceSingle: number;
-  priceSubscription: number;
   totalLessons: number;
   totalHours: number;
   category: string;
 }
-
-type PurchaseOption = 'single' | 'subscription';
 
 @Component({
   selector: 'app-financial-cart',
@@ -28,7 +25,6 @@ type PurchaseOption = 'single' | 'subscription';
 export class FinancialCartComponent implements OnInit {
 
   course: ICartCourse | null = null;
-  selectedOption: PurchaseOption = 'single';
   isLoading: boolean = true;
 
   constructor(
@@ -64,26 +60,18 @@ export class FinancialCartComponent implements OnInit {
     return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(price);
   }
 
-  selectOption(option: PurchaseOption): void {
-    this.selectedOption = option;
-  }
-
   get selectedPrice(): number {
     if (!this.course) return 0;
-    return this.selectedOption === 'single' ? this.course.priceSingle : this.course.priceSubscription;
+    return this.course.priceSingle;
   }
 
   get selectedLabel(): string {
-    return this.selectedOption === 'single' ? 'Compra Avulsa' : 'Assinatura Mensal';
+    return 'Compra Avulsa';
   }
 
   onCheckout(): void {
     if (this.course) {
-      if (this.selectedOption === 'single') {
-        this.router.navigate(['/financial/payment', this.course.id], { queryParams: { plan: 'single' } });
-      } else {
-        this.router.navigate(['/financial/payment', 'subscription'], { queryParams: { plan: 'subscription' } });
-      }
+      this.router.navigate(['/financial/payment', this.course.id], { queryParams: { plan: 'single' } });
     }
   }
 

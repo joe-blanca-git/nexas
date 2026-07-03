@@ -8,7 +8,7 @@ import { forkJoin, Subscription } from 'rxjs';
 // ─── Interfaces ────────────────────────────────────────────────────────────────
 
 export type TransactionStatus = 'Pago' | 'Pendente' | 'Cancelado' | 'Reembolsado';
-export type TransactionType = 'Curso' | 'Assinatura';
+export type TransactionType = 'Curso';
 export type PaymentMethod = 'Cartão de Crédito' | 'PIX' | 'Boleto' | 'Cartão de Débito';
 
 export interface ITransaction {
@@ -28,8 +28,7 @@ export interface ITransaction {
 
 export interface IFinancialSummary {
   totalInvested: number;
-  activeSubscription: string;
-  nextCharge: string;
+
   coursesAcquired: number;
 }
 
@@ -63,14 +62,12 @@ export class FinancialHomeComponent implements OnInit, OnDestroy {
   showToast = false;
 
   // ─── Filter Options ───────────────────────────────────────────────────────
-  typeOptions: string[] = ['Todos', 'Curso', 'Assinatura'];
+  typeOptions: string[] = ['Todos', 'Curso'];
   statusOptions: string[] = ['Todos', 'Pago', 'Pendente', 'Cancelado', 'Reembolsado'];
 
   // ─── Summary ─────────────────────────────────────────────────────────────
   summary: IFinancialSummary = {
     totalInvested: 0,
-    activeSubscription: '',
-    nextCharge: '',
     coursesAcquired: 0
   };
 
@@ -120,8 +117,7 @@ export class FinancialHomeComponent implements OnInit, OnDestroy {
   loadTransactions(): void {
     this.isLoading = true;
     forkJoin({
-      purchases: this.financialService.getMyPurchases(),
-      subscription: this.financialService.getMySubscription()
+      purchases: this.financialService.getMyPurchases()
     }).subscribe({
       next: (res) => {
         const txs: ITransaction[] = [];
@@ -146,44 +142,6 @@ export class FinancialHomeComponent implements OnInit, OnDestroy {
           });
         }
 
-        // Mapear Subscription
-        if (res.subscription && res.subscription.subscriptionId) {
-          const sub = res.subscription;
-          
-          if (sub.lastCharges && Array.isArray(sub.lastCharges)) {
-            sub.lastCharges.forEach((c: any) => {
-              txs.push({
-                id: `SUB-CHG-${c.chargeId}`,
-                name: sub.planName,
-                type: 'Assinatura',
-                value: c.amount,
-                paymentMethod: 'PIX', // ou c.paymentMethod se existir no backend
-                status: this.mapStatus(c.status),
-                chargeDate: c.paymentDate ? new Date(c.paymentDate).toLocaleDateString() : 'N/A',
-                nextRenewal: sub.nextDueDate ? new Date(sub.nextDueDate).toLocaleDateString() : null,
-                transactionCode: `NXS-CHG-${c.chargeId}`,
-                icon: 'fa-crown',
-                color: '#6366f1'
-              });
-            });
-          } else {
-             // Caso não tenha cobranças listadas mas tenha assinatura
-             txs.push({
-              id: `SUB-${sub.subscriptionId}`,
-              name: sub.planName,
-              type: 'Assinatura',
-              value: 0,
-              paymentMethod: 'PIX',
-              status: this.mapStatus(sub.status),
-              chargeDate: sub.startDate ? new Date(sub.startDate).toLocaleDateString() : 'N/A',
-              nextRenewal: sub.nextDueDate ? new Date(sub.nextDueDate).toLocaleDateString() : null,
-              transactionCode: `NXS-SUB-${sub.subscriptionId}`,
-              icon: 'fa-crown',
-              color: '#6366f1'
-            });
-          }
-        }
-
         this.transactions = txs;
         this.calculateSummary();
         this.isLoading = false;
@@ -203,11 +161,6 @@ export class FinancialHomeComponent implements OnInit, OnDestroy {
     this.summary.coursesAcquired = this.transactions.filter(
       t => t.type === 'Curso' && (t.status === 'Pago' || t.status === 'Pendente')
     ).length;
-    const activeSub = this.transactions.find(t => t.type === 'Assinatura' && t.status === 'Pago');
-    this.summary.activeSubscription = activeSub ? activeSub.name.split('—')[0].trim() : 'Nenhuma';
-    const pendingSub = this.transactions.find(t => t.type === 'Assinatura' && t.status === 'Pendente');
-    const nextSub = pendingSub || activeSub;
-    this.summary.nextCharge = nextSub?.chargeDate || '—';
   }
 
   // ─── Filtering & Sorting ──────────────────────────────────────────────────
@@ -290,10 +243,7 @@ export class FinancialHomeComponent implements OnInit, OnDestroy {
     this.closeDetail();
   }
 
-  renewSubscription(tx: ITransaction): void {
-    this.triggerToast(`Renovação de "${tx.name}" iniciada com sucesso!`);
-    this.closeDetail();
-  }
+
 
   // ─── Toast ────────────────────────────────────────────────────────────────
 

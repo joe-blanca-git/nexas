@@ -39,7 +39,7 @@ export class FinancialPaymentComponent implements OnInit {
 
   cursoId: number = 0;
   checkoutSummary?: CheckoutSummary;
-  tipoCompra: 'AVULSO' | 'ANUAL' = 'ANUAL';
+  tipoCompra: 'AVULSO' = 'AVULSO';
   valorTotal = 0;
   isLoadingCourse = true;
 
@@ -60,7 +60,7 @@ export class FinancialPaymentComponent implements OnInit {
     this.broadcastChannel = new BroadcastChannel('payment_sync_channel');
     this.broadcastChannel.onmessage = (event) => {
       if (event.data === 'payment_confirmed') {
-        this.redirectOnSuccess(this.tipoCompra, this.cursoId);
+        this.redirectOnSuccess(this.cursoId);
       }
     };
   }
@@ -73,18 +73,7 @@ export class FinancialPaymentComponent implements OnInit {
     this.initForm();
     const idParam = this.route.snapshot.paramMap.get('id');
     
-    if (idParam === 'subscription') {
-      this.tipoCompra = 'ANUAL';
-      this.isLoadingCourse = false;
-      this.checkoutSummary = {
-        id: 0,
-        title: 'Assinatura Portal Pan (Acesso Total)',
-        imgCoverLink: 'https://cdn-icons-png.flaticon.com/512/4169/4169165.png', // Pode trocar pela logo oficial
-        priceSingle: 0,
-        priceSubscription: 79.90
-      };
-      this.calcularParcelas();
-    } else if (idParam) {
+    if (idParam) {
       this.cursoId = Number(idParam);
       this.loadCourseData();
     } else {
@@ -101,7 +90,7 @@ export class FinancialPaymentComponent implements OnInit {
         if (notification.sucesso) {
           this.broadcastChannel.postMessage('payment_confirmed');
           alert('Pagamento processado e aprovado com sucesso!');
-          this.redirectOnSuccess(notification.tipoCompra, notification.cursoId);
+          this.redirectOnSuccess(notification.cursoId);
         }
       });
 
@@ -114,25 +103,17 @@ export class FinancialPaymentComponent implements OnInit {
     this.verificarPendencias();
   }
 
-  redirectOnSuccess(tipoCompra: string, cursoId: number) {
-    if (tipoCompra === 'ANUAL') {
-      this.router.navigate(['/courses']);
-    } else {
-      this.router.navigate(['/courses/details', cursoId]);
-    }
+  redirectOnSuccess(cursoId: number) {
+    this.router.navigate(['/courses/details', cursoId]);
   }
 
   verificarPendencias() {
-    this.financialService.verificarPendencias(this.cursoId, this.tipoCompra).subscribe({
+    this.financialService.verificarPendencias(this.cursoId).subscribe({
       next: (res: PendenciaDTO) => {
         // Regra de Roteamento (Proteção de Rota)
         if (res && res.jaPago) {
           alert('Você já possui acesso ativo a este conteúdo!');
-          if (this.tipoCompra === 'ANUAL') {
-            this.router.navigate(['/courses']);
-          } else {
-            this.router.navigate(['/courses/details', this.cursoId]);
-          }
+          this.router.navigate(['/courses/details', this.cursoId]);
           return;
         }
 
@@ -175,10 +156,8 @@ export class FinancialPaymentComponent implements OnInit {
       this.isLoadingCourse = false;
       
       // Mantemos a leitura do plan via query param para decidir o fluxo
-      this.route.queryParams.subscribe(params => {
-        this.tipoCompra = params['plan'] === 'single' ? 'AVULSO' : 'ANUAL';
-        this.calcularParcelas();
-      });
+      this.tipoCompra = 'AVULSO';
+      this.calcularParcelas();
     } catch (err) {
       console.error('Erro ao carregar curso', err);
       this.isLoadingCourse = false;
@@ -193,33 +172,22 @@ export class FinancialPaymentComponent implements OnInit {
     this.installments = [];
     const maxParcelas = 12;
 
-    if (this.tipoCompra === 'ANUAL') {
-      this.valorTotal = this.checkoutSummary.priceSubscription * 12;
-      for (let i = 1; i <= maxParcelas; i++) {
-        const parcela = this.valorTotal / i;
+    this.valorTotal = this.checkoutSummary.priceSingle;
+    for (let i = 1; i <= maxParcelas; i++) {
+      if (i === 1) {
         this.installments.push({
           value: i,
-          label: `${i}x de ${this.formatPrice(parcela)} sem juros`
+          label: `1x de ${this.formatPrice(this.valorTotal)} sem juros`
         });
-      }
-    } else {
-      this.valorTotal = this.checkoutSummary.priceSingle;
-      for (let i = 1; i <= maxParcelas; i++) {
-        if (i === 1) {
-          this.installments.push({
-            value: i,
-            label: `1x de ${this.formatPrice(this.valorTotal)} sem juros`
-          });
-        } else {
-          // Juros mock de 2.5% simples pra avulso
-          const juros = 0.025;
-          const valorComJuros = this.valorTotal * (1 + (juros * i));
-          const parcela = valorComJuros / i;
-          this.installments.push({
-            value: i,
-            label: `${i}x de ${this.formatPrice(parcela)} (com juros)`
-          });
-        }
+      } else {
+        // Juros mock de 2.5% simples pra avulso
+        const juros = 0.025;
+        const valorComJuros = this.valorTotal * (1 + (juros * i));
+        const parcela = valorComJuros / i;
+        this.installments.push({
+          value: i,
+          label: `${i}x de ${this.formatPrice(parcela)} (com juros)`
+        });
       }
     }
   }
@@ -255,7 +223,6 @@ export class FinancialPaymentComponent implements OnInit {
       
       this.financialService.gerarPixAsaas({
         cursoId: this.cursoId,
-        tipoCompra: this.tipoCompra,
         cpf: this.pixCpf,
         valor: this.valorTotal
       }).subscribe({

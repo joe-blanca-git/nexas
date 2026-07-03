@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Nexas.Application.Common.Interfaces;
 using Nexas.Application.Purchases.Commands;
-using Nexas.Application.Subscriptions.Commands;
 using Nexas.Domain.Entities;
 using System.Linq;
 using System.Net.Http.Json;
@@ -177,103 +176,7 @@ public class AsaasService : IAsaasService
         return new PurchaseResponseDto(purchase.Id, asaasData.Status, qrCode, copyPaste, asaasData.Id);
     }
 
-    /// <summary>
-    /// Cria uma assinatura recorrente mensal.
-    /// </summary>
-    public async Task<SubscriptionResponseDto> CreateSubscriptionAsync(
-        Subscription subscription, 
-        decimal amount, 
-        CreditCardInfo? card, 
-        CancellationToken ct,
-        int trialDays = 1)
-    {
-        var creditCardHolderInfo = card != null ? new Dictionary<string, object?>
-        {
-            ["name"] = card.HolderName,
-            ["email"] = NormalizeEmail(subscription.User.Email),
-            ["cpfCnpj"] = SanitizeCpfCnpj(card.HolderCpfCnpj),
-            ["postalCode"] = "00000000",
-            ["addressNumber"] = "0"
-        } : null;
 
-        if (creditCardHolderInfo != null)
-        {
-            if (creditCardHolderInfo["email"] == null)
-            {
-                creditCardHolderInfo.Remove("email");
-            }
-
-            if (creditCardHolderInfo["cpfCnpj"] == null)
-            {
-                creditCardHolderInfo.Remove("cpfCnpj");
-            }
-        }
-
-            var requestData = new
-        {
-            customer = subscription.User.AsaasCustomerId,
-            billingType = card != null ? "CREDIT_CARD" : "PIX",
-            value = amount,
-            nextDueDate = DateTime.UtcNow.AddDays(trialDays).ToString("yyyy-MM-dd"),
-            cycle = "MONTHLY",
-            externalReference = subscription.Id.ToString(),
-            description = "Assinatura Mensal Nexas",
-            creditCard = card != null ? new {
-                holderName = card.HolderName,
-                number = card.Number,
-                expiryMonth = card.ExpiryMonth,
-                expiryYear = card.ExpiryYear,
-                ccv = card.Ccv
-            } : null,
-            creditCardHolderInfo = creditCardHolderInfo
-        };
-
-        var response = await _httpClient.PostAsJsonAsync("subscriptions", requestData, ct);
-        response.EnsureSuccessStatusCode();
-
-        var asaasData = await response.Content.ReadFromJsonAsync<AsaasSubscriptionResponse>(ct);
-        var subId = asaasData?.Id ?? string.Empty;
-        var subStatus = asaasData?.Status ?? "pending";
-
-        string? asaasPaymentId = null;
-        string? pixQrCode = null;
-        string? pixCopyPaste = null;
-
-        if (card == null && !string.IsNullOrEmpty(subId)) // É PIX
-        {
-            // Busca o primeiro pagamento gerado para esta assinatura
-            var paymentsResp = await _httpClient.GetAsync($"subscriptions/{subId}/payments", ct);
-            if (paymentsResp.IsSuccessStatusCode)
-            {
-                var paymentsData = await paymentsResp.Content.ReadFromJsonAsync<AsaasPaymentListResult>(ct);
-                var firstPayment = paymentsData?.Data?.FirstOrDefault();
-                if (firstPayment != null)
-                {
-                    asaasPaymentId = firstPayment.Id;
-                    
-                    // Busca o QR Code desse primeiro pagamento
-                    var pixResp = await _httpClient.GetAsync($"payments/{asaasPaymentId}/pixQrCode", ct);
-                    if (pixResp.IsSuccessStatusCode)
-                    {
-                        var pixData = await pixResp.Content.ReadFromJsonAsync<AsaasPixResult>(ct);
-                        if (pixData != null)
-                        {
-                            pixQrCode = pixData.EncodedImage;
-                            pixCopyPaste = pixData.Payload;
-                        }
-                    }
-                }
-            }
-        }
-
-        return new SubscriptionResponseDto(
-            subscription.Id, 
-            subStatus, 
-            subId,
-            pixQrCode,
-            pixCopyPaste,
-            asaasPaymentId ?? string.Empty);
-    }
 
     public async Task RefundPaymentAsync(string asaasPaymentId, CancellationToken ct)
     {
@@ -287,17 +190,7 @@ public class AsaasService : IAsaasService
         }
     }
 
-    public async Task CancelSubscriptionAsync(string asaasSubscriptionId, CancellationToken ct)
-    {
-        if (string.IsNullOrWhiteSpace(asaasSubscriptionId)) throw new ArgumentException("asaasSubscriptionId is required");
 
-        var response = await _httpClient.DeleteAsync($"subscriptions/{asaasSubscriptionId}", ct);
-        if (!response.IsSuccessStatusCode)
-        {
-            var body = await response.Content.ReadAsStringAsync(ct);
-            throw new InvalidOperationException($"Asaas.CancelSubscriptionAsync failed: {(int)response.StatusCode} - {response.ReasonPhrase}. Body: {body}");
-        }
-    }
 
     public async Task<string> GetPaymentStatusAsync(string asaasPaymentId, CancellationToken ct)
     {
@@ -387,6 +280,4 @@ public class AsaasService : IAsaasService
     private record AsaasResponse(string Id);
     private record AsaasPaymentResult(string Id, string Status);
     private record AsaasPixResult(string EncodedImage, string Payload);
-    private record AsaasSubscriptionResponse(string Id, string Status);
-    private record AsaasPaymentListResult(System.Collections.Generic.List<AsaasPaymentResult> Data);
 }

@@ -81,7 +81,7 @@ public class CreatePurchaseCommandHandler : IRequestHandler<CreatePurchaseComman
                     var qrCodeData = await _asaasService.GetPixQrCodeAsync(pendingPurchase.AsaasPaymentId, cancellationToken);
                     return new PurchaseResponseDto(pendingPurchase.Id, "PENDING", qrCodeData.EncodedImage, qrCodeData.Payload, pendingPurchase.AsaasPaymentId);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     // Failed to retrieve QR code from Asaas.
                     // DO NOT cancel the purchase. Just return without QR code.

@@ -79,49 +79,6 @@ public class GetCheckoutPendenciasQueryHandler : IRequestHandler<GetCheckoutPend
                 }
             }
         }
-        else if (request.TipoCompra == "ANUAL")
-        {
-            // Check if subscription is ALREADY ACTIVE
-            var hasActiveSubscription = await _context.Subscriptions
-                .AnyAsync(s => s.UserId == user.Id && s.Status == Nexas.Domain.Enums.SubscriptionStatus.Active, cancellationToken);
-            
-            if (hasActiveSubscription)
-            {
-                response.JaPago = true;
-                return response;
-            }
-
-            var pendingSubscriptionPayment = await _context.SubscriptionPayments
-                .Include(p => p.Subscription)
-                .Where(p => p.Subscription.UserId == user.Id && p.Status == SubscriptionPaymentStatus.Pending)
-                .OrderByDescending(p => p.Id)
-                .FirstOrDefaultAsync(cancellationToken);
-
-            if (pendingSubscriptionPayment != null)
-            {
-                response.TemPendencia = true;
-                response.Status = "PENDING";
-                // Assuming PIX if it has AsaasPaymentId, since SubscriptionPayment has no PaymentMethod entity right now
-                response.MetodoPagamento = "PIX";
-
-                if (!string.IsNullOrEmpty(pendingSubscriptionPayment.AsaasPaymentId))
-                {
-                    try
-                    {
-                        var qrCodeData = await _asaasService.GetPixQrCodeAsync(pendingSubscriptionPayment.AsaasPaymentId, cancellationToken);
-                        response.PixCopiaECola = qrCodeData.Payload;
-                        response.QrCodeBase64 = qrCodeData.EncodedImage;
-                        response.Mensagem = "Você já possui um PIX aguardando pagamento para sua assinatura.";
-                    }
-                    catch (Exception ex)
-                    {
-                        // Failed to retrieve QR Code from Asaas (might be expired, deleted, or API error)
-                        // DO NOT cancel the payment. 
-                        response.Mensagem = $"Houve um erro ao recuperar o QR Code do PIX. (Erro: {ex.Message})";
-                    }
-                }
-            }
-        }
 
         return response;
     }

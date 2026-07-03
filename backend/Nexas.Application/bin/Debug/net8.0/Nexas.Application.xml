@@ -299,10 +299,5 @@
             Validador para o comando de criação de compra.
             </summary>
         </member>
-        <member name="T:Nexas.Application.Subscriptions.Commands.CreateSubscriptionCommandValidator">
-            <summary>
-            Validador para o comando de criação de assinatura.
-            </summary>
-        </member>
     </members>
 </doc>

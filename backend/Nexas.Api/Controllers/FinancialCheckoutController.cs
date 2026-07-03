@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Nexas.Application.Checkout.Commands;
 using Nexas.Application.Purchases.Commands;
-using Nexas.Application.Subscriptions.Commands;
 
 namespace Nexas.Api.Controllers;
 
@@ -22,18 +21,6 @@ public class FinancialCheckoutController : ApiControllerBase
             if (request.TipoCompra == "AVULSO")
             {
                 var command = new CreatePurchaseCommand(request.CursoId, request.Valor, "PIX", request.Cpf);
-                var result = await Mediator.Send(command);
-                return Ok(new CheckoutPixResponseDto
-                {
-                    Sucesso = true,
-                    CobrancaId = result.AsaasPaymentId,
-                    PixCopiaECola = result.PixCopyPaste ?? string.Empty,
-                    QrCode = result.PixQrCode ?? string.Empty
-                });
-            }
-            else if (request.TipoCompra == "ANUAL")
-            {
-                var command = new CreateSubscriptionCommand("Assinatura Anual", request.Valor, "PIX", request.Cpf);
                 var result = await Mediator.Send(command);
                 return Ok(new CheckoutPixResponseDto
                 {

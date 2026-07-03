@@ -211,44 +211,6 @@
             </remarks>
             <returns>Lista de objetos UserPurchaseDto contendo detalhes das compras.</returns>
         </member>
-        <member name="T:Nexas.Api.Controllers.SubscriptionsController">
-            <summary>
-            Controller responsável pelas operações de assinatura recorrente no Painel do Aluno (PAN).
-            </summary>
-        </member>
-        <member name="M:Nexas.Api.Controllers.SubscriptionsController.Create(Nexas.Application.Subscriptions.Commands.CreateSubscriptionCommand)">
-            <summary>
-            Inicia o processo de assinatura recorrente.
-            </summary>
-            <remarks>
-            Exemplo de request:
-            {
-              "planName": "Premium",
-              "amount": 99.90
-            }
-            </remarks>
-            <param name="command">Dados da assinatura (nome do plano, valor).</param>
-            <returns>ID da assinatura gerada no sistema.</returns>
-        </member>
-        <member name="M:Nexas.Api.Controllers.SubscriptionsController.Cancel(System.Int32)">
-            <summary>
-            Cancela uma assinatura recorrente.
-            </summary>
-            <remarks>
-            O cancelamento só é permitido dentro do período de trial (até 7 dias).
-            </remarks>
-            <param name="subscriptionId">ID da assinatura a ser cancelada.</param>
-            <returns>Resultado da operação de cancelamento.</returns>
-        </member>
-        <member name="M:Nexas.Api.Controllers.SubscriptionsController.GetMySubscription">
-            <summary>
-            Obtém a assinatura ativa do usuário autenticado.
-            </summary>
-            <remarks>
-            Retorna detalhes da assinatura atual ou 404 caso não exista.
-            </remarks>
-            <returns>Detalhes da assinatura do usuário.</returns>
-        </member>
         <member name="M:Nexas.Api.Controllers.TeachersController.GetTeachers">
             <summary>
             Lista todos os professores ativos.

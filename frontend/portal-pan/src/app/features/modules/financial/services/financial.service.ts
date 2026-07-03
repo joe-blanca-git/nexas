@@ -5,7 +5,6 @@ import { BaseService } from '../../../../core/services/base.service';
 
 export interface PixRequest {
   cursoId: number;
-  tipoCompra: 'AVULSO' | 'ANUAL';
   cpf: string;
   valor: number;
 }
@@ -32,7 +31,6 @@ export interface CheckoutSummary {
   title: string;
   imgCoverLink: string;
   priceSingle: number;
-  priceSubscription: number;
 }
 
 @Injectable({
@@ -47,8 +45,8 @@ export class FinancialService extends BaseService {
     return this.http.post<PixResponse>(`${this.urlApiNexas}financeiro/checkout/pix`, payload, this.GetAuthHeaderJson());
   }
 
-  verificarPendencias(cursoId: number | undefined, tipoCompra: string): Observable<PendenciaDTO> {
-    let url = `${this.urlApiNexas}financeiro/checkout/pendencias?tipoCompra=${tipoCompra}`;
+  verificarPendencias(cursoId: number | undefined): Observable<PendenciaDTO> {
+    let url = `${this.urlApiNexas}financeiro/checkout/pendencias?tipoCompra=AVULSO`;
     if (cursoId) {
       url += `&cursoId=${cursoId}`;
     }
@@ -57,10 +55,6 @@ export class FinancialService extends BaseService {
 
   getMyPurchases(): Observable<any[]> {
     return this.http.get<any[]>(`${this.urlApiNexas}Purchases/my-purchases`, this.GetAuthHeaderJson());
-  }
-
-  getMySubscription(): Observable<any> {
-    return this.http.get<any>(`${this.urlApiNexas}Subscriptions/my-subscription`, this.GetAuthHeaderJson());
   }
 
   getApiUrl(): string {

@@ -6,6 +6,7 @@ import { FinancialService, CheckoutSummary, PixResponse, PendenciaDTO } from '..
 import { CoursesService } from '../../../courses/services/courses.service';
 import { SignalRService, PaymentNotification } from '../../../../../core/services/signalr.service';
 import { AuthUtil } from '../../../../../core/auth/auth.util';
+import { ToastService } from '../../../../../core/services/toast.service';
 
 @Component({
   selector: 'app-financial-payment',
@@ -55,7 +56,8 @@ export class FinancialPaymentComponent implements OnInit {
     private financialService: FinancialService,
     private coursesService: CoursesService,
     private signalRService: SignalRService,
-    private authUtil: AuthUtil
+    private authUtil: AuthUtil,
+    private toastService: ToastService
   ) {
     this.broadcastChannel = new BroadcastChannel('payment_sync_channel');
     this.broadcastChannel.onmessage = (event) => {
@@ -89,7 +91,7 @@ export class FinancialPaymentComponent implements OnInit {
       this.signalRService.paymentConfirmed$.subscribe((notification: PaymentNotification) => {
         if (notification.sucesso) {
           this.broadcastChannel.postMessage('payment_confirmed');
-          alert('Pagamento processado e aprovado com sucesso!');
+          this.toastService.success('Pagamento processado e aprovado com sucesso!');
           this.redirectOnSuccess(notification.cursoId);
         }
       });
@@ -104,7 +106,7 @@ export class FinancialPaymentComponent implements OnInit {
   }
 
   redirectOnSuccess(cursoId: number) {
-    this.router.navigate(['/courses/details', cursoId]);
+    this.router.navigate(['/courses/course-detail', cursoId]);
   }
 
   verificarPendencias() {
@@ -112,8 +114,8 @@ export class FinancialPaymentComponent implements OnInit {
       next: (res: PendenciaDTO) => {
         // Regra de Roteamento (Proteção de Rota)
         if (res && res.jaPago) {
-          alert('Você já possui acesso ativo a este conteúdo!');
-          this.router.navigate(['/courses/details', this.cursoId]);
+          this.toastService.info('Você já possui acesso ativo a este conteúdo!');
+          this.router.navigate(['/courses/course-detail', this.cursoId]);
           return;
         }
 

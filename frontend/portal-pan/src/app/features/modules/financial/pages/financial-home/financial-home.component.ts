@@ -71,7 +71,7 @@ export class FinancialHomeComponent implements OnInit, OnDestroy {
     coursesAcquired: 0
   };
 
-  // ─── Mock Data ────────────────────────────────────────────────────────────
+  // ─── Transactions List ─────────────────────────────────────────────────────
   transactions: ITransaction[] = [];
 
   constructor(
@@ -116,28 +116,24 @@ export class FinancialHomeComponent implements OnInit, OnDestroy {
 
   loadTransactions(): void {
     this.isLoading = true;
-    forkJoin({
-      purchases: this.financialService.getMyPurchases()
-    }).subscribe({
+    this.financialService.getMyPortalTransactions().subscribe({
       next: (res) => {
         const txs: ITransaction[] = [];
 
-        // Mapear Purchases
-        if (res.purchases && Array.isArray(res.purchases)) {
-          res.purchases.forEach(p => {
+        if (res && Array.isArray(res)) {
+          res.forEach(p => {
             txs.push({
-              id: `PUR-${p.purchaseId}`,
-              name: p.courseTitle,
+              id: p.id.toString(),
+              name: p.name,
               type: 'Curso',
-              value: p.amount,
+              value: p.value,
               paymentMethod: (p.paymentMethod === 'PIX' ? 'PIX' : 'Cartão de Crédito') as PaymentMethod,
               status: this.mapStatus(p.status),
-              chargeDate: new Date(p.purchasedAt).toLocaleDateString(),
+              chargeDate: new Date(p.paymentDate).toLocaleDateString(),
               nextRenewal: null,
-              transactionCode: `NXS-PUR-${p.purchaseId}`,
+              transactionCode: p.transactionCode,
               icon: 'fa-book',
-              color: '#06b6d4',
-              relatedCourseId: p.courseId
+              color: '#06b6d4'
             });
           });
         }

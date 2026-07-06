@@ -59,7 +59,7 @@
   <div class="card border-0 rounded-4 shadow-sm p-3 mb-3">
     <div class="row g-2 align-items-center">
 
-      <div class="col-12 col-md-5">
+      <div class="col-12 col-md-8">
         <div class="position-relative">
           <span class="position-absolute start-0 top-50 translate-middle-y ps-3 text-muted" style="font-size: 0.82rem;">
             <i class="fas fa-search"></i>
@@ -71,15 +71,6 @@
                  (ngModelChange)="currentPage = 1"
                  style="font-size: 0.83rem;">
         </div>
-      </div>
-
-      <div class="col-6 col-md-3">
-        <select class="form-select rounded-pill bg-light border-0 shadow-none py-2"
-                [(ngModel)]="selectedType"
-                (ngModelChange)="currentPage = 1"
-                style="font-size: 0.83rem;">
-          <option *ngFor="let opt of typeOptions" [value]="opt">{{ opt === 'Todos' ? 'Todos os tipos' : opt }}</option>
-        </select>
       </div>
 
       <div class="col-6 col-md-3">

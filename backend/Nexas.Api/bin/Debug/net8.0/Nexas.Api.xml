@@ -155,6 +155,56 @@
             Deleta permanentemente um domínio de um curso.
             </summary>
         </member>
+        <member name="M:Nexas.Api.Controllers.ForumCategoriesController.GetAll">
+            <summary>
+            Lista todas as categorias do fórum.
+            </summary>
+        </member>
+        <member name="M:Nexas.Api.Controllers.ForumCategoriesController.Create(Nexas.Application.Portal.Forum.Categories.Commands.CreateForumCategory.CreateForumCategoryCommand)">
+            <summary>
+            Cria uma nova categoria no fórum.
+            </summary>
+        </member>
+        <member name="M:Nexas.Api.Controllers.ForumCategoriesController.Update(System.Int32,Nexas.Application.Portal.Forum.Categories.Commands.UpdateForumCategory.UpdateForumCategoryCommand)">
+            <summary>
+            Atualiza uma categoria existente.
+            </summary>
+        </member>
+        <member name="M:Nexas.Api.Controllers.ForumCategoriesController.Deactivate(System.Int32)">
+            <summary>
+            Desativa uma categoria.
+            </summary>
+        </member>
+        <member name="M:Nexas.Api.Controllers.ForumTopicsController.GetAll(Nexas.Application.Portal.Forum.Topics.Queries.GetForumTopics.GetForumTopicsQuery)">
+            <summary>
+            Lista os tópicos do fórum com base nos filtros informados.
+            </summary>
+        </member>
+        <member name="M:Nexas.Api.Controllers.ForumTopicsController.GetById(System.Int32)">
+            <summary>
+            Obtém os detalhes completos de um tópico pelo ID, incluindo mensagens.
+            </summary>
+        </member>
+        <member name="M:Nexas.Api.Controllers.ForumTopicsController.Create(Nexas.Application.Portal.Forum.Topics.Commands.CreateForumTopic.CreateForumTopicCommand)">
+            <summary>
+            Cria um novo tópico no fórum.
+            </summary>
+        </member>
+        <member name="M:Nexas.Api.Controllers.ForumTopicsController.Reply(System.Int32,Nexas.Application.Portal.Forum.Messages.Commands.ReplyForumTopic.ReplyForumTopicCommand)">
+            <summary>
+            Adiciona uma mensagem/resposta a um tópico existente.
+            </summary>
+        </member>
+        <member name="M:Nexas.Api.Controllers.ForumTopicsController.Resolve(System.Int32)">
+            <summary>
+            Marca um tópico como resolvido.
+            </summary>
+        </member>
+        <member name="M:Nexas.Api.Controllers.ForumTopicsController.Reopen(System.Int32)">
+            <summary>
+            Reabre um tópico resolvido.
+            </summary>
+        </member>
         <member name="T:Nexas.Api.Controllers.PurchasesController">
             <summary>
             Controller responsável pelas operações de compra no Painel do Aluno (PAN).

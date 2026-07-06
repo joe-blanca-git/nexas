@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { FinancialService } from '../../services/financial.service';
 import { SignalRService, PaymentNotification } from '../../../../../core/services/signalr.service';
 import { forkJoin, Subscription } from 'rxjs';
+import { jsPDF } from 'jspdf';
 
 // ─── Interfaces ────────────────────────────────────────────────────────────────
 
@@ -48,7 +49,6 @@ export class FinancialHomeComponent implements OnInit, OnDestroy {
   searchTerm = '';
   private broadcastChannel: BroadcastChannel;
   private signalRSub?: Subscription;
-  selectedType: string = 'Todos';
   selectedStatus: string = 'Todos';
   sortField: keyof ITransaction = 'chargeDate';
   sortDirection: 'asc' | 'desc' = 'desc';
@@ -62,7 +62,6 @@ export class FinancialHomeComponent implements OnInit, OnDestroy {
   showToast = false;
 
   // ─── Filter Options ───────────────────────────────────────────────────────
-  typeOptions: string[] = ['Todos', 'Curso'];
   statusOptions: string[] = ['Todos', 'Pago', 'Pendente', 'Cancelado', 'Reembolsado'];
 
   // ─── Summary ─────────────────────────────────────────────────────────────
@@ -166,9 +165,8 @@ export class FinancialHomeComponent implements OnInit, OnDestroy {
       const matchSearch =
         t.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
         t.transactionCode.toLowerCase().includes(this.searchTerm.toLowerCase());
-      const matchType = this.selectedType === 'Todos' || t.type === this.selectedType;
       const matchStatus = this.selectedStatus === 'Todos' || t.status === this.selectedStatus;
-      return matchSearch && matchType && matchStatus;
+      return matchSearch && matchStatus;
     });
 
     // Ordenação
@@ -217,7 +215,6 @@ export class FinancialHomeComponent implements OnInit, OnDestroy {
 
   clearFilters(): void {
     this.searchTerm = '';
-    this.selectedType = 'Todos';
     this.selectedStatus = 'Todos';
     this.currentPage = 1;
   }
@@ -235,7 +232,95 @@ export class FinancialHomeComponent implements OnInit, OnDestroy {
   }
 
   downloadReceipt(tx: ITransaction): void {
-    this.triggerToast(`Comprovante de "${tx.name}" sendo gerado...`);
+    this.triggerToast(`Gerando comprovante de "${tx.name}"...`);
+
+    const doc = new jsPDF();
+    
+    // Cores e Configurações
+    const primaryColor = '#4f46e5'; // Indigo-600
+    const textColor = '#334155'; // Slate-700
+    const lightGray = '#f1f5f9'; // Slate-100
+    
+    // Fundo do Cabeçalho
+    doc.setFillColor(primaryColor);
+    doc.rect(0, 0, 210, 40, 'F');
+    
+    // Logo / Nome da Empresa (Fictício)
+    doc.setTextColor('#ffffff');
+    doc.setFontSize(22);
+    doc.setFont('helvetica', 'bold');
+    doc.text('NEXAS', 15, 25);
+    
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.text('Comprovante de Pagamento', 210 - 15, 25, { align: 'right' });
+
+    // Informações da Transação
+    doc.setTextColor(textColor);
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Detalhes da Transação', 15, 55);
+
+    // Linha divisória
+    doc.setDrawColor('#e2e8f0'); // Slate-200
+    doc.setLineWidth(0.5);
+    doc.line(15, 60, 195, 60);
+
+    // Helper para desenhar linhas de dados
+    let startY = 70;
+    const lineHeight = 10;
+    
+    const drawRow = (label: string, value: string) => {
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold');
+      doc.text(label, 15, startY);
+      
+      doc.setFont('helvetica', 'normal');
+      // Alinhar os valores na direita
+      doc.text(value, 195, startY, { align: 'right' });
+      
+      // Linha sutil
+      doc.setDrawColor('#f8fafc'); // Slate-50
+      doc.line(15, startY + 3, 195, startY + 3);
+      
+      startY += lineHeight;
+    };
+
+    drawRow('Código da Transação:', tx.transactionCode);
+    drawRow('Descrição:', tx.name);
+    drawRow('Data do Pagamento:', tx.chargeDate);
+    drawRow('Método de Pagamento:', tx.paymentMethod);
+    drawRow('Status do Pagamento:', tx.status);
+    
+    if (tx.nextRenewal) {
+      drawRow('Próxima Renovação:', tx.nextRenewal);
+    }
+
+    // Bloco de Valor Total
+    startY += 10;
+    doc.setFillColor(lightGray);
+    doc.rect(15, startY, 180, 25, 'F');
+    
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text('VALOR TOTAL PAGO', 25, startY + 16);
+    
+    doc.setFontSize(16);
+    doc.setTextColor(primaryColor);
+    doc.text(this.formatCurrency(tx.value), 195 - 5, startY + 16, { align: 'right' });
+
+    // Rodapé
+    doc.setTextColor('#94a3b8'); // Slate-400
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    const footerText = 'Este documento é um comprovante de pagamento válido.\nPlataforma Educacional Nexas - CNPJ: 00.000.000/0001-00';
+    
+    const pageHeight = doc.internal.pageSize.getHeight();
+    doc.text(footerText, 105, pageHeight - 20, { align: 'center' });
+
+    // Download do PDF
+    doc.save(`Comprovante_${tx.transactionCode}.pdf`);
+    
     this.closeDetail();
   }
 

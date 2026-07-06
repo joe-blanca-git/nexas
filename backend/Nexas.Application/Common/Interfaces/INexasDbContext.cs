@@ -18,6 +18,9 @@ namespace Nexas.Application.Common.Interfaces
         DbSet<CourseCategory> CourseCategories { get; }
         DbSet<CourseCourseCategory> CourseCourseCategories { get; }
         DbSet<LessonView> LessonViews { get; }
+        DbSet<ForumCategory> ForumCategories { get; }
+        DbSet<ForumTopic> ForumTopics { get; }
+        DbSet<ForumMessage> ForumMessages { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

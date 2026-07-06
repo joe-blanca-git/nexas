@@ -7,6 +7,7 @@ export interface PixRequest {
   cursoId: number;
   cpf: string;
   valor: number;
+  tipoCompra: string;
 }
 
 export interface PixResponse {

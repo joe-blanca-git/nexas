@@ -68,24 +68,26 @@
 </head>
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg fixed-top scrolled" id="mainNav">
+     <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top" id="mainNav">
         <div class="container">
-            <a class="navbar-brand" href="index.html">
+            <a class="navbar-brand" href="#">
                 <img src="./assets/images/logos/logo-nobg.png" class="navbar-logo" alt="Nexas">
             </a>
             <button class="navbar-toggler border-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon text-white"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.html#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="sobre.html">Sobre</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.html#cursos">Cursos</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.html#professores">Professores</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.html#depoimentos">Depoimentos</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.html#faq">FAQ</a></li>
-                    <li class="nav-item ms-lg-3"><a class="btn btn-primary btn-sm text-white" href="index.html#cursos">Matricule-se</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#cursos">Cursos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#professores">Professores</a></li>
+                    <!-- <li class="nav-item"><a class="nav-link" href="#depoimentos">Depoimentos</a></li> -->
+                    <li class="nav-item"><a class="nav-link" href="#faq">FAQ</a></li>
+                    <li class="nav-item ms-lg-3"><a class="btn btn-warning btn-sm text-success" href="https://joederblanca.com.br/portal-pan/auth/register">Matricule-se</a></li>
+                    <li class="nav-item ms-lg-3"><a class="btn btn-primary btn-sm text-white" href="https://joederblanca.com.br/portal-pan/auth/login">Entrar</a></li>
+
                 </ul>
             </div>
         </div>
@@ -121,7 +123,7 @@
                 <h2>2. Planos, Compras e Pagamentos</h2>
                 
                 <h3>2.1 Forma de pagamento</h3>
-                <p>Atualmente, a Nexas aceita <strong>exclusivamente pagamentos via cartão de crédito</strong>.</p>
+                <p>Atualmente, a Nexas aceita <strong>exclusivamente pagamentos via cartão de crédito, cartão de débito e pix</strong>.</p>
 
                 <h3>2.2 Processamento de pagamento</h3>
                 <p>Os pagamentos são processados por meio da plataforma Asaas.</p>
@@ -134,14 +136,18 @@
 
                 <h3>2.3 Captura do pagamento (regra dos 7 dias)</h3>
                 <ul>
-                    <li>Após a compra, o valor poderá ser <strong>apenas autorizado (pré-autorização)</strong> no cartão</li>
+                    <li>Para pagamento no cartão de crédito, após a compra, o valor poderá ser <strong>apenas autorizado (pré-autorização)</strong> no cartão</li>
                     <li>A <strong>captura efetiva do valor será realizada após o prazo de 7 (sete) dias corridos</strong></li>
                     <li>Esse prazo corresponde ao período de garantia/legal de arrependimento</li>
                 </ul>
+                <ul>
+                    <li>Para pagamento no pix ou cartão de débito, após a compra, o valor poderá ser <strong>capturado (autorizado e cobrado);</strong></li>
+                    <li>A <strong>captura efetiva do valor será realizada imediatamente após a compra</strong></li>
+                </ul>
                 <p>Caso o usuário solicite reembolso dentro desse período:</p>
                 <ul>
-                    <li>A cobrança poderá ser cancelada antes da captura</li>
-                    <li>Evitando efetiva cobrança na fatura</li>
+                    <li>No cartão de crédito, a cobrança poderá ser cancelada antes da captura, evitando efetiva cobrança na fatura</li>
+                    <li>No pix ou cartão de débito, o estorno será realizado conforme as políticas do intermediador</li>
                 </ul>
 
                 <h3>2.4 Taxas e encargos</h3>
@@ -179,7 +185,7 @@
                 </ul>
 
                 <hr>
-
+<!-- 
                 <h2>4. Assinaturas e Cancelamento</h2>
                 
                 <h3>4.1 Renovação automática</h3>
@@ -205,7 +211,7 @@
                     <li>Uso indevido</li>
                     <li>Compartilhamento de conta</li>
                     <li>Tentativas de burlar o sistema</li>
-                </ul>
+                </ul> -->
 
                 <hr>
 
@@ -323,14 +329,14 @@
                         <a href="#">Ajuda & Suporte</a>
                     </div>
                 </div>
-                <div class="col-lg-3">
+                <!-- <div class="col-lg-3">
                     <h5 class="mb-4">Assine Nossa Newsletter</h5>
                     <p class="small mb-4">Dicas de tecnologia agrícola diretamente no seu e-mail.</p>
                     <form class="input-group mb-3 newsletter-form">
                         <input type="email" class="form-control bg-dark border-0 text-white" placeholder="Seu melhor e-mail" style="padding: 12px; min-height: 48px;">
                         <button class="btn btn-primary px-3" type="button" style="min-height: 48px;"><i class="bi bi-send"></i></button>
                     </form>
-                </div>
+                </div> -->
             </div>
             <hr class="mt-5 mb-4 opacity-10">
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start">

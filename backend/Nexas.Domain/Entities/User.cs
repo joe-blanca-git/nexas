@@ -16,6 +16,7 @@ public class User : BaseEntity
     // Relacionamentos (Necessários para o EF não se perder nas consultas de compra/matrícula)
     public virtual ICollection<Enrollment> Enrollments { get; private set; } = new List<Enrollment>();
     public virtual ICollection<Purchase> Purchases { get; private set; } = new List<Purchase>();
+    public virtual ICollection<LessonView> LessonViews { get; set; } = new List<LessonView>();
 
     private User() { }
 

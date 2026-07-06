@@ -5,12 +5,18 @@ import { Router, RouterModule } from '@angular/router';
 
 import { CoursesService } from '../../services/courses.service';
 
+export interface ICategory {
+  id: number;
+  name: string;
+}
+
 export interface ICourse {
   id: number;
   title: string;
   description: string;
   imgCoverLink: string;
   released: boolean;
+  categories?: ICategory[];
 }
 
 @Component({
@@ -44,6 +50,19 @@ export class CourseHomeComponent implements OnInit {
     this.isLoading = true;
     try {
       this.courses = await this.coursesService.getMyCourses();
+      
+      const extractedCategories = new Set<string>();
+      this.courses.forEach(course => {
+        if (course.categories && course.categories.length > 0) {
+          course.categories.forEach(cat => extractedCategories.add(cat.name));
+        }
+      });
+      
+      this.categories = ['Todos', ...Array.from(extractedCategories)].sort((a, b) => {
+        if (a === 'Todos') return -1;
+        if (b === 'Todos') return 1;
+        return a.localeCompare(b);
+      });
     } catch (error) {
       console.error('Erro ao carregar cursos', error);
     } finally {
@@ -58,10 +77,10 @@ export class CourseHomeComponent implements OnInit {
 
   getFilteredCourses(): ICourse[] {
     return this.courses.filter(course => {
-      // Temporarily removed category filtering logic since category doesn't exist yet
-      // const matchesCategory = this.selectedCategory === 'Todos' || course.category === this.selectedCategory;
+      const matchesCategory = this.selectedCategory === 'Todos' || 
+                              (course.categories && course.categories.some(c => c.name === this.selectedCategory));
       const matchesSearch = course.title.toLowerCase().includes(this.searchTerm.toLowerCase());
-      return matchesSearch;
+      return matchesCategory && matchesSearch;
     });
   }
 

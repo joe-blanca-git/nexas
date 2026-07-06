@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Nexas.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3a5eaaffc6dfa7a985ab849dfcedc16832e9423d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b2c121b95b70cbb6fea686c9df730dbc4f9b55ad")]
 [assembly: System.Reflection.AssemblyProductAttribute("Nexas.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Nexas.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

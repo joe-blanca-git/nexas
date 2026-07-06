@@ -169,4 +169,12 @@ export class CourseDetailComponent implements OnInit {
   goBack() {
     this.router.navigate(['/courses']);
   }
+
+  goToLesson() {
+    if (this.course && this.course.progress !== 100) {
+      this.router.navigate(['/courses/lesson', this.courseId]);
+    } else if (this.course && this.course.progress === 100) {
+      alert('Certificado será gerado em breve!');
+    }
+  }
 }

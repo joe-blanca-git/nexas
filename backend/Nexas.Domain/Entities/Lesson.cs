@@ -15,6 +15,7 @@ namespace Nexas.Domain.Entities
 
         // Relations
         public virtual Module Module { get; set; } = null!;
+        public virtual ICollection<LessonView> LessonViews { get; set; } = new List<LessonView>();
 
         public static Lesson Create(string name, string? description, int? durationSeconds, string? bunnyVideoId, int? createdBy)
         {

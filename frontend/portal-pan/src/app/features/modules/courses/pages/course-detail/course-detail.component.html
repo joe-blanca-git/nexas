@@ -132,7 +132,8 @@
           <button class="btn w-100 rounded-pill py-2.5 fw-bold text-uppercase d-flex align-items-center justify-content-center gap-2 transition action-course-btn"
                   [style.background-color]="course.color"
                   [style.box-shadow]="'0 8px 16px -4px ' + course.color + '60'"
-                  style="color: #ffffff; font-size: 0.8rem; border: 0;">
+                  style="color: #ffffff; font-size: 0.8rem; border: 0;"
+                  (click)="goToLesson()">
             <i class="fas" [class.fa-certificate]="course.progress === 100" [class.fa-play-circle]="course.progress !== 100"></i>
             {{ course.progress === 100 ? 'Gerar Certificado' : 'Iniciar Próxima Aula' }}
           </button>

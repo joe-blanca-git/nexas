@@ -12,5 +12,10 @@ export const coursesRoutes: Routes = [
         path: 'course-detail/:id',
         component: CourseDetailComponent,
         title: 'Detalhes do Curso',
+    },
+    {
+        path: 'lesson/:courseId',
+        loadComponent: () => import('./pages/lesson-viewer/lesson-viewer.component').then(m => m.LessonViewerComponent),
+        title: 'Aula',
     }
 ];

@@ -226,7 +226,8 @@ export class FinancialPaymentComponent implements OnInit {
       this.financialService.gerarPixAsaas({
         cursoId: this.cursoId,
         cpf: this.pixCpf,
-        valor: this.valorTotal
+        valor: this.valorTotal,
+        tipoCompra: 'AVULSO'
       }).subscribe({
         next: (res: PixResponse) => {
           this.isLoadingPix = false;

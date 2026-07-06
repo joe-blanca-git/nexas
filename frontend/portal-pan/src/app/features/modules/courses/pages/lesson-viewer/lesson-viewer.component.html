@@ -1,0 +1,179 @@
+<div class="lesson-viewer-container" *ngIf="course && currentLesson">
+  
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb-nav" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="#">Meus Cursos</a></li>
+      <li class="breadcrumb-item"><a href="#">{{ course.title }}</a></li>
+      <li class="breadcrumb-item"><a href="#">{{ currentModule.title }}</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ currentLesson.title }}</li>
+    </ol>
+  </nav>
+
+  <div class="content-grid">
+    
+    <!-- MAIN CONTENT (Left Side / Top on Mobile) -->
+    <main class="main-content">
+      
+      <!-- Video Player Placeholder -->
+      <div class="video-wrapper">
+        <div class="video-overlay" *ngIf="isVideoLoading">
+          <div class="spinner"></div>
+          <span>Carregando vídeo...</span>
+        </div>
+        
+        <!-- Placeholder iframe for bunny.net -->
+        <iframe 
+          [src]="safeVideoUrl" 
+          loading="lazy" 
+          style="border: none; width: 100%; height: 100%;" 
+          allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" 
+          allowfullscreen="true">
+        </iframe>
+        
+        <!-- Fallback mock visual if iframe fails or is empty -->
+        <div class="video-placeholder" *ngIf="!currentLesson.idBunny">
+          <i class="bi bi-play-circle-fill"></i>
+          <p>ID do Vídeo: {{ currentLesson.idBunny || 'N/A' }}</p>
+        </div>
+      </div>
+
+      <!-- Lesson Info -->
+      <div class="lesson-header">
+        <h1 class="lesson-title">{{ currentLesson.title }}</h1>
+        <p class="lesson-module-name">{{ currentModule.title }}</p>
+        
+        <div class="lesson-meta">
+          <span class="duration"><i class="bi bi-clock"></i> {{ currentLesson.duration }}</span>
+        </div>
+        
+        <p class="lesson-description">{{ currentLesson.description }}</p>
+      </div>
+
+      <!-- Actions Bar -->
+      <div class="actions-bar">
+        <button 
+          class="btn btn-secondary btn-nav" 
+          [disabled]="isFirstLesson()" 
+          (click)="goToPreviousLesson()">
+          <i class="bi bi-chevron-left"></i> Aula Anterior
+        </button>
+
+        <div class="toggle-completed">
+          <label class="switch">
+            <input type="checkbox" [checked]="currentLesson.isCompleted" (change)="toggleLessonCompleted()">
+            <span class="slider round"></span>
+          </label>
+          <span class="toggle-label" [class.completed-text]="currentLesson.isCompleted">
+            {{ currentLesson.isCompleted ? 'Concluída' : 'Marcar como concluída' }}
+          </span>
+        </div>
+
+        <button 
+          class="btn btn-primary btn-nav" 
+          [disabled]="isLastLesson()" 
+          (click)="goToNextLesson()">
+          Próxima Aula <i class="bi bi-chevron-right"></i>
+        </button>
+      </div>
+
+      <!-- Forum Section -->
+      <div class="forum-section">
+        <h3>Fórum da Aula</h3>
+        
+        <div class="new-comment-box">
+          <img src="https://i.pravatar.cc/150?u=current" alt="Seu Avatar" class="avatar">
+          <div class="input-group">
+            <textarea 
+              [(ngModel)]="newCommentText" 
+              placeholder="Ficou com alguma dúvida? Envie aqui..." 
+              rows="3">
+            </textarea>
+            <button class="btn btn-outline-primary" [disabled]="!newCommentText.trim()" (click)="addComment()">
+              Enviar dúvida
+            </button>
+          </div>
+        </div>
+
+        <div class="comments-list">
+          <div class="comment-item" *ngFor="let comment of comments">
+            <img [src]="comment.avatar" [alt]="comment.authorName" class="avatar">
+            <div class="comment-content">
+              <div class="comment-header">
+                <span class="author">{{ comment.authorName }}</span>
+                <span class="date">{{ comment.date }}</span>
+              </div>
+              <p class="text">{{ comment.content }}</p>
+            </div>
+          </div>
+          <div class="no-comments" *ngIf="comments.length === 0">
+            Nenhuma dúvida enviada ainda. Seja o primeiro!
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- SIDEBAR (Right Side / Bottom on Mobile) -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2>Conteúdo do Curso</h2>
+      </div>
+
+      <div class="accordion-container">
+        
+        <!-- Modules Loop -->
+        <div class="module-card" *ngFor="let module of course.modules" [class.expanded]="module.isExpanded">
+          
+          <div class="module-header" (click)="toggleModuleAccordion(module)">
+            <div class="module-info">
+              <span class="module-title">{{ module.title }}</span>
+              <span class="module-progress">
+                {{ getCompletedLessonsCount(module) }} / {{ module.lessons.length }} aulas
+              </span>
+            </div>
+            <i class="bi" [class.bi-chevron-down]="!module.isExpanded" [class.bi-chevron-up]="module.isExpanded"></i>
+          </div>
+
+          <!-- Lessons List (Expandable) -->
+          <div class="module-body" *ngIf="module.isExpanded">
+            <ul class="lesson-list">
+              <li 
+                *ngFor="let lesson of module.lessons" 
+                class="lesson-item" 
+                [class.active]="lesson.id === currentLesson.id"
+                [class.completed]="lesson.isCompleted"
+                (click)="setCurrentLesson(lesson, module)">
+                
+                <div class="lesson-status-icon">
+                  <i class="bi bi-check-circle-fill text-success" *ngIf="lesson.isCompleted"></i>
+                  <i class="bi bi-circle text-muted" *ngIf="!lesson.isCompleted"></i>
+                </div>
+                
+                <div class="lesson-details">
+                  <span class="lesson-name">{{ lesson.title }}</span>
+                  <span class="lesson-duration"><i class="bi bi-play-btn"></i> {{ lesson.duration }}</span>
+                </div>
+                
+              </li>
+            </ul>
+
+            <!-- Rate Module Button -->
+            <div class="rate-module-wrapper">
+              <button 
+                class="btn btn-rate" 
+                [disabled]="!checkModuleCompletion(module.id)"
+                [class.enabled]="checkModuleCompletion(module.id)"
+                (click)="rateModule(module)">
+                ⭐ Avaliar Módulo
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </aside>
+
+  </div>
+</div>

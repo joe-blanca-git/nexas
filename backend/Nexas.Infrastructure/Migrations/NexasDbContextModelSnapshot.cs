@@ -351,6 +351,39 @@ namespace Nexas.Infrastructure.Migrations
                     b.ToTable("Lessons", (string)null);
                 });
 
+            modelBuilder.Entity("Nexas.Domain.Entities.LessonView", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("LessonViewId");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("CreatedAt");
+
+                    b.Property<int>("LessonId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("UpdatedAt");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LessonId");
+
+                    b.HasIndex("UserId", "LessonId")
+                        .IsUnique();
+
+                    b.ToTable("LessonViews", (string)null);
+                });
+
             modelBuilder.Entity("Nexas.Domain.Entities.Module", b =>
                 {
                     b.Property<int>("Id")
@@ -666,6 +699,25 @@ namespace Nexas.Infrastructure.Migrations
                     b.Navigation("Module");
                 });
 
+            modelBuilder.Entity("Nexas.Domain.Entities.LessonView", b =>
+                {
+                    b.HasOne("Nexas.Domain.Entities.Lesson", "Lesson")
+                        .WithMany("LessonViews")
+                        .HasForeignKey("LessonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Nexas.Domain.Entities.User", "User")
+                        .WithMany("LessonViews")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Lesson");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Nexas.Domain.Entities.Module", b =>
                 {
                     b.HasOne("Nexas.Domain.Entities.Course", "Course")
@@ -714,6 +766,11 @@ namespace Nexas.Infrastructure.Migrations
                     b.Navigation("CourseCategories");
                 });
 
+            modelBuilder.Entity("Nexas.Domain.Entities.Lesson", b =>
+                {
+                    b.Navigation("LessonViews");
+                });
+
             modelBuilder.Entity("Nexas.Domain.Entities.Module", b =>
                 {
                     b.Navigation("Lessons");
@@ -727,6 +784,8 @@ namespace Nexas.Infrastructure.Migrations
             modelBuilder.Entity("Nexas.Domain.Entities.User", b =>
                 {
                     b.Navigation("Enrollments");
+
+                    b.Navigation("LessonViews");
 
                     b.Navigation("Purchases");
                 });

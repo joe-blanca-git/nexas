@@ -67,6 +67,10 @@ export class CourseDetailComponent implements OnInit {
     }
   }
 
+  goToSpecificLesson(lessonId: number) {
+    this.router.navigate(['/courses/lesson', this.courseId], { queryParams: { lessonId: lessonId } });
+  }
+
   getTeacherInitials(teacherName: string): string {
     if (!teacherName) return 'PF';
     const parts = teacherName.split(' ');

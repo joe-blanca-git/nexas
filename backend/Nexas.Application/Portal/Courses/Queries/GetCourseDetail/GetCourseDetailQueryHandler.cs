@@ -1,6 +1,8 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using Nexas.Application.Common.Interfaces;
+using Nexas.Domain.Entities;
 
 namespace Nexas.Application.Portal.Courses.Queries.GetCourseDetail;
 
@@ -27,7 +29,6 @@ public class GetCourseDetailQueryHandler : IRequestHandler<GetCourseDetailQuery,
                 .ThenInclude(ct => ct.Teacher)
             .Include(c => c.CourseCategories)
                 .ThenInclude(cc => cc.Category)
-            .AsSplitQuery() // Optimization for multiple includes
             .AsNoTracking()
             .FirstOrDefaultAsync(c => c.Id == request.CourseId && c.Active, cancellationToken);
 

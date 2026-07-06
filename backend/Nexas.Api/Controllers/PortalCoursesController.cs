@@ -23,6 +23,16 @@ public class PortalCoursesController : ApiControllerBase
         var result = await _mediator.Send(new GetMyCoursesQuery());
         return Ok(result);
     }
+
+    [HttpGet("course-detail/{id}")]
+    public async Task<IActionResult> GetCourseDetail(int id)
+    {
+        var result = await _mediator.Send(new Nexas.Application.Portal.Courses.Queries.GetCourseDetail.GetCourseDetailQuery(id));
+        if (result == null)
+            return NotFound(new { message = "Curso não encontrado ou inativo." });
+
+        return Ok(result);
+    }
     [HttpGet("{id}/checkout-summary")]
     public async Task<IActionResult> GetCourseCheckoutSummary(int id)
     {

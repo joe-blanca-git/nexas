@@ -1,5 +1,23 @@
+<!-- Loading State -->
+<div class="container-fluid py-5 text-center" *ngIf="isLoading">
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Carregando...</span>
+  </div>
+  <p class="text-muted mt-3">Carregando informações do curso...</p>
+</div>
+
+<!-- Error State -->
+<div class="container-fluid py-5 text-center" *ngIf="!isLoading && errorMessage">
+  <div class="alert alert-danger d-inline-block">
+    <i class="fas fa-exclamation-triangle me-2"></i> {{ errorMessage }}
+  </div>
+  <div class="mt-3">
+    <button class="btn btn-outline-secondary rounded-pill" (click)="goBack()">Voltar para Cursos</button>
+  </div>
+</div>
+
 <!-- Course Detail Page Container -->
-<div class="container-fluid p-0 animated-fade-in" *ngIf="course">
+<div class="container-fluid p-0 animated-fade-in" *ngIf="!isLoading && course">
   
   <!-- Back navigation button -->
   <div class="row mb-3">
@@ -18,27 +36,27 @@
       <!-- Course Hero Cover -->
       <div class="card border-0 rounded-5 shadow-sm overflow-hidden mb-4">
         <div class="position-relative" style="height: 250px; min-height: 250px;">
-          <img [src]="course.image" class="w-100 h-100 object-fit-cover" alt="Course Banner Cover">
+          <img [src]="course.imgCoverLink || 'assets/images/default-course-cover.jpg'" class="w-100 h-100 object-fit-cover" alt="Course Banner Cover">
           <div class="position-absolute start-0 top-0 w-100 h-100" 
                style="background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.7) 100%);"></div>
           
           <!-- Category Floating badge -->
           <div class="position-absolute start-4 bottom-4 text-white z-index-2">
-            <span class="badge px-3 py-1.5 rounded-pill mb-2 shadow-sm" [style.background-color]="course.color">
+            <span class="badge px-3 py-1.5 rounded-pill mb-2 shadow-sm" style="background-color: #6366f1;" *ngIf="course.category">
               {{ course.category }}
             </span>
-            <h2 class="fw-extrabold text-white mb-1 tracking-tight" style="font-size: 1.8rem;">{{ course.name }}</h2>
+            <h2 class="fw-extrabold text-white mb-1 tracking-tight" style="font-size: 1.8rem;">{{ course.title }}</h2>
             <div class="d-flex align-items-center gap-3 text-white-50 font-monospace small" style="font-size: 0.75rem;">
-              <span>Código: {{ course.code }}</span>
-              <span>•</span>
-              <span>Instrutor: {{ course.teacher }}</span>
+              <span *ngIf="course.level">Nível: {{ course.level }}</span>
+              <span *ngIf="course.level && course.teacher">•</span>
+              <span *ngIf="course.teacher">Instrutor: {{ course.teacher }}</span>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Description Section -->
-      <div class="card border-0 rounded-4 shadow-sm p-4 mb-4 bg-white">
+      <div class="card border-0 rounded-4 shadow-sm p-4 mb-4 bg-white" *ngIf="course.description">
         <h5 class="fw-extrabold text-dark mb-3">Sobre esta Disciplina</h5>
         <p class="text-muted mb-0" style="line-height: 1.6; font-size: 0.88rem;">
           {{ course.description }}
@@ -50,40 +68,54 @@
         <div class="d-flex align-items-center justify-content-between mb-4">
           <h5 class="fw-extrabold text-dark mb-0">Grade Curricular</h5>
           <span class="badge bg-light text-muted border border-secondary border-opacity-10 px-3 py-1.5 rounded-pill" style="font-size: 0.72rem;">
-            {{ course.syllabus.length }} Aulas catalogadas
+            {{ course.totalLessons }} Aulas catalogadas
           </span>
         </div>
 
-        <div class="syllabus-list d-flex flex-column gap-2.5">
-          <div *ngFor="let lesson of course.syllabus"
-               class="lesson-row rounded-3 p-3 d-flex align-items-center justify-content-between border transition"
-               [class.completed-row]="lesson.completed"
-               [class.pending-row]="!lesson.completed">
+        <div class="syllabus-list d-flex flex-column gap-3">
+          <ng-container *ngFor="let module of course.modules">
             
-            <div class="d-flex align-items-center gap-3">
-              <!-- Play / Status Check indicator icon -->
-              <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 status-icon-circle shadow-sm"
-                   [class.bg-success-light]="lesson.completed"
-                   [class.bg-light-gray]="!lesson.completed"
-                   style="width: 36px; height: 36px;">
-                <i class="fas" [class.fa-check]="lesson.completed" [class.fa-play]="!lesson.completed"
-                   [class.text-success]="lesson.completed" [class.text-muted]="!lesson.completed" style="font-size: 0.85rem;"></i>
-              </div>
-              
-              <div>
-                <h6 class="fw-bold mb-0.5 lesson-title" [class.text-decoration-line-through]="lesson.completed" style="font-size: 0.85rem;">
-                  {{ lesson.title }}
-                </h6>
-                <span class="text-muted font-monospace" style="font-size: 0.68rem;">Duração: {{ lesson.duration }}</span>
-              </div>
+            <div class="module-header bg-light rounded-3 p-3 mb-2">
+              <h6 class="fw-bold mb-1">{{ module.title }}</h6>
+              <span class="text-muted small" *ngIf="module.description">{{ module.description }}</span>
             </div>
 
-            <span class="badge rounded-pill px-2.5 py-1 text-uppercase"
-                  [class.bg-success-light]="lesson.completed"
-                  [class.bg-warning-light]="!lesson.completed"
-                  style="font-size: 0.6rem; font-weight: 700;">
-              {{ lesson.completed ? 'Concluída' : 'Pendente' }}
-            </span>
+            <div *ngFor="let lesson of module.lessons"
+                 class="lesson-row rounded-3 p-3 d-flex align-items-center justify-content-between border transition ms-3"
+                 [class.completed-row]="lesson.isCompleted"
+                 [class.pending-row]="!lesson.isCompleted">
+              
+              <div class="d-flex align-items-center gap-3">
+                <!-- Play / Status Check indicator icon -->
+                <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 status-icon-circle shadow-sm"
+                     [class.bg-success-light]="lesson.isCompleted"
+                     [class.bg-light-gray]="!lesson.isCompleted"
+                     style="width: 36px; height: 36px;">
+                  <i class="fas" [class.fa-check]="lesson.isCompleted" [class.fa-play]="!lesson.isCompleted"
+                     [class.text-success]="lesson.isCompleted" [class.text-muted]="!lesson.isCompleted" style="font-size: 0.85rem;"></i>
+                </div>
+                
+                <div>
+                  <h6 class="fw-bold mb-0.5 lesson-title" [class.text-decoration-line-through]="lesson.isCompleted" style="font-size: 0.85rem;">
+                    {{ lesson.title }}
+                  </h6>
+                  <span class="text-muted font-monospace" style="font-size: 0.68rem;" *ngIf="lesson.duration">Duração: {{ lesson.duration }}</span>
+                </div>
+              </div>
+
+              <span class="badge rounded-pill px-2.5 py-1 text-uppercase"
+                    [class.bg-success-light]="lesson.isCompleted"
+                    [class.bg-warning-light]="!lesson.isCompleted"
+                    style="font-size: 0.6rem; font-weight: 700;">
+                {{ lesson.isCompleted ? 'Concluída' : 'Pendente' }}
+              </span>
+            </div>
+          </ng-container>
+
+          <!-- Empty state para módulos vazios -->
+          <div *ngIf="!course.modules || course.modules.length === 0" class="text-center text-muted py-4">
+            <i class="fas fa-folder-open mb-2 fs-4"></i>
+            <p class="mb-0 small">Nenhum módulo cadastrado neste curso.</p>
           </div>
         </div>
 
@@ -101,8 +133,8 @@
           
           <!-- Large Circular percentage or bar progress -->
           <div class="text-center py-2">
-            <div class="display-3 fw-black mb-1 font-monospace" [style.color]="course.color" style="font-weight: 900; letter-spacing: -2px;">
-              {{ course.progress }}%
+            <div class="display-3 fw-black mb-1 font-monospace" style="color: #6366f1; font-weight: 900; letter-spacing: -2px;">
+              {{ course.progressPercentage }}%
             </div>
             <span class="text-muted small d-block mb-3">Conclusão acadêmica desta matéria</span>
           </div>
@@ -110,9 +142,8 @@
           <div class="progress rounded-pill bg-light mb-4" style="height: 10px; overflow: hidden;">
             <div class="progress-bar rounded-pill transition"
                  role="progressbar"
-                 [style.width.%]="course.progress"
-                 [style.background-color]="course.color"
-                 [style.box-shadow]="'0 0 10px ' + course.color + '80'">
+                 [style.width.%]="course.progressPercentage"
+                 style="background-color: #6366f1; box-shadow: 0 0 10px #6366f180;">
             </div>
           </div>
 
@@ -122,34 +153,36 @@
               <span class="text-muted small"><i class="fas fa-video me-2 text-muted"></i>Aulas Concluídas</span>
               <span class="fw-bold text-dark font-monospace small">{{ course.completedLessons }} de {{ course.totalLessons }}</span>
             </div>
+            
+            <!-- Comentado a pedido: funcionalidade de avaliação não será implementada agora -->
+            <!--
             <div class="d-flex justify-content-between align-items-center py-2 border-bottom border-light">
               <span class="text-muted small"><i class="fas fa-star me-2 text-muted"></i>Avaliação do Curso</span>
               <span class="fw-bold text-dark font-monospace small"><i class="fas fa-star text-warning me-1"></i>{{ course.rating }} / 5.0</span>
             </div>
+            -->
           </div>
 
           <!-- Floating primary actions -->
           <button class="btn w-100 rounded-pill py-2.5 fw-bold text-uppercase d-flex align-items-center justify-content-center gap-2 transition action-course-btn"
-                  [style.background-color]="course.color"
-                  [style.box-shadow]="'0 8px 16px -4px ' + course.color + '60'"
-                  style="color: #ffffff; font-size: 0.8rem; border: 0;"
+                  style="background-color: #6366f1; color: #ffffff; font-size: 0.8rem; border: 0; box-shadow: 0 8px 16px -4px #6366f160;"
                   (click)="goToLesson()">
-            <i class="fas" [class.fa-certificate]="course.progress === 100" [class.fa-play-circle]="course.progress !== 100"></i>
-            {{ course.progress === 100 ? 'Gerar Certificado' : 'Iniciar Próxima Aula' }}
+            <i class="fas" [class.fa-certificate]="course.progressPercentage === 100" [class.fa-play-circle]="course.progressPercentage !== 100"></i>
+            {{ course.progressPercentage === 100 ? 'Gerar Certificado' : (course.lastViewedLesson ? 'Continuar Assistindo' : 'Iniciar Aula') }}
           </button>
         </div>
 
         <!-- Instructor Profile Card widget -->
-        <div class="card border-0 rounded-4 shadow-sm p-4 bg-white">
+        <div class="card border-0 rounded-4 shadow-sm p-4 bg-white" *ngIf="course.teacher">
           <h6 class="fw-extrabold text-dark mb-3">Seu Professor</h6>
           <div class="d-flex align-items-center gap-3">
             <div class="avatar-circle-sm bg-gradient-avatar text-white fw-bold d-flex align-items-center justify-content-center rounded-circle shadow-sm"
-                 style="width: 46px; height: 46px; font-size: 1rem;">
-              {{ course.teacher.substring(5, 7).toUpperCase() }}
+                 style="width: 46px; height: 46px; font-size: 1rem; background-color: #6c757d;">
+              {{ getTeacherInitials(course.teacher) }}
             </div>
             <div>
               <div class="fw-bold text-dark" style="font-size: 0.88rem;">{{ course.teacher }}</div>
-              <span class="text-muted d-block small" style="font-size: 0.72rem;">Coordenador Nexas Acadêmico</span>
+              <span class="text-muted d-block small" style="font-size: 0.72rem;">Professor do Curso</span>
             </div>
           </div>
         </div>

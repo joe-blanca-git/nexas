@@ -9,6 +9,7 @@ namespace Nexas.Api.Controllers;
 [Authorize]
 [ApiController]
 [Route("api/v1/lessons")]
+[Tags("Portal Pan - Lessons")]
 public class LessonsController : ApiControllerBase
 {
     [HttpPost("{id}/toggle-view")]

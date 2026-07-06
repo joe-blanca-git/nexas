@@ -23,6 +23,18 @@ export class CoursesService extends BaseService {
     }
   }
 
+  async getCourseDetail(id: number): Promise<any> {
+    try {
+      let url = `${this.urlApiNexas}portal/courses/course-detail/${id}`;
+      const response = await firstValueFrom(
+        this.httpClient.get<any>(url, this.GetAuthHeaderJson())
+      );
+      return this.extractData(response);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async getCourseCheckoutSummary(id: number): Promise<any> {
     try {
       let url = `${this.urlApiNexas}portal/courses/${id}/checkout-summary`;

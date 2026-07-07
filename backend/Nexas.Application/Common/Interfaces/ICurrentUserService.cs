@@ -4,5 +4,6 @@ namespace Nexas.Application.Common.Interfaces
     {
         string? ExternalId { get; }
         string? Email { get; }
+        string? FullName { get; }
     }
 }

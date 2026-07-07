@@ -1,5 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ForumService, IForumCategoryDto, IForumTopicSummaryDto, CreateForumTopicCommand } from '../../services/forum.service';
 
@@ -50,7 +51,7 @@ export interface IForumStats {
 @Component({
   selector: 'app-forum-home',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './forum-home.component.html',
   styleUrl: './forum-home.component.scss'
 })

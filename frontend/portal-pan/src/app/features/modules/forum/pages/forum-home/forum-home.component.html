@@ -247,7 +247,7 @@
           </div>
           <div class="flex-grow-1 min-w-0">
             <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
-              <span class="fw-extrabold text-dark topic-title-link" style="font-size: 0.88rem; cursor: pointer;">
+              <span class="fw-extrabold text-dark topic-title-link" style="font-size: 0.88rem; cursor: pointer;" [routerLink]="['/forum/topic', topic.id]">
                 {{ topic.title }}
               </span>
               <span class="badge rounded-pill px-2 py-1 fw-semibold" [ngClass]="getStatusBadgeClass(topic.status)" style="font-size: 0.62rem;">

@@ -30,8 +30,14 @@ namespace Nexas.Application.Common.Services
             if (user == null)
             {
                 var email = _currentUserService.Email ?? "unknown@nexas.com"; // Default if missing
-                user = User.Create(externalId, email);
+                var fullName = _currentUserService.FullName;
+                user = User.Create(externalId, email, fullName);
                 _context.Users.Add(user);
+                await _context.SaveChangesAsync(default);
+            }
+            else if (string.IsNullOrEmpty(user.FullName) && !string.IsNullOrEmpty(_currentUserService.FullName))
+            {
+                user.UpdateProfile(_currentUserService.FullName, user.CpfCnpj);
                 await _context.SaveChangesAsync(default);
             }
 

@@ -28,6 +28,31 @@ export interface CreateForumTopicCommand {
   content: string;
 }
 
+export interface IForumMessageDto {
+  id: number;
+  content: string;
+  authorName: string;
+  createdAt: string;
+}
+
+export interface IForumTopicDetailDto {
+  id: number;
+  title: string;
+  subject: string;
+  content: string;
+  status: string;
+  categoryName: string;
+  authorName: string;
+  lessonName?: string;
+  createdAt: string;
+  messages: IForumMessageDto[];
+}
+
+export interface ReplyForumTopicCommand {
+  topicId: number;
+  content: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -73,6 +98,18 @@ export class ForumService extends BaseService {
     }
   }
 
+  async getTopicById(id: number): Promise<IForumTopicDetailDto> {
+    try {
+      let url = `${this.urlApiNexas}ForumTopics/${id}`;
+      const response = await firstValueFrom(
+        this.httpClient.get<IForumTopicDetailDto>(url, this.GetAuthHeaderJson())
+      );
+      return this.extractData(response) as IForumTopicDetailDto;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async createTopic(command: CreateForumTopicCommand): Promise<{ id: number }> {
     try {
       let url = `${this.urlApiNexas}ForumTopics`;
@@ -84,4 +121,18 @@ export class ForumService extends BaseService {
       throw error;
     }
   }
+
+  async replyTopic(id: number, command: ReplyForumTopicCommand): Promise<{ id: number }> {
+    try {
+      let url = `${this.urlApiNexas}ForumTopics/${id}/reply`;
+      const response = await firstValueFrom(
+        this.httpClient.post<{ id: number }>(url, command, this.GetAuthHeaderJson())
+      );
+      return this.extractData(response);
+    } catch (error) {
+      throw error;
+    }
+  }
 }
+//https://joederblanca.com.br/nexas-api/api/v1/ForumCategories
+//

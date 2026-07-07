@@ -47,5 +47,20 @@ namespace Nexas.Api.Services
                        user.FindFirst(ClaimTypes.Email)?.Value;
             }
         }
+
+        public string? FullName
+        {
+            get
+            {
+                var user = _httpContextAccessor.HttpContext?.User;
+
+                if (user == null || user.Identity?.IsAuthenticated == false)
+                    return null;
+
+                return user.FindFirst("name")?.Value ??
+                       user.FindFirst(ClaimTypes.Name)?.Value ??
+                       user.FindFirst("given_name")?.Value;
+            }
+        }
     }
 }

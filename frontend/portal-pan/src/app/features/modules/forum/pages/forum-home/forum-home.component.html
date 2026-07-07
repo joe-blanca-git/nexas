@@ -362,8 +362,9 @@
       </div>
       <div class="d-flex gap-2 justify-content-end">
         <button type="button" class="btn btn-outline-dark rounded-3 px-4 py-2 fw-semibold" style="font-size: 0.82rem;" (click)="closeNewTopic()">Cancelar</button>
-        <button type="submit" class="btn btn-dark rounded-3 px-4 py-2 fw-bold" style="font-size: 0.82rem;">
-          <i class="fas fa-paper-plane me-1"></i> Publicar Tópico
+        <button type="submit" class="btn btn-dark rounded-3 px-4 py-2 fw-bold" style="font-size: 0.82rem;" [disabled]="isSubmittingNewTopic">
+          <i class="fas" [ngClass]="isSubmittingNewTopic ? 'fa-spinner fa-spin' : 'fa-paper-plane'"></i>
+          {{ isSubmittingNewTopic ? 'Publicando...' : 'Publicar Tópico' }}
         </button>
       </div>
     </form>

@@ -31,7 +31,7 @@ public class User : BaseEntity
         };
     }
 
-    public void UpdateProfile(string fullName, string cpfCnpj)
+    public void UpdateProfile(string fullName, string? cpfCnpj)
     {
         FullName = fullName;
         CpfCnpj = cpfCnpj;

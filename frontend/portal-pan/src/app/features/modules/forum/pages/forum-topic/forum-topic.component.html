@@ -6,13 +6,10 @@
     </button>
   </div>
 
-  <div *ngIf="isLoading" class="card border-0 rounded-4 shadow-sm p-4 skeleton-card mb-4">
-    <div class="skeleton skeleton-lg mb-3"></div>
-    <div class="skeleton skeleton-sm mb-2" style="width: 50%;"></div>
-    <div class="skeleton skeleton-sm mb-4" style="width: 30%;"></div>
-    <div class="skeleton skeleton-md mb-2"></div>
-    <div class="skeleton skeleton-md mb-2"></div>
-    <div class="skeleton skeleton-md"></div>
+  <div *ngIf="isLoading" class="d-flex justify-content-center align-items-center py-5">
+    <div class="spinner-border text-dark" role="status" style="width: 3rem; height: 3rem;">
+      <span class="visually-hidden">Carregando...</span>
+    </div>
   </div>
 
   <div *ngIf="errorMessage" class="alert alert-danger rounded-4 shadow-sm border-0 d-flex align-items-center gap-3 p-4">

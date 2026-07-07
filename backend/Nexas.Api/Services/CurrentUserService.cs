@@ -57,9 +57,24 @@ namespace Nexas.Api.Services
                 if (user == null || user.Identity?.IsAuthenticated == false)
                     return null;
 
-                return user.FindFirst("name")?.Value ??
-                       user.FindFirst(ClaimTypes.Name)?.Value ??
-                       user.FindFirst("given_name")?.Value;
+                var name = user.FindFirst("name")?.Value ??
+                           user.FindFirst(ClaimTypes.Name)?.Value ??
+                           user.FindFirst("given_name")?.Value ??
+                           user.FindFirst("preferred_username")?.Value ??
+                           user.FindFirst("unique_name")?.Value ??
+                           user.FindFirst("nickname")?.Value;
+
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    // Fallback para o prefixo do email se o token não tiver a claim de nome
+                    var email = Email;
+                    if (!string.IsNullOrWhiteSpace(email) && email.Contains("@"))
+                    {
+                        name = email.Split('@')[0];
+                    }
+                }
+
+                return name;
             }
         }
     }

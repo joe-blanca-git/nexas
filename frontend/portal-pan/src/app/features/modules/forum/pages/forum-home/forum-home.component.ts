@@ -58,6 +58,7 @@ export interface IForumStats {
 export class ForumHomeComponent implements OnInit {
 
   private forumService = inject(ForumService);
+  isSubmittingNewTopic: boolean = false;
 
   // ─── State ────────────────────────────────────────────────────────────────
   isLoading = true;
@@ -253,6 +254,7 @@ export class ForumHomeComponent implements OnInit {
     const cat = this.categories.find(c => c.name === this.newTopicCategory);
     
     if (cat) {
+      this.isSubmittingNewTopic = true;
       const cmd: CreateForumTopicCommand = {
         categoryId: cat.id,
         lessonId: this.newTopicLessonId || undefined,
@@ -269,6 +271,8 @@ export class ForumHomeComponent implements OnInit {
       } catch (err) {
         this.triggerToast('Erro ao criar tópico.');
         console.error(err);
+      } finally {
+        this.isSubmittingNewTopic = false;
       }
     }
   }

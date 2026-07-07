@@ -13,6 +13,10 @@ public class CreateForumTopicCommandValidator : AbstractValidator<CreateForumTop
             .NotEmpty().WithMessage("O título do tópico é obrigatório.")
             .MaximumLength(255).WithMessage("O título não pode exceder 255 caracteres.");
 
+        RuleFor(v => v.Subject)
+            .NotEmpty().WithMessage("O assunto do tópico é obrigatório.")
+            .MaximumLength(255).WithMessage("O assunto não pode exceder 255 caracteres.");
+
         RuleFor(v => v.Content)
             .NotEmpty().WithMessage("O conteúdo do tópico é obrigatório.");
     }

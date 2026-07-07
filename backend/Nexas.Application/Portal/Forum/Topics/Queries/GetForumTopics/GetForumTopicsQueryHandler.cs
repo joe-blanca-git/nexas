@@ -43,6 +43,7 @@ public class GetForumTopicsQueryHandler : IRequestHandler<GetForumTopicsQuery, L
             {
                 Id = t.Id,
                 Title = t.Title,
+                Subject = t.Subject,
                 Status = t.Status.ToString(),
                 CategoryName = t.Category.Name,
                 AuthorName = t.Author.FullName ?? "Anônimo",

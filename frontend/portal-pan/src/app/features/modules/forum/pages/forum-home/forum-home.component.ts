@@ -68,9 +68,11 @@ export class ForumHomeComponent implements OnInit {
 
   // ─── Modal State ──────────────────────────────────────────────────────────
   showNewTopicModal = false;
-  newTopicTitle = '';
-  newTopicCategory = '';
-  newTopicMessage = '';
+  newTopicCategory: string = '';
+  newTopicTitle: string = '';
+  newTopicSubject: string = '';
+  newTopicMessage: string = '';
+  newTopicLessonId: number | null = null;
   toastMessage = '';
   showToast = false;
 
@@ -229,9 +231,11 @@ export class ForumHomeComponent implements OnInit {
   // ─── New Topic Modal ──────────────────────────────────────────────────────
 
   openNewTopic(): void {
-    this.showNewTopicModal = true;
     this.newTopicTitle = '';
+    this.newTopicSubject = '';
     this.newTopicMessage = '';
+    this.newTopicLessonId = null;
+    this.showNewTopicModal = true;
   }
 
   closeNewTopic(): void {
@@ -240,8 +244,8 @@ export class ForumHomeComponent implements OnInit {
 
   async submitNewTopic(event: Event): Promise<void> {
     event.preventDefault();
-    if (!this.newTopicTitle.trim() || !this.newTopicMessage.trim()) {
-      this.triggerToast('Preencha o título e a mensagem do tópico.');
+    if (!this.newTopicTitle.trim() || !this.newTopicSubject.trim() || !this.newTopicMessage.trim()) {
+      this.triggerToast('Preencha o título, assunto e a mensagem do tópico.');
       return;
     }
 
@@ -250,7 +254,9 @@ export class ForumHomeComponent implements OnInit {
     if (cat) {
       const cmd: CreateForumTopicCommand = {
         categoryId: cat.id,
+        lessonId: this.newTopicLessonId || undefined,
         title: this.newTopicTitle,
+        subject: this.newTopicSubject,
         content: this.newTopicMessage
       };
 

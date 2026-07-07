@@ -8,6 +8,7 @@ public class ForumTopic : BaseEntity
     public int CategoryId { get; private set; }
     public int? LessonId { get; private set; }
     public string Title { get; private set; } = string.Empty;
+    public string Subject { get; private set; } = string.Empty;
     public string Content { get; private set; } = string.Empty;
     public int AuthorId { get; private set; }
     public ForumTopicStatus Status { get; private set; }
@@ -20,13 +21,14 @@ public class ForumTopic : BaseEntity
 
     private ForumTopic() { } // EF Core
 
-    public static ForumTopic Create(int categoryId, int? lessonId, string title, string content, int authorId)
+    public static ForumTopic Create(int categoryId, int? lessonId, string title, string subject, string content, int authorId)
     {
         return new ForumTopic
         {
             CategoryId = categoryId,
             LessonId = lessonId,
             Title = title,
+            Subject = subject,
             Content = content,
             AuthorId = authorId,
             Status = ForumTopicStatus.Open,

@@ -19,7 +19,7 @@ public class CreateForumTopicCommandHandler : IRequestHandler<CreateForumTopicCo
     {
         var currentUser = await _userContextService.GetCurrentUserAsync();
 
-        var topic = ForumTopic.Create(request.CategoryId, request.LessonId, request.Title, request.Content, currentUser.Id);
+        var topic = ForumTopic.Create(request.CategoryId, request.LessonId, request.Title, request.Subject, request.Content, currentUser.Id);
 
         _context.ForumTopics.Add(topic);
         await _context.SaveChangesAsync(cancellationToken);

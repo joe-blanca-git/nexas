@@ -24,6 +24,7 @@ export interface CreateForumTopicCommand {
   categoryId: number;
   lessonId?: number;
   title: string;
+  subject: string;
   content: string;
 }
 

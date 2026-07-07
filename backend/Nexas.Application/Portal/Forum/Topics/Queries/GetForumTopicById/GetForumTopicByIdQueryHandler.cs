@@ -31,6 +31,7 @@ public class GetForumTopicByIdQueryHandler : IRequestHandler<GetForumTopicByIdQu
         {
             Id = topic.Id,
             Title = topic.Title,
+            Subject = topic.Subject,
             Content = topic.Content,
             Status = topic.Status.ToString(),
             CategoryName = topic.Category.Name,

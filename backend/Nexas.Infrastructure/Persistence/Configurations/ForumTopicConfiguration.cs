@@ -16,6 +16,10 @@ public class ForumTopicConfiguration : IEntityTypeConfiguration<ForumTopic>
             .IsRequired()
             .HasMaxLength(255);
 
+        builder.Property(e => e.Subject)
+            .IsRequired()
+            .HasMaxLength(255);
+
         builder.Property(e => e.Content)
             .IsRequired()
             .HasColumnType("longtext");

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Nexas.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3749d81b3040d541e852336bc8404e6325b0a695")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e1f53a716042f4172c79e8c05d471098f6935ca8")]
 [assembly: System.Reflection.AssemblyProductAttribute("Nexas.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Nexas.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

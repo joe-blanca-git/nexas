@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Nexas.Application.Common.Interfaces;
 using System.Security.Claims;
 
@@ -7,10 +8,12 @@ namespace Nexas.Api.Services
     public class CurrentUserService : ICurrentUserService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ILogger<CurrentUserService> _logger;
 
-        public CurrentUserService(IHttpContextAccessor httpContextAccessor)
+        public CurrentUserService(IHttpContextAccessor httpContextAccessor, ILogger<CurrentUserService> logger)
         {
             _httpContextAccessor = httpContextAccessor;
+            _logger = logger;
         }
 
         public string? ExternalId
@@ -56,6 +59,12 @@ namespace Nexas.Api.Services
 
                 if (user == null || user.Identity?.IsAuthenticated == false)
                     return null;
+
+                _logger.LogInformation("CurrentUserService.FullName called. Claims available:");
+                foreach (var claim in user.Claims)
+                {
+                    _logger.LogInformation($"Claim Type: {claim.Type}, Value: {claim.Value}");
+                }
 
                 var name = user.FindFirst("name")?.Value ??
                            user.FindFirst(ClaimTypes.Name)?.Value ??

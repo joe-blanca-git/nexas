@@ -6,10 +6,12 @@ namespace Nexas.Application.Portal.Forum.Topics.Commands.ResolveForumTopic;
 public class ResolveForumTopicCommandHandler : IRequestHandler<ResolveForumTopicCommand>
 {
     private readonly INexasDbContext _context;
+    private readonly IUserContextService _userContextService;
 
-    public ResolveForumTopicCommandHandler(INexasDbContext context)
+    public ResolveForumTopicCommandHandler(INexasDbContext context, IUserContextService userContextService)
     {
         _context = context;
+        _userContextService = userContextService;
     }
 
     public async Task Handle(ResolveForumTopicCommand request, CancellationToken cancellationToken)
@@ -18,6 +20,10 @@ public class ResolveForumTopicCommandHandler : IRequestHandler<ResolveForumTopic
 
         if (topic == null)
             throw new Exception("Tópico não encontrado.");
+
+        var currentUser = await _userContextService.GetCurrentUserAsync();
+        if (topic.AuthorId != currentUser.Id)
+            throw new UnauthorizedAccessException("Somente o autor do tópico pode marcá-lo como resolvido.");
 
         topic.Resolve();
 

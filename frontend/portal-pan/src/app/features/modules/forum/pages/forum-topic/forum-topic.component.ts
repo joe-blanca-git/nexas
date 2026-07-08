@@ -112,6 +112,28 @@ export class ForumTopicComponent implements OnInit {
     }
   }
 
+  async resolveTopic() {
+    if (!this.topic) return;
+    try {
+      await this.forumService.resolveTopic(this.topic.id);
+      await this.loadTopicData();
+    } catch (error) {
+      console.error('Erro ao resolver tópico:', error);
+      alert('Não foi possível marcar como resolvido.');
+    }
+  }
+
+  async reopenTopic() {
+    if (!this.topic) return;
+    try {
+      await this.forumService.reopenTopic(this.topic.id);
+      await this.loadTopicData();
+    } catch (error) {
+      console.error('Erro ao reabrir tópico:', error);
+      alert('Não foi possível reabrir o tópico.');
+    }
+  }
+
   formatDate(dateString: string): string {
     const date = new Date(dateString);
     return new Intl.DateTimeFormat('pt-BR', {

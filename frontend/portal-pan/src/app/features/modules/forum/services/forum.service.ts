@@ -46,6 +46,7 @@ export interface IForumTopicDetailDto {
   lessonName?: string;
   createdAt: string;
   messages: IForumMessageDto[];
+  isOwn: boolean;
 }
 
 export interface ReplyForumTopicCommand {
@@ -122,13 +123,35 @@ export class ForumService extends BaseService {
     }
   }
 
-  async replyTopic(id: number, command: ReplyForumTopicCommand): Promise<{ id: number }> {
+  async replyTopic(topicId: number, command: ReplyForumTopicCommand): Promise<{ id: number }> {
     try {
-      let url = `${this.urlApiNexas}ForumTopics/${id}/reply`;
+      let url = `${this.urlApiNexas}ForumTopics/${topicId}/reply`;
       const response = await firstValueFrom(
         this.httpClient.post<{ id: number }>(url, command, this.GetAuthHeaderJson())
       );
       return this.extractData(response);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async resolveTopic(topicId: number): Promise<void> {
+    try {
+      let url = `${this.urlApiNexas}ForumTopics/${topicId}/resolve`;
+      await firstValueFrom(
+        this.httpClient.patch(url, null, this.GetAuthHeaderJson())
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async reopenTopic(topicId: number): Promise<void> {
+    try {
+      let url = `${this.urlApiNexas}ForumTopics/${topicId}/reopen`;
+      await firstValueFrom(
+        this.httpClient.patch(url, null, this.GetAuthHeaderJson())
+      );
     } catch (error) {
       throw error;
     }

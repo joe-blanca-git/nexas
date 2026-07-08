@@ -1,19 +1,5 @@
 <div class="animated-fade-in">
 
-  <div class="row mb-4 align-items-center">
-    <div class="col-12 col-md-8">
-     
-    </div>
-    <div class="col-12 col-md-4 mt-3 mt-md-0 d-flex justify-content-md-end">
-      <button class="btn btn-dark rounded-pill px-4 py-2 fw-bold d-flex align-items-center gap-2 shadow-sm"
-              style="font-size: 0.83rem;"
-              (click)="openNewTopic()">
-        <i class="fas fa-plus"></i> Novo Tópico
-      </button>
-    </div>
-  </div>
-
-
   <div class="row g-3 mb-4" *ngIf="isLoading">
     <div class="col-6 col-lg" *ngFor="let i of [1,2,3,4,5]">
       <div class="card border-0 rounded-4 shadow-sm p-3 skeleton-card">
@@ -109,7 +95,7 @@
                  style="font-size: 0.83rem;">
         </div>
       </div>
-      <div class="col-12 col-md-5">
+      <div class="col-12 col-md-3">
         <select class="form-select rounded-pill bg-light border-0 shadow-none py-2"
                 [(ngModel)]="selectedCategory"
                 (ngModelChange)="currentPage = 1"
@@ -117,6 +103,13 @@
           <option *ngFor="let opt of categoryOptions" [value]="opt">{{ opt }}</option>
         </select>
       </div>
+      <div class="col-12 col-md-2 d-flex justify-content-md-end">
+      <button class="btn btn-dark rounded-pill px-4 py-2 fw-bold d-flex align-items-center gap-2 shadow-sm"
+              style="font-size: 0.83rem;"
+              (click)="openNewTopic()">
+        <i class="fas fa-plus"></i> Novo Tópico
+      </button>
+    </div>
     </div>
   </div>
 
@@ -331,25 +324,14 @@
                name="topicTitle"
                style="font-size: 0.85rem;">
       </div>
-      <div class="row g-2 mb-3">
-        <div class="col-12 col-md-8">
-          <label class="form-label fw-semibold text-muted" style="font-size: 0.73rem; text-transform: uppercase; letter-spacing: 0.04rem;">Assunto</label>
-          <input type="text"
-                 class="form-control rounded-3 bg-light border-0 shadow-none py-2"
-                 placeholder="Qual o assunto principal?"
-                 [(ngModel)]="newTopicSubject"
-                 name="topicSubject"
-                 style="font-size: 0.85rem;">
-        </div>
-        <div class="col-12 col-md-4">
-          <label class="form-label fw-semibold text-muted" style="font-size: 0.73rem; text-transform: uppercase; letter-spacing: 0.04rem;">ID da Aula <span class="fw-normal text-muted" style="text-transform: none;">(Opcional)</span></label>
-          <input type="number"
-                 class="form-control rounded-3 bg-light border-0 shadow-none py-2"
-                 placeholder="Ex: 123"
-                 [(ngModel)]="newTopicLessonId"
-                 name="topicLessonId"
-                 style="font-size: 0.85rem;">
-        </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold text-muted" style="font-size: 0.73rem; text-transform: uppercase; letter-spacing: 0.04rem;">Assunto</label>
+        <input type="text"
+               class="form-control rounded-3 bg-light border-0 shadow-none py-2"
+               placeholder="Qual o assunto principal?"
+               [(ngModel)]="newTopicSubject"
+               name="topicSubject"
+               style="font-size: 0.85rem;">
       </div>
       <div class="mb-4">
         <label class="form-label fw-semibold text-muted" style="font-size: 0.73rem; text-transform: uppercase; letter-spacing: 0.04rem;">Mensagem</label>

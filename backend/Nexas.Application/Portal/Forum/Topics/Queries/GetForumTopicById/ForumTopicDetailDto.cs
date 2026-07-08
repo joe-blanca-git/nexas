@@ -13,4 +13,5 @@ public class ForumTopicDetailDto
     public DateTime CreatedAt { get; set; }
     
     public List<ForumMessageDto> Messages { get; set; } = new List<ForumMessageDto>();
+    public bool IsOwn { get; set; }
 }

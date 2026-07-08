@@ -74,7 +74,6 @@ export class ForumHomeComponent implements OnInit {
   newTopicTitle: string = '';
   newTopicSubject: string = '';
   newTopicMessage: string = '';
-  newTopicLessonId: number | null = null;
   toastMessage = '';
   showToast = false;
 
@@ -236,7 +235,6 @@ export class ForumHomeComponent implements OnInit {
     this.newTopicTitle = '';
     this.newTopicSubject = '';
     this.newTopicMessage = '';
-    this.newTopicLessonId = null;
     this.showNewTopicModal = true;
   }
 
@@ -257,7 +255,6 @@ export class ForumHomeComponent implements OnInit {
       this.isSubmittingNewTopic = true;
       const cmd: CreateForumTopicCommand = {
         categoryId: cat.id,
-        lessonId: this.newTopicLessonId || undefined,
         title: this.newTopicTitle,
         subject: this.newTopicSubject,
         content: this.newTopicMessage

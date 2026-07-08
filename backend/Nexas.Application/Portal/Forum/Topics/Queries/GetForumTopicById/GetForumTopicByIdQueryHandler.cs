@@ -7,10 +7,12 @@ namespace Nexas.Application.Portal.Forum.Topics.Queries.GetForumTopicById;
 public class GetForumTopicByIdQueryHandler : IRequestHandler<GetForumTopicByIdQuery, ForumTopicDetailDto>
 {
     private readonly INexasDbContext _context;
+    private readonly IUserContextService _userContextService;
 
-    public GetForumTopicByIdQueryHandler(INexasDbContext context)
+    public GetForumTopicByIdQueryHandler(INexasDbContext context, IUserContextService userContextService)
     {
         _context = context;
+        _userContextService = userContextService;
     }
 
     public async Task<ForumTopicDetailDto> Handle(GetForumTopicByIdQuery request, CancellationToken cancellationToken)
@@ -27,7 +29,7 @@ public class GetForumTopicByIdQueryHandler : IRequestHandler<GetForumTopicByIdQu
         if (topic == null)
             throw new Exception("Tópico não encontrado.");
 
-        return new ForumTopicDetailDto
+        var dto = new ForumTopicDetailDto
         {
             Id = topic.Id,
             Title = topic.Title,
@@ -44,7 +46,16 @@ public class GetForumTopicByIdQueryHandler : IRequestHandler<GetForumTopicByIdQu
                 Content = m.Content,
                 AuthorName = m.Author.FullName ?? "Anônimo",
                 CreatedAt = m.CreatedAt
-            }).ToList()
+            }).ToList(),
+            IsOwn = false // To be filled below
         };
+        
+        var currentUser = await _userContextService.GetCurrentUserAsync();
+        if (currentUser != null && topic.AuthorId == currentUser.Id)
+        {
+            dto.IsOwn = true;
+        }
+        
+        return dto;
     }
 }

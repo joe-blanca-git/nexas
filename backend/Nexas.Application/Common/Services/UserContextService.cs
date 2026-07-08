@@ -35,7 +35,7 @@ namespace Nexas.Application.Common.Services
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync(default);
             }
-            else if (string.IsNullOrEmpty(user.FullName) && !string.IsNullOrEmpty(_currentUserService.FullName))
+            else if (!string.IsNullOrWhiteSpace(_currentUserService.FullName) && user.FullName != _currentUserService.FullName)
             {
                 user.UpdateProfile(_currentUserService.FullName, user.CpfCnpj);
                 await _context.SaveChangesAsync(default);

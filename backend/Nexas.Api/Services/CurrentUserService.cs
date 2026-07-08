@@ -73,6 +73,12 @@ namespace Nexas.Api.Services
                            user.FindFirst("unique_name")?.Value ??
                            user.FindFirst("nickname")?.Value;
 
+                // Foolproof check for any claim that contains "name" as a fallback
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    name = user.Claims.FirstOrDefault(c => c.Type.ToLower().Contains("name") && !c.Type.ToLower().Contains("identifier"))?.Value;
+                }
+
                 if (string.IsNullOrWhiteSpace(name))
                 {
                     // Fallback para o prefixo do email se o token não tiver a claim de nome

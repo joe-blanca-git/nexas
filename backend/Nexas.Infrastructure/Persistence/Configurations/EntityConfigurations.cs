@@ -32,7 +32,10 @@ namespace Nexas.Infrastructure.Persistence.Configurations
             builder.Property(u => u.UpdatedAt)
                 .HasColumnName("UpdatedAt");
 
-            builder.Ignore(u => u.FullName);
+            builder.Property(u => u.FullName)
+                .HasColumnName("FullName")
+                .HasMaxLength(255);
+
             builder.Ignore(u => u.CpfCnpj);
             builder.Ignore(u => u.AsaasCustomerId);
         }

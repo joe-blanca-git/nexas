@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 // ─── Interfaces ────────────────────────────────────────────────────────────────
 
@@ -36,7 +37,7 @@ export interface ISupportChannel {
 @Component({
   selector: 'app-support-home',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './support-home.component.html',
   styleUrl: './support-home.component.scss'
 })
@@ -69,7 +70,6 @@ export class SupportHomeComponent implements OnInit {
         { id: 'Cursos', name: 'Cursos', icon: 'fa-book-open', color: '#6366f1' },
         { id: 'Certificados', name: 'Certificados', icon: 'fa-certificate', color: '#f59e0b' },
         { id: 'Conta', name: 'Conta', icon: 'fa-user-circle', color: '#8b5cf6' },
-        { id: 'Assinatura', name: 'Assinatura', icon: 'fa-crown', color: '#ec4899' },
         { id: 'Plataforma', name: 'Plataforma', icon: 'fa-desktop', color: '#06b6d4' }
       ];
 
@@ -78,7 +78,7 @@ export class SupportHomeComponent implements OnInit {
           id: 1,
           category: 'Pagamentos',
           question: 'Quais formas de pagamento são aceitas na plataforma?',
-          answer: 'Aceitamos cartão de crédito (Visa, Mastercard, Amex e Elo), cartão de débito, PIX e boleto bancário. Para assinaturas recorrentes, recomendamos o uso de cartão de crédito, pois a renovação é feita automaticamente.',
+          answer: 'Aceitamos cartão de crédito (Visa, Mastercard, Amex e Elo), cartão de débito, PIX e boleto bancário.',
           isOpen: false
         },
         {
@@ -89,31 +89,17 @@ export class SupportHomeComponent implements OnInit {
           isOpen: false
         },
         {
-          id: 3,
-          category: 'Assinatura',
-          question: 'Como cancelar minha assinatura Nexas Premium?',
-          answer: 'Para cancelar sua assinatura, acesse Financeiro > Assinatura Ativa > Gerenciar Assinatura > Cancelar. O cancelamento é imediato e você mantém o acesso até o final do período já pago. Não realizamos cobranças adicionais após o cancelamento.',
-          isOpen: false
-        },
-        {
-          id: 4,
-          category: 'Assinatura',
-          question: 'O que está incluído no plano Nexas Premium?',
-          answer: 'O Plano Premium inclui acesso ilimitado a todos os cursos da plataforma, suporte prioritário, certificados digitais verificáveis, downloads de material complementar, acesso antecipado a novos conteúdos e participação nos fóruns exclusivos de alunos premium.',
-          isOpen: false
-        },
-        {
           id: 5,
           category: 'Cursos',
           question: 'Posso acessar os cursos sem conexão com a internet?',
-          answer: 'No momento, o acesso aos cursos requer conexão com a internet. Estamos desenvolvendo uma funcionalidade de download offline que estará disponível em breve para assinantes Premium.',
+          answer: 'No momento, o acesso aos cursos requer conexão com a internet.',
           isOpen: false
         },
         {
           id: 6,
           category: 'Cursos',
           question: 'Os cursos possuem data de expiração para assistir?',
-          answer: 'Cursos comprados individualmente têm acesso vitalício — você pode assisti-los quantas vezes quiser, sem prazo de expiração. Assinantes Nexas Premium têm acesso a todos os cursos enquanto a assinatura estiver ativa.',
+          answer: 'Cursos têm acesso vitalício — você pode assisti-los quantas vezes quiser, sem prazo de expiração.',
           isOpen: false
         },
         {
@@ -182,8 +168,9 @@ export class SupportHomeComponent implements OnInit {
           isOnline: true,
           actionLabel: 'Acessar Fórum',
           actionHref: '/forum'
-        },
-        {
+        }
+        /*
+        ,{
           id: 'whatsapp',
           name: 'Suporte via WhatsApp',
           description: 'Converse com nosso assistente virtual 24h por dia para resolver dúvidas rápidas sobre a plataforma, pagamentos e acesso.',
@@ -194,6 +181,7 @@ export class SupportHomeComponent implements OnInit {
           actionLabel: 'Iniciar Conversa',
           actionHref: 'https://wa.me/5511900000000'
         }
+        */
       ];
 
       this.isLoading = false;

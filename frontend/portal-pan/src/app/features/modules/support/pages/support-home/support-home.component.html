@@ -1,41 +1,40 @@
-<!-- <div class="animated-fade-in">
+<div class="animated-fade-in">
 
 
-  <div class="support-hero rounded-5 p-4 p-md-5 mb-4 position-relative overflow-hidden"
+  <div class="support-hero rounded-4 p-3 p-md-4 mb-3 position-relative overflow-hidden"
        style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);">
     <div class="hero-circle hero-c1"></div>
     <div class="hero-circle hero-c2"></div>
 
     <div class="row align-items-center position-relative" style="z-index: 2;">
-      <div class="col-12 col-lg-7 text-center text-lg-start mb-4 mb-lg-0">
-        <span class="badge px-3 py-2 mb-3 fw-semibold text-uppercase"
-              style="background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.7); font-size: 0.68rem; letter-spacing: 0.06rem; border: 1px solid rgba(255,255,255,0.1);">
+      <div class="col-12 col-lg-7 text-center text-lg-start mb-3 mb-lg-0">
+        <span class="badge px-3 py-1.5 mb-2 fw-semibold text-uppercase"
+              style="background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.7); font-size: 0.65rem; letter-spacing: 0.06rem; border: 1px solid rgba(255,255,255,0.1);">
           <i class="fas fa-headset me-1"></i> Central de Ajuda & Suporte
         </span>
-        <h2 class="fw-extrabold text-white mb-2 leading-tight" style="font-size: 1.85rem; letter-spacing: -0.02rem;">
+        <h4 class="fw-extrabold text-white mb-1 leading-tight" style="font-size: 1.45rem; letter-spacing: -0.02rem;">
           Como podemos te ajudar?
-        </h2>
-        <p class="mb-0" style="color: rgba(255,255,255,0.55); font-size: 0.9rem; line-height: 1.6;">
-          Encontre respostas rápidas nas perguntas frequentes ou entre em contato com nossa equipe de suporte especializada.
+        </h4>
+        <p class="mb-0" style="color: rgba(255,255,255,0.55); font-size: 0.85rem; line-height: 1.5;">
+          Encontre respostas rápidas nas perguntas frequentes ou entre em contato com nossa equipe especializada.
         </p>
       </div>
 
       <div class="col-12 col-lg-5">
         <div class="position-relative">
-          <span class="position-absolute start-0 top-50 translate-middle-y ps-4 text-muted" style="font-size: 0.88rem; z-index: 2;">
+          <span class="position-absolute start-0 top-50 translate-middle-y ps-3 text-muted" style="font-size: 0.88rem; z-index: 2;">
             <i class="fas fa-search"></i>
           </span>
           <input type="text"
-                 class="form-control rounded-pill ps-5 py-3 border-0 shadow-lg hero-search"
+                 class="form-control rounded-pill ps-5 py-2 border-0 shadow-sm hero-search"
                  placeholder="Ex: como baixar meu certificado..."
                  [(ngModel)]="searchTerm"
                  style="font-size: 0.88rem; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);">
         </div>
-        <div class="d-flex flex-wrap gap-2 mt-3 justify-content-center justify-content-lg-start">
+        <div class="d-flex flex-wrap gap-2 mt-2 justify-content-center justify-content-lg-start">
           <span class="hero-quick-tag" (click)="searchTerm = 'certificado'">🎓 Certificados</span>
           <span class="hero-quick-tag" (click)="searchTerm = 'reembolso'">💳 Reembolso</span>
           <span class="hero-quick-tag" (click)="searchTerm = 'senha'">🔒 Senha</span>
-          <span class="hero-quick-tag" (click)="searchTerm = 'assinatura'">⭐ Assinatura</span>
         </div>
       </div>
     </div>
@@ -82,15 +81,28 @@
           <i class="fas fa-clock" style="font-size: 0.65rem;"></i>
           <span>{{ channel.responseTime }}</span>
         </div>
-        <a [href]="channel.actionHref"
-           class="btn btn-sm rounded-pill px-4 py-2 fw-bold d-flex align-items-center justify-content-center gap-2 channel-cta-btn"
-           [style.background]="channel.color + '12'"
-           [style.color]="channel.color"
-           [style.borderColor]="channel.color + '28'"
-           style="font-size: 0.78rem; border: 1px solid; transition: all 0.25s ease;"
-           target="_blank">
-          {{ channel.actionLabel }} <i class="fas fa-arrow-right" style="font-size: 0.65rem;"></i>
-        </a>
+        <ng-container *ngIf="!channel.actionHref.startsWith('/')">
+          <a [href]="channel.actionHref"
+             class="btn btn-sm rounded-pill px-4 py-2 fw-bold d-flex align-items-center justify-content-center gap-2 channel-cta-btn"
+             [style.background]="channel.color + '12'"
+             [style.color]="channel.color"
+             [style.borderColor]="channel.color + '28'"
+             style="font-size: 0.78rem; border: 1px solid; transition: all 0.25s ease;"
+             target="_blank">
+            {{ channel.actionLabel }} <i class="fas fa-arrow-right" style="font-size: 0.65rem;"></i>
+          </a>
+        </ng-container>
+        
+        <ng-container *ngIf="channel.actionHref.startsWith('/')">
+          <a [routerLink]="channel.actionHref"
+             class="btn btn-sm rounded-pill px-4 py-2 fw-bold d-flex align-items-center justify-content-center gap-2 channel-cta-btn"
+             [style.background]="channel.color + '12'"
+             [style.color]="channel.color"
+             [style.borderColor]="channel.color + '28'"
+             style="font-size: 0.78rem; border: 1px solid; transition: all 0.25s ease;">
+            {{ channel.actionLabel }} <i class="fas fa-arrow-right" style="font-size: 0.65rem;"></i>
+          </a>
+        </ng-container>
       </div>
     </div>
 
@@ -273,4 +285,4 @@
      style="background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px);">
   <i class="fas fa-check-circle text-success fs-5"></i>
   <span class="small fw-semibold">{{ toastMessage }}</span>
-</div> -->
+</div>

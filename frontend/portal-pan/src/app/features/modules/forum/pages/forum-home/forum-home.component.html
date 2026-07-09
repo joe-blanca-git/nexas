@@ -39,7 +39,9 @@
     </div>
 
     <div class="col-6 col-lg">
-      <div class="card border-0 rounded-4 shadow-sm forum-stat-card p-3 h-100">
+      <div class="card border-0 rounded-4 shadow-sm forum-stat-card p-3 h-100"
+           (click)="toggleUnansweredFilter()"
+           [ngStyle]="{'cursor': 'pointer', 'border': showOnlyUnanswered ? '2px solid #f59e0b' : 'none'}">
         <div class="d-flex align-items-center gap-2 mb-1">
           <div class="stat-icon-box" style="background: rgba(245,158,11,0.09); color: #f59e0b;">
             <i class="fas fa-question-circle" style="font-size: 0.85rem;"></i>
@@ -51,31 +53,6 @@
       </div>
     </div>
 
-    <div class="col-6 col-lg">
-      <div class="card border-0 rounded-4 shadow-sm forum-stat-card p-3 h-100">
-        <div class="d-flex align-items-center gap-2 mb-1">
-          <div class="stat-icon-box" style="background: rgba(236,72,153,0.09); color: #ec4899;">
-            <i class="fas fa-star" style="font-size: 0.85rem;"></i>
-          </div>
-          <span class="text-muted fw-semibold text-uppercase font-monospace" style="font-size: 0.65rem; letter-spacing: 0.04rem;">Favoritos</span>
-        </div>
-        <h4 class="fw-extrabold text-dark mb-0 mt-1" style="font-size: 1.3rem;">{{ stats.favoriteTopics }}</h4>
-        <span class="text-muted" style="font-size: 0.7rem;">salvos</span>
-      </div>
-    </div>
-
-    <div class="col-6 col-lg">
-      <div class="card border-0 rounded-4 shadow-sm forum-stat-card p-3 h-100">
-        <div class="d-flex align-items-center gap-2 mb-1">
-          <div class="stat-icon-box" style="background: rgba(139,92,246,0.09); color: #8b5cf6;">
-            <i class="fas fa-bell" style="font-size: 0.85rem;"></i>
-          </div>
-          <span class="text-muted fw-semibold text-uppercase font-monospace" style="font-size: 0.65rem; letter-spacing: 0.04rem;">Não Lidos</span>
-        </div>
-        <h4 class="fw-extrabold text-dark mb-0 mt-1" style="font-size: 1.3rem;">{{ stats.unreadReplies }}</h4>
-        <span class="text-muted" style="font-size: 0.7rem;">notificações</span>
-      </div>
-    </div>
 
   </div>
 

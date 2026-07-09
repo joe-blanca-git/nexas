@@ -4,6 +4,15 @@
         <name>Nexas.Application</name>
     </assembly>
     <members>
+        <member name="M:Nexas.Application.Common.Interfaces.IBunnyNetService.GenerateSignedVideoUrl(System.String,System.String,System.Int32)">
+            <summary>
+            Generates a signed URL for a Bunny.net stream video using Token Authentication.
+            </summary>
+            <param name="libraryId">The Bunny.net Library ID.</param>
+            <param name="videoId">The Bunny.net Video ID.</param>
+            <param name="expirationMinutes">Expiration time in minutes (default 180).</param>
+            <returns>A signed URL string, or null if parameters are invalid.</returns>
+        </member>
         <member name="T:Nexas.Application.Courses.Commands.CreateCourse.CreateCourseCommand">
             <summary>
             Comando para criação de um novo curso completo com módulos e aulas.

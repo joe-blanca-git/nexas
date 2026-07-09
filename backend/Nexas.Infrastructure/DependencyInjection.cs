@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Nexas.Application.Common.Interfaces;
 using Nexas.Infrastructure.Persistence;
 using Nexas.Infrastructure.ExternalServices.Asaas;
+using Nexas.Infrastructure.Services;
 
 namespace Nexas.Infrastructure
 {
@@ -27,6 +28,8 @@ namespace Nexas.Infrastructure
                 client.BaseAddress = new Uri(baseUrl);
                 client.DefaultRequestHeaders.UserAgent.ParseAdd("Nexas.Backend/1.0");
             });
+            
+            services.AddScoped<IBunnyNetService, BunnyNetService>();
                                 
             return services;
         }

@@ -135,11 +135,12 @@ export class ForumHomeComponent implements OnInit {
     };
   }
 
-  mapTopic(dto: IForumTopicSummaryDto): IForumTopicUI {
-    let status: TopicStatus = dto.status === 'Resolved' ? 'Resolvido' : (dto.repliesCount > 0 ? 'Em andamento' : 'Sem resposta');
+  mapTopic(dto: any): IForumTopicUI {
+    const repliesCount = dto.repliesCount || dto.replyCount || 0;
+    let status: TopicStatus = dto.status === 'Resolved' ? 'Resolvido' : (repliesCount > 0 ? 'Em andamento' : 'Sem resposta');
     
     const parts = (dto.authorName || 'User').split(' ');
-    const initials = parts.slice(0, 2).map(n => n[0]).join('').toUpperCase();
+    const initials = parts.slice(0, 2).map((n: string) => n[0]).join('').toUpperCase();
     const isUnread = false; 
     const isOwn = false; 
 
@@ -152,21 +153,21 @@ export class ForumHomeComponent implements OnInit {
       authorColor: '#6366f1',
       title: dto.title,
       preview: '',
-      replyCount: dto.repliesCount,
+      replyCount: repliesCount,
       viewCount: 0, 
       date: new Date(dto.createdAt).toLocaleDateString(),
       status: status,
       isUnread: isUnread,
       isOwn: isOwn,
-      hasPendingReplies: dto.repliesCount > 0 && status !== 'Resolvido'
+      hasPendingReplies: repliesCount > 0 && status !== 'Resolvido'
     };
   }
 
   calculateStats(): void {
     this.stats = {
         totalTopics: this.topics.length,
-        totalReplies: this.topics.reduce((s, t) => s + t.replyCount, 0),
-        unansweredTopics: this.topics.filter(t => t.status === 'Sem resposta').length,
+        totalReplies: this.topics.reduce((s, t) => s + (t.replyCount || 0), 0),
+        unansweredTopics: this.topics.filter(t => t.replyCount === 0).length,
         favoriteTopics: 0,
         unreadReplies: 0
     };
@@ -177,9 +178,23 @@ export class ForumHomeComponent implements OnInit {
   }
 
   // ─── Filtering ────────────────────────────────────────────────────────────
+  
+  showOnlyUnanswered = false;
+
+  toggleUnansweredFilter(): void {
+    this.showOnlyUnanswered = !this.showOnlyUnanswered;
+    if (this.showOnlyUnanswered && this.activeTab === 'forums') {
+      this.activeTab = 'recent'; // Muda para aba de lista para visualizar
+    }
+    this.currentPage = 1;
+  }
 
   get filteredTopics(): IForumTopicUI[] {
     let list = this.topics;
+
+    if (this.showOnlyUnanswered) {
+      list = list.filter(t => t.replyCount === 0);
+    }
 
     if (this.activeTab === 'mine') {
       list = list.filter(t => t.isOwn);

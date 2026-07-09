@@ -47,7 +47,7 @@ public class CourseLessonDto
     public string Title { get; set; } = string.Empty;
     public string? Description { get; set; }
     public string? Duration { get; set; }
-    public string? IdBunny { get; set; }
+    public string? VideoUrl { get; set; }
     public int Order { get; set; }
     public bool IsCompleted { get; set; }
 }

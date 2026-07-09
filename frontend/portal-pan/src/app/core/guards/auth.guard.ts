@@ -1,4 +1,5 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import {
   ActivatedRouteSnapshot,
   Router,
@@ -18,6 +19,7 @@ export class AuthGuardService {
   private stateUtil = inject(StateUtil);
   private menuService = inject(MenuService);
   private authService = inject(AuthService);
+  private platformId = inject(PLATFORM_ID);
 
   constructor(
     private router: Router,
@@ -33,7 +35,9 @@ export class AuthGuardService {
 
     if (isLoggedIn && !this.authService.isTokenValid()) {      
       this.authService.logOut();
-      this.router.navigate(['/auth/login']);
+      if (isPlatformBrowser(this.platformId)) {
+        this.router.navigate(['/auth/login']);
+      }
       return false;
     }
 
@@ -43,7 +47,9 @@ export class AuthGuardService {
     }
 
     if (!isLoggedIn && !isAuthForm) {
-      this.router.navigate(['/auth/login']);
+      if (isPlatformBrowser(this.platformId)) {
+        this.router.navigate(['/auth/login']);
+      }
       return false;
     }
 

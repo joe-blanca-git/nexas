@@ -10,11 +10,13 @@ public class GetCourseDetailQueryHandler : IRequestHandler<GetCourseDetailQuery,
 {
     private readonly INexasDbContext _context;
     private readonly IUserContextService _userContextService;
+    private readonly IBunnyNetService _bunnyNetService;
 
-    public GetCourseDetailQueryHandler(INexasDbContext context, IUserContextService userContextService)
+    public GetCourseDetailQueryHandler(INexasDbContext context, IUserContextService userContextService, IBunnyNetService bunnyNetService)
     {
         _context = context;
         _userContextService = userContextService;
+        _bunnyNetService = bunnyNetService;
     }
 
     public async Task<GetCourseDetailResponseDto?> Handle(GetCourseDetailQuery request, CancellationToken cancellationToken)
@@ -87,7 +89,7 @@ public class GetCourseDetailQueryHandler : IRequestHandler<GetCourseDetailQuery,
                     Title = lesson.Name,
                     Description = lesson.Description,
                     Duration = lesson.DurationSeconds.HasValue ? $"{lesson.DurationSeconds / 60}m {lesson.DurationSeconds % 60}s" : null,
-                    IdBunny = lesson.BunnyVideoId,
+                    VideoUrl = _bunnyNetService.GenerateSignedVideoUrl(course.BunnyLibraryId, lesson.BunnyVideoId),
                     Order = globalLessonOrder++,
                     IsCompleted = completedLessonIds.Contains(lesson.Id)
                 });

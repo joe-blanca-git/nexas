@@ -9,7 +9,7 @@ export interface Lesson {
   title: string;
   description: string;
   duration: string;
-  idBunny: string;
+  videoUrl?: string;
   isCompleted: boolean;
 }
 
@@ -18,7 +18,7 @@ export interface Module {
   title: string;
   description: string;
   lessons: Lesson[];
-  isExpanded?: boolean; // For accordion UI state
+  isExpanded?: boolean;
 }
 
 export interface Course {
@@ -71,11 +71,11 @@ export class LessonViewerComponent implements OnInit {
         description: 'Introdução ao maquinário e segurança.',
         isExpanded: true,
         lessons: [
-          { id: 1, title: 'Introdução à Segurança', description: 'Regras de segurança no campo e uso de EPIs.', duration: '12:30', idBunny: 'video-sec-01', isCompleted: false },
-          { id: 2, title: 'Reconhecimento do Painel', description: 'Entendendo os indicadores do painel principal.', duration: '15:45', idBunny: 'video-sec-02', isCompleted: false },
-          { id: 3, title: 'Inspeção Diária', description: 'O que checar antes de dar a partida.', duration: '08:20', idBunny: 'video-sec-03', isCompleted: false },
-          { id: 4, title: 'Partida e Aquecimento', description: 'Procedimentos corretos para vida útil do motor.', duration: '10:15', idBunny: 'video-sec-04', isCompleted: false },
-          { id: 5, title: 'Prática: Primeira Condução', description: 'Movimentos básicos e frenagem.', duration: '22:00', idBunny: 'video-sec-05', isCompleted: false }
+          { id: 1, title: 'Introdução à Segurança', description: 'Regras de segurança no campo e uso de EPIs.', duration: '12:30', videoUrl: 'https://iframe.mediadelivery.net/embed/dummy/video-sec-01?autoplay=false', isCompleted: false },
+          { id: 2, title: 'Reconhecimento do Painel', description: 'Entendendo os indicadores do painel principal.', duration: '15:45', videoUrl: 'https://iframe.mediadelivery.net/embed/dummy/video-sec-02?autoplay=false', isCompleted: false },
+          { id: 3, title: 'Inspeção Diária', description: 'O que checar antes de dar a partida.', duration: '08:20', videoUrl: 'https://iframe.mediadelivery.net/embed/dummy/video-sec-03?autoplay=false', isCompleted: false },
+          { id: 4, title: 'Partida e Aquecimento', description: 'Procedimentos corretos para vida útil do motor.', duration: '10:15', videoUrl: 'https://iframe.mediadelivery.net/embed/dummy/video-sec-04?autoplay=false', isCompleted: false },
+          { id: 5, title: 'Prática: Primeira Condução', description: 'Movimentos básicos e frenagem.', duration: '22:00', videoUrl: 'https://iframe.mediadelivery.net/embed/dummy/video-sec-05?autoplay=false', isCompleted: false }
         ]
       },
       {
@@ -84,12 +84,12 @@ export class LessonViewerComponent implements OnInit {
         description: 'Entendendo bombas, mangueiras e pistões.',
         isExpanded: false,
         lessons: [
-          { id: 6, title: 'Bomba Hidráulica Principal', description: 'Como funciona a bomba de engrenagem.', duration: '18:10', idBunny: 'video-hid-01', isCompleted: false },
-          { id: 7, title: 'Comandos Hidráulicos', description: 'Operando o joystick e válvulas direcionais.', duration: '25:30', idBunny: 'video-hid-02', isCompleted: false },
-          { id: 8, title: 'Manutenção de Mangueiras', description: 'Identificando vazamentos e desgastes.', duration: '14:20', idBunny: 'video-hid-03', isCompleted: false },
-          { id: 9, title: 'Troca de Fluido e Filtros', description: 'Procedimento correto para evitar contaminação.', duration: '30:45', idBunny: 'video-hid-04', isCompleted: false },
-          { id: 10, title: 'Prática: Engate de Implementos', description: 'Acoplamento seguro de implementos.', duration: '20:15', idBunny: 'video-hid-05', isCompleted: false },
-          { id: 11, title: 'Diagnóstico de Falhas Hidráulicas', description: 'Problemas comuns e soluções.', duration: '16:00', idBunny: 'video-hid-06', isCompleted: false }
+          { id: 6, title: 'Bomba Hidráulica Principal', description: 'Como funciona a bomba de engrenagem.', duration: '18:10', videoUrl: 'https://iframe.mediadelivery.net/embed/dummy/video-hid-01?autoplay=false', isCompleted: false },
+          { id: 7, title: 'Comandos Hidráulicos', description: 'Operando o joystick e válvulas direcionais.', duration: '25:30', videoUrl: 'https://iframe.mediadelivery.net/embed/dummy/video-hid-02?autoplay=false', isCompleted: false },
+          { id: 8, title: 'Manutenção de Mangueiras', description: 'Identificando vazamentos e desgastes.', duration: '14:20', videoUrl: 'https://iframe.mediadelivery.net/embed/dummy/video-hid-03?autoplay=false', isCompleted: false },
+          { id: 9, title: 'Troca de Fluido e Filtros', description: 'Procedimento correto para evitar contaminação.', duration: '30:45', videoUrl: 'https://iframe.mediadelivery.net/embed/dummy/video-hid-04?autoplay=false', isCompleted: false },
+          { id: 10, title: 'Prática: Engate de Implementos', description: 'Acoplamento seguro de implementos.', duration: '20:15', videoUrl: 'https://iframe.mediadelivery.net/embed/dummy/video-hid-05?autoplay=false', isCompleted: false },
+          { id: 11, title: 'Diagnóstico de Falhas Hidráulicas', description: 'Problemas comuns e soluções.', duration: '16:00', videoUrl: 'https://iframe.mediadelivery.net/embed/dummy/video-hid-06?autoplay=false', isCompleted: false }
         ]
       },
       {
@@ -98,11 +98,11 @@ export class LessonViewerComponent implements OnInit {
         description: 'Tecnologia embarcada e mapeamento.',
         isExpanded: false,
         lessons: [
-          { id: 12, title: 'Configuração do Monitor', description: 'Ajustes iniciais e criação de fazenda/talhão.', duration: '21:10', idBunny: 'video-gps-01', isCompleted: false },
-          { id: 13, title: 'Calibração de Piloto Automático', description: 'Ajuste de sensibilidade e rota.', duration: '19:40', idBunny: 'video-gps-02', isCompleted: false },
-          { id: 14, title: 'Linhas AB e Contornos', description: 'Criando diferentes tipos de linhas de orientação.', duration: '24:15', idBunny: 'video-gps-03', isCompleted: false },
-          { id: 15, title: 'Mapeamento de Colheita', description: 'Configurando sensores de produtividade.', duration: '28:30', idBunny: 'video-gps-04', isCompleted: false },
-          { id: 16, title: 'Exportação de Dados', description: 'Extraindo mapas via pendrive ou nuvem.', duration: '11:50', idBunny: 'video-gps-05', isCompleted: false }
+          { id: 12, title: 'Configuração do Monitor', description: 'Ajustes iniciais e criação de fazenda/talhão.', duration: '21:10', videoUrl: 'https://iframe.mediadelivery.net/embed/dummy/video-gps-01?autoplay=false', isCompleted: false },
+          { id: 13, title: 'Calibração de Piloto Automático', description: 'Ajuste de sensibilidade e rota.', duration: '19:40', videoUrl: 'https://iframe.mediadelivery.net/embed/dummy/video-gps-02?autoplay=false', isCompleted: false },
+          { id: 14, title: 'Linhas AB e Contornos', description: 'Criando diferentes tipos de linhas de orientação.', duration: '24:15', videoUrl: 'https://iframe.mediadelivery.net/embed/dummy/video-gps-03?autoplay=false', isCompleted: false },
+          { id: 15, title: 'Mapeamento de Colheita', description: 'Configurando sensores de produtividade.', duration: '28:30', videoUrl: 'https://iframe.mediadelivery.net/embed/dummy/video-gps-04?autoplay=false', isCompleted: false },
+          { id: 16, title: 'Exportação de Dados', description: 'Extraindo mapas via pendrive ou nuvem.', duration: '11:50', videoUrl: 'https://iframe.mediadelivery.net/embed/dummy/video-gps-05?autoplay=false', isCompleted: false }
         ]
       },
       {
@@ -111,11 +111,11 @@ export class LessonViewerComponent implements OnInit {
         description: 'Evite quebras e maximize o tempo de máquina.',
         isExpanded: false,
         lessons: [
-          { id: 17, title: 'Sistema de Injeção Eletrônica', description: 'Cuidados com filtros e sensores.', duration: '17:30', idBunny: 'video-manut-01', isCompleted: false },
-          { id: 18, title: 'Arrefecimento do Motor', description: 'Limpeza de radiadores e aditivos.', duration: '15:20', idBunny: 'video-manut-02', isCompleted: false },
-          { id: 19, title: 'Transmissão e Eixos', description: 'Lubrificação correta de pontos críticos.', duration: '22:10', idBunny: 'video-manut-03', isCompleted: false },
-          { id: 20, title: 'Sistema Elétrico Base', description: 'Teste de baterias e alternador.', duration: '19:05', idBunny: 'video-manut-04', isCompleted: false },
-          { id: 21, title: 'Prática: Revisão de 500 horas', description: 'O que fazer na revisão principal.', duration: '45:00', idBunny: 'video-manut-05', isCompleted: false }
+          { id: 17, title: 'Sistema de Injeção Eletrônica', description: 'Cuidados com filtros e sensores.', duration: '17:30', videoUrl: 'https://iframe.mediadelivery.net/embed/dummy/video-manut-01?autoplay=false', isCompleted: false },
+          { id: 18, title: 'Arrefecimento do Motor', description: 'Limpeza de radiadores e aditivos.', duration: '15:20', videoUrl: 'https://iframe.mediadelivery.net/embed/dummy/video-manut-02?autoplay=false', isCompleted: false },
+          { id: 19, title: 'Transmissão e Eixos', description: 'Lubrificação correta de pontos críticos.', duration: '22:10', videoUrl: 'https://iframe.mediadelivery.net/embed/dummy/video-manut-03?autoplay=false', isCompleted: false },
+          { id: 20, title: 'Sistema Elétrico Base', description: 'Teste de baterias e alternador.', duration: '19:05', videoUrl: 'https://iframe.mediadelivery.net/embed/dummy/video-manut-04?autoplay=false', isCompleted: false },
+          { id: 21, title: 'Prática: Revisão de 500 horas', description: 'O que fazer na revisão principal.', duration: '45:00', videoUrl: 'https://iframe.mediadelivery.net/embed/dummy/video-manut-05?autoplay=false', isCompleted: false }
         ]
       }
     ]
@@ -148,9 +148,10 @@ export class LessonViewerComponent implements OnInit {
     this.currentLesson = lesson;
     this.currentModule = module;
     
-    // Configura a URL segura para o iframe
-    const baseUrl = 'https://iframe.mediadelivery.net/embed/LIBRARY_ID/';
-    this.safeVideoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`${baseUrl}${lesson.idBunny}?autoplay=false`);
+    // Configura a URL segura para o iframe diretamente do videoUrl
+    if (lesson.videoUrl) {
+      this.safeVideoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(lesson.videoUrl);
+    }
 
     // Simula carregamento de novo vídeo
     this.isVideoLoading = true;

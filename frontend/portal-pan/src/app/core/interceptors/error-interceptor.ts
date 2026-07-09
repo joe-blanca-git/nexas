@@ -18,7 +18,8 @@ import {
   HttpRequest,
   HttpResponse,
 } from '@angular/common/http';
-import { inject } from '@angular/core';
+import { inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -35,6 +36,7 @@ export const errorInterceptor: HttpInterceptorFn = (
   const toastService = inject(ToastService);
   const stateUtil = inject(StateUtil);
   const authUtil = inject(AuthUtil);
+  const platformId = inject(PLATFORM_ID);
 
   return next(req).pipe(
     map((event: HttpEvent<any>) => {
@@ -102,11 +104,13 @@ export const errorInterceptor: HttpInterceptorFn = (
         //erro de autenticação
         if (err.status === 401) {
           const msg = err.error?.message || 'Seu acesso expirou, por favor faça Login novamente!';
-          toastService.error(msg, 5000);
-          stateUtil.clearState();
-          authUtil.removeCookieAuth();
-          sessionStorage.removeItem('nexas_user');
-          router.navigate(['/auth/login']);
+          if (isPlatformBrowser(platformId)) {
+            toastService.error(msg, 5000);
+            stateUtil.clearState();
+            authUtil.removeCookieAuth();
+            sessionStorage.removeItem('nexas_user');
+            router.navigate(['/auth/login']);
+          }
         }
 
         //erro: Proibido (Usuário conhecido, mas sem permissão)

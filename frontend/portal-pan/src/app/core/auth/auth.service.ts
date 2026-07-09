@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, Injector } from '@angular/core';
+import { inject, Injectable, Injector, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { StateUtil, UserState } from '../utils/UserState.util';
 import { BaseService } from '../services/base.service';
@@ -13,6 +14,7 @@ export class AuthService extends BaseService {
   private http = inject(HttpClient);
   private router = inject(Router);
   private stateUtil = inject(StateUtil);
+  private platformId = inject(PLATFORM_ID);
   private user: UserLogedModel | null = null;
 
   constructor(protected override injector: Injector) {
@@ -37,12 +39,18 @@ export class AuthService extends BaseService {
   async logOut() {
     this.authUtil.removeCookieAuth();
     this.stateUtil.clearState();
-    sessionStorage.removeItem('nexas_user');
+    if (isPlatformBrowser(this.platformId)) {
+      sessionStorage.removeItem('nexas_user');
+      await this.router.navigate(['/auth/login']);
+    }
     this.user = null;
-    await this.router.navigate(['/auth/login']);
   }
 
   async rehydrateUserState(): Promise<boolean> {
+    if (!isPlatformBrowser(this.platformId)) {
+      return true; // Skip hydrating user on server to prevent errors
+    }
+
     const token = this.authUtil.getCookieAuth();
 
     if (!token) return false;

@@ -32,9 +32,9 @@
         </iframe>
         
         <!-- Fallback mock visual if iframe fails or is empty -->
-        <div class="video-placeholder" *ngIf="!currentLesson.idBunny">
-          <i class="bi bi-play-circle-fill"></i>
-          <p>ID do Vídeo: {{ currentLesson.idBunny || 'N/A' }}</p>
+        <div class="video-placeholder" *ngIf="!currentLesson.videoUrl">
+          <i class="fas fa-video-slash"></i>
+          <p>URL do Vídeo: {{ currentLesson.videoUrl || 'N/A' }}</p>
         </div>
       </div>
 

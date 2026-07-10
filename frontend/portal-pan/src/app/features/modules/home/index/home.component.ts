@@ -396,6 +396,13 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     if (typeof window !== 'undefined') {
+      // Carrega o estado salvo do cache (localStorage)
+      const savedSidebarState = localStorage.getItem('sidebarCollapsed');
+      if (savedSidebarState !== null) {
+        this.sidebarCollapsed = JSON.parse(savedSidebarState);
+      }
+
+      // Em telas menores, garantimos que comece fechada por padrão
       if (window.innerWidth < 992) {
         this.sidebarCollapsed = true;
       }
@@ -434,6 +441,9 @@ export class HomeComponent implements OnInit {
 
   toggleSidebar() {
     this.sidebarCollapsed = !this.sidebarCollapsed;
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('sidebarCollapsed', JSON.stringify(this.sidebarCollapsed));
+    }
   }
 
   setActiveTab(tab: string) {

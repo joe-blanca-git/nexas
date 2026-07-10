@@ -1,7 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { CoursesService } from '../../services/courses.service';
+import { ForumService, CreateForumTopicCommand, IForumCategoryDto, IForumTopicSummaryDto } from '../../../forum/services/forum.service';
+import { BreadcrumbService } from '../../../../../shared/components/breadcrumb/breadcrumb.service';
+import { Breadcrumb } from '../../../../../shared/components/breadcrumb/breadcrumb.component';
 
 // --- Interfaces ---
 export interface Lesson {
@@ -34,17 +39,19 @@ export interface ForumComment {
   authorName: string;
   avatar: string;
   content: string;
+  subject?: string;
   date: string;
+  repliesCount: number;
 }
 
 @Component({
   selector: 'app-lesson-viewer',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './lesson-viewer.component.html',
   styleUrls: ['./lesson-viewer.component.scss']
 })
-export class LessonViewerComponent implements OnInit {
+export class LessonViewerComponent implements OnInit, OnDestroy {
   
   // --- Propriedades de Estado ---
   course!: Course;
@@ -53,11 +60,28 @@ export class LessonViewerComponent implements OnInit {
   comments: ForumComment[] = [];
   
   // Controle de interface
-  newCommentText: string = '';
   isVideoLoading: boolean = true;
   safeVideoUrl!: SafeResourceUrl;
 
-  constructor(private sanitizer: DomSanitizer) {}
+  // --- Modal Novo Tópico ---
+  showNewTopicModal = false;
+  newTopicCategory: string = '';
+  newTopicTitle: string = '';
+  newTopicSubject: string = '';
+  newTopicMessage: string = '';
+  isSubmittingNewTopic = false;
+  showToast = false;
+  toastMessage = '';
+  categories: { name: string, id: number }[] = [];
+
+  constructor(
+    private sanitizer: DomSanitizer,
+    private route: ActivatedRoute,
+    private router: Router,
+    private coursesService: CoursesService,
+    private breadcrumbService: BreadcrumbService,
+    private forumService: ForumService
+  ) {}
 
   // --- Dados Mocados ---
   private readonly MOCK_COURSE: Course = {
@@ -122,19 +146,75 @@ export class LessonViewerComponent implements OnInit {
   };
 
   private readonly MOCK_COMMENTS: ForumComment[] = [
-    { id: 1, lessonId: 1, authorName: 'Carlos Silva', avatar: 'https://i.pravatar.cc/150?u=1', content: 'Muito boa essa introdução! Sempre tive dúvida sobre o momento certo de usar cada EPI.', date: '2 dias atrás' },
-    { id: 2, lessonId: 1, authorName: 'Ana Paula', avatar: 'https://i.pravatar.cc/150?u=2', content: 'Excelente didática, parabéns.', date: '1 dia atrás' },
-    { id: 3, lessonId: 2, authorName: 'Roberto Marcos', avatar: 'https://i.pravatar.cc/150?u=3', content: 'O painel do meu trator é um pouco diferente, mas os símbolos são iguais.', date: 'Ontem' },
-    { id: 4, lessonId: 6, authorName: 'João Ferreira', avatar: 'https://i.pravatar.cc/150?u=4', content: 'Qual o óleo mais recomendado para tratores de grande porte?', date: '3 horas atrás' }
+    { id: 1, lessonId: 1, authorName: 'Carlos Silva', avatar: 'https://i.pravatar.cc/150?u=1', content: 'Muito boa essa introdução! Sempre tive dúvida sobre o momento certo de usar cada EPI.', subject: 'Dúvida sobre EPIs', date: '2 dias atrás', repliesCount: 3 },
+    { id: 2, lessonId: 1, authorName: 'Ana Paula', avatar: 'https://i.pravatar.cc/150?u=2', content: 'Excelente didática, parabéns.', subject: 'Feedback', date: '1 dia atrás', repliesCount: 0 },
+    { id: 3, lessonId: 2, authorName: 'Roberto Marcos', avatar: 'https://i.pravatar.cc/150?u=3', content: 'O painel do meu trator é um pouco diferente, mas os símbolos são iguais.', subject: 'Painel do trator', date: 'Ontem', repliesCount: 1 },
+    { id: 4, lessonId: 6, authorName: 'João Ferreira', avatar: 'https://i.pravatar.cc/150?u=4', content: 'Qual o óleo mais recomendado para tratores de grande porte?', subject: 'Recomendação de Óleo', date: '3 horas atrás', repliesCount: 5 }
   ];
 
   // --- Lifecycle ---
-  ngOnInit(): void {
-    // Inicializar estado com o mock
-    this.course = JSON.parse(JSON.stringify(this.MOCK_COURSE)); // Clone profundo
-    
-    // Selecionar primeira aula do primeiro módulo
-    if (this.course.modules.length > 0 && this.course.modules[0].lessons.length > 0) {
+  async ngOnInit(): Promise<void> {
+    const courseIdParam = this.route.snapshot.paramMap.get('courseId');
+    const lessonIdParam = this.route.snapshot.queryParamMap.get('lessonId');
+
+    // Carregar categorias do fórum para o modal
+    try {
+      const cats = await this.forumService.getCategories();
+      this.categories = cats.map(c => ({ name: c.name, id: c.id }));
+      if (this.categories.length > 0) {
+        this.newTopicCategory = this.categories[0].name;
+      }
+    } catch (e) {
+      console.error('Erro ao carregar categorias do fórum', e);
+    }
+
+    if (courseIdParam) {
+      await this.loadRealCourse(+courseIdParam, lessonIdParam ? +lessonIdParam : null);
+    } else {
+      // Fallback para mock se não houver ID (para testes isolados)
+      this.course = JSON.parse(JSON.stringify(this.MOCK_COURSE));
+      this.initInitialLesson();
+    }
+  }
+
+  ngOnDestroy(): void {
+    // Limpar o breadcrumb customizado ao sair
+    this.breadcrumbService.setBreadcrumbs(null);
+  }
+
+  private async loadRealCourse(courseId: number, lessonIdToSelect: number | null): Promise<void> {
+    this.isVideoLoading = true;
+    try {
+      this.course = await this.coursesService.getCourseDetail(courseId);
+      
+      if (!this.course || !this.course.modules || this.course.modules.length === 0) {
+        return;
+      }
+
+      if (lessonIdToSelect) {
+        // Encontrar a aula solicitada
+        for (const module of this.course.modules) {
+          const lesson = module.lessons.find((l: Lesson) => l.id === lessonIdToSelect);
+          if (lesson) {
+            this.currentModule = module;
+            this.setCurrentLesson(lesson, module);
+            return;
+          }
+        }
+      }
+      
+      // Se não houver aula específica ou não encontrou, seleciona a primeira
+      this.initInitialLesson();
+
+    } catch (error) {
+      console.error('Erro ao carregar curso no viewer:', error);
+    } finally {
+      this.isVideoLoading = false;
+    }
+  }
+
+  private initInitialLesson(): void {
+    if (this.course && this.course.modules.length > 0 && this.course.modules[0].lessons.length > 0) {
       this.currentModule = this.course.modules[0];
       this.setCurrentLesson(this.course.modules[0].lessons[0], this.course.modules[0]);
     }
@@ -163,7 +243,18 @@ export class LessonViewerComponent implements OnInit {
     // (Neste design, manteremos apenas o módulo atual aberto para focar na aula)
     this.course.modules.forEach(m => m.isExpanded = (m.id === module.id));
 
+    this.updateBreadcrumb();
     this.loadForum();
+  }
+
+  private updateBreadcrumb(): void {
+    const breadcrumbs: Breadcrumb[] = [
+      { label: 'Home', url: '/' },
+      { label: 'Cursos', url: '/courses' },
+      { label: this.course.title, url: `/courses/course-detail/${this.course.id}` },
+      { label: this.currentLesson.title, url: `/courses/lesson/${this.course.id}?lessonId=${this.currentLesson.id}` }
+    ];
+    this.breadcrumbService.setBreadcrumbs(breadcrumbs);
   }
 
   goToNextLesson(): void {
@@ -238,32 +329,79 @@ export class LessonViewerComponent implements OnInit {
     return module.lessons.filter(l => l.isCompleted).length;
   }
 
-  addComment(): void {
-    if (!this.newCommentText.trim()) return;
+  // --- Fórum ---
+  
+  openNewTopic(): void {
+    this.newTopicTitle = '';
+    this.newTopicSubject = '';
+    this.newTopicMessage = '';
+    this.showNewTopicModal = true;
+  }
 
-    const newComment: ForumComment = {
-      id: Date.now(),
+  closeNewTopic(): void {
+    this.showNewTopicModal = false;
+  }
+
+  async submitNewTopic(event: Event): Promise<void> {
+    event.preventDefault();
+    if (!this.newTopicTitle.trim() || !this.newTopicSubject.trim() || !this.newTopicMessage.trim()) {
+      this.triggerToast('Preencha o título, assunto e a mensagem do tópico.');
+      return;
+    }
+
+    const cat = this.categories.find(c => c.name === this.newTopicCategory);
+    if (!cat) return;
+    
+    this.isSubmittingNewTopic = true;
+    const cmd: CreateForumTopicCommand = {
+      categoryId: cat.id,
       lessonId: this.currentLesson.id,
-      authorName: 'Você (Aluno)',
-      avatar: 'https://i.pravatar.cc/150?u=current',
-      content: this.newCommentText.trim(),
-      date: 'Agora mesmo'
+      title: this.newTopicTitle,
+      subject: this.newTopicSubject,
+      content: this.newTopicMessage
     };
 
-    // Adiciona no início da lista local
-    this.comments.unshift(newComment);
-    
-    // Opcional: Adicionar ao Mock Global se quiser que persista ao trocar de aula
-    this.MOCK_COMMENTS.push(newComment); 
+    try {
+      await this.forumService.createTopic(cmd);
+      this.closeNewTopic();
+      this.triggerToast('Tópico criado com sucesso!');
+      await this.loadForum(); // Recarrega a lista
+    } catch (err) {
+      this.triggerToast('Erro ao criar tópico.');
+      console.error(err);
+    } finally {
+      this.isSubmittingNewTopic = false;
+    }
+  }
 
-    this.newCommentText = '';
+  triggerToast(message: string): void {
+    this.toastMessage = message;
+    this.showToast = true;
+    setTimeout(() => (this.showToast = false), 3000);
   }
 
   // --- Métodos Privados ---
-  private loadForum(): void {
-    // Filtra comentários para a aula atual e ordena (simulação do mais recente primeiro, invertendo a ordem original pra teste)
-    this.comments = this.MOCK_COMMENTS
-      .filter(c => c.lessonId === this.currentLesson.id)
-      .reverse(); 
+  private async loadForum(): Promise<void> {
+    try {
+      // Busca tópicos reais do fórum vinculados a esta aula
+      const topics = await this.forumService.getTopics({ lessonId: this.currentLesson.id, pageSize: 50 });
+      
+      this.comments = topics.map(t => ({
+        id: t.id,
+        lessonId: this.currentLesson.id,
+        authorName: t.authorName || 'Usuário',
+        avatar: 'https://ui-avatars.com/api/?name=' + encodeURIComponent(t.authorName || 'U') + '&background=random',
+        content: t.title,
+        subject: (t as any).subject || (t as any).content || '', // O backend pode retornar subject ou content dependendo da modelagem
+        date: new Date(t.createdAt).toLocaleDateString(),
+        repliesCount: t.repliesCount || 0
+      }));
+    } catch (e) {
+      console.error('Erro ao buscar tópicos da aula', e);
+      // Fallback para mock caso a API falhe para que a tela não quebre
+      this.comments = this.MOCK_COMMENTS
+        .filter(c => c.lessonId === this.currentLesson.id)
+        .reverse();
+    }
   }
 }

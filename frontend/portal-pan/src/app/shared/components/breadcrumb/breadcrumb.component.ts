@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, NavigationEnd, ActivatedRoute, Event as RouterEvent } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
+import { BreadcrumbService } from './breadcrumb.service';
 
 export interface Breadcrumb {
   label: string;
@@ -19,16 +20,33 @@ export class BreadcrumbComponent implements OnInit, OnDestroy {
   public breadcrumbs: Breadcrumb[] = [];
   private routerSubscription?: Subscription;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute) {}
+  private dynamicSubscription?: Subscription;
+
+  constructor(
+    private router: Router, 
+    private activatedRoute: ActivatedRoute,
+    private breadcrumbService: BreadcrumbService
+  ) {}
 
   ngOnInit() {
-    // Inicializa o breadcrumb com a rota atual
+    // Inicializa o breadcrumb com a rota atual (caso não haja override)
     this.breadcrumbs = this.buildBreadcrumb(this.activatedRoute.root);
+
+    // Ouve os overrides dinâmicos
+    this.dynamicSubscription = this.breadcrumbService.dynamicBreadcrumbs$.subscribe(dynamic => {
+      if (dynamic) {
+        this.breadcrumbs = dynamic;
+      } else {
+        this.breadcrumbs = this.buildBreadcrumb(this.activatedRoute.root);
+      }
+    });
 
     // Ouve os eventos de roteamento
     this.routerSubscription = this.router.events
       .pipe(filter((event: RouterEvent) => event instanceof NavigationEnd))
       .subscribe(() => {
+        // Ao navegar, limpar os breadcrumbs dinâmicos e refazer a rota normal
+        this.breadcrumbService.setBreadcrumbs(null);
         this.breadcrumbs = this.buildBreadcrumb(this.activatedRoute.root);
       });
   }
@@ -36,6 +54,9 @@ export class BreadcrumbComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.routerSubscription) {
       this.routerSubscription.unsubscribe();
+    }
+    if (this.dynamicSubscription) {
+      this.dynamicSubscription.unsubscribe();
     }
   }
 

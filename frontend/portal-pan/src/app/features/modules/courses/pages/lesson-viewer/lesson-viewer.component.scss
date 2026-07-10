@@ -18,11 +18,15 @@ $shadow-md: 0 4px 6px rgba(0,0,0,0.08);
 .lesson-viewer-container {
   max-width: 1600px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 12px;
   background-color: $background;
   min-height: 100vh;
   font-family: 'Inter', 'Roboto', sans-serif;
   color: $text-main;
+
+  @media (min-width: 768px) {
+    padding: 20px;
+  }
 }
 
 // --- Breadcrumb ---
@@ -136,15 +140,23 @@ $shadow-md: 0 4px 6px rgba(0,0,0,0.08);
 
 .lesson-header {
   background: $surface;
-  padding: 24px;
+  padding: 16px;
   border-radius: $border-radius-lg;
   box-shadow: $shadow-sm;
+  
+  @media (min-width: 768px) {
+    padding: 24px;
+  }
 
   .lesson-title {
-    font-size: 1.8rem;
+    font-size: 1.4rem;
     font-weight: 700;
     margin: 0 0 8px 0;
     color: #1a1a1a;
+    
+    @media (min-width: 768px) {
+      font-size: 1.8rem;
+    }
   }
   
   .lesson-module-name {
@@ -176,14 +188,21 @@ $shadow-md: 0 4px 6px rgba(0,0,0,0.08);
 // --- Actions Bar ---
 .actions-bar {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   background: $surface;
-  padding: 16px 24px;
+  padding: 16px;
   border-radius: $border-radius-lg;
   box-shadow: $shadow-sm;
-  flex-wrap: wrap;
-  gap: 16px;
+  gap: 12px;
+
+  @media (min-width: 576px) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    gap: 16px;
+  }
 
   .btn {
     padding: 10px 20px;
@@ -192,9 +211,15 @@ $shadow-md: 0 4px 6px rgba(0,0,0,0.08);
     border: none;
     cursor: pointer;
     display: flex;
+    justify-content: center;
     align-items: center;
     gap: 8px;
     transition: all $transition-speed;
+    width: 100%;
+
+    @media (min-width: 576px) {
+      width: auto;
+    }
 
     &:disabled {
       opacity: 0.5;
@@ -289,9 +314,13 @@ $shadow-md: 0 4px 6px rgba(0,0,0,0.08);
 // --- Forum Section ---
 .forum-section {
   background: $surface;
-  padding: 24px;
+  padding: 16px;
   border-radius: $border-radius-lg;
   box-shadow: $shadow-sm;
+
+  @media (min-width: 768px) {
+    padding: 24px;
+  }
 
   h3 {
     margin-top: 0;
@@ -373,19 +402,34 @@ $shadow-md: 0 4px 6px rgba(0,0,0,0.08);
 
     .comment-item {
       display: flex;
-      gap: 16px;
+      gap: 12px;
+      
+      @media (min-width: 576px) {
+        gap: 16px;
+      }
       
       .avatar {
-        width: 48px;
-        height: 48px;
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
+        flex-shrink: 0;
+        
+        @media (min-width: 576px) {
+          width: 48px;
+          height: 48px;
+        }
       }
       
       .comment-content {
         flex: 1;
+        min-width: 0; // Fixes overflow in flex items
         background: $background;
-        padding: 16px;
+        padding: 12px;
         border-radius: 0 $border-radius-md $border-radius-md $border-radius-md;
+        
+        @media (min-width: 576px) {
+          padding: 16px;
+        }
         
         .comment-header {
           display: flex;
@@ -407,6 +451,13 @@ $shadow-md: 0 4px 6px rgba(0,0,0,0.08);
           line-height: 1.5;
           color: #4a4a4a;
         }
+
+        .topic-link {
+          transition: color 0.2s ease;
+          &:hover {
+            color: $primary !important;
+          }
+        }
       }
     }
   }
@@ -418,9 +469,13 @@ $shadow-md: 0 4px 6px rgba(0,0,0,0.08);
   
   .sidebar-header {
     background: $surface;
-    padding: 20px 24px;
+    padding: 16px;
     border-radius: $border-radius-lg $border-radius-lg 0 0;
     border-bottom: 1px solid $border;
+    
+    @media (min-width: 768px) {
+      padding: 20px 24px;
+    }
     
     h2 {
       margin: 0;
@@ -444,13 +499,17 @@ $shadow-md: 0 4px 6px rgba(0,0,0,0.08);
     }
 
     .module-header {
-      padding: 16px 24px;
+      padding: 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
       background: $surface;
       transition: background $transition-speed;
+      
+      @media (min-width: 768px) {
+        padding: 16px 24px;
+      }
       
       &:hover {
         background: #fdfdfd;
@@ -497,11 +556,16 @@ $shadow-md: 0 4px 6px rgba(0,0,0,0.08);
         
         .lesson-item {
           display: flex;
-          gap: 16px;
-          padding: 16px 24px;
+          gap: 12px;
+          padding: 12px 16px;
           cursor: pointer;
           border-left: 4px solid transparent;
           transition: all $transition-speed;
+          
+          @media (min-width: 768px) {
+            gap: 16px;
+            padding: 16px 24px;
+          }
           
           &:hover {
             background: #f0f0f0;
@@ -592,3 +656,53 @@ $shadow-md: 0 4px 6px rgba(0,0,0,0.08);
     transform: translateY(0);
   }
 }
+
+/* ─── Modal ──────────────────────────────────────────────── */
+.custom-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(5px);
+  z-index: 1055;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.custom-modal-box {
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.animate-scale-up {
+  animation: scaleUp 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes scaleUp {
+  from { transform: scale(0.93); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+/* ─── Floating Toast ─────────────────────────────────────── */
+.custom-floating-toast {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 9999;
+  min-width: 220px;
+}
+
+.animated-slide-in {
+  animation: slideIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(16px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+/* ─── Utilities ──────────────────────────────────────────── */
+.fw-extrabold   { font-weight: 800; }
+.shadow-2xl     { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.18); }
+.min-w-0        { min-width: 0; }

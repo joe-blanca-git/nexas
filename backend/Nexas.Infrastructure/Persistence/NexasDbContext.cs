@@ -27,6 +27,7 @@ namespace Nexas.Infrastructure.Persistence
         public DbSet<ForumCategory> ForumCategories => Set<ForumCategory>();
         public DbSet<ForumTopic> ForumTopics => Set<ForumTopic>();
         public DbSet<ForumMessage> ForumMessages => Set<ForumMessage>();
+        public DbSet<CourseRate> CourseRates => Set<CourseRate>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

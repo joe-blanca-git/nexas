@@ -46,4 +46,29 @@ export class CoursesService extends BaseService {
       throw error;
     }
   }
+
+  async toggleLessonView(lessonId: number): Promise<any> {
+    try {
+      let url = `${this.urlApiNexas}lessons/${lessonId}/toggle-view`;
+      const response = await firstValueFrom(
+        this.httpClient.post<any>(url, {}, this.GetAuthHeaderJson())
+      );
+      return this.extractData(response);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async rateCourse(courseId: number, rate: number): Promise<any> {
+    try {
+      let url = `${this.urlApiNexas}portal/courses/${courseId}/rate`;
+      const body = { rate: rate };
+      const response = await firstValueFrom(
+        this.httpClient.post<any>(url, body, this.GetAuthHeaderJson())
+      );
+      return this.extractData(response);
+    } catch (error) {
+      throw error;
+    }
+  }
 }

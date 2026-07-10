@@ -17,6 +17,7 @@ public class User : BaseEntity
     public virtual ICollection<Enrollment> Enrollments { get; private set; } = new List<Enrollment>();
     public virtual ICollection<Purchase> Purchases { get; private set; } = new List<Purchase>();
     public virtual ICollection<LessonView> LessonViews { get; set; } = new List<LessonView>();
+    public virtual ICollection<CourseRate> CourseRates { get; set; } = new List<CourseRate>();
 
     private User() { }
 

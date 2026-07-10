@@ -42,4 +42,22 @@ public class PortalCoursesController : ApiControllerBase
             
         return Ok(result);
     }
+
+    [HttpPost("{courseId}/rate")]
+    public async Task<IActionResult> RateCourse(int courseId, [FromBody] RateCourseRequest request)
+    {
+        var command = new Nexas.Application.Portal.Courses.Commands.RateCourse.RateCourseCommand
+        {
+            CourseId = courseId,
+            Rate = request.Rate
+        };
+        
+        var result = await _mediator.Send(command);
+        return Ok(result);
+    }
+}
+
+public class RateCourseRequest
+{
+    public int Rate { get; set; }
 }

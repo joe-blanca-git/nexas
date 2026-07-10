@@ -21,6 +21,7 @@ namespace Nexas.Domain.Entities
         public virtual ICollection<CourseDomain> Domains { get; set; } = new List<CourseDomain>();
         public virtual ICollection<CourseTeacher> CourseTeachers { get; set; } = new List<CourseTeacher>();
         public virtual ICollection<CourseCourseCategory> CourseCategories { get; set; } = new List<CourseCourseCategory>();
+        public virtual ICollection<CourseRate> CourseRates { get; set; } = new List<CourseRate>();
 
         public static Course Create(string name, string? description, string? descriptionSub, string? level, decimal? priceSingle, string? imgCoverLink, string? bunnyLibraryId, int? createdBy)
         {

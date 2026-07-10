@@ -51,6 +51,17 @@ public class GetCourseDetailQueryHandler : IRequestHandler<GetCourseDetailQuery,
 
         var completedLessonIds = lessonViews.Select(lv => lv.LessonId).ToHashSet();
 
+        // 2.1. Fetch Course Ratings
+        var courseRatings = await _context.CourseRates
+            .AsNoTracking()
+            .Where(cr => cr.CourseId == request.CourseId)
+            .Select(cr => new { cr.UserId, cr.Rate })
+            .ToListAsync(cancellationToken);
+
+        var userRate = courseRatings.FirstOrDefault(cr => cr.UserId == currentUser.Id)?.Rate;
+        var totalRatings = courseRatings.Count;
+        var averageRate = totalRatings > 0 ? courseRatings.Average(cr => cr.Rate) : 0;
+
         // 3. Build DTOs
         var response = new GetCourseDetailResponseDto
         {
@@ -64,7 +75,10 @@ public class GetCourseDetailQueryHandler : IRequestHandler<GetCourseDetailQuery,
             Category = course.CourseCategories.FirstOrDefault()?.Category?.Name,
             TotalLessons = courseLessonIds.Count,
             CompletedLessons = completedLessonIds.Count,
-            ProgressPercentage = courseLessonIds.Count > 0 ? (completedLessonIds.Count * 100) / courseLessonIds.Count : 0
+            ProgressPercentage = courseLessonIds.Count > 0 ? (completedLessonIds.Count * 100) / courseLessonIds.Count : 0,
+            AverageRate = Math.Round(averageRate, 1),
+            TotalRatings = totalRatings,
+            UserRate = userRate
         };
 
         // 4. Map Modules and Lessons

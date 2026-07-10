@@ -21,6 +21,7 @@ namespace Nexas.Application.Common.Interfaces
         DbSet<ForumCategory> ForumCategories { get; }
         DbSet<ForumTopic> ForumTopics { get; }
         DbSet<ForumMessage> ForumMessages { get; }
+        DbSet<CourseRate> CourseRates { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

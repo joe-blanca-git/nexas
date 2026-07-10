@@ -74,6 +74,13 @@ export class LessonViewerComponent implements OnInit, OnDestroy {
   toastMessage = '';
   categories: { name: string, id: number }[] = [];
 
+  // --- Modal Avaliação de Módulo ---
+  showRatingModal = false;
+  ratingModule: Module | null = null;
+  selectedRating = 0;
+  hoverRating = 0;
+  isSubmittingRating = false;
+
   constructor(
     private sanitizer: DomSanitizer,
     private route: ActivatedRoute,
@@ -201,9 +208,30 @@ export class LessonViewerComponent implements OnInit, OnDestroy {
             return;
           }
         }
+      } else {
+        // Procurar a primeira aula não vista
+        let firstUnseenLesson: Lesson | null = null;
+        let firstUnseenModule: Module | null = null;
+        
+        for (const module of this.course.modules) {
+          if (module.lessons) {
+            const unseen = module.lessons.find((l: Lesson) => !l.isCompleted);
+            if (unseen) {
+              firstUnseenLesson = unseen;
+              firstUnseenModule = module;
+              break;
+            }
+          }
+        }
+
+        if (firstUnseenLesson && firstUnseenModule) {
+          this.currentModule = firstUnseenModule;
+          this.setCurrentLesson(firstUnseenLesson, firstUnseenModule);
+          return;
+        }
       }
       
-      // Se não houver aula específica ou não encontrou, seleciona a primeira
+      // Se não houver aula específica ou não encontrou, e todas as aulas foram vistas, seleciona a primeira
       this.initInitialLesson();
 
     } catch (error) {
@@ -241,10 +269,26 @@ export class LessonViewerComponent implements OnInit, OnDestroy {
 
     // Expandir o módulo clicado, e recolher os outros se desejar 
     // (Neste design, manteremos apenas o módulo atual aberto para focar na aula)
-    this.course.modules.forEach(m => m.isExpanded = (m.id === module.id));
+    if (this.course && this.course.modules) {
+      this.course.modules.forEach(m => m.isExpanded = (m.id === module.id));
+    }
 
     this.updateBreadcrumb();
     this.loadForum();
+
+    // Marca como vista se ainda não foi
+    if (!lesson.isCompleted) {
+      this.markLessonAsViewed(lesson);
+    }
+  }
+
+  private async markLessonAsViewed(lesson: Lesson): Promise<void> {
+    try {
+      await this.coursesService.toggleLessonView(lesson.id);
+      lesson.isCompleted = true; // Atualiza o estado na interface imediatamente após sucesso
+    } catch (e) {
+      console.error('Erro ao marcar aula como vista', e);
+    }
   }
 
   private updateBreadcrumb(): void {
@@ -306,7 +350,49 @@ export class LessonViewerComponent implements OnInit, OnDestroy {
 
   rateModule(module: Module): void {
     if (!this.checkModuleCompletion(module.id)) return;
-    alert(`Obrigado por avaliar o ${module.title}! Esta funcionalidade será implementada no futuro.`);
+    this.ratingModule = module;
+    this.selectedRating = 0;
+    this.hoverRating = 0;
+    this.showRatingModal = true;
+  }
+
+  // --- Lógica de Avaliação ---
+  closeRatingModal(): void {
+    this.showRatingModal = false;
+    this.ratingModule = null;
+  }
+
+  setHoverRating(rating: number): void {
+    this.hoverRating = rating;
+  }
+
+  setRating(rating: number): void {
+    this.selectedRating = rating;
+  }
+
+  async submitRating(): Promise<void> {
+    if (this.selectedRating === 0) {
+      this.triggerToast('Por favor, selecione uma nota para avaliar o módulo.');
+      return;
+    }
+
+    if (!this.course || !this.course.id) return;
+
+    this.isSubmittingRating = true;
+
+    try {
+      await this.coursesService.rateCourse(this.course.id, this.selectedRating);
+      this.isSubmittingRating = false;
+      this.closeRatingModal();
+      this.triggerToast('Avaliação enviada com sucesso!');
+      
+      // Redirecionar para a página de detalhes do curso
+      this.router.navigate(['/courses/course-detail', this.course.id]);
+    } catch (error) {
+      console.error('Erro ao avaliar curso', error);
+      this.isSubmittingRating = false;
+      this.triggerToast('Não foi possível enviar sua avaliação no momento.');
+    }
   }
 
   isFirstLesson(): boolean {

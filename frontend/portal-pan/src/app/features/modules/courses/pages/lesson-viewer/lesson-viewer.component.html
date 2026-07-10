@@ -231,6 +231,45 @@
   </div>
 </div>
 
+<!-- RATING MODAL -->
+<div class="custom-modal-backdrop animated-fade-in" *ngIf="showRatingModal" (click)="closeRatingModal()">
+  <div class="custom-modal-box rounded-5 bg-white p-4 shadow-2xl animate-scale-up text-center"
+       style="max-width: 400px; width: 94vw;"
+       (click)="$event.stopPropagation()">
+
+    <div class="mb-4">
+      <div class="d-inline-flex align-items-center justify-content-center bg-warning bg-opacity-10 rounded-circle mb-3" style="width: 64px; height: 64px;">
+        <i class="fas fa-star text-warning fs-1"></i>
+      </div>
+      <h4 class="fw-extrabold text-dark mb-1">Avaliar Módulo</h4>
+      <p class="text-muted small mb-0 px-2">Como foi sua experiência de aprendizado no módulo <strong>{{ ratingModule?.title }}</strong>?</p>
+    </div>
+
+    <div class="stars-container d-flex justify-content-center gap-2 mb-4">
+      <i *ngFor="let star of [1, 2, 3, 4, 5]" 
+         class="fa-star cursor-pointer transition fs-2"
+         [ngClass]="(hoverRating >= star || (!hoverRating && selectedRating >= star)) ? 'fas text-warning' : 'far text-secondary text-opacity-25'"
+         (mouseenter)="setHoverRating(star)"
+         (mouseleave)="setHoverRating(0)"
+         (click)="setRating(star)"
+         style="transition: all 0.2s ease; transform-origin: center;"
+         [style.transform]="(hoverRating === star || (!hoverRating && selectedRating === star)) ? 'scale(1.15)' : 'scale(1)'">
+      </i>
+    </div>
+
+    <div class="d-flex flex-column gap-2 mt-2">
+      <button type="button" class="btn btn-warning rounded-pill py-2.5 fw-bold text-dark w-100 shadow-sm" (click)="submitRating()" [disabled]="isSubmittingRating || selectedRating === 0">
+        <i class="fas" [ngClass]="isSubmittingRating ? 'fa-spinner fa-spin' : 'fa-check-circle'"></i>
+        {{ isSubmittingRating ? 'Enviando...' : 'Confirmar Avaliação' }}
+      </button>
+      <button type="button" class="btn btn-light rounded-pill py-2 fw-semibold text-muted w-100" (click)="closeRatingModal()" [disabled]="isSubmittingRating">
+        Cancelar
+      </button>
+    </div>
+
+  </div>
+</div>
+
 <div class="custom-floating-toast rounded-4 p-3 shadow-lg border-0 text-white d-flex align-items-center gap-2.5 animated-slide-in"
      *ngIf="showToast"
      style="background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px);">

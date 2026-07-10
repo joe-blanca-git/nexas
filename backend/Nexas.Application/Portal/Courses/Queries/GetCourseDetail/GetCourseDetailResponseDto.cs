@@ -15,6 +15,9 @@ public class GetCourseDetailResponseDto
     public int TotalLessons { get; set; }
     public int CompletedLessons { get; set; }
     public int ProgressPercentage { get; set; }
+    public double AverageRate { get; set; }
+    public int TotalRatings { get; set; }
+    public int? UserRate { get; set; }
     
     // Last Viewed Lesson
     public LastViewedLessonDto? LastViewedLesson { get; set; }

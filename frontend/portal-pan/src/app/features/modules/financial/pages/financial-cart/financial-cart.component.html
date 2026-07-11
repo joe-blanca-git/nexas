@@ -17,7 +17,7 @@
       <div class="card border-0 rounded-4 shadow-sm overflow-hidden bg-white">
 
         <!-- Course Image -->
-        <div class="position-relative" style="height: 260px;">
+        <div class="position-relative hero-image-wrapper">
           <img [src]="course.imgCoverLink" class="w-100 h-100 object-fit-cover" [alt]="course.title">
           <div class="position-absolute start-0 end-0 bottom-0" style="height: 50%; background: linear-gradient(to top, rgba(15,23,42,0.85) 0%, transparent 100%);"></div>
           <div class="position-absolute bottom-0 start-0 p-4 w-100">
@@ -120,7 +120,7 @@
                 {{ formatPrice(selectedPrice) }}
               </span>
             </div>
-            <button class="btn w-100 fw-bold rounded-pill py-2 shadow-sm checkout-btn transition-all"
+            <button class="btn w-100 fw-bold rounded-pill py-3 shadow-sm checkout-btn transition-all"
                     (click)="onCheckout()">
               <i class="fas fa-lock me-2"></i>Finalizar Compra
             </button>

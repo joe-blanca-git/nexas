@@ -27,6 +27,15 @@ $cubic-bezier: cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 
+/* --- Hero Image --- */
+.hero-image-wrapper {
+  height: 260px;
+  @media (max-width: 767.98px) {
+    height: 35vh;
+    min-height: 220px;
+  }
+}
+
 /* --- Purchase Option Cards --- */
 .purchase-option-card {
   border: 2px solid rgba(0, 0, 0, 0.06);

@@ -78,6 +78,101 @@ $card-border: 1px solid rgba(0, 0, 0, 0.035);
   }
 }
 
+@media (max-width: 767.98px) {
+  .table-responsive {
+    border: none !important;
+  }
+  .transaction-table {
+    display: block;
+    width: 100%;
+    
+    .table-header {
+      display: none;
+    }
+    
+    tbody {
+      display: block;
+      width: 100%;
+    }
+    
+    tbody tr.transaction-row {
+      display: block;
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 12px;
+      margin: 0 1rem 1rem 1rem;
+      padding: 1rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      
+      &:hover {
+        background-color: transparent;
+      }
+      
+      td {
+        display: flex !important;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 0 !important;
+        border-bottom: 1px dashed rgba(0,0,0,0.06) !important;
+        text-align: right;
+        
+        &:last-child {
+          border-bottom: none !important;
+          padding-bottom: 0 !important;
+          justify-content: flex-end;
+        }
+        
+        &::before {
+          content: attr(data-label);
+          font-weight: 600;
+          font-size: 0.75rem;
+          color: #94a3b8;
+          text-transform: uppercase;
+          letter-spacing: 0.04rem;
+          margin-right: 1rem;
+          text-align: left;
+        }
+        
+        /* Adjust icon box layout inside the card */
+        .d-flex.align-items-center.gap-3 {
+          justify-content: flex-end;
+          text-align: right;
+          width: 100%;
+          
+          .tx-icon-box {
+            display: none !important; /* Hide icon box on mobile to save space, or keep it small */
+          }
+          div {
+            text-align: right;
+          }
+        }
+      }
+      
+      /* First cell (Description) doesn't need flex-end layout, let's keep it clean */
+      td:first-child {
+        border-bottom: 1px solid rgba(0,0,0,0.06) !important;
+        padding-top: 0 !important;
+        justify-content: space-between;
+        
+        &::before {
+          content: none;
+        }
+        
+        .d-flex.align-items-center.gap-3 {
+          justify-content: flex-start;
+          text-align: left;
+          
+          .tx-icon-box {
+            display: flex !important; /* Show icon box for the title */
+          }
+          div {
+            text-align: left;
+          }
+        }
+      }
+    }
+  }
+}
+
 /* ─── Transaction Icon Box ──────────────────────────────── */
 .tx-icon-box {
   width: 40px;
@@ -214,6 +309,25 @@ $card-border: 1px solid rgba(0, 0, 0, 0.035);
 @keyframes scaleUp {
   from { transform: scale(0.93); opacity: 0; }
   to   { transform: scale(1); opacity: 1; }
+}
+
+@media (max-width: 767.98px) {
+  .custom-modal-backdrop {
+    align-items: flex-end;
+    padding: 0;
+  }
+  .custom-modal-box {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 24px 24px 0 0 !important;
+    padding: 1.5rem 1rem 2rem 1rem !important;
+    animation: slideUpBottomSheet 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1) forwards;
+  }
+}
+
+@keyframes slideUpBottomSheet {
+  from { transform: translateY(100%); opacity: 1; }
+  to   { transform: translateY(0); opacity: 1; }
 }
 
 /* ─── Detail Modal Row ───────────────────────────────────── */

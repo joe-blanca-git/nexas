@@ -31,7 +31,7 @@
             </div>
             
             <!-- ETAPA 1: Payment Method Selection -->
-            <div class="payment-methods d-flex flex-wrap gap-3 mb-5">
+            <div class="payment-methods d-flex flex-column flex-md-row gap-3 mb-5">
               
               <div class="payment-card flex-grow-1" 
                    [class.active]="paymentMethod === 'PIX'" 
@@ -110,11 +110,11 @@
                 </div>
 
                 <div class="mb-3">
-                  <input type="text" class="form-control bg-light py-2 px-3 rounded-3 border-0" 
+                  <input type="text" class="form-control form-control-lg bg-light py-2 px-3 rounded-3 border-0" 
                          placeholder="000.000.000-00" 
                          [(ngModel)]="pixCpf">
                 </div>
-                <button class="btn btn-dark rounded-pill px-4" 
+                <button class="btn btn-dark rounded-pill px-4 py-3 fw-bold w-100" 
                         [disabled]="isLoadingPix || !pixCpf" 
                         (click)="generatePix()">
                   <span *ngIf="isLoadingPix" class="spinner-border spinner-border-sm me-2"></span>
@@ -150,7 +150,7 @@
                 <div class="row g-3">
                   <div class="col-12">
                     <label class="form-label small fw-semibold text-muted">Número do Cartão</label>
-                    <div class="input-group">
+                    <div class="input-group input-group-lg">
                       <span class="input-group-text bg-light border-0 px-3"><i class="fas fa-credit-card text-muted"></i></span>
                       <input type="text" class="form-control bg-light border-0 py-2" placeholder="0000 0000 0000 0000" formControlName="cardNumber" maxlength="19">
                     </div>
@@ -161,7 +161,7 @@
                   
                   <div class="col-12">
                     <label class="form-label small fw-semibold text-muted">Nome do Titular</label>
-                    <input type="text" class="form-control bg-light border-0 py-2 px-3" placeholder="Como impresso no cartão" formControlName="cardHolder">
+                    <input type="text" class="form-control form-control-lg bg-light border-0 py-2 px-3" placeholder="Como impresso no cartão" formControlName="cardHolder">
                     <div class="text-danger small mt-1" *ngIf="cardForm.get('cardHolder')?.invalid && cardForm.get('cardHolder')?.touched">
                       Nome é obrigatório.
                     </div>
@@ -169,7 +169,7 @@
 
                   <div class="col-6">
                     <label class="form-label small fw-semibold text-muted">Validade</label>
-                    <input type="text" class="form-control bg-light border-0 py-2 px-3" placeholder="MM/AA" formControlName="expiry" maxlength="5">
+                    <input type="text" class="form-control form-control-lg bg-light border-0 py-2 px-3" placeholder="MM/AA" formControlName="expiry" maxlength="5">
                     <div class="text-danger small mt-1" *ngIf="cardForm.get('expiry')?.invalid && cardForm.get('expiry')?.touched">
                       Validade inválida.
                     </div>
@@ -177,7 +177,7 @@
 
                   <div class="col-6">
                     <label class="form-label small fw-semibold text-muted">CVC</label>
-                    <input type="text" class="form-control bg-light border-0 py-2 px-3" placeholder="123" formControlName="cvc" maxlength="4">
+                    <input type="text" class="form-control form-control-lg bg-light border-0 py-2 px-3" placeholder="123" formControlName="cvc" maxlength="4">
                     <div class="text-danger small mt-1" *ngIf="cardForm.get('cvc')?.invalid && cardForm.get('cvc')?.touched">
                       CVC inválido.
                     </div>
@@ -186,7 +186,7 @@
                   <!-- INSTALLMENTS (CREDIT ONLY) -->
                   <div class="col-12 mt-3" *ngIf="paymentMethod === 'CREDIT'">
                     <label class="form-label small fw-semibold text-muted">Parcelamento</label>
-                    <select class="form-select bg-light border-0 py-2 px-3" formControlName="installments">
+                    <select class="form-select form-select-lg bg-light border-0 py-2 px-3" formControlName="installments">
                       <option *ngFor="let inst of installments" [value]="inst.value">{{ inst.label }}</option>
                     </select>
                   </div>

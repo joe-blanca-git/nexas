@@ -46,6 +46,10 @@
             <summary>ID da biblioteca Bunny para o curso.</summary>
             <example>library_12345</example>
         </member>
+        <member name="P:Nexas.Application.Courses.Commands.CreateCourse.CreateCourseCommand.WorkloadHours">
+            <summary>Carga horária total do curso em horas.</summary>
+            <example>40</example>
+        </member>
         <member name="P:Nexas.Application.Courses.Commands.CreateCourse.CreateCourseCommand.Modules">
             <summary>Lista de módulos que compõem o curso.</summary>
         </member>

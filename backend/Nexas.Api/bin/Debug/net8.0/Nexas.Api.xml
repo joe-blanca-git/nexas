@@ -291,5 +291,15 @@
             Vincula um professor a um curso específico.
             </summary>
         </member>
+        <member name="M:Nexas.Api.Controllers.V1.CertificatesController.GenerateCertificate(Nexas.Api.Controllers.V1.GenerateCertificateRequest)">
+            <summary>
+            Gera um certificado para o curso informado, caso esteja 100% concluído.
+            </summary>
+        </member>
+        <member name="M:Nexas.Api.Controllers.V1.CertificatesController.ValidateCertificate(System.String)">
+            <summary>
+            Retorna os dados do certificado validado.
+            </summary>
+        </member>
     </members>
 </doc>

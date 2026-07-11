@@ -706,3 +706,9 @@ $shadow-md: 0 4px 6px rgba(0,0,0,0.08);
 .fw-extrabold   { font-weight: 800; }
 .shadow-2xl     { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.18); }
 .min-w-0        { min-width: 0; }
+
+@media (min-width: 576px) {
+  ::ng-deep .w-sm-auto {
+    width: auto !important;
+  }
+}

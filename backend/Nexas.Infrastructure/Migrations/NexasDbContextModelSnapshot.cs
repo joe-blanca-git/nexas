@@ -75,6 +75,47 @@ namespace Nexas.Infrastructure.Migrations
                     b.ToTable("BlogPosts", (string)null);
                 });
 
+            modelBuilder.Entity("Nexas.Domain.Entities.Certificate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("IssuedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ValidationCode")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("ValidationCode")
+                        .IsUnique();
+
+                    b.HasIndex("UserId", "CourseId")
+                        .IsUnique();
+
+                    b.ToTable("Certificates", (string)null);
+                });
+
             modelBuilder.Entity("Nexas.Domain.Entities.Course", b =>
                 {
                     b.Property<int>("Id")
@@ -136,6 +177,9 @@ namespace Nexas.Infrastructure.Migrations
                     b.Property<int?>("UpdatedBy")
                         .HasColumnType("int")
                         .HasColumnName("UpdatedBy");
+
+                    b.Property<int>("WorkloadHours")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -778,6 +822,25 @@ namespace Nexas.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Nexas.Domain.Entities.Certificate", b =>
+                {
+                    b.HasOne("Nexas.Domain.Entities.Course", "Course")
+                        .WithMany("Certificates")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Nexas.Domain.Entities.User", "User")
+                        .WithMany("Certificates")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Nexas.Domain.Entities.CourseCourseCategory", b =>
                 {
                     b.HasOne("Nexas.Domain.Entities.CourseCategory", "Category")
@@ -972,6 +1035,8 @@ namespace Nexas.Infrastructure.Migrations
 
             modelBuilder.Entity("Nexas.Domain.Entities.Course", b =>
                 {
+                    b.Navigation("Certificates");
+
                     b.Navigation("CourseCategories");
 
                     b.Navigation("CourseRates");
@@ -1017,6 +1082,8 @@ namespace Nexas.Infrastructure.Migrations
 
             modelBuilder.Entity("Nexas.Domain.Entities.User", b =>
                 {
+                    b.Navigation("Certificates");
+
                     b.Navigation("CourseRates");
 
                     b.Navigation("Enrollments");

@@ -37,6 +37,10 @@ namespace Nexas.Application.Courses.Commands.CreateCourse
         /// <example>library_12345</example>
         public string? BunnyLibraryId { get; init; }
 
+        /// <summary>Carga horária total do curso em horas.</summary>
+        /// <example>40</example>
+        public int WorkloadHours { get; init; }
+
         /// <summary>Lista de módulos que compõem o curso.</summary>
         public List<CreateModuleDto> Modules { get; init; } = new();
     }
@@ -108,6 +112,7 @@ namespace Nexas.Application.Courses.Commands.CreateCourse
                 request.PriceSingle,
                 request.ImgCoverLink,
                 request.BunnyLibraryId,
+                request.WorkloadHours,
                 currentUser.Id
             );
 

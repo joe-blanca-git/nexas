@@ -28,6 +28,7 @@ namespace Nexas.Infrastructure.Persistence
         public DbSet<ForumTopic> ForumTopics => Set<ForumTopic>();
         public DbSet<ForumMessage> ForumMessages => Set<ForumMessage>();
         public DbSet<CourseRate> CourseRates => Set<CourseRate>();
+        public DbSet<Certificate> Certificates => Set<Certificate>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

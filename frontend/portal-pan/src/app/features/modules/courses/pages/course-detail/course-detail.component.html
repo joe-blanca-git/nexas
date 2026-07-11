@@ -34,22 +34,35 @@
     <div class="col-12 col-lg-8">
       
       <!-- Course Hero Cover -->
-      <div class="card border-0 rounded-5 shadow-sm overflow-hidden mb-4">
-        <div class="position-relative" style="height: 250px; min-height: 250px;">
-          <img [src]="course.imgCoverLink || 'assets/images/default-course-cover.jpg'" class="w-100 h-100 object-fit-cover" alt="Course Banner Cover">
-          <div class="position-absolute start-0 top-0 w-100 h-100" 
-               style="background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.7) 100%);"></div>
+      <div class="card border-0 rounded-5 shadow-lg overflow-hidden mb-4" style="background-color: #0f172a;">
+        <div class="position-relative w-100" style="height: 320px; min-height: 320px;">
+          <img [src]="course.imgCoverLink || 'assets/images/default-course-cover.jpg'" 
+               class="w-100 h-100 object-fit-cover opacity-75" 
+               style="object-position: center;"
+               alt="Course Banner Cover">
           
-          <!-- Category Floating badge -->
-          <div class="position-absolute start-4 bottom-4 text-white z-index-2">
-            <span class="badge px-3 py-1.5 rounded-pill mb-2 shadow-sm" style="background-color: #6366f1;" *ngIf="course.category">
-              {{ course.category }}
-            </span>
-            <h2 class="fw-extrabold text-white mb-1 tracking-tight" style="font-size: 1.8rem;">{{ course.title }}</h2>
-            <div class="d-flex align-items-center gap-3 text-white-50 font-monospace small" style="font-size: 0.75rem;">
-              <span *ngIf="course.level">Nível: {{ course.level }}</span>
+          <!-- Gradient Overlay for readability -->
+          <div class="position-absolute start-0 top-0 w-100 h-100" 
+               style="background: linear-gradient(to bottom, rgba(15, 23, 42, 0.1) 0%, rgba(15, 23, 42, 0.85) 100%);"></div>
+          
+          <!-- Content positioned at the bottom left -->
+          <div class="position-absolute start-0 bottom-0 w-100 p-4 p-md-5 d-flex flex-column justify-content-end" style="z-index: 2;">
+            <div>
+              <span class="badge px-3 py-1.5 rounded-pill mb-3 shadow-sm text-uppercase fw-bold" 
+                    style="background-color: #6366f1; letter-spacing: 0.05rem; font-size: 0.75rem;" 
+                    *ngIf="course.category">
+                {{ course.category }}
+              </span>
+            </div>
+            
+            <h1 class="fw-black text-white mb-2 tracking-tight display-5" style="text-shadow: 0 4px 12px rgba(0,0,0,0.5);">
+              {{ course.title }}
+            </h1>
+            
+            <div class="d-flex align-items-center gap-3 text-white-50 fw-semibold" style="font-size: 0.9rem;">
+              <span *ngIf="course.level"><i class="fas fa-layer-group me-1"></i> {{ course.level }}</span>
               <span *ngIf="course.level && course.teacher">•</span>
-              <span *ngIf="course.teacher">Instrutor: {{ course.teacher }}</span>
+              <span *ngIf="course.teacher"><i class="fas fa-chalkboard-teacher me-1"></i> {{ course.teacher }}</span>
             </div>
           </div>
         </div>

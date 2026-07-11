@@ -60,6 +60,7 @@ export class LessonViewerComponent implements OnInit, OnDestroy {
   comments: ForumComment[] = [];
   
   // Controle de interface
+  isPageLoading: boolean = true;
   isVideoLoading: boolean = true;
   safeVideoUrl!: SafeResourceUrl;
 
@@ -181,6 +182,7 @@ export class LessonViewerComponent implements OnInit, OnDestroy {
       // Fallback para mock se não houver ID (para testes isolados)
       this.course = JSON.parse(JSON.stringify(this.MOCK_COURSE));
       this.initInitialLesson();
+      this.isPageLoading = false;
     }
   }
 
@@ -238,6 +240,7 @@ export class LessonViewerComponent implements OnInit, OnDestroy {
       console.error('Erro ao carregar curso no viewer:', error);
     } finally {
       this.isVideoLoading = false;
+      this.isPageLoading = false;
     }
   }
 

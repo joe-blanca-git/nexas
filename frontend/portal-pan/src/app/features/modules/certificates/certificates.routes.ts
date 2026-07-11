@@ -6,6 +6,5 @@ export const certificatesRoutes: Routes = [
         path: '',
         component: CertificatesHomeComponent,
         title: 'Certificados',
-
     }
 ];

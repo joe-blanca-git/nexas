@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CoursesService } from '../../services/courses.service';
+import { CertificateService } from '../../../certificates/services/certificate.service';
+import { ToastService } from '../../../../../core/services/toast.service';
 
 @Component({
   selector: 'app-course-detail',
@@ -19,7 +21,10 @@ export class CourseDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private coursesService: CoursesService
+    private coursesService: CoursesService,
+    private certService: CertificateService,
+    private toastService: ToastService,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -52,7 +57,7 @@ export class CourseDetailComponent implements OnInit {
     this.router.navigate(['/courses']);
   }
 
-  goToLesson() {
+  async goToLesson() {
     if (!this.course) return;
 
     if (this.course.progressPercentage !== 100) {
@@ -63,7 +68,15 @@ export class CourseDetailComponent implements OnInit {
         this.router.navigate(['/courses/lesson', this.courseId]);
       }
     } else {
-      alert('Certificado será gerado em breve!');
+      try {
+        const validationCode = await this.certService.generateCertificate(this.courseId);
+        this.toastService.success('Certificado gerado com sucesso!');
+        const urlTree = this.router.createUrlTree(['/certificates/view', validationCode]);
+        const url = this.location.prepareExternalUrl(this.router.serializeUrl(urlTree));
+        window.open(url, '_blank');
+      } catch (error: any) {
+        this.toastService.error(error.message || 'Erro ao gerar certificado.');
+      }
     }
   }
 

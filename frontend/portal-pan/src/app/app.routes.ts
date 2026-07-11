@@ -10,6 +10,16 @@ export const routes: Routes = [
             import('./features/auth/auth.routes').then((r) => r.AUTH_ROUTES),
     },
     {
+        path: 'certificates/view',
+        loadComponent: () => import('./features/modules/certificates/pages/certificate-viewer/certificate-viewer.component').then(c => c.CertificateViewerComponent),
+        title: 'Validação de Certificado'
+    },
+    {
+        path: 'certificates/view/:code',
+        loadComponent: () => import('./features/modules/certificates/pages/certificate-viewer/certificate-viewer.component').then(c => c.CertificateViewerComponent),
+        title: 'Validação de Certificado'
+    },
+    {
         path: '',
         component: HomeComponent,
         canActivate: [AuthGuardService],

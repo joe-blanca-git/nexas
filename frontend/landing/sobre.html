@@ -6,6 +6,13 @@
     <title>Sobre Nós - Nexas Educação Tecnológica</title>
     <meta name="description" content="Conheça a Nexas, a plataforma que conecta pessoas à tecnologia que move o campo. Missão, visão e nossos valores no ensino técnico aplicado." />
     
+    <!-- Script para garantir o caminho correto dos assets na VPS -->
+    <script>
+        if (window.location.hostname === 'joederblanca.com.br' && window.location.pathname.startsWith('/nexas')) {
+            document.write('<base href="/nexas/">');
+        }
+    </script>
+
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
     <!-- Icons-->

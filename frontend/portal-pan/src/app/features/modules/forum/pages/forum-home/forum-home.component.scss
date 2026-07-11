@@ -98,18 +98,53 @@ $card-border: 1px solid rgba(0, 0, 0, 0.035);
   }
 }
 
-/* ─── Topic List Items ──────────────────────────────────── */
+/* ─── Topic List Items (App-Like Feed) ─────────────────────── */
+.feed-container {
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+
+  .card-header {
+    background: transparent !important;
+    border: none !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .card-footer {
+    background: transparent !important;
+    border: none !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
 .topic-list-item {
-  transition: background-color 0.18s ease;
+  transition: all 0.2s ease;
+  background: #ffffff;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
 
   &:hover {
-    background-color: rgba(99, 102, 241, 0.025);
+    background-color: rgba(99, 102, 241, 0.015);
+  }
+
+  @media (max-width: 767.98px) {
+    border: 1px solid rgba(0, 0, 0, 0.05) !important;
+    border-radius: 16px !important;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+    padding: 1.25rem !important;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 }
 
 .topic-title-link {
   transition: color 0.2s ease;
-  line-height: 1.35;
+  line-height: 1.4;
+  font-size: 1rem !important; /* Slightly larger on mobile */
 
   &:hover {
     color: $primary !important;
@@ -201,6 +236,26 @@ $card-border: 1px solid rgba(0, 0, 0, 0.035);
 @keyframes scaleUp {
   from { transform: scale(0.93); opacity: 0; }
   to   { transform: scale(1); opacity: 1; }
+}
+
+@media (max-width: 767.98px) {
+  .custom-modal-backdrop {
+    align-items: flex-end;
+    padding: 0;
+  }
+  .custom-modal-box {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 24px 24px 0 0 !important;
+    padding: 1.5rem 1rem 2rem 1rem !important;
+    margin-bottom: 0;
+    animation: slideUpBottomSheet 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1) forwards;
+  }
+}
+
+@keyframes slideUpBottomSheet {
+  from { transform: translateY(100%); opacity: 1; }
+  to   { transform: translateY(0); opacity: 1; }
 }
 
 /* ─── Floating Toast ─────────────────────────────────────── */

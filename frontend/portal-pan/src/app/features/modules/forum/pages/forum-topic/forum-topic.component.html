@@ -47,14 +47,14 @@
               Assunto: {{ topic.subject }}
             </h6>
           </div>
-          <div *ngIf="topic.isOwn" class="d-flex flex-wrap gap-2 mt-2 mt-md-0">
-            <button class="btn btn-sm btn-outline-success rounded-pill fw-bold px-3"
+          <div *ngIf="topic.isOwn" class="d-flex flex-column flex-md-row gap-2 mt-3 mt-md-0 w-100 w-md-auto">
+            <button class="btn btn-sm btn-outline-success rounded-pill fw-bold px-3 py-2 w-100 w-md-auto"
                     *ngIf="topic.status !== 'Resolved'"
                     (click)="resolveTopic()"
                     style="font-size: 0.8rem;">
               <i class="fas fa-check me-1"></i> Marcar como Resolvido
             </button>
-            <button class="btn btn-sm btn-outline-secondary rounded-pill fw-bold px-3"
+            <button class="btn btn-sm btn-outline-secondary rounded-pill fw-bold px-3 py-2 w-100 w-md-auto"
                     *ngIf="topic.status === 'Resolved'"
                     (click)="reopenTopic()"
                     style="font-size: 0.8rem;">
@@ -63,7 +63,7 @@
           </div>
         </div>
       </div>
-      <div class="card-body p-4">
+      <div class="card-body p-3 p-md-4">
         <div class="d-flex align-items-start gap-3">
           <div class="author-avatar rounded-circle d-flex align-items-center justify-content-center fw-bold text-white flex-shrink-0 shadow-sm"
                [style.background]="getAuthorColor(topic.authorName)"
@@ -94,7 +94,7 @@
     <!-- Replies List -->
     <div class="d-flex flex-column gap-3 mb-4">
       <div class="card border-0 rounded-4 shadow-sm" *ngFor="let msg of topic.messages" style="background: #fafafa;">
-        <div class="card-body p-4">
+        <div class="card-body p-3 p-md-4">
           <div class="d-flex align-items-start gap-3">
             <div class="author-avatar rounded-circle d-flex align-items-center justify-content-center fw-bold text-white flex-shrink-0 shadow-sm"
                  [style.background]="getAuthorColor(msg.authorName)"
@@ -131,8 +131,8 @@
                     [disabled]="isSubmittingReply"
                     style="font-size: 0.88rem; resize: none;"></textarea>
         </div>
-        <div class="d-flex justify-content-end">
-          <button type="submit" class="btn btn-dark rounded-pill px-4 py-2 fw-bold d-flex align-items-center gap-2 shadow-sm"
+        <div class="d-flex justify-content-end mt-3">
+          <button type="submit" class="btn btn-dark rounded-pill px-4 py-3 py-md-2 fw-bold d-flex justify-content-center align-items-center gap-2 shadow-sm w-100 w-md-auto"
                   [disabled]="isSubmittingReply || !newReplyContent.trim()"
                   style="font-size: 0.85rem;">
             <i class="fas" [ngClass]="isSubmittingReply ? 'fa-spinner fa-spin' : 'fa-paper-plane'"></i>

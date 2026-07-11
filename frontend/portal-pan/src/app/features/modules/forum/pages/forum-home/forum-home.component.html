@@ -12,7 +12,7 @@
 
   <div class="row g-3 mb-4" *ngIf="!isLoading">
 
-    <div class="col-6 col-lg">
+    <div class="col-12 col-md-4">
       <div class="card border-0 rounded-4 shadow-sm forum-stat-card p-3 h-100">
         <div class="d-flex align-items-center gap-2 mb-1">
           <div class="stat-icon-box" style="background: rgba(99,102,241,0.09); color: #6366f1;">
@@ -25,7 +25,7 @@
       </div>
     </div>
 
-    <div class="col-6 col-lg">
+    <div class="col-12 col-md-4">
       <div class="card border-0 rounded-4 shadow-sm forum-stat-card p-3 h-100">
         <div class="d-flex align-items-center gap-2 mb-1">
           <div class="stat-icon-box" style="background: rgba(16,185,129,0.09); color: #10b981;">
@@ -38,7 +38,7 @@
       </div>
     </div>
 
-    <div class="col-6 col-lg">
+    <div class="col-12 col-md-4">
       <div class="card border-0 rounded-4 shadow-sm forum-stat-card p-3 h-100"
            (click)="toggleUnansweredFilter()"
            [ngStyle]="{'cursor': 'pointer', 'border': showOnlyUnanswered ? '2px solid #f59e0b' : 'none'}">
@@ -65,7 +65,7 @@
             <i class="fas fa-search"></i>
           </span>
           <input type="text"
-                 class="form-control rounded-pill ps-5 bg-light border-0 shadow-none py-2"
+                 class="form-control form-control-lg rounded-pill ps-5 bg-light border-0 shadow-none py-2"
                  placeholder="Buscar tópico, autor ou conteúdo..."
                  [(ngModel)]="searchTerm"
                  (ngModelChange)="currentPage = 1"
@@ -73,7 +73,7 @@
         </div>
       </div>
       <div class="col-12 col-md-3">
-        <select class="form-select rounded-pill bg-light border-0 shadow-none py-2"
+        <select class="form-select form-select-lg rounded-pill bg-light border-0 shadow-none py-2"
                 [(ngModel)]="selectedCategory"
                 (ngModelChange)="currentPage = 1"
                 style="font-size: 0.83rem;">
@@ -81,7 +81,7 @@
         </select>
       </div>
       <div class="col-12 col-md-2 d-flex justify-content-md-end">
-      <button class="btn btn-dark rounded-pill px-4 py-2 fw-bold d-flex align-items-center gap-2 shadow-sm"
+        <button class="btn btn-dark rounded-pill px-4 py-3 py-md-2 fw-bold d-flex justify-content-center align-items-center gap-2 shadow-sm w-100 w-md-auto"
               style="font-size: 0.83rem;"
               (click)="openNewTopic()">
         <i class="fas fa-plus"></i> Novo Tópico
@@ -179,7 +179,7 @@
       </div>
     </div>
 
-    <div class="card border-0 rounded-4 shadow-sm overflow-hidden" *ngIf="!isLoading">
+    <div class="card border-0 rounded-4 shadow-sm overflow-hidden feed-container" *ngIf="!isLoading">
       <div class="card-header bg-white border-bottom border-secondary border-opacity-10 px-4 py-3 d-flex align-items-center justify-content-between">
         <span class="fw-bold text-dark small">
           {{ activeTab === 'mine' ? 'Meus Tópicos' : 'Tópicos Recentes' }}
@@ -205,10 +205,8 @@
         </div>
       </div>
 
-      <div class="topic-list-item px-4 py-3"
-           *ngFor="let topic of paginatedTopics; let last = last"
-           [class.border-bottom]="!last"
-           style="border-color: rgba(0,0,0,0.04) !important;">
+      <div class="topic-list-item px-4 py-4"
+           *ngFor="let topic of paginatedTopics; let last = last">
         <div class="d-flex align-items-start gap-3">
           <div class="author-avatar rounded-circle d-flex align-items-center justify-content-center fw-bold text-white flex-shrink-0"
                [style.background]="topic.authorColor"
@@ -287,7 +285,7 @@
     <form (submit)="submitNewTopic($event)">
       <div class="mb-3">
         <label class="form-label fw-semibold text-muted" style="font-size: 0.73rem; text-transform: uppercase; letter-spacing: 0.04rem;">Categoria</label>
-        <select class="form-select rounded-3 bg-light border-0 shadow-none py-2"
+        <select class="form-select form-select-lg rounded-3 bg-light border-0 shadow-none py-2"
                 [(ngModel)]="newTopicCategory" name="topicCategory" style="font-size: 0.85rem;">
           <option *ngFor="let cat of categories" [value]="cat.name">{{ cat.name }}</option>
         </select>
@@ -295,7 +293,7 @@
       <div class="mb-3">
         <label class="form-label fw-semibold text-muted" style="font-size: 0.73rem; text-transform: uppercase; letter-spacing: 0.04rem;">Título do Tópico</label>
         <input type="text"
-               class="form-control rounded-3 bg-light border-0 shadow-none py-2"
+               class="form-control form-control-lg rounded-3 bg-light border-0 shadow-none py-2"
                placeholder="Escreva um título claro e objetivo..."
                [(ngModel)]="newTopicTitle"
                name="topicTitle"
@@ -304,7 +302,7 @@
       <div class="mb-3">
         <label class="form-label fw-semibold text-muted" style="font-size: 0.73rem; text-transform: uppercase; letter-spacing: 0.04rem;">Assunto</label>
         <input type="text"
-               class="form-control rounded-3 bg-light border-0 shadow-none py-2"
+               class="form-control form-control-lg rounded-3 bg-light border-0 shadow-none py-2"
                placeholder="Qual o assunto principal?"
                [(ngModel)]="newTopicSubject"
                name="topicSubject"
@@ -312,16 +310,16 @@
       </div>
       <div class="mb-4">
         <label class="form-label fw-semibold text-muted" style="font-size: 0.73rem; text-transform: uppercase; letter-spacing: 0.04rem;">Mensagem</label>
-        <textarea class="form-control rounded-3 bg-light border-0 shadow-none py-2"
+        <textarea class="form-control form-control-lg rounded-3 bg-light border-0 shadow-none py-2"
                   rows="4"
                   placeholder="Descreva sua dúvida ou assunto com o máximo de detalhes possível..."
                   [(ngModel)]="newTopicMessage"
                   name="topicMessage"
                   style="font-size: 0.85rem; resize: none;"></textarea>
       </div>
-      <div class="d-flex gap-2 justify-content-end">
-        <button type="button" class="btn btn-outline-dark rounded-3 px-4 py-2 fw-semibold" style="font-size: 0.82rem;" (click)="closeNewTopic()">Cancelar</button>
-        <button type="submit" class="btn btn-dark rounded-3 px-4 py-2 fw-bold" style="font-size: 0.82rem;" [disabled]="isSubmittingNewTopic">
+      <div class="d-flex flex-column flex-md-row gap-2 justify-content-end">
+        <button type="button" class="btn btn-outline-dark rounded-3 px-4 py-3 py-md-2 fw-semibold w-100 w-md-auto" style="font-size: 0.82rem;" (click)="closeNewTopic()">Cancelar</button>
+        <button type="submit" class="btn btn-dark rounded-3 px-4 py-3 py-md-2 fw-bold w-100 w-md-auto" style="font-size: 0.82rem;" [disabled]="isSubmittingNewTopic">
           <i class="fas" [ngClass]="isSubmittingNewTopic ? 'fa-spinner fa-spin' : 'fa-paper-plane'"></i>
           {{ isSubmittingNewTopic ? 'Publicando...' : 'Publicar Tópico' }}
         </button>

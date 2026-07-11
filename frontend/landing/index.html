@@ -6,6 +6,13 @@
     <title>Nexas - Conectando você à tecnologia que move o campo</title>
     <meta name="description" content="Nexas é a plataforma definitiva de ensino técnico aplicado. Aprenda tecnologia para máquinas agrícolas e sistemas embarcados sem complicação." />
 
+    <!-- Script para garantir o caminho correto dos assets na VPS -->
+    <script>
+        if (window.location.hostname === 'joederblanca.com.br' && window.location.pathname.startsWith('/nexas')) {
+            document.write('<base href="/nexas/">');
+        }
+    </script>
+
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
     <!-- Icons-->

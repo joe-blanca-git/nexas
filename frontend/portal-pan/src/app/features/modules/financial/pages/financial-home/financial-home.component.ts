@@ -25,6 +25,7 @@ export interface ITransaction {
   icon: string;
   color: string;
   relatedCourseId?: number;
+  isRefundable?: boolean;
 }
 
 export interface IFinancialSummary {
@@ -120,7 +121,15 @@ export class FinancialHomeComponent implements OnInit, OnDestroy {
         const txs: ITransaction[] = [];
 
         if (res && Array.isArray(res)) {
+          const now = new Date();
           res.forEach(p => {
+            const payDate = new Date(p.paymentDate);
+            const diffTime = now.getTime() - payDate.getTime();
+            const diffDays = diffTime / (1000 * 60 * 60 * 24);
+            const statusStr = p.status?.toUpperCase() || '';
+            const isPaid = statusStr === 'APPROVED' || statusStr === 'PAID' || statusStr === 'ACTIVE';
+            const isRefundable = isPaid && diffDays <= 7;
+
             txs.push({
               id: p.id.toString(),
               name: p.name,
@@ -128,11 +137,12 @@ export class FinancialHomeComponent implements OnInit, OnDestroy {
               value: p.value,
               paymentMethod: (p.paymentMethod === 'PIX' ? 'PIX' : 'Cartão de Crédito') as PaymentMethod,
               status: this.mapStatus(p.status),
-              chargeDate: new Date(p.paymentDate).toLocaleDateString(),
+              chargeDate: payDate.toLocaleDateString(),
               nextRenewal: null,
               transactionCode: p.transactionCode,
               icon: 'fa-book',
-              color: '#06b6d4'
+              color: '#06b6d4',
+              isRefundable
             });
           });
         }
@@ -322,6 +332,16 @@ export class FinancialHomeComponent implements OnInit, OnDestroy {
     doc.save(`Comprovante_${tx.transactionCode}.pdf`);
     
     this.closeDetail();
+  }
+
+  requestRefund(tx: ITransaction): void {
+    if (!tx.isRefundable) return;
+    
+    if (confirm(`Tem certeza que deseja solicitar o reembolso de "${tx.name}"? Isso cancelará seu acesso ao curso imediatamente e a reversão não será possível.`)) {
+      // Futura chamada à API de reembolso. Por enquanto mock visual
+      this.triggerToast(`Solicitação de reembolso enviada para ${tx.transactionCode}! Em breve você receberá um email.`);
+      this.closeDetail();
+    }
   }
 
 

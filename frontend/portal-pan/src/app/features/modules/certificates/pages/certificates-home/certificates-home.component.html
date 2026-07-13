@@ -15,7 +15,20 @@
     </div>
   </div>
 
-  <div class="row g-3 mb-5">
+  <!-- Skeleton Stats -->
+  <div class="row g-3 mb-5" *ngIf="isLoading">
+    <div class="col-12 col-md-6 col-lg-4" *ngFor="let i of [1,2]">
+      <div class="card border-0 rounded-4 shadow-sm p-4 h-100 d-flex flex-row align-items-center">
+        <div class="skeleton skeleton-avatar flex-shrink-0" style="width: 48px; height: 48px;"></div>
+        <div class="ms-3 w-100">
+          <div class="skeleton skeleton-xs mb-2" style="width: 60%;"></div>
+          <div class="skeleton skeleton-sm" style="width: 30%;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-5" *ngIf="!isLoading">
     <div class="col-12 col-md-6 col-lg-4">
       <div class="stat-card-clean">
         <div class="stat-icon bg-indigo-light">
@@ -42,7 +55,33 @@
   </div>
 
   <div class="row g-4">
-    <div class="col-12 text-center py-5" *ngIf="filteredCertificates.length === 0">
+    <!-- Skeletons Certificates Grid -->
+    <ng-container *ngIf="isLoading">
+      <div class="col-12 col-md-6 col-lg-4 d-flex" *ngFor="let i of [1,2,3,4,5,6]">
+        <div class="card h-100 border-0 rounded-4 shadow-sm overflow-hidden bg-white w-100 d-flex flex-column">
+          <div class="skeleton rounded-0" style="height: 160px;"></div>
+          <div class="card-body p-4 d-flex flex-column flex-grow-1 justify-content-between">
+            <div>
+              <div class="d-flex align-items-center justify-content-between mb-3">
+                <div class="skeleton skeleton-sm w-50"></div>
+                <div class="skeleton skeleton-sm w-25"></div>
+              </div>
+              <div class="skeleton skeleton-md mb-2"></div>
+              <div class="skeleton skeleton-text"></div>
+            </div>
+            <div class="pt-3 border-top border-secondary border-opacity-10 mt-3">
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="skeleton skeleton-sm w-25"></div>
+                <div class="skeleton rounded-pill py-3 px-4 w-25"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Empty State -->
+    <div class="col-12 text-center py-5" *ngIf="!isLoading && filteredCertificates.length === 0">
       <div class="py-4">
         <i class="fas fa-search-minus text-muted mb-3" style="font-size: 3rem; opacity: 0.35;"></i>
         <h5 class="fw-bold text-dark">Nenhum certificado encontrado</h5>
@@ -53,12 +92,14 @@
       </div>
     </div>
 
-    <div class="col-12 col-md-6 col-lg-4 d-flex" *ngFor="let cert of filteredCertificates">
-      <div
-        class="card h-100 border-0 rounded-4 shadow-sm overflow-hidden course-interactive-card bg-white w-100 d-flex flex-column transition-all"
-        (click)="viewCertificate(cert.hash)">
+    <!-- Real Content -->
+    <ng-container *ngIf="!isLoading">
+      <div class="col-12 col-md-6 col-lg-4 d-flex" *ngFor="let cert of filteredCertificates">
+        <div
+          class="card h-100 border-0 rounded-4 shadow-sm overflow-hidden course-interactive-card bg-white w-100 d-flex flex-column transition-all"
+          (click)="viewCertificate(cert.hash)">
 
-        <div class="position-relative certificate-cover">
+          <div class="position-relative certificate-cover">
           <img *ngIf="cert.coverImage" [src]="cert.coverImage" class="position-absolute w-100 h-100" style="object-fit: cover; top: 0; left: 0; z-index: 0;">
           <div *ngIf="cert.coverImage" class="position-absolute w-100 h-100" style="background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.8)); top: 0; left: 0; z-index: 1;"></div>
           
@@ -114,5 +155,6 @@
         </div>
       </div>
     </div>
+    </ng-container>
   </div>
 </div>

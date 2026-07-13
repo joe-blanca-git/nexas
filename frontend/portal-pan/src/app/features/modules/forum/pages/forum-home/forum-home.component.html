@@ -1,10 +1,14 @@
 <div class="animated-fade-in">
 
   <div class="row g-3 mb-4" *ngIf="isLoading">
-    <div class="col-6 col-lg" *ngFor="let i of [1,2,3,4,5]">
-      <div class="card border-0 rounded-4 shadow-sm p-3 skeleton-card">
-        <div class="skeleton skeleton-xs mb-2"></div>
-        <div class="skeleton skeleton-lg"></div>
+    <div class="col-4 col-md-4" *ngFor="let i of [1,2,3]">
+      <div class="card border-0 rounded-4 shadow-sm p-2 p-md-3 h-100 d-flex flex-column align-items-center align-items-md-start">
+        <div class="d-flex flex-column flex-md-row align-items-center gap-1 gap-md-2 mb-1 w-100 justify-content-center justify-content-md-start">
+          <div class="skeleton skeleton-avatar flex-shrink-0" style="width: 28px; height: 28px;"></div>
+          <div class="skeleton skeleton-xs" style="width: 40%;"></div>
+        </div>
+        <div class="skeleton skeleton-md mt-2 w-50"></div>
+        <div class="skeleton skeleton-xs mt-1 w-75"></div>
       </div>
     </div>
   </div>

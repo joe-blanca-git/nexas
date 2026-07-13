@@ -1,9 +1,16 @@
-<!-- Loading State -->
-<div class="container-fluid py-5 text-center" *ngIf="isLoading">
-  <div class="spinner-border text-primary" role="status">
-    <span class="visually-hidden">Carregando...</span>
+<!-- Skeleton State -->
+<div class="container-fluid p-0 animated-fade-in" *ngIf="isLoading">
+  <div class="row g-4 pt-4">
+    <div class="col-12 col-lg-8">
+      <div class="skeleton border-0 rounded-5 mb-4" style="height: 320px; width: 100%;"></div>
+      <div class="skeleton border-0 rounded-4 mb-4" style="height: 120px; width: 100%;"></div>
+      <div class="skeleton border-0 rounded-4 mb-4" style="height: 300px; width: 100%;"></div>
+    </div>
+    <div class="col-12 col-lg-4">
+      <div class="skeleton border-0 rounded-4 mb-4" style="height: 300px; width: 100%;"></div>
+      <div class="skeleton border-0 rounded-4 mb-4" style="height: 100px; width: 100%;"></div>
+    </div>
   </div>
-  <p class="text-muted mt-3">Carregando informações do curso...</p>
 </div>
 
 <!-- Error State -->

@@ -1,9 +1,27 @@
-<!-- Loading State -->
-<div class="container-fluid py-5 text-center" *ngIf="isPageLoading">
-  <div class="spinner-border text-primary" role="status">
-    <span class="visually-hidden">Carregando...</span>
+<!-- Skeleton State -->
+<div class="lesson-viewer-container animated-fade-in p-3 p-md-4" *ngIf="isPageLoading">
+  <div class="content-grid">
+    <main class="main-content">
+      <div class="skeleton mb-4" style="width: 100%; aspect-ratio: 16/9; border-radius: 12px;"></div>
+      <div class="lesson-header mb-4">
+        <div class="skeleton skeleton-lg w-75 mb-2"></div>
+        <div class="skeleton skeleton-sm w-25 mb-4"></div>
+        <div class="skeleton skeleton-xs w-100 mb-2"></div>
+        <div class="skeleton skeleton-xs w-100 mb-2"></div>
+        <div class="skeleton skeleton-xs w-50"></div>
+      </div>
+      <div class="actions-bar d-flex justify-content-between mb-4">
+        <div class="skeleton rounded-pill" style="width: 140px; height: 40px;"></div>
+        <div class="skeleton rounded-pill" style="width: 140px; height: 40px;"></div>
+      </div>
+    </main>
+    <aside class="sidebar mt-4 mt-lg-0">
+      <div class="sidebar-header mb-3">
+        <div class="skeleton skeleton-md w-50"></div>
+      </div>
+      <div class="skeleton rounded-3 mb-2 w-100" style="height: 60px;" *ngFor="let i of [1,2,3,4,5]"></div>
+    </aside>
   </div>
-  <p class="text-muted mt-3">Carregando informações da aula...</p>
 </div>
 
 <div class="lesson-viewer-container animated-fade-in" *ngIf="!isPageLoading && course && currentLesson">
@@ -17,9 +35,9 @@
       
       <!-- Video Player Placeholder -->
       <div class="video-wrapper">
-        <div class="video-overlay" *ngIf="isVideoLoading">
-          <div class="spinner"></div>
-          <span>Carregando vídeo...</span>
+        <div class="video-overlay" *ngIf="isVideoLoading" style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(15, 23, 42, 0.95); position: absolute; inset: 0; z-index: 10;">
+          <div class="skeleton mb-3" style="width: 50px; height: 50px; border-radius: 50%; opacity: 0.5;"></div>
+          <span class="text-white-50 fw-semibold small">Carregando player...</span>
         </div>
         
         <!-- Placeholder iframe for bunny.net -->

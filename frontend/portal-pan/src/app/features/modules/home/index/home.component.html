@@ -50,12 +50,12 @@
 
           <button class="btn d-flex align-items-center gap-2 p-1 border-0 bg-transparent shadow-none" (click)="toggleProfile($event)">
 
-            <div [ngClass]="{'bg-loading': isLoadingPage, 'bg-gradient-avatar': !isLoadingPage}" class="avatar-circle-sm  text-white fw-bold d-flex align-items-center justify-content-center rounded-circle shadow-sm">
+            <div [ngClass]="{'skeleton': isLoadingPage, 'bg-gradient-avatar': !isLoadingPage}" class="avatar-circle-sm  text-white fw-bold d-flex align-items-center justify-content-center rounded-circle shadow-sm">
               <span *ngIf="!isLoadingPage">{{ getInitials(studentName) }}</span>
             </div>
 
             <div class="text-start d-none d-md-block" style="line-height: 1.1;">
-              <div class="fw-bold text-dark small" [ngClass]="{'bg-loading': isLoadingPage}">
+              <div class="fw-bold text-dark small" [ngClass]="{'skeleton skeleton-sm mt-1': isLoadingPage}">
                 <span *ngIf="!isLoadingPage">{{ studentName }}</span>
                 <span *ngIf="isLoadingPage">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
               </div>
@@ -69,10 +69,10 @@
           <div class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-2 dropdown-menu-custom animated-fade-in show" *ngIf="showProfileDropdown" style="width: 270px; position: absolute; right: 0; top: 48px; z-index: 1050;" (click)="$event.stopPropagation()">
             
             <div class="p-3 border-bottom text-center">
-              <div [ngClass]="{'bg-loading': isLoadingPage, 'bg-gradient-avatar': !isLoadingPage}" class="avatar-circle-lg text-white fw-bold d-flex align-items-center justify-content-center rounded-circle mx-auto mb-2 fs-3 shadow">
+              <div [ngClass]="{'skeleton': isLoadingPage, 'bg-gradient-avatar': !isLoadingPage}" class="avatar-circle-lg text-white fw-bold d-flex align-items-center justify-content-center rounded-circle mx-auto mb-2 fs-3 shadow">
                 <span *ngIf="!isLoadingPage">{{ getInitials(studentName) }}</span>
               </div>
-              <h6 class="mb-1 fw-bold text-dark text-truncate" [ngClass]="{'bg-loading': isLoadingPage}">
+              <h6 class="mb-1 fw-bold text-dark text-truncate" [ngClass]="{'skeleton skeleton-sm w-75 mx-auto': isLoadingPage}">
                  <span *ngIf="!isLoadingPage">{{ studentName }}</span>
                  <span *ngIf="isLoadingPage">&nbsp;</span>
               </h6>

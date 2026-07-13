@@ -23,7 +23,7 @@
       </div>
       <div class="col-12 col-lg-4 d-flex justify-content-center justify-content-lg-end">
         <div class="hero-quick-card bg-blur rounded-3 p-2 px-3 border border-white border-opacity-10 d-flex align-items-center gap-3 text-start shadow-sm" 
-             [ngClass]="{'bg-loading bg-blur': isLoadingPage}" 
+             [ngClass]="{'skeleton': isLoadingPage}" 
              [style.cursor]="homeData?.myLatestLesson ? 'pointer' : 'default'"
              (click)="goToLatestLesson()"
              style="max-width: 250px;">

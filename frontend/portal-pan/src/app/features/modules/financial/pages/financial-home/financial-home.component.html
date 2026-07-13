@@ -104,16 +104,41 @@
       </span>
     </div>
 
-    <div *ngIf="isLoading" class="p-4">
-      <div class="skeleton-row mb-3" *ngFor="let i of [1,2,3,4,5]">
-        <div class="d-flex align-items-center gap-3">
-          <div class="skeleton rounded-circle" style="width:40px; height:40px; flex-shrink:0;"></div>
-          <div class="flex-grow-1">
-            <div class="skeleton skeleton-sm mb-1"></div>
-            <div class="skeleton skeleton-xs" style="width: 60%;"></div>
+    <!-- Skeleton Tabela (Desktop) -->
+    <div *ngIf="isLoading" class="p-4 d-none d-md-block">
+      <div class="mb-4" *ngFor="let i of [1,2,3,4,5]">
+        <div class="d-flex align-items-center justify-content-between gap-3">
+          <div class="d-flex align-items-center gap-3 w-50">
+            <div class="skeleton skeleton-avatar flex-shrink-0"></div>
+            <div class="w-100">
+              <div class="skeleton skeleton-sm mb-2" style="width: 60%;"></div>
+              <div class="skeleton skeleton-xs" style="width: 40%;"></div>
+            </div>
           </div>
-          <div class="skeleton" style="width: 80px; height: 20px; border-radius: 999px;"></div>
-          <div class="skeleton" style="width: 80px; height: 20px; border-radius: 4px;"></div>
+          <div class="skeleton skeleton-sm rounded-pill" style="width: 10%;"></div>
+          <div class="skeleton skeleton-sm rounded-pill" style="width: 15%;"></div>
+          <div class="skeleton skeleton-sm rounded-pill" style="width: 10%;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skeleton Cards (Mobile) -->
+    <div *ngIf="isLoading" class="p-3 d-block d-md-none bg-light">
+      <div class="card mb-3 border-0 shadow-sm rounded-4" *ngFor="let i of [1,2,3,4]">
+        <div class="card-body p-3">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <div class="d-flex align-items-center gap-2 w-100">
+              <div class="skeleton skeleton-avatar flex-shrink-0" style="width: 40px; height: 40px;"></div>
+              <div class="w-100">
+                <div class="skeleton skeleton-sm mb-2" style="width: 70%;"></div>
+                <div class="skeleton skeleton-xs" style="width: 40%;"></div>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top border-secondary border-opacity-10">
+            <div class="skeleton skeleton-sm rounded-pill" style="width: 30%;"></div>
+            <div class="skeleton skeleton-sm rounded-pill" style="width: 25%;"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -134,7 +159,8 @@
       </div>
     </div>
 
-    <div class="table-responsive" *ngIf="!isLoading && filteredTransactions.length > 0">
+    <!-- Tabela Desktop -->
+    <div class="table-responsive d-none d-md-block" *ngIf="!isLoading && filteredTransactions.length > 0">
       <table class="table transaction-table mb-0 align-middle">
         <thead class="table-header">
           <tr>
@@ -209,6 +235,40 @@
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <!-- Cards Mobile -->
+    <div class="d-block d-md-none p-3 bg-light" *ngIf="!isLoading && filteredTransactions.length > 0">
+      <div class="card mb-3 border-0 shadow-sm rounded-4 transaction-row" *ngFor="let tx of paginatedTransactions" (click)="openDetail(tx)">
+        <div class="card-body p-3">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <div class="d-flex align-items-center gap-2">
+              <div class="tx-icon-box rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+                   [style.background]="tx.color + '18'" style="width: 40px; height: 40px;">
+                <i class="fas" [ngClass]="tx.icon" [style.color]="tx.color"></i>
+              </div>
+              <div>
+                <h6 class="mb-0 fw-bold" style="font-size: 0.85rem;">{{ tx.name }}</h6>
+                <small class="text-muted font-monospace" style="font-size: 0.65rem;">{{ tx.transactionCode }}</small>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top border-secondary border-opacity-10">
+            <div>
+              <span class="badge rounded-pill px-2 py-1 fw-semibold d-flex align-items-center gap-1 w-fit"
+                    [ngClass]="getStatusBadgeClass(tx.status)"
+                    style="font-size: 0.65rem;">
+                <i class="fas" [ngClass]="getStatusIcon(tx.status)" style="font-size: 0.6rem;"></i>
+                {{ tx.status }}
+              </span>
+            </div>
+            <div class="text-end">
+              <div class="fw-extrabold text-dark" style="font-size: 0.95rem;">{{ formatCurrency(tx.value) }}</div>
+              <small class="text-muted" style="font-size: 0.7rem;">{{ tx.chargeDate }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="card-footer bg-white border-top border-secondary border-opacity-10 px-4 py-3 d-flex align-items-center justify-content-between"
@@ -309,6 +369,15 @@
               (click)="downloadReceipt(selectedTransaction)">
         <i class="fas fa-file-download"></i> Baixar Comprovante (PDF)
       </button>
+
+      <button *ngIf="selectedTransaction.isRefundable" 
+              class="btn btn-outline-danger rounded-4 py-2.5 fw-bold d-flex align-items-center justify-content-center gap-2"
+              style="font-size: 0.83rem; border-width: 2px;"
+              (click)="requestRefund(selectedTransaction)"
+              title="Solicitar reembolso deste item">
+        <i class="fas fa-undo-alt"></i> Solicitar Reembolso
+      </button>
+
       <button class="btn btn-outline-secondary rounded-4 py-2 fw-semibold"
               style="font-size: 0.82rem; border-color: rgba(0,0,0,0.07);"
               (click)="closeDetail()">

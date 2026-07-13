@@ -26,31 +26,36 @@ public class GetMyCoursesQueryHandler : IRequestHandler<GetMyCoursesQuery, List<
             
         var courses = await _context.Courses
             .AsNoTracking()
-            .Include(c => c.CourseCategories)
-                .ThenInclude(cc => cc.Category)
             .Where(c => c.Active)
             .Select(c => new {
                 Course = c,
-                Released = enrolledCourseIds.Contains(c.Id)
+                Categories = c.CourseCategories.Select(cc => cc.Category).ToList(),
+                Released = enrolledCourseIds.Contains(c.Id),
+                TotalLessons = c.Modules.SelectMany(m => m.Lessons).Count(l => l.Active),
+                CompletedLessons = c.Modules.SelectMany(m => m.Lessons).SelectMany(l => l.LessonViews).Count(lv => lv.UserId == user.Id),
+                AverageRating = c.CourseRates.Any() ? c.CourseRates.Average(r => (double)r.Rate) : 0.0
             })
             .OrderByDescending(x => x.Released)
             .ThenByDescending(x => x.Course.CreatedAt)
             .ToListAsync(cancellationToken);
             
-        var result = courses.Select(x => new PortalMyCourseDto(
-            x.Course.Id,
-            x.Course.Name,
-            x.Course.Description,
-            x.Course.ImgCoverLink,
-            x.Released,
-            "#6366f1",
-            $"NX-{x.Course.Id:D4}",
-            4.8m,
-            x.Released ? 25 : 0,
-            x.Released ? 5 : 0,
-            20,
-            x.Course.CourseCategories.Select(cc => new Nexas.Application.Courses.Common.CourseCategoryBasicDto(cc.Category.Id, cc.Category.Name)).ToList()
-        )).ToList();
+        var result = courses.Select(x => {
+            int progress = x.TotalLessons > 0 ? (int)((x.CompletedLessons * 100.0) / x.TotalLessons) : 0;
+            return new PortalMyCourseDto(
+                x.Course.Id,
+                x.Course.Name,
+                x.Course.Description,
+                x.Course.ImgCoverLink,
+                x.Released,
+                "#6366f1", // Color (A tabela de curso ainda não tem coluna Color)
+                $"NX-{x.Course.Id:D4}", // Code (Mock, pois também não há coluna nativa)
+                (decimal)Math.Round(x.AverageRating, 1),
+                progress,
+                x.CompletedLessons,
+                x.TotalLessons,
+                x.Categories.Select(cat => new Nexas.Application.Courses.Common.CourseCategoryBasicDto(cat.Id, cat.Name)).ToList()
+            );
+        }).ToList();
         
         return result;
     }

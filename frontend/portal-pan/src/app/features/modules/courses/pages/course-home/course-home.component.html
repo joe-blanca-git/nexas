@@ -50,18 +50,16 @@
         
         <div class="position-relative overflow-hidden" style="height: 160px; min-height: 160px;">
           <img [src]="course.imgCoverLink || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQY5JRi1qnVrXkmfdZGtvwU__qfPnrsVZqIVg&s'" class="w-100 h-100 object-fit-cover course-thumbnail" alt="Course Cover Image">
-          <!-- TODO: Trazer categoria na API 
           <span class="badge position-absolute start-3 top-3 px-3 py-1.5 rounded-pill shadow-sm"
                 [style.background-color]="course.color"
                 style="font-size: 0.65rem; font-weight: 600; color: #ffffff;">
-            {{ course.category }}
+            {{ course.categories && course.categories.length > 0 ? course.categories[0].name : 'Geral' }}
           </span>
-          -->
+         
         </div>
 
         <div class="card-body p-4 d-flex flex-column flex-grow-1 justify-content-between">
           <div>
-            <!-- TODO: Trazer código e rating na API
             <div class="d-flex align-items-center justify-content-between mb-2">
               <span class="font-monospace text-muted small" style="font-size: 0.68rem; letter-spacing: 0.02rem;">{{ course.code }}</span>
               <div class="d-flex align-items-center gap-1 small text-muted" style="font-size: 0.72rem;">
@@ -69,8 +67,7 @@
                 <span class="fw-bold text-dark">{{ course.rating }}</span>
               </div>
             </div>
-            -->
-            
+           
             <h5 class="fw-extrabold text-dark mb-2 course-title-hover mt-3" style="font-size: 0.98rem; line-height: 1.35; height: 2.6rem; overflow: hidden;">
               {{ course.title }}
             </h5>
@@ -82,7 +79,6 @@
 
           <div>
             <div class="pt-3 border-top border-secondary border-opacity-10">
-              <!-- TODO: Trazer progresso e total de aulas na API
               <div class="d-flex justify-content-between align-items-center mb-1.5" style="font-size: 0.72rem;">
                 <span class="text-muted">Progresso</span>
                 <span class="fw-bold text-dark">{{ course.progress }}%</span>
@@ -96,13 +92,13 @@
                      [style.box-shadow]="'0 0 8px ' + course.color + '80'">
                 </div>
               </div>
-              -->
+             
               <div class="d-flex justify-content-between align-items-center mt-3 pt-1">
-                <!--
+                
                 <span class="text-muted font-monospace" style="font-size: 0.65rem;">
                   <i class="far fa-play-circle me-1"></i>{{ course.completedLessons }}/{{ course.totalLessons }} aulas
                 </span>
-                -->
+               
                 <a class="btn btn-link ms-auto text-decoration-none fw-bold p-0 d-flex align-items-center gap-1.5 transition active-hover-link"
                    style="color: #6366f1; font-size: 0.72rem;">
                   {{course.released ? 'Acessar' : 'Comprar Agora'}}

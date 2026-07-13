@@ -6,5 +6,11 @@ public record PortalMyCourseDto(
     string? Description,
     string? ImgCoverLink,
     bool Released,
+    string Color,
+    string Code,
+    decimal Rating,
+    int Progress,
+    int CompletedLessons,
+    int TotalLessons,
     List<Nexas.Application.Courses.Common.CourseCategoryBasicDto>? Categories = null
 );

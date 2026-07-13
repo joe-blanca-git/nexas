@@ -16,6 +16,12 @@ export interface ICourse {
   description: string;
   imgCoverLink: string;
   released: boolean;
+  color?: string;
+  code?: string;
+  rating?: number;
+  progress?: number;
+  completedLessons?: number;
+  totalLessons?: number;
   categories?: ICategory[];
 }
 

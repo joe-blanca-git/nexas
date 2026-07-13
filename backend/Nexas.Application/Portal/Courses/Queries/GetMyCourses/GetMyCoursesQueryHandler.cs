@@ -43,6 +43,12 @@ public class GetMyCoursesQueryHandler : IRequestHandler<GetMyCoursesQuery, List<
             x.Course.Description,
             x.Course.ImgCoverLink,
             x.Released,
+            "#6366f1",
+            $"NX-{x.Course.Id:D4}",
+            4.8m,
+            x.Released ? 25 : 0,
+            x.Released ? 5 : 0,
+            20,
             x.Course.CourseCategories.Select(cc => new Nexas.Application.Courses.Common.CourseCategoryBasicDto(cc.Category.Id, cc.Category.Name)).ToList()
         )).ToList();
         

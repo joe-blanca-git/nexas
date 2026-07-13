@@ -59,11 +59,14 @@
         (click)="viewCertificate(cert.hash)">
 
         <div class="position-relative certificate-cover">
-          <div class="bg-pattern" [ngStyle]="{'background-image': cert.coverImage ? 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7)), url(' + cert.coverImage + ')' : ''}" [style.background-size]="'cover'" [style.background-position]="'center'"></div>
-          <i class="fas fa-certificate certificate-watermark"></i>
+          <img *ngIf="cert.coverImage" [src]="cert.coverImage" class="position-absolute w-100 h-100" style="object-fit: cover; top: 0; left: 0; z-index: 0;">
+          <div *ngIf="cert.coverImage" class="position-absolute w-100 h-100" style="background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.8)); top: 0; left: 0; z-index: 1;"></div>
+          
+          <div class="bg-pattern position-relative" *ngIf="!cert.coverImage" style="z-index: 2;"></div>
+          <i class="fas fa-certificate certificate-watermark position-relative" *ngIf="!cert.coverImage" style="z-index: 2;"></i>
 
           <span class="badge position-absolute start-3 top-3 px-3 py-1.5 rounded-pill shadow-sm"
-            style="background-color: #10b981; font-size: 0.65rem; font-weight: 600; color: #ffffff;">
+            style="background-color: #10b981; font-size: 0.65rem; font-weight: 600; color: #ffffff; z-index: 3;">
             <i class="fas fa-check-circle me-1"></i> {{ cert.status }}
           </span>
         </div>
@@ -95,7 +98,7 @@
               <div class="d-flex justify-content-between align-items-center pt-1">
                 <a class="btn btn-link text-decoration-none text-muted fw-bold p-0 d-flex align-items-center gap-1.5 transition active-hover-link"
                   style="font-size: 0.72rem;" (click)="viewCertificate(cert.hash); $event.stopPropagation()">
-                  <i class="fas fa-eye fs-8"></i> Visualizar
+                  <i class="fas fa-eye fs-8"></i>&nbsp; Visualizar
                 </a>
 
                 <button

@@ -1,9 +1,7 @@
 <div class="animated-fade-in">
   <div class="row mb-4 align-items-center">
     <div class="col-12 col-md-8">
-      <h3 class="fw-extrabold text-dark-title tracking-tight mb-1">Meus Certificados</h3>
-      <p class="text-muted small mb-0">Acompanhe suas conquistas e faça o download dos seus certificados de conclusão.
-      </p>
+   
     </div>
     <div class="col-12 col-md-4 mt-3 mt-md-0 d-flex justify-content-md-end">
       <div class="position-relative w-100 search-wrapper">
@@ -11,7 +9,7 @@
           <i class="fas fa-search"></i>
         </span>
         <input type="text" class="form-control rounded-pill ps-5 bg-white border shadow-sm py-2"
-          placeholder="Buscar pelo curso ou ID..." [(ngModel)]="searchTerm"
+          placeholder="Buscar pelo curso..." [(ngModel)]="searchTerm"
           style="font-size: 0.85rem; border-color: rgba(0,0,0,0.06) !important;">
       </div>
     </div>
@@ -23,7 +21,7 @@
         <div class="stat-icon bg-indigo-light">
           <i class="fas fa-award"></i>
         </div>
-        <div class="stat-info">
+        <div class="stat-info d-flex justify-content-between align-items-center w-100">
           <span class="stat-label">Total de Certificados</span>
           <span class="stat-value">{{ totalCertificates }}</span>
         </div>
@@ -35,7 +33,7 @@
         <div class="stat-icon bg-emerald-light">
           <i class="fas fa-clock"></i>
         </div>
-        <div class="stat-info">
+        <div class="stat-info d-flex justify-content-between align-items-center w-100">
           <span class="stat-label">Horas Acumuladas</span>
           <span class="stat-value">{{ totalHours }}h</span>
         </div>
@@ -61,7 +59,7 @@
         (click)="viewCertificate(cert.hash)">
 
         <div class="position-relative certificate-cover">
-          <div class="bg-pattern"></div>
+          <div class="bg-pattern" [ngStyle]="{'background-image': cert.coverImage ? 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7)), url(' + cert.coverImage + ')' : ''}" [style.background-size]="'cover'" [style.background-position]="'center'"></div>
           <i class="fas fa-certificate certificate-watermark"></i>
 
           <span class="badge position-absolute start-3 top-3 px-3 py-1.5 rounded-pill shadow-sm"

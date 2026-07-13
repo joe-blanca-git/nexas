@@ -12,6 +12,21 @@ export interface CertificateDetailDto {
   issuedAt: string | Date;
 }
 
+export interface MyCertificateItemDto {
+  hash: string;
+  courseName: string;
+  workload: number;
+  completionDate: string;
+  status: string;
+  coverImage?: string;
+}
+
+export interface MyCertificatesResponseDto {
+  totalCertificates: number;
+  totalHours: number;
+  certificates: MyCertificateItemDto[];
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -45,6 +60,19 @@ export class CertificateService extends BaseService {
       );
     } catch (error) {
       throw new Error('Certificado inválido ou não encontrado.');
+    }
+  }
+
+  public async getMyCertificates(): Promise<MyCertificatesResponseDto> {
+    try {
+      return await firstValueFrom(
+        this.http.get<MyCertificatesResponseDto>(
+          `${this.urlApiNexas}certificates/my`,
+          this.GetAuthHeaderJson()
+        )
+      );
+    } catch (error) {
+      throw new Error('Falha ao carregar certificados.');
     }
   }
 }

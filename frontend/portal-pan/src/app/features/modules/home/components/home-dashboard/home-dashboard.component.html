@@ -22,25 +22,31 @@
         </div>
       </div>
       <div class="col-12 col-lg-4 d-flex justify-content-center justify-content-lg-end">
-        <!-- <div class="hero-quick-card bg-blur rounded-3 p-2 px-3 border border-white border-opacity-10 d-flex align-items-center gap-3 text-start shadow-sm" [ngClass]="{'bg-loading bg-blur': isLoadingPage}" style="max-width: 250px;">
+        <div class="hero-quick-card bg-blur rounded-3 p-2 px-3 border border-white border-opacity-10 d-flex align-items-center gap-3 text-start shadow-sm" 
+             [ngClass]="{'bg-loading bg-blur': isLoadingPage}" 
+             [style.cursor]="homeData?.myLatestLesson ? 'pointer' : 'default'"
+             (click)="goToLatestLesson()"
+             style="max-width: 250px;">
           <div *ngIf="!isLoadingPage" class="rounded-circle bg-white text-dark d-flex align-items-center justify-content-center shadow"
                style="width: 40px; height: 40px; flex-shrink: 0;">
-            <i class="fas fa-book-open fs-5 text-indigo"></i>
+            <i class="fas fa-play fs-6 text-indigo" style="margin-left: 2px;"></i>
           </div>
-          <div *ngIf="!isLoadingPage" >
+          <div *ngIf="!isLoadingPage" style="min-width: 0;">
             <div class="text-uppercase fw-bold text-light-muted"
                  style="font-size: 0.6rem; letter-spacing: 0.05rem;">
               Continue de onde parou
             </div>
-            <div class="fw-bold text-white mb-0 mt-1 text-truncate" style="font-size: 0.8rem;">---</div>
+            <div class="fw-bold text-white mb-0 mt-1 text-truncate" style="font-size: 0.8rem;" [title]="homeData?.myLatestLesson?.lessonTitle || 'Nenhuma aula iniciada'">
+              {{ homeData?.myLatestLesson?.lessonTitle || 'Nenhuma aula iniciada' }}
+            </div>
           </div>
-        </div> -->
+        </div>
       </div>
     </div>
   </div>
 
   <!-- Responsive Dashboard Stats Cards -->
-  <app-dashboard (tabChange)="setActiveTab($event)" [isLoadingPage]="isLoadingPage" [latestCourse]="homeData?.latestCourse || null"></app-dashboard>
+  <app-dashboard (tabChange)="setActiveTab($event)" [isLoadingPage]="isLoadingPage" [latestCourse]="homeData?.latestCourse || null" [coursesSummary]="homeData?.myCoursesSummary || null"></app-dashboard>
 
   <!-- Responsive Blog External Component -->
   <app-blog-external [isLoadingPage]="isLoadingPage" [news]="homeData?.latestNews || []"></app-blog-external>

@@ -451,6 +451,9 @@ export class HomeComponent implements OnInit {
     this.activeTab = cleanTab === 'home' ? 'dashboard' : cleanTab;
     this.closeDropdowns();
 
+    // Dispara a rota (importante para chamadas que vem do header dropdown)
+    this.router.navigate([cleanTab]);
+
     // Auto collapse sidebar on small screen after selecting an option
     if (typeof window !== 'undefined') {
       if (window.innerWidth < 768) {

@@ -72,6 +72,12 @@ export const routes: Routes = [
                 title: 'Suporte',
                 loadChildren: () =>
                     import('./features/modules/support/support.routes').then((r) => r.supportRoutes),
+            },
+            {
+                path: 'profile',
+                title: 'Dados Cadastrais',
+                loadChildren: () =>
+                    import('./features/modules/profile/profile.routes').then((r) => r.profileRoutes),
             }
         ]
     }

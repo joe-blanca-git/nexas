@@ -301,5 +301,10 @@
             Retorna os dados do certificado validado.
             </summary>
         </member>
+        <member name="M:Nexas.Api.Controllers.V1.CertificatesController.GetMyCertificates">
+            <summary>
+            Retorna os certificados do usuário logado.
+            </summary>
+        </member>
     </members>
 </doc>

@@ -54,7 +54,7 @@
       <div class="d-flex align-items-center justify-content-between" *ngIf="!isLoadingPage">
         <div>
           <span class="text-muted fw-bold text-uppercase small-title font-monospace" style="font-size: 0.72rem; letter-spacing: 0.05rem;">Meus Cursos</span>
-          <h3 class="fw-extrabold text-dark mt-2 mb-0">{{info.myCourses || 0}} Curso{{(info.myCourses || 0) > 1 ? 's' : ''}}</h3>
+          <h3 class="fw-extrabold text-dark mt-2 mb-0">{{info.myCourses || 0}} Curso{{(info.myCourses || 0) !== 1 ? 's' : ''}}</h3>
         </div>
         <div class="metric-icon-box bg-indigo-light text-primary-emphasis rounded-4 d-flex align-items-center justify-content-center shadow-sm"
              style="width: 48px; height: 48px;">
@@ -62,7 +62,7 @@
         </div>
       </div>
       <div class="text-success small fw-bold mt-4 d-flex align-items-center" *ngIf="!isLoadingPage">
-        <i class="fas fa-check-circle me-1.5"></i> <span>Progresso Geral: {{info.progressMyCourses}}%</span>
+        <i class="fas fa-check-circle me-1.5"></i>&nbsp;<span>Progresso Geral: {{info.progressMyCourses}}%</span>
       </div>
     </div>
   </div>

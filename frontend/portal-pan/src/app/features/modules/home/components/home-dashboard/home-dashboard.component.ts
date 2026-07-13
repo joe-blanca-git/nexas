@@ -51,4 +51,11 @@ export class HomeDashboardComponent implements OnInit {
   setActiveTab(tab: string) {
     this.router.navigate([tab]);
   }
+
+  goToLatestLesson() {
+    const latestLesson = this.homeData?.myLatestLesson;
+    if (latestLesson) {
+      this.router.navigate(['/courses/lesson', latestLesson.courseId], { queryParams: { lessonId: latestLesson.lessonId } });
+    }
+  }
 }

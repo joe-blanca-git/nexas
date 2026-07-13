@@ -1,6 +1,28 @@
 export interface IPortalHomeData {
   latestCourse: ILatestCourse | null;
   latestNews: ILatestNews[];
+  myLatestLesson?: IMyLatestLesson | null;
+  myCoursesSummary?: IMyCoursesSummary | null;
+}
+
+export interface IMyLatestLesson {
+  courseId: number;
+  courseTitle: string;
+  moduleId: number;
+  moduleTitle: string;
+  lessonId: number;
+  lessonTitle: string;
+  lessonOrder: number | null;
+  thumbnail: string | null;
+  lastViewedAt: string;
+  progressPercentage: number;
+}
+
+export interface IMyCoursesSummary {
+  totalCourses: number;
+  completedCourses: number;
+  coursesInProgress: number;
+  overallProgress: number;
 }
 
 export interface ILatestCourse {

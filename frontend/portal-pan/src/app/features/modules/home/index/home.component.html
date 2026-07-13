@@ -83,7 +83,7 @@
                 <i class="me-4 fa-regular fa-id-card text-muted" style="width: 16px;"></i>
                 <span class="small font-medium">Carteirinha Digital</span>
               </button> -->
-              <button class="dropdown-item py-2 px-3 rounded-3 d-flex align-items-center gap-2.5 cursor-pointer text-muted-hover transition" [disabled]="isLoadingPage">
+              <button class="dropdown-item py-2 px-3 rounded-3 d-flex align-items-center gap-2.5 cursor-pointer text-muted-hover transition" [disabled]="isLoadingPage" (click)="setActiveTab('profile')">
                 <i class="me-4 fa-regular fa-user text-muted" style="width: 16px;"></i>
                 <span class="small font-medium">Dados Cadastrais</span>
               </button>

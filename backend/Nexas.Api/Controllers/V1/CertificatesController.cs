@@ -42,6 +42,19 @@ public class CertificatesController : ControllerBase
 
         return Ok(certificate);
     }
+
+    /// <summary>
+    /// Retorna os certificados do usuário logado.
+    /// </summary>
+    [HttpGet("my")]
+    [Authorize]
+    public async Task<IActionResult> GetMyCertificates()
+    {
+        var query = new Nexas.Application.Certificates.Queries.GetMyCertificates.GetMyCertificatesQuery();
+        var result = await _mediator.Send(query);
+
+        return Ok(result);
+    }
 }
 
 public class GenerateCertificateRequest

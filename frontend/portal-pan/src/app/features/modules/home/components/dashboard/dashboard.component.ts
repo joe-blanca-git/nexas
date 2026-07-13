@@ -1,6 +1,6 @@
 import { Component, Output, EventEmitter, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ILatestCourse } from '../../models/home.model';
+import { ILatestCourse, IMyCoursesSummary } from '../../models/home.model';
 
 export interface IInfo {
   myCourses: number;
@@ -36,6 +36,7 @@ export class DashboardComponent implements OnChanges {
   
   @Input() isLoadingPage: boolean = false;
   @Input() latestCourse: ILatestCourse | null = null;
+  @Input() coursesSummary: IMyCoursesSummary | null = null;
 
   info: IInfo = {
     myCourses: 0,
@@ -58,15 +59,15 @@ export class DashboardComponent implements OnChanges {
   };
 
   ngOnChanges(changes: SimpleChanges) {
-    if ((changes['latestCourse'] || changes['isLoadingPage']) && !this.isLoadingPage) {
+    if ((changes['latestCourse'] || changes['coursesSummary'] || changes['isLoadingPage']) && !this.isLoadingPage) {
       this.buildInfo();
     }
   }
 
   buildInfo() {
     this.info = {
-      myCourses: 0,
-      progressMyCourses: 0,
+      myCourses: this.coursesSummary?.totalCourses || 0,
+      progressMyCourses: this.coursesSummary?.overallProgress || 0,
       myForums: 0,
       myCertificates: 0,
       lastCourse: this.latestCourse ? {

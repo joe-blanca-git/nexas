@@ -47,6 +47,10 @@ export class CertificateViewerComponent implements OnInit {
       this.errorMessage = error.message || 'Erro ao validar o certificado.';
     } finally {
       this.isLoading = false;
+      const shouldDownload = this.route.snapshot.queryParamMap.get('download') === 'true';
+      if (shouldDownload && !this.errorMessage) {
+        setTimeout(() => this.downloadPDF(), 800); // Dá tempo para as imagens e fontes renderizarem
+      }
     }
   }
 

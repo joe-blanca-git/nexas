@@ -1,0 +1,56 @@
+.bg-blur {
+  background: rgba(255, 255, 255, 0.09) !important;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+.welcome-hero-banner {
+  position: relative;
+  
+  .hero-bg-circle {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 1;
+
+    &.circle-1 {
+      width: 400px;
+      height: 400px;
+      right: -100px;
+      top: -150px;
+    }
+
+    &.circle-2 {
+      width: 300px;
+      height: 300px;
+      left: 10%;
+      bottom: -150px;
+    }
+  }
+}
+
+.text-light-muted {
+  color: #cbd5e1 !important;
+}
+
+.text-indigo {
+  color: #818cf8 !important; /* Sleek light-indigo accent */
+}
+
+.fw-extrabold {
+  font-weight: 800;
+}
+
+.animated-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

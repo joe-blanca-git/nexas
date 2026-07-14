@@ -1,0 +1,45 @@
+.breadcrumb-container {
+  ol.breadcrumb {
+    background: transparent;
+    padding: 0;
+    margin: 0;
+
+    .breadcrumb-item {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.85rem;
+      font-weight: 500;
+      
+      a {
+        display: inline-flex;
+        align-items: center;
+        color: #64748b; /* slate-500 */
+        text-decoration: none;
+        transition: color 0.2s ease-in-out;
+        
+        &:hover {
+          color: #6366f1; /* indigo-500 */
+        }
+      }
+
+      &.active {
+        color: #0f172a; /* slate-900 */
+        font-weight: 600;
+      }
+    }
+
+    /* Style the separator */
+    .breadcrumb-item + .breadcrumb-item::before {
+      content: '\f105'; /* FontAwesome chevron-right */
+      font-family: 'Font Awesome 5 Free', 'Font Awesome 6 Free';
+      font-weight: 900;
+      display: inline-flex;
+      align-items: center;
+      color: #cbd5e1; /* slate-300 */
+      font-size: 0.75rem;
+      padding-right: 0.5rem;
+      padding-left: 0.5rem;
+      float: none;
+    }
+  }
+}

@@ -1,0 +1,436 @@
+/* Custom Variable Design System for Portal Aluno Nexas (PAN) */
+$bg-light-modern: #f8fafc;
+$bg-dark-sidebar: #0f172a;
+$sidebar-widget-bg: #1e293b;
+$primary-glow: #6366f1;
+$success-glow: #10b981;
+$transition-speed: 0.3s;
+$cubic-bezier: cubic-bezier(0.4, 0, 0.2, 1);
+
+:host {
+  display: block;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden; /* Enforce screen containment */
+  background-color: $bg-light-modern;
+  font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.bg-light-modern {
+  background-color: $bg-light-modern !important;
+}
+
+/* --- Layout Structure & Sidebar --- */
+#wrapper {
+  overflow-x: hidden; /* Contain all child layouts horizontally */
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+}
+
+.sidebar {
+  width: 260px;
+  min-height: 100vh;
+  background-color: $bg-dark-sidebar !important;
+  transition: width $transition-speed $cubic-bezier;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 1000;
+  overflow: hidden;
+
+  &.collapsed {
+    width: 80px;
+
+    .brand-text, .menu-nav-text, .sidebar-widget, .sidebar-collapse-trigger span {
+      display: none !important;
+    }
+
+    .sidebar-logo {
+      width: 42px;
+      margin: 0 auto;
+    }
+
+    .logo-wrapper {
+      width: 100%;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
+
+.sidebar-logo {
+  width: 100px;
+  height: auto;
+  transition: all $transition-speed $cubic-bezier;
+}
+
+.sidebar-menu-list {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  /* Custom scrollbar inside sidebar menu */
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+  }
+}
+
+.bg-dark-widget {
+  background-color: $sidebar-widget-bg;
+}
+
+.progress-bar.bg-success-glow {
+  background-color: $success-glow !important;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+}
+
+.sidebar-collapse-trigger {
+  color: rgba(248, 250, 252, 0.4) !important;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: #ffffff !important;
+  }
+}
+
+/* --- Main Layout Wrapper & Header --- */
+.main-layout-wrapper {
+  margin-left: 260px;
+  transition: margin-left $transition-speed $cubic-bezier;
+  min-height: 100vh;
+  background-color: $bg-light-modern;
+  width: calc(100% - 260px);
+  max-width: 100%;
+  min-width: 0; /* Flexbox item horizontal boundary protection */
+
+  &.shifted {
+    margin-left: 80px;
+    width: calc(100% - 80px);
+  }
+
+  @media (max-width: 768px) {
+    margin-left: 0 !important;
+    width: 100% !important;
+    overflow-x: hidden; /* Contain elements internally, let tables scroll locally */
+  }
+}
+
+.navbar {
+  height: 70px;
+  background: rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: blur(10px);
+  z-index: 999;
+}
+
+.bg-light-gray {
+  background-color: #f1f5f9 !important;
+}
+
+.header-menu-toggle {
+  &:hover {
+    background-color: #f1f5f9;
+  }
+}
+
+.header-icon-btn {
+  &:hover {
+    background-color: #f1f5f9 !important;
+  }
+}
+
+/* --- Custom Avatars --- */
+.avatar-circle-sm {
+  width: 34px;
+  height: 34px;
+  font-size: 0.8rem;
+  letter-spacing: 0.02rem;
+}
+
+.avatar-circle-lg {
+  width: 76px;
+  height: 76px;
+}
+
+.bg-gradient-avatar {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+}
+
+/* --- Dropdown Menus --- */
+.dropdown-menu-custom {
+  display: block;
+  pointer-events: auto;
+  border-radius: 1rem !important;
+  border: 1px solid rgba(0, 0, 0, 0.05) !important;
+  background-color: #ffffff;
+}
+
+.notification-item-card {
+  border-left: 3px solid transparent;
+
+  &.unread-bg {
+    background-color: rgba(99, 102, 241, 0.03);
+    border-left-color: $primary-glow;
+  }
+
+  &:hover {
+    background-color: #f8fafc;
+  }
+}
+
+.list-scroll-container {
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+  }
+}
+
+.dropdown-item {
+  &.text-muted-hover:hover {
+    background-color: #f1f5f9;
+    color: #0f172a !important;
+  }
+
+  &.transition-bg-danger:hover {
+    background-color: rgba(220, 53, 69, 0.08);
+    color: #dc3545 !important;
+  }
+}
+
+
+
+/* --- Metric Summary Cards --- */
+.metric-card {
+  transition: all 0.25s ease-in-out;
+  border: 1px solid rgba(0, 0, 0, 0.03) !important;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02) !important;
+  }
+}
+
+/* --- Course Interaction Grid Cards --- */
+.course-interactive-card {
+  border: 1px solid rgba(0, 0, 0, 0.04) !important;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.03) !important;
+  }
+}
+
+.course-gradient-banner {
+  padding: 1.5rem !important;
+}
+
+.text-truncate-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* --- Tables Styling (Boletim, Financeiro, Secretaria) --- */
+.table-dark-header {
+  th {
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
+    font-weight: 600 !important;
+    font-size: 0.78rem !important;
+    text-uppercase: true;
+    letter-spacing: 0.02rem;
+    padding: 1rem 0.75rem !important;
+    border-bottom: none !important;
+
+    &:first-child {
+      border-top-left-radius: 0.75rem !important;
+    }
+    &:last-child {
+      border-top-right-radius: 0.75rem !important;
+    }
+  }
+}
+
+.custom-grades-table, .custom-financial-table, .custom-secretaria-table {
+  tbody tr {
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid #f1f5f9 !important;
+
+    &:hover {
+      background-color: rgba(99, 102, 241, 0.01) !important;
+    }
+
+    td {
+      padding: 1rem 0.75rem !important;
+      border: none !important;
+    }
+  }
+}
+
+.bg-warning-light {
+  background-color: rgba(245, 158, 11, 0.1) !important;
+  color: #d97706 !important;
+}
+
+.bg-success-light {
+  background-color: rgba(16, 185, 129, 0.08) !important;
+  color: #10b981 !important;
+}
+
+/* --- FAQ Accordion --- */
+.faq-accordion-item {
+  border: 1px solid rgba(0, 0, 0, 0.05) !important;
+  overflow: hidden;
+
+  &.faq-open {
+    border-color: rgba(99, 102, 241, 0.2) !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+
+    button {
+      background-color: rgba(99, 102, 241, 0.02) !important;
+    }
+  }
+}
+
+/* --- Modals and Wizards (Secretaria creation request) --- */
+.custom-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 1rem;
+}
+
+.custom-modal-box {
+  width: 100%;
+  max-width: 500px;
+  background-color: #ffffff;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+/* --- Floating Toasts feedback --- */
+.custom-floating-toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 3000;
+  min-width: 250px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.05) !important;
+
+  @media (max-width: 576px) {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    min-width: 0;
+    width: calc(100% - 2rem);
+  }
+}
+
+/* Ensure mobile header dropdowns scale appropriately */
+@media (max-width: 576px) {
+  .dropdown-menu-custom {
+    width: calc(100vw - 2rem) !important;
+    max-width: 320px !important;
+    right: -10px !important;
+  }
+}
+
+/* --- Animations Keyframes --- */
+.animated-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.animated-slide-in {
+  animation: slideInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-scale-up {
+  animation: scaleUp 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleUp {
+  from {
+    transform: scale(0.92);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Responsive side drawer on mobile */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(0); /* Expanded drawer on mobile when sidebarCollapsed is false */
+    width: 280px !important;
+    box-shadow: 0 0 24px rgba(0, 0, 0, 0.25) !important;
+
+    .brand-text, .menu-nav-text, .sidebar-widget, .sidebar-collapse-trigger span {
+      display: inline-block !important;
+    }
+    
+    .sidebar-logo {
+      width: 100px;
+    }
+
+    &.collapsed {
+      transform: translateX(-100%); /* Hidden drawer offscreen when sidebarCollapsed is true */
+      width: 280px !important;
+      box-shadow: none !important;
+    }
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

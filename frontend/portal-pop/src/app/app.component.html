@@ -1,0 +1,12 @@
+<div class="container-fluid p-0" style="height: 100vh;">
+  
+  <ng-container *ngIf="isPublicRoute">
+    <router-outlet></router-outlet>
+  </ng-container>
+
+  <ng-container *ngIf="!isPublicRoute">
+    <router-outlet></router-outlet>
+  </ng-container>
+
+  <app-toast></app-toast>
+</div>

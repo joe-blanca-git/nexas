@@ -1,0 +1,60 @@
+// _skeletons.scss
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background-color: $slate-200;
+  border-radius: $border-radius-sm;
+  
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.4) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s infinite linear;
+  }
+}
+
+// Helpers
+.skeleton-xs { height: 0.75rem; width: 40%; }
+.skeleton-sm { height: 1rem; width: 60%; }
+.skeleton-md { height: 1.25rem; width: 80%; }
+.skeleton-lg { height: 1.5rem; width: 100%; }
+
+.skeleton-text {
+  height: 1rem;
+  margin-bottom: 0.5rem;
+  width: 100%;
+  
+  &:last-child {
+    width: 80%;
+    margin-bottom: 0;
+  }
+}
+
+.skeleton-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
+
+.skeleton-card {
+  padding: 1.5rem;
+  background: white;
+  border-radius: $border-radius-xl;
+  box-shadow: $box-shadow-sm;
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}

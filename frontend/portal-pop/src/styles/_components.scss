@@ -1,0 +1,81 @@
+// _components.scss
+
+// 1. Cards
+.card {
+  border-radius: $border-radius-xl;
+  border: none;
+  box-shadow: $box-shadow-sm;
+  transition: all 0.2s ease-in-out;
+  background-color: #fff;
+  
+  &.hover-elevate:hover {
+    transform: translateY(-2px);
+    box-shadow: $box-shadow;
+  }
+}
+
+// 2. Botões
+.btn {
+  font-weight: 600;
+  border-radius: $border-radius-lg;
+  padding: 0.5rem 1rem;
+  transition: all 0.2s ease-in-out;
+  
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+.btn-primary {
+  background-color: $indigo-600;
+  border-color: $indigo-600;
+  color: white;
+
+  &:hover {
+    background-color: $indigo-700;
+    border-color: $indigo-700;
+  }
+}
+
+.btn-outline-primary {
+  color: $indigo-600;
+  border-color: $indigo-600;
+
+  &:hover {
+    background-color: $indigo-50;
+    color: $indigo-700;
+  }
+}
+
+// 3. Inputs
+.form-control, .form-select {
+  border-radius: $border-radius-lg;
+  border: 1px solid $slate-200;
+  padding: 0.625rem 1rem;
+  color: $slate-700;
+  background-color: #fff;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+  &:focus {
+    border-color: $indigo-400;
+    box-shadow: 0 0 0 0.25rem rgba($indigo-500, 0.25);
+  }
+  
+  &::placeholder {
+    color: $slate-400;
+  }
+}
+
+// 4. Badges
+.badge {
+  font-weight: 600;
+  padding: 0.35em 0.65em;
+  border-radius: 9999px; // pill
+}
+
+// 5. Tooltips
+.tooltip-inner {
+  background-color: $slate-800;
+  border-radius: $border-radius;
+  padding: 0.5rem 0.75rem;
+}

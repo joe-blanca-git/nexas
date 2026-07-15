@@ -70,8 +70,7 @@ app.UseSwagger(c =>
     {
         swaggerDoc.Servers = new List<OpenApiServer>
         {
-            // Força o Swagger a usar a URL externa real em todas as requisições (Try it out)
-            new OpenApiServer { Url = "https://joederblanca.com.br/nexas-api" }
+            new OpenApiServer { Url = "https://joederblanca.com.br/nexas-landing-api" }
         };
     });
 });

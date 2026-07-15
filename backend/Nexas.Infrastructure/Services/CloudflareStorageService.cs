@@ -32,7 +32,7 @@ public class CloudflareStorageService : ICloudflareStorageService
         {
             ServiceURL = serviceUrl,
             ForcePathStyle = true,
-            AuthenticationRegion = "auto"
+            AuthenticationRegion = "us-east-1"
         };
 
         _s3Client = new AmazonS3Client(accessKey, secretKey, config);

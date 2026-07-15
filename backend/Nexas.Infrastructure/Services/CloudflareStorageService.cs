@@ -45,7 +45,8 @@ public class CloudflareStorageService : ICloudflareStorageService
             InputStream = fileStream,
             Key = fileName,
             BucketName = _bucketName,
-            ContentType = contentType
+            ContentType = contentType,
+            DisablePayloadSigning = true
         };
 
         await _s3Client.PutObjectAsync(putRequest);

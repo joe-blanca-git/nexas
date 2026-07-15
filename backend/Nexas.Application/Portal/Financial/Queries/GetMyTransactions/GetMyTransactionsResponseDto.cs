@@ -9,4 +9,5 @@ public class GetMyTransactionsResponseDto
     public string Status { get; set; } = string.Empty;
     public DateTime PaymentDate { get; set; }
     public string TransactionCode { get; set; } = string.Empty;
+    public int? CourseId { get; set; }
 }

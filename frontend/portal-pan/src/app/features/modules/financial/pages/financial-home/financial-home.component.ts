@@ -142,7 +142,8 @@ export class FinancialHomeComponent implements OnInit, OnDestroy {
               transactionCode: p.transactionCode,
               icon: 'fa-book',
               color: '#06b6d4',
-              isRefundable
+              isRefundable,
+              relatedCourseId: p.courseId
             });
           });
         }
@@ -244,94 +245,113 @@ export class FinancialHomeComponent implements OnInit, OnDestroy {
   downloadReceipt(tx: ITransaction): void {
     this.triggerToast(`Gerando comprovante de "${tx.name}"...`);
 
-    const doc = new jsPDF();
-    
-    // Cores e Configurações
-    const primaryColor = '#4f46e5'; // Indigo-600
-    const textColor = '#334155'; // Slate-700
-    const lightGray = '#f1f5f9'; // Slate-100
-    
-    // Fundo do Cabeçalho
-    doc.setFillColor(primaryColor);
-    doc.rect(0, 0, 210, 40, 'F');
-    
-    // Logo / Nome da Empresa (Fictício)
-    doc.setTextColor('#ffffff');
-    doc.setFontSize(22);
-    doc.setFont('helvetica', 'bold');
-    doc.text('NEXAS', 15, 25);
-    
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'normal');
-    doc.text('Comprovante de Pagamento', 210 - 15, 25, { align: 'right' });
+    const renderPdf = (logoImg?: HTMLImageElement) => {
+      const doc = new jsPDF();
+      
+      const primaryColor = '#0f172a'; // Slate-900 (premium dark)
+      const accentColor = '#6366f1'; // Indigo-500
+      const textColor = '#334155';
+      const lightGray = '#f8fafc';
+      
+      // Header Background
+      doc.setFillColor(primaryColor);
+      doc.rect(0, 0, 210, 45, 'F');
+      
+      if (logoImg) {
+        // Render image maintaining aspect ratio
+        const aspectRatio = logoImg.width / logoImg.height;
+        const targetHeight = 14;
+        const targetWidth = targetHeight * aspectRatio;
+        doc.addImage(logoImg, 'PNG', 15, 15, targetWidth, targetHeight);
+      } else {
+        doc.setTextColor('#ffffff');
+        doc.setFontSize(24);
+        doc.setFont('helvetica', 'bold');
+        doc.text('NEXAS', 15, 28);
+      }
+      
+      doc.setTextColor('#94a3b8');
+      doc.setFontSize(8);
+      doc.setFont('helvetica', 'normal');
+      doc.text('COMPROVANTE DE PAGAMENTO', 195, 22, { align: 'right' });
+      
+      doc.setTextColor('#ffffff');
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'bold');
+      doc.text(tx.transactionCode, 195, 29, { align: 'right' });
 
-    // Informações da Transação
-    doc.setTextColor(textColor);
-    doc.setFontSize(14);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Detalhes da Transação', 15, 55);
+      // Title Section
+      doc.setTextColor(primaryColor);
+      doc.setFontSize(15);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Detalhes da Transação', 15, 65);
 
-    // Linha divisória
-    doc.setDrawColor('#e2e8f0'); // Slate-200
-    doc.setLineWidth(0.5);
-    doc.line(15, 60, 195, 60);
+      doc.setDrawColor('#e2e8f0');
+      doc.setLineWidth(0.5);
+      doc.line(15, 70, 195, 70);
 
-    // Helper para desenhar linhas de dados
-    let startY = 70;
-    const lineHeight = 10;
-    
-    const drawRow = (label: string, value: string) => {
+      let startY = 82;
+      const drawRow = (label: string, value: string) => {
+        doc.setTextColor('#64748b');
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.text(label, 15, startY);
+        
+        doc.setTextColor(primaryColor);
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'bold');
+        doc.text(value, 195, startY, { align: 'right' });
+        
+        doc.setDrawColor('#f1f5f9');
+        doc.line(15, startY + 4, 195, startY + 4);
+        
+        startY += 12;
+      };
+
+      drawRow('Data do Pagamento:', tx.chargeDate);
+      drawRow('Descrição:', tx.name);
+      drawRow('Tipo de Produto:', tx.type);
+      drawRow('Método de Pagamento:', tx.paymentMethod);
+      drawRow('Status do Pagamento:', tx.status);
+      
+      if (tx.nextRenewal) {
+        drawRow('Próxima Renovação:', tx.nextRenewal);
+      }
+
+      // Total Box (Rounded Rect)
+      startY += 10;
+      doc.setFillColor(lightGray);
+      doc.setDrawColor(accentColor);
+      doc.setLineWidth(0.5);
+      doc.roundedRect(15, startY, 180, 28, 3, 3, 'FD'); // Fill and border
+      
+      doc.setTextColor('#64748b');
       doc.setFontSize(10);
       doc.setFont('helvetica', 'bold');
-      doc.text(label, 15, startY);
+      doc.text('VALOR TOTAL PAGO', 25, startY + 16);
       
+      doc.setTextColor(accentColor);
+      doc.setFontSize(20);
+      doc.setFont('helvetica', 'bold');
+      doc.text(this.formatCurrency(tx.value), 185, startY + 18, { align: 'right' });
+
+      // Footer
+      doc.setTextColor('#94a3b8');
+      doc.setFontSize(8);
       doc.setFont('helvetica', 'normal');
-      // Alinhar os valores na direita
-      doc.text(value, 195, startY, { align: 'right' });
-      
-      // Linha sutil
-      doc.setDrawColor('#f8fafc'); // Slate-50
-      doc.line(15, startY + 3, 195, startY + 3);
-      
-      startY += lineHeight;
+      doc.text('Este documento é um comprovante de pagamento válido e gerado eletronicamente.', 105, 275, { align: 'center' });
+      doc.text('Plataforma Educacional Nexas - CNPJ: 00.000.000/0001-00', 105, 280, { align: 'center' });
+      doc.text(window.location.origin, 105, 285, { align: 'center' });
+
+      doc.save(`Comprovante_${tx.transactionCode}.pdf`);
+      this.closeDetail();
     };
 
-    drawRow('Código da Transação:', tx.transactionCode);
-    drawRow('Descrição:', tx.name);
-    drawRow('Data do Pagamento:', tx.chargeDate);
-    drawRow('Método de Pagamento:', tx.paymentMethod);
-    drawRow('Status do Pagamento:', tx.status);
-    
-    if (tx.nextRenewal) {
-      drawRow('Próxima Renovação:', tx.nextRenewal);
-    }
-
-    // Bloco de Valor Total
-    startY += 10;
-    doc.setFillColor(lightGray);
-    doc.rect(15, startY, 180, 25, 'F');
-    
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.text('VALOR TOTAL PAGO', 25, startY + 16);
-    
-    doc.setFontSize(16);
-    doc.setTextColor(primaryColor);
-    doc.text(this.formatCurrency(tx.value), 195 - 5, startY + 16, { align: 'right' });
-
-    // Rodapé
-    doc.setTextColor('#94a3b8'); // Slate-400
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    const footerText = 'Este documento é um comprovante de pagamento válido.\nPlataforma Educacional Nexas - CNPJ: 00.000.000/0001-00';
-    
-    const pageHeight = doc.internal.pageSize.getHeight();
-    doc.text(footerText, 105, pageHeight - 20, { align: 'center' });
-
-    // Download do PDF
-    doc.save(`Comprovante_${tx.transactionCode}.pdf`);
-    
-    this.closeDetail();
+    // Carrega a logo dinamicamente para renderizar no PDF
+    const img = new Image();
+    img.src = '/logos/logo-nobg.png';
+    img.onload = () => renderPdf(img);
+    img.onerror = () => renderPdf(); // Falha graciosa se não encontrar a imagem
   }
 
   requestRefund(tx: ITransaction): void {
@@ -341,6 +361,15 @@ export class FinancialHomeComponent implements OnInit, OnDestroy {
       // Futura chamada à API de reembolso. Por enquanto mock visual
       this.triggerToast(`Solicitação de reembolso enviada para ${tx.transactionCode}! Em breve você receberá um email.`);
       this.closeDetail();
+    }
+  }
+
+  continuePayment(tx: ITransaction): void {
+    if (tx.relatedCourseId) {
+      this.closeDetail();
+      window.location.href = `http://localhost:4200/portal-pan/financial/payment/${tx.relatedCourseId}?plan=single`;
+    } else {
+      this.triggerToast('ID do curso não encontrado para continuar o pagamento.');
     }
   }
 

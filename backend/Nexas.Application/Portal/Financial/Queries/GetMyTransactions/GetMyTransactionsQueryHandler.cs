@@ -39,7 +39,8 @@ public class GetMyTransactionsQueryHandler : IRequestHandler<GetMyTransactionsQu
             PaymentMethod = p.PaymentMethod,
             Status = p.Status.ToString(), // Pode mapear para português se desejar depois
             PaymentDate = p.CreatedAt,
-            TransactionCode = p.AsaasPaymentId ?? $"NEXAS-{p.Id}"
+            TransactionCode = p.AsaasPaymentId ?? $"NEXAS-{p.Id}",
+            CourseId = p.CourseId
         }).ToList();
     }
 }

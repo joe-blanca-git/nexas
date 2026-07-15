@@ -126,3 +126,5 @@ C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Admin.Api\
 C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Admin.Api\obj\Debug\net8.0\Nexas.Admin.Api.pdb
 C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Admin.Api\obj\Debug\net8.0\Nexas.Admin.Api.genruntimeconfig.cache
 C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Admin.Api\obj\Debug\net8.0\ref\Nexas.Admin.Api.dll
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Admin.Api\bin\Debug\net8.0\AWSSDK.Core.dll
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Admin.Api\bin\Debug\net8.0\AWSSDK.S3.dll

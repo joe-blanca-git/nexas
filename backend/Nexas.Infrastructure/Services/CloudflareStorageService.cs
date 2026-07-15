@@ -40,10 +40,6 @@ public class CloudflareStorageService : ICloudflareStorageService
 
     public async Task<string> UploadImageAsync(Stream fileStream, string fileName, string contentType)
     {
-        // Ao copiar para um MemoryStream, garantimos que o SDK da AWS saiba o tamanho exato do stream e possa buscar (seek).
-        // Isso permite que o SDK calcule o hash SHA256 do arquivo inteiro antes de enviar.
-        // Assim, ele faz a assinatura completa do payload de uma vez, evitando o uso de assinaturas particionadas
-        // (STREAMING-AWS4-HMAC-SHA256-PAYLOAD-TRAILER), que o Cloudflare R2 não suporta.
         using var memoryStream = new MemoryStream();
         await fileStream.CopyToAsync(memoryStream);
         memoryStream.Position = 0;
@@ -53,8 +49,8 @@ public class CloudflareStorageService : ICloudflareStorageService
             InputStream = memoryStream,
             Key = fileName,
             BucketName = _bucketName,
-            ContentType = contentType
-            // Não desabilitamos o DisablePayloadSigning porque as credenciais atuais requerem payload assinado (senão dá Unauthorized).
+            ContentType = contentType,
+            DisablePayloadSigning = true
         };
 
         await _s3Client.PutObjectAsync(putRequest);

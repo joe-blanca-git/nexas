@@ -21,9 +21,8 @@
         </member>
         <member name="M:Nexas.Admin.Api.Controllers.CoursesController.GetById(System.Int32)">
             <summary>
-            Obtém os detalhes de um curso pelo ID.
+            Obtém um curso específico pelo ID com detalhes.
             </summary>
-            <param name="id">ID do curso.</param>
         </member>
         <member name="M:Nexas.Admin.Api.Controllers.CoursesController.Create(Nexas.Application.Courses.Commands.CreateCourse.CreateCourseCommand)">
             <summary>

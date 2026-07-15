@@ -1,6 +1,6 @@
-# Portal Pan (Frontend) - Documentação Oficial
+# POP - Portal do Professor Nexas (Frontend) - Documentação Oficial
 
-Bem-vindo à documentação oficial do frontend do **Portal Pan**. Este documento contém a visão geral completa da arquitetura, fluxo funcional, organização estrutural e guia de implementação para desenvolvedores e agentes de IA, cobrindo todo o ciclo de vida do projeto.
+Bem-vindo à documentação oficial do frontend do **POP - Portal do Professor Nexas**. Este documento contém a visão geral completa da arquitetura, fluxo funcional, organização estrutural e guia de implementação para desenvolvedores e agentes de IA, cobrindo todo o ciclo de vida do projeto.
 
 ---
 
@@ -24,16 +24,12 @@ Bem-vindo à documentação oficial do frontend do **Portal Pan**. Este document
 
 ## 1. Visão Geral
 
-- **Objetivo do Projeto:** O Portal Pan é uma plataforma interativa para gerenciar e disponibilizar trilhas de conhecimento, cursos, certificações, módulos financeiros, fóruns de discussão e suporte, unificando a experiência educacional e comunitária em um só ambiente.
-- **Problema que Resolve:** Centraliza o consumo de conteúdo EaD, gerenciamento financeiro do aluno e interação social (fórum), evitando que o usuário precise acessar múltiplas plataformas.
-- **Público-alvo:** Estudantes, assinantes e usuários em busca de educação, certificação e troca de conhecimento através da comunidade (fórum).
+- **Objetivo do Projeto:** O POP (Portal do Professor) é uma plataforma interativa para professores da Nexas gerenciarem turmas, cursos e interagirem com os recursos acadêmicos.
+- **Público-alvo:** Professores e instrutores da plataforma Nexas.
 - **Principais Funcionalidades:**
-  - Login e recuperação de senha.
-  - Consumo de cursos e visualização de aulas (`lesson-viewer`).
-  - Emissão e listagem de certificados.
-  - Gestão de faturas, pagamentos e carrinho (módulo financeiro).
-  - Fórum de discussões interativo.
-  - Central de suporte.
+  - Login com validação estrita de permissões (Exige perfil `Teacher`).
+  - Módulo de Cursos (ambiente acadêmico preparado para gestão).
+  - Gestão de perfil e dados cadastrais.
 - **Tecnologias Base:** Angular 18 com Server-Side Rendering (SSR) suportado por Node.js/Express.
 
 ---
@@ -56,8 +52,6 @@ graph TD
   CoreGuard -- Aprovado --> Layout[App Component Layout]
   Layout --> Home[Home Module]
   Layout --> Courses[Courses Module]
-  Layout --> Forum[Forum Module]
-  Layout --> Financial[Financial Module]
   
   Courses --> BaseService[BaseService/Interceptors]
   Forum --> BaseService
@@ -96,12 +90,8 @@ A organização segue a divisão lógica recomendada pela equipe do Angular:
 - **`src/app/features/`**: Funcionalidades agrupadas por contexto de negócios (Domain Driven).
   - **`auth/`**: Fluxo de autenticação, login, registro, troca de senha.
   - **`modules/`**:
-    - `certificates`: Exibição e listagem de certificações do aluno.
-    - `courses`: Catálogo de cursos, visualizador de aulas.
-    - `financial`: Carrinho, histórico de pagamento, faturas.
-    - `forum`: Discussões, tópicos, postagens e interações.
-    - `home`: Dashboards do usuário e consumo de notícias.
-    - `support`: Tickets e ajuda técnica.
+    - `courses`: Funcionalidades de gestão de cursos para o professor.
+    - `home`: Dashboards do usuário e consumo de avisos.
 - **`src/app/shared/`**: Recursos compartilhados por toda a aplicação (sem injeção de estado complexo).
   - `components`: `toast`, `breadcrumb`, menu lateral.
 - **`custom-theme/`**: Configurações globais de tokens SCSS (`theme.scss`).
@@ -120,18 +110,8 @@ A organização segue a divisão lógica recomendada pela equipe do Angular:
 - **Dashboard (`/home`):** Página principal pós-login. Exibe métricas, progresso e notícias. Usa o `HomeDashboardComponent`.
 - **News Detail (`/news-detail/:id`):** Componente para exibir conteúdo detalhado da plataforma de notícias ou avisos.
 
-### Módulo de Fórum (`/forum`)
-- **Fórum Home (`/forum`):** Exibe métricas (Total de Tópicos, Respostas, Sem respostas), categorias e filtro em abas (Todos, Recentes, Meus Tópicos). Clicar no card "Sem Resp." aplica um filtro imediato nos tópicos que possuem 0 respostas.
-- **Fórum Topic (`/forum/topic/:id`):** Visualização detalhada de um tópico. O usuário pode ler respostas, enviar respostas (via SignalR opcionalmente) e, se dono, marcar como resolvido ou reabrir.
-
 ### Módulo de Cursos (`/courses`)
-- **Home de Cursos (`/courses`):** Catálogo geral com progresso.
-- **Detalhes do Curso (`/courses/:id`):** Descritivo de ementa.
-- **Lesson Viewer (`/courses/lesson/:id`):** Player de aula, marcação de concluído.
-
-### Módulo Financeiro (`/financial`)
-- **Home Financeiro (`/financial`):** Faturas em aberto e histórico pago.
-- **Pagamento e Carrinho:** Checkout de produtos/planos, conexão com gateway de pagamento.
+- **Home de Cursos (`/courses`):** Ambiente inicial preparado para gestão de cursos e turmas do professor.
 
 ---
 

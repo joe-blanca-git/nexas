@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Nexas.Landing.Api</name>
+    </assembly>
+    <members>
+        <member name="T:Nexas.Landing.Api.Controllers.LandingCoursesController">
+            <summary>
+            Leitura pública de Cursos para a Landing Page.
+            </summary>
+        </member>
+        <member name="M:Nexas.Landing.Api.Controllers.LandingTeachersController.GetTeachers">
+            <summary>
+            Lista todos os professores ativos.
+            </summary>
+        </member>
+        <member name="M:Nexas.Landing.Api.Controllers.LandingTeachersController.GetTeacherById(System.Int32)">
+            <summary>
+            Obtém detalhes de um professor pelo ID.
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -16,6 +16,12 @@ export class MenuService {
         title: 'Pagina Inicial',
         icon: 'far fa-house',
         route: '/home'
+      },
+      {
+        id: 2,
+        title: 'Cursos',
+        icon: 'fas fa-book-reader',
+        route: '/courses'
       }
     ];
     return menuMock;

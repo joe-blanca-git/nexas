@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "6LzrxGJdO5JnMatIMV+Ror8Ptubl4DuG9/JPcm2ysfc=",
+  "Source": "Nexas.Admin.Api",
+  "BasePath": "_content/Nexas.Admin.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

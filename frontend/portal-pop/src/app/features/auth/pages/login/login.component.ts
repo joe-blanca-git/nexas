@@ -5,6 +5,7 @@ import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { StateUtil } from '../../../../core/utils/UserState.util';
 import { UserLogedModel } from '../../../../core/models/userLoged.model';
+import { ToastService } from '../../../../core/services/toast.service';
 
 @Component({
   selector: 'app-login',
@@ -22,6 +23,7 @@ export class LoginComponent {
   private authService = inject(AuthService);
   private authUtil = inject(AuthService).authUtil;
   private stateUtil = inject(StateUtil);
+  private toastService = inject(ToastService);
 
   constructor(private fb: FormBuilder, private router: Router) {
     this.loginForm = this.fb.group({
@@ -49,9 +51,19 @@ export class LoginComponent {
     });
   }
 
-  async processSuccessfulLogin(responseLogin: UserLogedModel) {
+  async processSuccessfulLogin(responseLogin: any) {
     
     try{
+      const isTeacher = responseLogin.user?.roles?.some((r: any) => r.value === 'Teacher');
+      const hasSystem1 = responseLogin.systemIds?.includes(1);
+
+      if (!isTeacher || !hasSystem1) {
+        this.toastService.error('Acesso não permitido. Portal exclusivo para professores.');
+        this.isLoading = false;
+        this.loginForm.enable();
+        return;
+      }
+
       await this.authUtil.saveCookieAuth(responseLogin);
       await this.stateUtil.saveUser(responseLogin);
       sessionStorage.setItem('nexas_user', JSON.stringify(responseLogin));

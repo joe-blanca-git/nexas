@@ -1,0 +1,46 @@
+<div class="custom-modal-backdrop lesson-backdrop animated-fade-in d-flex align-items-center justify-content-center">
+  <div class="custom-modal-dialog bg-white rounded-4 shadow-lg overflow-hidden d-flex flex-column" style="width: 90%; max-width: 600px;">
+    
+    <!-- Modal Header -->
+    <div class="modal-header px-4 py-3 border-bottom d-flex justify-content-between align-items-center bg-light">
+      <h5 class="mb-0 fw-bold text-dark"><i class="fas fa-play-circle text-success me-2"></i>{{ lessonData.id && lessonData.name !== '' ? 'Editar Aula' : 'Nova Aula' }}</h5>
+      <button type="button" class="btn-close" aria-label="Close" (click)="cancel()"></button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-body p-4 overflow-auto custom-scrollbar">
+      <form [formGroup]="lessonForm">
+        
+        <div class="mb-3">
+          <label class="form-label fw-medium small">Título da Aula <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" formControlName="name" placeholder="Ex: Aula 1 - Bem vindo"
+                 [ngClass]="{'is-invalid': f['name'].invalid && f['name'].touched}">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-medium small">Descrição (Opcional)</label>
+          <textarea class="form-control" rows="3" formControlName="description" placeholder="Resumo do conteúdo desta aula..."></textarea>
+        </div>
+
+        <div class="row g-3 mb-2">
+          <div class="col-12 col-md-6">
+            <label class="form-label fw-medium small">ID do Vídeo (Bunny)</label>
+            <input type="text" class="form-control" formControlName="bunnyVideoId" placeholder="Ex: bcd1234...">
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label fw-medium small">Duração (Segundos)</label>
+            <input type="number" class="form-control" formControlName="durationSeconds" placeholder="Ex: 600" min="0">
+          </div>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="modal-footer px-4 py-3 border-top bg-light">
+      <button type="button" class="btn btn-outline-secondary rounded-pill px-4" (click)="cancel()">Cancelar</button>
+      <button type="button" class="btn btn-success rounded-pill px-4 text-white" (click)="save()">Salvar Aula</button>
+    </div>
+
+  </div>
+</div>

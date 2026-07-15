@@ -34,6 +34,12 @@ export const routes: Routes = [
                     import('./features/modules/home/components/news-detail/news-detail.component').then(c => c.NewsDetailComponent)
             },
             {
+                path: 'courses',
+                title: 'Cursos',
+                loadChildren: () =>
+                    import('./features/modules/courses/courses.routes').then((r) => r.coursesRoutes),
+            },
+            {
                 path: 'profile',
                 title: 'Dados Cadastrais',
                 loadChildren: () =>

@@ -1,0 +1,189 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Nexas.Admin.Api</name>
+    </assembly>
+    <members>
+        <member name="T:Nexas.Admin.Api.Controllers.CoursesController">
+            <summary>
+            Gerenciamento de Cursos, Módulos e Aulas.
+            </summary>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.CoursesController.GetAll">
+            <summary>
+            Obtém a lista de todos os cursos ativos com módulos e aulas.
+            </summary>
+            <remarks>
+            Este endpoint é público e não requer autenticação. Retorna a hierarquia completa: 
+            cursos → módulos → aulas com todos os detalhes.
+            Usado principalmente pela Landing Page e páginas de detalhes de cursos.
+            </remarks>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.CoursesController.GetById(System.Int32)">
+            <summary>
+            Obtém os detalhes de um curso pelo ID.
+            </summary>
+            <param name="id">ID do curso.</param>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.CoursesController.Create(Nexas.Application.Courses.Commands.CreateCourse.CreateCourseCommand)">
+            <summary>
+            Cria um novo curso completo.
+            </summary>
+            <remarks>
+            Este endpoint permite a criação de um curso junto com seus módulos e aulas em uma única transação.
+            Requer permissão de 'Teacher'.
+            </remarks>
+            <param name="command">Dados do curso, módulos e aulas.</param>
+            <returns>O ID do curso criado.</returns>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.CoursesController.Update(Nexas.Application.Courses.Commands.UpdateCourse.UpdateCourseCommand)">
+            <summary>
+            Atualiza os dados de um curso existente.
+            </summary>
+            <remarks>
+            Permite atualizar nome, descrição, nível e preço de um curso.
+            Requer permissão de 'Teacher'.
+            </remarks>
+            <param name="command">Dados a serem atualizados.</param>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.CoursesController.Deactivate(Nexas.Application.Courses.Commands.DeactivateCourse.DeactivateCourseCommand)">
+            <summary>
+            Inativa um curso sem deletá-lo.
+            </summary>
+            <remarks>
+            Marca o curso como inativo. Requer permissão de 'Teacher'.
+            </remarks>
+            <param name="command">Dados com o ID do curso a ser inativado.</param>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.CoursesController.AssignCategories(System.Int32,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Atualiza as categorias de um curso.
+            </summary>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.CoursesController.CreateModule(Nexas.Application.Courses.Commands.CreateModule.CreateModuleCommand)">
+            <summary>
+            Cria um novo módulo em um curso existente.
+            </summary>
+            <remarks>
+            Permite adicionar um novo módulo a um curso já existente.
+            Requer permissão de 'Teacher'.
+            </remarks>
+            <param name="command">Dados do módulo a ser criado.</param>
+            <returns>O ID do módulo criado.</returns>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.CoursesController.UpdateModule(Nexas.Application.Courses.Commands.UpdateModule.UpdateModuleCommand)">
+            <summary>
+            Atualiza os dados de um módulo existente.
+            </summary>
+            <remarks>
+            Permite atualizar nome e descrição de um módulo.
+            Requer permissão de 'Teacher'.
+            </remarks>
+            <param name="command">Dados do módulo a serem atualizados.</param>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.CoursesController.DeactivateModule(Nexas.Application.Courses.Commands.DeactivateModule.DeactivateModuleCommand)">
+            <summary>
+            Inativa um módulo sem deletá-lo.
+            </summary>
+            <remarks>
+            Marca o módulo como inativo. Requer permissão de 'Teacher'.
+            </remarks>
+            <param name="command">Dados com o ID do módulo a ser inativado.</param>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.CoursesController.DeleteModule(System.Int32)">
+            <summary>
+            Deleta permanentemente um módulo e todas as suas aulas.
+            </summary>
+            <remarks>
+            Remove o módulo do banco de dados junto com todas as aulas associadas.
+            Requer permissão de 'Teacher'.
+            </remarks>
+            <param name="id">ID do módulo a ser deletado.</param>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.CoursesController.CreateLesson(Nexas.Application.Courses.Commands.CreateLesson.CreateLessonCommand)">
+            <summary>
+            Cria uma nova aula em um módulo existente.
+            </summary>
+            <remarks>
+            Permite adicionar uma nova aula a um módulo já existente.
+            Requer permissão de 'Teacher'.
+            </remarks>
+            <param name="command">Dados da aula a ser criada.</param>
+            <returns>O ID da aula criada.</returns>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.CoursesController.UpdateLesson(Nexas.Application.Courses.Commands.UpdateLesson.UpdateLessonCommand)">
+            <summary>
+            Atualiza os dados de uma aula existente.
+            </summary>
+            <remarks>
+            Permite atualizar nome, descrição e duração de uma aula.
+            Requer permissão de 'Teacher'.
+            </remarks>
+            <param name="command">Dados da aula a serem atualizados.</param>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.CoursesController.DeactivateLesson(Nexas.Application.Courses.Commands.DeactivateLesson.DeactivateLessonCommand)">
+            <summary>
+            Inativa uma aula sem deletá-la.
+            </summary>
+            <remarks>
+            Marca a aula como inativa. Requer permissão de 'Teacher'.
+            </remarks>
+            <param name="command">Dados com o ID da aula a ser inativada.</param>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.CoursesController.DeleteLesson(System.Int32)">
+            <summary>
+            Deleta permanentemente uma aula.
+            </summary>
+            <remarks>
+            Remove a aula do banco de dados.
+            Requer permissão de 'Teacher'.
+            </remarks>
+            <param name="id">ID da aula a ser deletada.</param>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.CoursesController.CreateCourseDomain(System.Int32,Nexas.Application.Courses.Commands.CreateCourseDomain.CreateCourseDomainCommand)">
+            <summary>
+            Cria um novo domínio/benefício para um curso.
+            </summary>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.CoursesController.UpdateCourseDomain(System.Int32,System.Int32,Nexas.Application.Courses.Commands.UpdateCourseDomain.UpdateCourseDomainCommand)">
+            <summary>
+            Atualiza os dados de um domínio/benefício existente.
+            </summary>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.CoursesController.DeleteCourseDomain(System.Int32,System.Int32)">
+            <summary>
+            Deleta permanentemente um domínio de um curso.
+            </summary>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.TeachersController.GetTeachers">
+            <summary>
+            Lista todos os professores ativos.
+            </summary>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.TeachersController.GetTeacherById(System.Int32)">
+            <summary>
+            Obtém detalhes de um professor pelo ID.
+            </summary>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.TeachersController.CreateTeacher(Nexas.Application.Teachers.Commands.CreateTeacher.CreateTeacherCommand)">
+            <summary>
+            Cadastra um novo professor.
+            </summary>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.TeachersController.UpdateTeacher(System.Int32,Nexas.Application.Teachers.Commands.UpdateTeacher.UpdateTeacherCommand)">
+            <summary>
+            Atualiza os dados de um professor existente.
+            </summary>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.TeachersController.DeleteTeacher(System.Int32)">
+            <summary>
+            Remove (inativa) um professor.
+            </summary>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.TeachersController.AssignTeacher(Nexas.Application.Teachers.Commands.AssignTeacher.AssignTeacherCommand)">
+            <summary>
+            Vincula um professor a um curso específico.
+            </summary>
+        </member>
+    </members>
+</doc>

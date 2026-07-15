@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nexas.Domain", "Nexas.Domai
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nexas.Infrastructure", "Nexas.Infrastructure\Nexas.Infrastructure.csproj", "{4E4AB014-C815-484D-9569-BE628A5F6F88}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nexas.Admin.Api", "Nexas.Admin.Api\Nexas.Admin.Api.csproj", "{EA634CC1-B743-4197-8D36-85E1CCE742A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nexas.Landing.Api", "Nexas.Landing.Api\Nexas.Landing.Api.csproj", "{40AC10D3-5042-470F-8B28-B4D02ABD5B08}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +40,13 @@ Global
 		{4E4AB014-C815-484D-9569-BE628A5F6F88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E4AB014-C815-484D-9569-BE628A5F6F88}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E4AB014-C815-484D-9569-BE628A5F6F88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA634CC1-B743-4197-8D36-85E1CCE742A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA634CC1-B743-4197-8D36-85E1CCE742A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA634CC1-B743-4197-8D36-85E1CCE742A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA634CC1-B743-4197-8D36-85E1CCE742A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40AC10D3-5042-470F-8B28-B4D02ABD5B08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40AC10D3-5042-470F-8B28-B4D02ABD5B08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40AC10D3-5042-470F-8B28-B4D02ABD5B08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40AC10D3-5042-470F-8B28-B4D02ABD5B08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

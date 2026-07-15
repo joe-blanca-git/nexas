@@ -152,60 +152,99 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <form [formGroup]="courseForm" (ngSubmit)="saveCourse()">
-        <div class="modal-body">
-          <div class="row g-3">
-            <div class="col-12">
-              <label class="form-label small fw-semibold">Nome do Curso <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" formControlName="name" placeholder="Ex: Desenvolvimento Web">
-            </div>
-            <div class="col-12">
-              <label class="form-label small fw-semibold">Descrição (Longa) <span class="text-danger">*</span></label>
-              <textarea class="form-control" rows="3" formControlName="description"></textarea>
-            </div>
-            <div class="col-12">
-              <label class="form-label small fw-semibold">Sub-descrição (Curta)</label>
-              <input type="text" class="form-control" formControlName="descriptionSub">
-            </div>
-            <div class="col-md-6">
-              <label class="form-label small fw-semibold">Nível <span class="text-danger">*</span></label>
-              <select class="form-select" formControlName="level">
-                <option value="Iniciante">Iniciante</option>
-                <option value="Intermediário">Intermediário</option>
-                <option value="Avançado">Avançado</option>
-              </select>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label small fw-semibold">Preço (R$) <span class="text-danger">*</span></label>
-              <input type="number" step="0.01" class="form-control" formControlName="priceSingle">
-            </div>
-            <div class="col-12">
-              <label class="form-label small fw-semibold">Categoria <span class="text-danger">*</span></label>
-              <select class="form-select" formControlName="categoryId">
-                <option value="" disabled selected>Selecione uma categoria...</option>
-                <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name }}</option>
-              </select>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label small fw-semibold">Capa do Curso (16:9, Max 2MB)</label>
-              <input type="file" class="form-control" accept="image/png, image/jpeg, image/webp" (change)="onCoverImageSelected($event)">
-              <small class="text-danger mt-1 d-block" *ngIf="coverImageError">{{ coverImageError }}</small>
-            </div>
-            <div class="col-md-6 d-flex flex-column">
-              <label class="form-label small fw-semibold">Preview</label>
-              <div *ngIf="coverImagePreview" class="rounded-3 overflow-hidden shadow-sm" style="width: 160px; height: 90px; border: 1px solid #dee2e6;">
-                <img [src]="coverImagePreview" class="w-100 h-100 object-fit-cover" alt="Preview Capa">
-              </div>
-              <div *ngIf="!coverImagePreview" class="rounded-3 bg-light border d-flex align-items-center justify-content-center text-muted" style="width: 160px; height: 90px; font-size: 0.8rem;">
-                <i class="fas fa-image me-2"></i> Capa
+        <div class="modal-body bg-light p-4">
+          <div class="row g-4">
+            
+            <!-- Bloco Principal -->
+            <div class="col-lg-8">
+              <div class="bg-white p-4 rounded-4 shadow-sm border-0 h-100">
+                <h6 class="fw-bold mb-4 text-primary"><i class="fas fa-info-circle me-2"></i>Informações Principais</h6>
+                <div class="row g-3">
+                  <div class="col-12">
+                    <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.5px; font-size: 0.7rem;">Nome do Curso <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-lg fs-6 border-light-subtle" formControlName="name" placeholder="Ex: Masterclass de Angular">
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.5px; font-size: 0.7rem;">Sub-título (Curto)</label>
+                    <input type="text" class="form-control border-light-subtle" formControlName="descriptionSub" placeholder="Uma frase de efeito para a capa...">
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.5px; font-size: 0.7rem;">Descrição Completa <span class="text-danger">*</span></label>
+                    <textarea class="form-control border-light-subtle" rows="5" formControlName="description" placeholder="Descreva o que o aluno vai aprender..."></textarea>
+                  </div>
+                </div>
               </div>
             </div>
+
+            <!-- Bloco Lateral -->
+            <div class="col-lg-4">
+              <div class="bg-white p-4 rounded-4 shadow-sm border-0 h-100">
+                <h6 class="fw-bold mb-4 text-primary"><i class="fas fa-tags me-2"></i>Classificação</h6>
+                <div class="row g-4">
+                  <div class="col-12">
+                    <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.5px; font-size: 0.7rem;">Categoria <span class="text-danger">*</span></label>
+                    <select class="form-select border-light-subtle" formControlName="categoryId">
+                      <option value="" disabled selected>Selecione...</option>
+                      <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name }}</option>
+                    </select>
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.5px; font-size: 0.7rem;">Nível <span class="text-danger">*</span></label>
+                    <select class="form-select border-light-subtle" formControlName="level">
+                      <option value="Iniciante">Iniciante</option>
+                      <option value="Intermediário">Intermediário</option>
+                      <option value="Avançado">Avançado</option>
+                    </select>
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.5px; font-size: 0.7rem;">Preço (R$) <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                      <span class="input-group-text bg-light border-light-subtle text-muted">R$</span>
+                      <input type="number" step="0.01" class="form-control border-light-subtle border-start-0 ps-2" formControlName="priceSingle" placeholder="0,00">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bloco de Mídia (Largura Total) -->
+            <div class="col-12">
+              <div class="bg-white p-4 rounded-4 shadow-sm border-0">
+                <h6 class="fw-bold mb-4 text-primary"><i class="fas fa-image me-2"></i>Aparência Visual</h6>
+                <div class="row g-4 align-items-center">
+                  <div class="col-md-4 text-center">
+                    <div *ngIf="coverImagePreview" class="rounded-4 overflow-hidden shadow-sm mx-auto" style="width: 240px; height: 135px; border: 3px solid #f8f9fa;">
+                      <img [src]="coverImagePreview" class="w-100 h-100 object-fit-cover" alt="Preview Capa">
+                    </div>
+                    <div *ngIf="!coverImagePreview" class="rounded-4 bg-light border mx-auto d-flex flex-column align-items-center justify-content-center text-muted" style="width: 240px; height: 135px; border-style: dashed !important;">
+                      <i class="fas fa-cloud-upload-alt fs-1 mb-2 text-secondary opacity-50"></i>
+                      <span class="small fw-semibold">1280 x 720</span>
+                    </div>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="mb-2">
+                      <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.5px; font-size: 0.7rem;">Capa do Curso</label>
+                      <input type="file" class="form-control form-control-lg fs-6 border-light-subtle" accept="image/png, image/jpeg, image/webp" (change)="onCoverImageSelected($event)">
+                      <div class="mt-2 d-flex align-items-center text-muted small">
+                        <i class="fas fa-info-circle me-2 text-primary opacity-75"></i>
+                        <span>Recomendado: <strong>Proporção 16:9</strong> (Max 2MB). Formatos: JPG, PNG, WEBP.</span>
+                      </div>
+                      <div class="mt-2 text-danger small fw-bold d-flex align-items-center" *ngIf="coverImageError">
+                        <i class="fas fa-exclamation-circle me-2"></i> {{ coverImageError }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
-        <div class="modal-footer border-top-0 pt-0">
-          <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-primary rounded-pill px-4" [disabled]="courseForm.invalid || isSubmittingCourse">
+        <div class="modal-footer bg-white border-top px-4 py-3 rounded-bottom-4">
+          <button type="button" class="btn btn-light rounded-pill px-4 fw-medium" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary rounded-pill px-5 fw-bold shadow-sm" [disabled]="courseForm.invalid || isSubmittingCourse">
             <span *ngIf="!isSubmittingCourse">Salvar Curso</span>
-            <span *ngIf="isSubmittingCourse"><i class="fas fa-spinner fa-spin"></i> Salvando...</span>
+            <span *ngIf="isSubmittingCourse"><i class="fas fa-spinner fa-spin me-2"></i>Salvando e Processando...</span>
           </button>
         </div>
       </form>
@@ -221,33 +260,35 @@
         <h5 class="modal-title fw-bold">Adicionar Módulo e Aulas</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body bg-light p-4">
         <div class="row g-4">
           
           <!-- Module Header Form -->
           <div class="col-lg-5">
-            <div class="p-3 bg-light rounded-4">
-              <h6 class="fw-bold mb-3"><i class="fas fa-folder text-primary me-2"></i>Dados do Módulo</h6>
+            <div class="bg-white p-4 rounded-4 shadow-sm border-0 h-100">
+              <h6 class="fw-bold mb-4 text-primary"><i class="fas fa-folder me-2"></i>Dados do Módulo</h6>
               <form [formGroup]="moduleForm">
-                <div class="mb-3">
-                  <label class="form-label small fw-semibold">Nome do Módulo <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control" formControlName="name">
-                </div>
-                <div class="mb-3">
-                  <label class="form-label small fw-semibold">Descrição</label>
-                  <textarea class="form-control" rows="2" formControlName="description"></textarea>
-                </div>
-                <div class="mb-3">
-                  <label class="form-label small fw-semibold">Sub-descrição</label>
-                  <input type="text" class="form-control" formControlName="descriptionSub">
-                </div>
-                <div class="mb-3">
-                  <label class="form-label small fw-semibold">Link da Capa</label>
-                  <input type="url" class="form-control" formControlName="imgCoverLink">
-                </div>
-                <div class="mb-0">
-                  <label class="form-label small fw-semibold">Bunny Collection ID</label>
-                  <input type="text" class="form-control" formControlName="bunnyCollectionId">
+                <div class="row g-3">
+                  <div class="col-12">
+                    <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.5px; font-size: 0.7rem;">Nome do Módulo <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-lg fs-6 border-light-subtle" formControlName="name" placeholder="Ex: Introdução">
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.5px; font-size: 0.7rem;">Descrição</label>
+                    <textarea class="form-control border-light-subtle" rows="3" formControlName="description" placeholder="Resumo do que será visto..."></textarea>
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.5px; font-size: 0.7rem;">Sub-descrição</label>
+                    <input type="text" class="form-control border-light-subtle" formControlName="descriptionSub" placeholder="Frase de apoio...">
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.5px; font-size: 0.7rem;">Link da Capa (URL)</label>
+                    <input type="url" class="form-control border-light-subtle" formControlName="imgCoverLink" placeholder="https://...">
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.5px; font-size: 0.7rem;">Bunny Collection ID</label>
+                    <input type="text" class="form-control border-light-subtle" formControlName="bunnyCollectionId">
+                  </div>
                 </div>
               </form>
             </div>
@@ -255,47 +296,53 @@
 
           <!-- Lessons Section -->
           <div class="col-lg-7">
-            <div class="p-3 bg-white border rounded-4 h-100 d-flex flex-column">
-              <h6 class="fw-bold mb-3"><i class="fas fa-video text-danger me-2"></i>Aulas do Módulo</h6>
+            <div class="bg-white p-4 rounded-4 shadow-sm border-0 h-100 d-flex flex-column">
+              <h6 class="fw-bold mb-4 text-danger"><i class="fas fa-video me-2"></i>Aulas do Módulo</h6>
               
               <!-- Add Lesson Inline Form -->
-              <form [formGroup]="lessonForm" class="bg-light p-3 rounded-3 mb-3 border">
-                <div class="row g-2 align-items-end">
-                  <div class="col-md-6">
-                    <label class="form-label small fw-semibold">Nome da Aula <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control form-control-sm" formControlName="name">
+              <form [formGroup]="lessonForm" class="bg-light p-3 rounded-4 mb-4 border border-light-subtle shadow-sm">
+                <div class="row g-3 align-items-end">
+                  <div class="col-md-5">
+                    <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.5px; font-size: 0.7rem;">Nome da Aula <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="name" placeholder="Ex: Bem-vindo">
                   </div>
                   <div class="col-md-3">
-                    <label class="form-label small fw-semibold">Duração (seg) <span class="text-danger">*</span></label>
-                    <input type="number" class="form-control form-control-sm" formControlName="durationSeconds">
+                    <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.5px; font-size: 0.7rem;">Duração (seg) <span class="text-danger">*</span></label>
+                    <input type="number" class="form-control" formControlName="durationSeconds" placeholder="Ex: 600">
                   </div>
-                  <div class="col-md-3">
-                    <label class="form-label small fw-semibold">Bunny Video ID <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control form-control-sm" formControlName="bunnyVideoId">
+                  <div class="col-md-4">
+                    <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.5px; font-size: 0.7rem;">Video ID <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="bunnyVideoId" placeholder="ID no Bunny">
                   </div>
-                  <div class="col-12 mt-2 d-flex justify-content-between align-items-center">
-                    <div class="flex-grow-1 me-2">
-                      <input type="text" class="form-control form-control-sm" formControlName="description" placeholder="Descrição da aula (opcional)">
-                    </div>
-                    <button type="button" class="btn btn-sm btn-dark px-3" (click)="addPendingLesson()" [disabled]="lessonForm.invalid">
-                      <i class="fas fa-plus"></i> Adicionar
+                  <div class="col-md-8 mt-3">
+                    <input type="text" class="form-control bg-white" formControlName="description" placeholder="Descrição curta (opcional)">
+                  </div>
+                  <div class="col-md-4 mt-3">
+                    <button type="button" class="btn btn-dark w-100 fw-medium rounded-3" (click)="addPendingLesson()" [disabled]="lessonForm.invalid">
+                      <i class="fas fa-plus me-2"></i> Adicionar
                     </button>
                   </div>
                 </div>
               </form>
 
               <!-- Lessons List -->
-              <div class="flex-grow-1 overflow-auto" style="min-height: 150px;">
-                <div *ngIf="pendingLessons.length === 0" class="text-center text-muted small py-4">
-                  Nenhuma aula adicionada ainda.<br>Preencha os campos acima para adicionar aulas ao módulo.
+              <div class="flex-grow-1 overflow-auto rounded-3 border border-light-subtle bg-light" style="min-height: 200px;">
+                <div *ngIf="pendingLessons.length === 0" class="h-100 d-flex flex-column align-items-center justify-content-center text-muted p-4">
+                  <i class="fas fa-list-ul fs-2 mb-3 text-secondary opacity-50"></i>
+                  <span class="small text-center">Nenhuma aula adicionada ainda.<br>Preencha os campos acima para começar.</span>
                 </div>
-                <div class="list-group list-group-flush">
-                  <div class="list-group-item px-0 py-2 d-flex justify-content-between align-items-center" *ngFor="let lesson of pendingLessons; let i = index">
-                    <div>
-                      <h6 class="mb-0 text-dark" style="font-size: 0.9rem;">{{ i + 1 }}. {{ lesson.name }}</h6>
-                      <small class="text-muted" style="font-size: 0.75rem;">{{ lesson.durationSeconds }}s | ID: {{ lesson.bunnyVideoId }}</small>
+                <div class="list-group list-group-flush rounded-3">
+                  <div class="list-group-item bg-transparent px-3 py-3 border-bottom d-flex justify-content-between align-items-center" *ngFor="let lesson of pendingLessons; let i = index">
+                    <div class="d-flex align-items-center">
+                      <div class="bg-white rounded-circle shadow-sm d-flex align-items-center justify-content-center text-primary fw-bold me-3" style="width: 32px; height: 32px; font-size: 0.85rem;">
+                        {{ i + 1 }}
+                      </div>
+                      <div>
+                        <h6 class="mb-1 text-dark fw-semibold" style="font-size: 0.95rem;">{{ lesson.name }}</h6>
+                        <small class="text-muted" style="font-size: 0.8rem;"><i class="far fa-clock me-1"></i>{{ lesson.durationSeconds }}s <span class="mx-2">|</span> <i class="fas fa-link me-1"></i>ID: {{ lesson.bunnyVideoId }}</small>
+                      </div>
                     </div>
-                    <button class="btn btn-sm btn-outline-danger border-0" (click)="removePendingLesson(i)">
+                    <button class="btn btn-sm btn-light text-danger rounded-circle p-2" style="width: 35px; height: 35px;" (click)="removePendingLesson(i)" title="Remover">
                       <i class="fas fa-trash"></i>
                     </button>
                   </div>
@@ -307,11 +354,11 @@
 
         </div>
       </div>
-      <div class="modal-footer border-top-0 pt-0">
-        <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary rounded-pill px-4" (click)="saveModuleWithLessons()" [disabled]="moduleForm.invalid || isSubmittingModule">
+      <div class="modal-footer bg-white border-top px-4 py-3 rounded-bottom-4">
+        <button type="button" class="btn btn-light rounded-pill px-4 fw-medium" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary rounded-pill px-5 fw-bold shadow-sm" (click)="saveModuleWithLessons()" [disabled]="moduleForm.invalid || isSubmittingModule">
           <span *ngIf="!isSubmittingModule">Salvar Módulo e Aulas</span>
-          <span *ngIf="isSubmittingModule"><i class="fas fa-spinner fa-spin"></i> Salvando...</span>
+          <span *ngIf="isSubmittingModule"><i class="fas fa-spinner fa-spin me-2"></i>Salvando e Processando...</span>
         </button>
       </div>
     </div>

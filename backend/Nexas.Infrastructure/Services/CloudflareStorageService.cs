@@ -19,7 +19,7 @@ public class CloudflareStorageService : ICloudflareStorageService
     {
         _configuration = configuration;
         var accessKey = _configuration["Cloudflare:AccessKeyId"];
-        var secretKey = _configuration["Cloudflare:SecretTokenKey"];
+        var secretKey = _configuration["Cloudflare:SecretTokenKey"] ?? _configuration["Cloudflare:TokenKey"];
         var serviceUrl = _configuration["Cloudflare:UrlS3Client"];
         _publicUrl = _configuration["Cloudflare:UrlBuckS3Api"];
 

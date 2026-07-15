@@ -1,6 +1,7 @@
 using MediatR;
 using Nexas.Application.Common.Interfaces;
 using Nexas.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Nexas.Application.Courses.Commands.CreateCourse
 {
@@ -36,10 +37,6 @@ namespace Nexas.Application.Courses.Commands.CreateCourse
         /// <summary>ID da biblioteca Bunny para o curso.</summary>
         /// <example>library_12345</example>
         public string? BunnyLibraryId { get; init; }
-
-        /// <summary>Carga horária total do curso em horas.</summary>
-        /// <example>40</example>
-        public int WorkloadHours { get; init; }
 
         /// <summary>Lista de módulos que compõem o curso.</summary>
         public List<CreateModuleDto> Modules { get; init; } = new();
@@ -112,9 +109,19 @@ namespace Nexas.Application.Courses.Commands.CreateCourse
                 request.PriceSingle,
                 request.ImgCoverLink,
                 request.BunnyLibraryId,
-                request.WorkloadHours,
                 currentUser.Id
             );
+
+            // Fetch Teacher profile and link to course
+            var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.IdAgivys == currentUser.ExternalId, cancellationToken);
+            if (teacher != null)
+            {
+                course.CourseTeachers.Add(new CourseTeacher
+                {
+                    TeacherId = teacher.Id,
+                    Course = course
+                });
+            }
 
             foreach (var moduleDto in request.Modules)
             {

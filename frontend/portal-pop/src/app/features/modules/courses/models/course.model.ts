@@ -48,6 +48,7 @@ export interface Course {
   priceSingle: number;
   imgCoverLink: string;
   bunnyLibraryId: string;
+  workloadHours: number;
   modules: Module[];
   domains: Domain[];
   teachers: Teacher[];

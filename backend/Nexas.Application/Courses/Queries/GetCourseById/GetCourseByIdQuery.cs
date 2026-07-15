@@ -12,26 +12,45 @@ namespace Nexas.Application.Courses.Queries.GetCourseById
     {
         /// <summary>ID do curso.</summary>
         public int Id { get; init; }
+        
+        /// <summary>Indica se deve incluir curso, módulos e aulas inativos (uso em portais admin).</summary>
+        public bool IncludeInactive { get; init; } = false;
+
+        /// <summary>Indica se deve filtrar pelo professor atual.</summary>
+        public bool FilterByCurrentUserTeacher { get; init; } = false;
     }
 
     public class GetCourseByIdQueryHandler : IRequestHandler<GetCourseByIdQuery, CourseDto?>
     {
         private readonly INexasDbContext _context;
+        private readonly IUserContextService _userContextService;
 
-        public GetCourseByIdQueryHandler(INexasDbContext context)
+        public GetCourseByIdQueryHandler(INexasDbContext context, IUserContextService userContextService)
         {
             _context = context;
+            _userContextService = userContextService;
         }
 
         public async Task<CourseDto?> Handle(GetCourseByIdQuery request, CancellationToken cancellationToken)
         {
-            return await _context.Courses
-                .Where(c => c.Id == request.Id && c.Active)
+            var query = _context.Courses.AsQueryable();
+            
+            if (!request.IncludeInactive)
+                query = query.Where(c => c.Active);
+
+            if (request.FilterByCurrentUserTeacher)
+            {
+                var currentUser = await _userContextService.GetCurrentUserAsync();
+                query = query.Where(c => c.CourseTeachers.Any(ct => ct.Teacher.IdAgivys == currentUser.ExternalId));
+            }
+
+            return await query
+                .Where(c => c.Id == request.Id)
                 .Include(c => c.Domains)
                 .Include(c => c.CourseTeachers)
                     .ThenInclude(ct => ct.Teacher)
-                .Include(c => c.Modules.Where(m => m.Active))
-                    .ThenInclude(m => m.Lessons.Where(l => l.Active))
+                .Include(c => c.Modules)
+                    .ThenInclude(m => m.Lessons)
                 .Select(c => new CourseDto
                 {
                     Id = c.Id,
@@ -42,7 +61,7 @@ namespace Nexas.Application.Courses.Queries.GetCourseById
                     PriceSingle = c.PriceSingle,
                     ImgCoverLink = c.ImgCoverLink,
                     BunnyLibraryId = c.BunnyLibraryId,
-                    Modules = c.Modules.Select(m => new ModuleDto
+                    Modules = c.Modules.Where(m => request.IncludeInactive || m.Active).Select(m => new ModuleDto
                     {
                         Id = m.Id,
                         Name = m.Name,
@@ -50,7 +69,7 @@ namespace Nexas.Application.Courses.Queries.GetCourseById
                         DescriptionSub = m.DescriptionSub,
                         ImgCoverLink = m.ImgCoverLink,
                         BunnyCollectionId = m.BunnyCollectionId,
-                        Lessons = m.Lessons.Select(l => new LessonDto
+                        Lessons = m.Lessons.Where(l => request.IncludeInactive || l.Active).Select(l => new LessonDto
                         {
                             Id = l.Id,
                             Name = l.Name,

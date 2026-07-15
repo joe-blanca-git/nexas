@@ -1,6 +1,7 @@
 using MediatR;
 using Nexas.Application.Common.Interfaces;
 using Nexas.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Nexas.Application.Courses.Commands.CreateLesson
 {
@@ -45,10 +46,20 @@ namespace Nexas.Application.Courses.Commands.CreateLesson
         {
             var currentUser = await _userContextService.GetCurrentUserAsync();
 
-            // Verificar se o módulo existe
-            var module = await _context.Modules.FindAsync(new object[] { request.ModuleId }, cancellationToken: cancellationToken);
+            // Verificar se o módulo existe e incluir o Course e seus CourseTeachers
+            var module = await _context.Modules
+                .Include(m => m.Course)
+                .ThenInclude(c => c.CourseTeachers)
+                .ThenInclude(ct => ct.Teacher)
+                .FirstOrDefaultAsync(m => m.Id == request.ModuleId, cancellationToken);
+                
             if (module == null)
                 throw new InvalidOperationException($"Módulo com ID {request.ModuleId} não encontrado.");
+
+            // Verificar se o usuário atual é professor do curso vinculado a este módulo
+            bool isTeacherOfCourse = module.Course.CourseTeachers.Any(ct => ct.Teacher.IdAgivys == currentUser.ExternalId);
+            if (!isTeacherOfCourse)
+                throw new UnauthorizedAccessException("Você não tem permissão para adicionar aulas a este módulo/curso.");
 
             var lesson = Lesson.Create(
                 request.Name,
@@ -62,6 +73,19 @@ namespace Nexas.Application.Courses.Commands.CreateLesson
 
             _context.Lessons.Add(lesson);
             await _context.SaveChangesAsync(cancellationToken);
+
+            // Update Course WorkloadHours
+            var course = await _context.Courses
+                .Include(c => c.Modules)
+                .ThenInclude(m => m.Lessons)
+                .FirstOrDefaultAsync(c => c.Id == module.CourseId, cancellationToken);
+
+            if (course != null)
+            {
+                var totalSeconds = course.Modules.SelectMany(m => m.Lessons).Sum(l => l.DurationSeconds ?? 0);
+                course.WorkloadHours = totalSeconds / 3600;
+                await _context.SaveChangesAsync(cancellationToken);
+            }
 
             return lesson.Id;
         }

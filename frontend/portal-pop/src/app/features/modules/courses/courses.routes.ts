@@ -6,10 +6,5 @@ export const coursesRoutes: Routes = [
     path: '',
     component: CoursesComponent,
     title: 'Cursos',
-  },
-  {
-    path: 'new',
-    loadComponent: () => import('./pages/course-form/course-form.component').then(m => m.CourseFormComponent),
-    title: 'Novo Curso'
   }
 ];

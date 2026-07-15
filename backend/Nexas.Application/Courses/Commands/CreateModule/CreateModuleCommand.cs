@@ -1,6 +1,7 @@
 using MediatR;
 using Nexas.Application.Common.Interfaces;
 using Nexas.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Nexas.Application.Courses.Commands.CreateModule
 {
@@ -49,10 +50,19 @@ namespace Nexas.Application.Courses.Commands.CreateModule
         {
             var currentUser = await _userContextService.GetCurrentUserAsync();
 
-            // Verificar se o curso existe
-            var course = await _context.Courses.FindAsync(new object[] { request.CourseId }, cancellationToken: cancellationToken);
+            // Fetch course with CourseTeachers
+            var course = await _context.Courses
+                .Include(c => c.CourseTeachers)
+                .ThenInclude(ct => ct.Teacher)
+                .FirstOrDefaultAsync(c => c.Id == request.CourseId, cancellationToken);
+                
             if (course == null)
                 throw new InvalidOperationException($"Curso com ID {request.CourseId} não encontrado.");
+
+            // Check if current user is a teacher of this course
+            bool isTeacherOfCourse = course.CourseTeachers.Any(ct => ct.Teacher.IdAgivys == currentUser.ExternalId);
+            if (!isTeacherOfCourse)
+                throw new UnauthorizedAccessException("Você não tem permissão para adicionar módulos a este curso.");
 
             var module = Module.Create(
                 request.Name,

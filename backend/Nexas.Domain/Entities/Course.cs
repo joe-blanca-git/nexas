@@ -25,7 +25,7 @@ namespace Nexas.Domain.Entities
         public virtual ICollection<CourseRate> CourseRates { get; set; } = new List<CourseRate>();
         public virtual ICollection<Certificate> Certificates { get; set; } = new List<Certificate>();
 
-        public static Course Create(string name, string? description, string? descriptionSub, string? level, decimal? priceSingle, string? imgCoverLink, string? bunnyLibraryId, int workloadHours, int? createdBy)
+        public static Course Create(string name, string? description, string? descriptionSub, string? level, decimal? priceSingle, string? imgCoverLink, string? bunnyLibraryId, int? createdBy)
         {
             return new Course 
             { 
@@ -36,9 +36,9 @@ namespace Nexas.Domain.Entities
                 PriceSingle = priceSingle,
                 ImgCoverLink = imgCoverLink,
                 BunnyLibraryId = bunnyLibraryId,
-                WorkloadHours = workloadHours,
+                WorkloadHours = 0,
                 CreatedBy = createdBy,
-                Active = true
+                Active = false
             };
         }
     }

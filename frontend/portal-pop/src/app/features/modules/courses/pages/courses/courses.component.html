@@ -11,24 +11,23 @@
     </div>
     <div class="col-6 col-md-3">
       <div class="card border-0 shadow-sm rounded-4 h-100 px-3 py-3 d-flex align-items-center justify-content-center text-center">
-        <div class="text-muted small fw-semibold text-uppercase mb-1" style="font-size: 0.7rem; letter-spacing: 0.5px;">Vendas Totais</div>
-        <h3 class="fw-bold mb-0 text-success" *ngIf="!isLoading">{{ totalSold }}</h3>
+        <div class="text-muted small fw-semibold text-uppercase mb-1" style="font-size: 0.7rem; letter-spacing: 0.5px;">Total de Módulos</div>
+        <h3 class="fw-bold mb-0 text-success" *ngIf="!isLoading">{{ totalModules }}</h3>
         <div class="skeleton rounded" style="height: 30px; width: 50px;" *ngIf="isLoading"></div>
       </div>
     </div>
     <div class="col-6 col-md-3">
       <div class="card border-0 shadow-sm rounded-4 h-100 px-3 py-3 d-flex align-items-center justify-content-center text-center">
-        <div class="text-muted small fw-semibold text-uppercase mb-1" style="font-size: 0.7rem; letter-spacing: 0.5px;">Alunos Inscritos</div>
-        <h3 class="fw-bold mb-0 text-primary" *ngIf="!isLoading">{{ totalStudents }}</h3>
+        <div class="text-muted small fw-semibold text-uppercase mb-1" style="font-size: 0.7rem; letter-spacing: 0.5px;">Total de Aulas</div>
+        <h3 class="fw-bold mb-0 text-primary" *ngIf="!isLoading">{{ totalLessons }}</h3>
         <div class="skeleton rounded" style="height: 30px; width: 50px;" *ngIf="isLoading"></div>
       </div>
     </div>
     <div class="col-6 col-md-3">
       <div class="card border-0 shadow-sm rounded-4 h-100 px-3 py-3 d-flex align-items-center justify-content-center text-center">
-        <div class="text-muted small fw-semibold text-uppercase mb-1" style="font-size: 0.7rem; letter-spacing: 0.5px;">Avaliação Média</div>
+        <div class="text-muted small fw-semibold text-uppercase mb-1" style="font-size: 0.7rem; letter-spacing: 0.5px;">Carga Horária Média</div>
         <div class="d-flex align-items-center gap-2" *ngIf="!isLoading">
-          <h3 class="fw-bold mb-0 text-warning">{{ averageRating }}</h3>
-          <i class="fas fa-star text-warning"></i>
+          <h3 class="fw-bold mb-0 text-warning">{{ averageWorkload }}h</h3>
         </div>
         <div class="skeleton rounded" style="height: 30px; width: 80px;" *ngIf="isLoading"></div>
       </div>
@@ -39,7 +38,7 @@
   <div class="card border-0 shadow-sm rounded-4 mb-4">
     <div class="card-header bg-white border-bottom-0 py-3 px-4 d-flex justify-content-between align-items-center rounded-top-4">
       <h6 class="mb-0 fw-bold text-dark">Meus Cursos</h6>
-      <button class="btn btn-primary rounded-pill px-4 shadow-sm" routerLink="/courses/new">
+      <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="openNewCourseModal()">
         <i class="fas fa-plus me-2"></i> Novo Curso
       </button>
     </div>
@@ -120,10 +119,15 @@
                 <span class="badge rounded-pill bg-light text-dark fw-medium border">{{ course.level || 'Não definido' }}</span>
               </td>
               <td class="py-3 text-muted">
-                {{ course.modules?.length || 0 }} módulos
+                <div class="d-flex align-items-center gap-2">
+                  <span>{{ course.modules?.length || 0 }} módulos</span>
+                  <button class="btn btn-sm btn-light rounded-circle p-1 d-flex align-items-center justify-content-center border" style="width: 28px; height: 28px;" (click)="openAddModuleModal(course.id)" title="Adicionar Módulos">
+                    <i class="fas fa-plus text-primary" style="font-size: 0.75rem;"></i>
+                  </button>
+                </div>
               </td>
               <td class="py-3 fw-medium text-success">
-                {{ course.priceSingle | currency:'BRL':'symbol':'1.2-2' }}
+                {{ (course.priceSingle || 0) | currency:'BRL':'symbol':'1.2-2' }}
               </td>
               <td class="pe-4 py-3 text-end">
                 <button class="btn btn-sm btn-outline-secondary rounded-pill px-3">
@@ -137,4 +141,166 @@
     </div>
   </div>
 
+</div>
+
+<!-- Course Modal -->
+<div class="modal fade" id="courseModal" tabindex="-1" #courseModal>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content rounded-4 border-0 shadow">
+      <div class="modal-header border-bottom-0 pb-0">
+        <h5 class="modal-title fw-bold">Novo Curso</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form [formGroup]="courseForm" (ngSubmit)="saveCourse()">
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label small fw-semibold">Nome do Curso <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" formControlName="name" placeholder="Ex: Desenvolvimento Web">
+            </div>
+            <div class="col-12">
+              <label class="form-label small fw-semibold">Descrição (Longa) <span class="text-danger">*</span></label>
+              <textarea class="form-control" rows="3" formControlName="description"></textarea>
+            </div>
+            <div class="col-12">
+              <label class="form-label small fw-semibold">Sub-descrição (Curta)</label>
+              <input type="text" class="form-control" formControlName="descriptionSub">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-semibold">Nível <span class="text-danger">*</span></label>
+              <select class="form-select" formControlName="level">
+                <option value="Iniciante">Iniciante</option>
+                <option value="Intermediário">Intermediário</option>
+                <option value="Avançado">Avançado</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-semibold">Preço (R$) <span class="text-danger">*</span></label>
+              <input type="number" step="0.01" class="form-control" formControlName="priceSingle">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-semibold">Link da Capa (URL)</label>
+              <input type="url" class="form-control" formControlName="imgCoverLink">
+            </div>
+            <div class="col-12">
+              <label class="form-label small fw-semibold">Bunny Library ID</label>
+              <input type="text" class="form-control" formControlName="bunnyLibraryId">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-top-0 pt-0">
+          <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary rounded-pill px-4" [disabled]="courseForm.invalid || isSubmittingCourse">
+            <span *ngIf="!isSubmittingCourse">Salvar Curso</span>
+            <span *ngIf="isSubmittingCourse"><i class="fas fa-spinner fa-spin"></i> Salvando...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Module Modal -->
+<div class="modal fade" id="moduleModal" tabindex="-1" #moduleModal>
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content rounded-4 border-0 shadow">
+      <div class="modal-header border-bottom-0 pb-0">
+        <h5 class="modal-title fw-bold">Adicionar Módulo e Aulas</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-4">
+          
+          <!-- Module Header Form -->
+          <div class="col-lg-5">
+            <div class="p-3 bg-light rounded-4">
+              <h6 class="fw-bold mb-3"><i class="fas fa-folder text-primary me-2"></i>Dados do Módulo</h6>
+              <form [formGroup]="moduleForm">
+                <div class="mb-3">
+                  <label class="form-label small fw-semibold">Nome do Módulo <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" formControlName="name">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label small fw-semibold">Descrição</label>
+                  <textarea class="form-control" rows="2" formControlName="description"></textarea>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label small fw-semibold">Sub-descrição</label>
+                  <input type="text" class="form-control" formControlName="descriptionSub">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label small fw-semibold">Link da Capa</label>
+                  <input type="url" class="form-control" formControlName="imgCoverLink">
+                </div>
+                <div class="mb-0">
+                  <label class="form-label small fw-semibold">Bunny Collection ID</label>
+                  <input type="text" class="form-control" formControlName="bunnyCollectionId">
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Lessons Section -->
+          <div class="col-lg-7">
+            <div class="p-3 bg-white border rounded-4 h-100 d-flex flex-column">
+              <h6 class="fw-bold mb-3"><i class="fas fa-video text-danger me-2"></i>Aulas do Módulo</h6>
+              
+              <!-- Add Lesson Inline Form -->
+              <form [formGroup]="lessonForm" class="bg-light p-3 rounded-3 mb-3 border">
+                <div class="row g-2 align-items-end">
+                  <div class="col-md-6">
+                    <label class="form-label small fw-semibold">Nome da Aula <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="name">
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label small fw-semibold">Duração (seg) <span class="text-danger">*</span></label>
+                    <input type="number" class="form-control form-control-sm" formControlName="durationSeconds">
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label small fw-semibold">Bunny Video ID <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="bunnyVideoId">
+                  </div>
+                  <div class="col-12 mt-2 d-flex justify-content-between align-items-center">
+                    <div class="flex-grow-1 me-2">
+                      <input type="text" class="form-control form-control-sm" formControlName="description" placeholder="Descrição da aula (opcional)">
+                    </div>
+                    <button type="button" class="btn btn-sm btn-dark px-3" (click)="addPendingLesson()" [disabled]="lessonForm.invalid">
+                      <i class="fas fa-plus"></i> Adicionar
+                    </button>
+                  </div>
+                </div>
+              </form>
+
+              <!-- Lessons List -->
+              <div class="flex-grow-1 overflow-auto" style="min-height: 150px;">
+                <div *ngIf="pendingLessons.length === 0" class="text-center text-muted small py-4">
+                  Nenhuma aula adicionada ainda.<br>Preencha os campos acima para adicionar aulas ao módulo.
+                </div>
+                <div class="list-group list-group-flush">
+                  <div class="list-group-item px-0 py-2 d-flex justify-content-between align-items-center" *ngFor="let lesson of pendingLessons; let i = index">
+                    <div>
+                      <h6 class="mb-0 text-dark" style="font-size: 0.9rem;">{{ i + 1 }}. {{ lesson.name }}</h6>
+                      <small class="text-muted" style="font-size: 0.75rem;">{{ lesson.durationSeconds }}s | ID: {{ lesson.bunnyVideoId }}</small>
+                    </div>
+                    <button class="btn btn-sm btn-outline-danger border-0" (click)="removePendingLesson(i)">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="modal-footer border-top-0 pt-0">
+        <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary rounded-pill px-4" (click)="saveModuleWithLessons()" [disabled]="moduleForm.invalid || isSubmittingModule">
+          <span *ngIf="!isSubmittingModule">Salvar Módulo e Aulas</span>
+          <span *ngIf="isSubmittingModule"><i class="fas fa-spinner fa-spin"></i> Salvando...</span>
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

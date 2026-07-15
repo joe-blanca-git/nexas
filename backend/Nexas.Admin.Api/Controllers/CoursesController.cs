@@ -53,22 +53,21 @@ namespace Nexas.Admin.Api.Controllers
         [ProducesResponseType(typeof(List<CourseDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll()
         {
-            var result = await _mediator.Send(new GetCoursesQuery());
+            var result = await _mediator.Send(new GetCoursesQuery(IncludeInactive: true, FilterByCurrentUserTeacher: true));
             return Ok(result);
         }
 
         /// <summary>
-        /// Obtém os detalhes de um curso pelo ID.
+        /// Obtém um curso específico pelo ID com detalhes.
         /// </summary>
-        /// <param name="id">ID do curso.</param>
-        [AllowAnonymous]
+        [Authorize(Roles = "Teacher")]
         [HttpGet("{id}")]
-        [SwaggerOperation(Summary = "Obtém um curso por ID")]
+        [SwaggerOperation(Summary = "Obtém um curso", Description = "Retorna os detalhes de um curso ativo específico pelo ID, incluindo módulos e aulas. Restrito aos cursos do professor.")]
         [ProducesResponseType(typeof(CourseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(int id)
         {
-            var result = await _mediator.Send(new GetCourseByIdQuery { Id = id });
+            var result = await _mediator.Send(new GetCourseByIdQuery { Id = id, IncludeInactive = true, FilterByCurrentUserTeacher = true });
             if (result == null)
                 return NotFound(new { message = $"Curso com ID {id} não encontrado." });
 

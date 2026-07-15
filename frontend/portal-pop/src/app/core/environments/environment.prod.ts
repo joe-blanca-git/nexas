@@ -7,6 +7,6 @@ export const environment = {
   //=============================PRODUCAO==============================================================
   apiAgivysUrl: 'https://joederblanca.com.br/agivys-api/api/v1/',
   apiAvivysAuthUrl: 'https://joederblanca.com.br/agivys-api/api/v1/auth/',
-  apiNexasUrl: 'https://joederblanca.com.br/nexas/api/v1/',
+  apiNexasUrl: 'https://joederblanca.com.br/nexas-admin-api/v1/api/',
   //===================================================================================================
 };

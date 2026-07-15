@@ -31,7 +31,8 @@ public class CloudflareStorageService : ICloudflareStorageService
         var config = new AmazonS3Config
         {
             ServiceURL = serviceUrl,
-            ForcePathStyle = true
+            ForcePathStyle = true,
+            AuthenticationRegion = "auto"
         };
 
         _s3Client = new AmazonS3Client(accessKey, secretKey, config);
@@ -39,18 +40,15 @@ public class CloudflareStorageService : ICloudflareStorageService
 
     public async Task<string> UploadImageAsync(Stream fileStream, string fileName, string contentType)
     {
-        var fileTransferUtility = new TransferUtility(_s3Client);
-        
-        var uploadRequest = new TransferUtilityUploadRequest
+        var putRequest = new Amazon.S3.Model.PutObjectRequest
         {
             InputStream = fileStream,
             Key = fileName,
             BucketName = _bucketName,
-            ContentType = contentType,
-            DisablePayloadSigning = true 
+            ContentType = contentType
         };
 
-        await fileTransferUtility.UploadAsync(uploadRequest);
+        await _s3Client.PutObjectAsync(putRequest);
 
         var finalUrl = _publicUrl.EndsWith("/") ? $"{_publicUrl}{fileName}" : $"{_publicUrl}/{fileName}";
         return finalUrl;

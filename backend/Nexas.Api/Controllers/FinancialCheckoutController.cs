@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Nexas.Application.Checkout.Commands;
 using Nexas.Application.Purchases.Commands;
 
-namespace Nexas.Admin.Api.Controllers;
+namespace Nexas.Api.Controllers;
 
 [Authorize]
 [ApiController]

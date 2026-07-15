@@ -1,7 +1,40 @@
 <div class="animated-fade-in py-3">
   <div class="container-fluid max-w-5xl">
     
-    <div class="row g-4">
+    <!-- PAGE LOADING SKELETON -->
+    <div class="row g-4" *ngIf="isLoadingCourse || isLoadingPendencies">
+      <div class="col-12 col-lg-8">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4 p-4">
+          <div class="skeleton skeleton-lg mb-3" style="width: 40%;"></div>
+          <div class="skeleton skeleton-sm mb-4" style="width: 70%;"></div>
+          <div class="d-flex gap-3 mb-4">
+            <div class="skeleton skeleton-lg flex-grow-1" style="height: 80px;"></div>
+            <div class="skeleton skeleton-lg flex-grow-1" style="height: 80px;"></div>
+            <div class="skeleton skeleton-lg flex-grow-1" style="height: 80px;"></div>
+          </div>
+          <div class="skeleton skeleton-sm mb-2"></div>
+          <div class="skeleton skeleton-sm mb-2"></div>
+          <div class="skeleton skeleton-lg mt-4" style="height: 50px;"></div>
+        </div>
+      </div>
+      <div class="col-12 col-lg-4">
+        <div class="card border-0 shadow-sm rounded-4 p-4">
+          <div class="skeleton skeleton-lg mb-4" style="width: 60%;"></div>
+          <div class="d-flex gap-3 mb-4">
+            <div class="skeleton skeleton-avatar" style="width: 70px; height: 70px;"></div>
+            <div class="flex-grow-1">
+              <div class="skeleton skeleton-sm mb-2" style="width: 90%;"></div>
+              <div class="skeleton skeleton-xs" style="width: 40%;"></div>
+            </div>
+          </div>
+          <div class="skeleton skeleton-sm mb-2"></div>
+          <div class="skeleton skeleton-sm mb-4"></div>
+          <div class="skeleton skeleton-lg" style="height: 40px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4" *ngIf="!isLoadingCourse && !isLoadingPendencies">
       <!-- MAIN CHECKOUT AREA -->
       <div class="col-12 col-lg-8">
         <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
@@ -225,14 +258,7 @@
       <!-- SIDEBAR SUMMARY -->
       <div class="col-12 col-lg-4">
         <div class="card border-0 shadow-sm rounded-4 position-sticky" style="top: 2rem;">
-          <div class="card-body p-4 text-center py-5" *ngIf="isLoadingCourse">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Carregando...</span>
-            </div>
-            <p class="text-muted small mt-2">Carregando dados do curso...</p>
-          </div>
-
-          <div class="card-body p-4" *ngIf="!isLoadingCourse && checkoutSummary">
+          <div class="card-body p-4" *ngIf="checkoutSummary">
             <h5 class="fw-bold mb-4">Resumo da Compra</h5>
             
             <div class="d-flex gap-3 mb-4">

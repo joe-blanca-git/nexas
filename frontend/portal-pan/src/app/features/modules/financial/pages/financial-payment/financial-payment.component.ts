@@ -43,6 +43,7 @@ export class FinancialPaymentComponent implements OnInit {
   tipoCompra: 'AVULSO' = 'AVULSO';
   valorTotal = 0;
   isLoadingCourse = true;
+  isLoadingPendencies = true;
 
   // Mock data for installments
   installments: { value: number, label: string }[] = [];
@@ -112,10 +113,10 @@ export class FinancialPaymentComponent implements OnInit {
   verificarPendencias() {
     this.financialService.verificarPendencias(this.cursoId).subscribe({
       next: (res: PendenciaDTO) => {
-        // Regra de Roteamento (Proteção de Rota)
         if (res && res.jaPago) {
           this.toastService.info('Você já possui acesso ativo a este conteúdo!');
           this.router.navigate(['/courses/course-detail', this.cursoId]);
+          this.isLoadingPendencies = false;
           return;
         }
 
@@ -130,8 +131,12 @@ export class FinancialPaymentComponent implements OnInit {
           this.pixCopiaECola = '';
           this.qrCodeUrl = '';
         }
+        this.isLoadingPendencies = false;
       },
-      error: (err) => console.error('Erro ao verificar pendências', err)
+      error: (err) => {
+        console.error('Erro ao verificar pendências', err);
+        this.isLoadingPendencies = false;
+      }
     });
   }
 

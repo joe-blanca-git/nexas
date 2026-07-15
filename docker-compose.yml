@@ -1,9 +1,33 @@
 services:
   api:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Nexas.Api/Dockerfile
     container_name: nexas_api
     ports:
       - "5001:8080"
+    networks:
+      - agivys_default
+    restart: unless-stopped
+
+  admin-api:
+    build:
+      context: ./backend
+      dockerfile: Nexas.Admin.Api/Dockerfile
+    container_name: nexas_admin_api
+    ports:
+      - "5002:8080"
+    networks:
+      - agivys_default
+    restart: unless-stopped
+
+  landing-api:
+    build:
+      context: ./backend
+      dockerfile: Nexas.Landing.Api/Dockerfile
+    container_name: nexas_landing_api
+    ports:
+      - "5003:8080"
     networks:
       - agivys_default
     restart: unless-stopped
@@ -22,6 +46,15 @@ services:
     container_name: nexas_portal
     ports:
       - "4205:80"
+    networks:
+      - agivys_default
+    restart: unless-stopped
+
+  portal-pop:
+    build: ./frontend/portal-pop
+    container_name: nexas_portal_pop
+    ports:
+      - "4206:80"
     networks:
       - agivys_default
     restart: unless-stopped

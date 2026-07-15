@@ -178,13 +178,26 @@
               <label class="form-label small fw-semibold">Preço (R$) <span class="text-danger">*</span></label>
               <input type="number" step="0.01" class="form-control" formControlName="priceSingle">
             </div>
-            <div class="col-md-6">
-              <label class="form-label small fw-semibold">Link da Capa (URL)</label>
-              <input type="url" class="form-control" formControlName="imgCoverLink">
-            </div>
             <div class="col-12">
-              <label class="form-label small fw-semibold">Bunny Library ID</label>
-              <input type="text" class="form-control" formControlName="bunnyLibraryId">
+              <label class="form-label small fw-semibold">Categoria <span class="text-danger">*</span></label>
+              <select class="form-select" formControlName="categoryId">
+                <option value="" disabled selected>Selecione uma categoria...</option>
+                <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name }}</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-semibold">Capa do Curso (16:9, Max 2MB)</label>
+              <input type="file" class="form-control" accept="image/png, image/jpeg, image/webp" (change)="onCoverImageSelected($event)">
+              <small class="text-danger mt-1 d-block" *ngIf="coverImageError">{{ coverImageError }}</small>
+            </div>
+            <div class="col-md-6 d-flex flex-column">
+              <label class="form-label small fw-semibold">Preview</label>
+              <div *ngIf="coverImagePreview" class="rounded-3 overflow-hidden shadow-sm" style="width: 160px; height: 90px; border: 1px solid #dee2e6;">
+                <img [src]="coverImagePreview" class="w-100 h-100 object-fit-cover" alt="Preview Capa">
+              </div>
+              <div *ngIf="!coverImagePreview" class="rounded-3 bg-light border d-flex align-items-center justify-content-center text-muted" style="width: 160px; height: 90px; font-size: 0.8rem;">
+                <i class="fas fa-image me-2"></i> Capa
+              </div>
             </div>
           </div>
         </div>

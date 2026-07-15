@@ -2,6 +2,8 @@ using System;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Net.Http;
+using System.Text.Json;
 using Microsoft.Extensions.Configuration;
 using Nexas.Application.Common.Interfaces;
 
@@ -10,10 +12,46 @@ namespace Nexas.Infrastructure.Services;
 public class BunnyNetService : IBunnyNetService
 {
     private readonly IConfiguration _configuration;
+    private readonly HttpClient _httpClient;
 
-    public BunnyNetService(IConfiguration configuration)
+    public BunnyNetService(IConfiguration configuration, HttpClient httpClient)
     {
         _configuration = configuration;
+        _httpClient = httpClient;
+    }
+
+    public async Task<string?> CreateVideoLibraryAsync(string name)
+    {
+        var accountApiKey = _configuration["BunnyNets:AccountApiKey"];
+        
+        if (string.IsNullOrWhiteSpace(accountApiKey))
+        {
+            throw new InvalidOperationException("BunnyNets:AccountApiKey is not configured in appsettings.");
+        }
+
+        var request = new HttpRequestMessage(HttpMethod.Post, "videolibrary");
+        request.Headers.Add("AccessKey", accountApiKey);
+        
+        var payload = new { Name = name };
+        request.Content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
+
+        var response = await _httpClient.SendAsync(request);
+        
+        if (!response.IsSuccessStatusCode)
+        {
+            var errorBody = await response.Content.ReadAsStringAsync();
+            throw new Exception($"Failed to create Bunny.net Library. Status: {response.StatusCode}, Body: {errorBody}");
+        }
+
+        var responseBody = await response.Content.ReadAsStringAsync();
+        using var document = JsonDocument.Parse(responseBody);
+        
+        if (document.RootElement.TryGetProperty("Id", out var idElement))
+        {
+            return idElement.GetInt64().ToString();
+        }
+
+        return null;
     }
 
     public string? GenerateSignedVideoUrl(string? libraryId, string? videoId, int expirationMinutes = 180)

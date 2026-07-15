@@ -38,6 +38,9 @@ namespace Nexas.Application.Courses.Commands.CreateCourse
         /// <example>library_12345</example>
         public string? BunnyLibraryId { get; init; }
 
+        /// <summary>Lista de IDs das categorias às quais o curso pertence.</summary>
+        public List<int> CategoryIds { get; init; } = new();
+
         /// <summary>Lista de módulos que compõem o curso.</summary>
         public List<CreateModuleDto> Modules { get; init; } = new();
     }
@@ -90,16 +93,30 @@ namespace Nexas.Application.Courses.Commands.CreateCourse
     {
         private readonly INexasDbContext _context;
         private readonly IUserContextService _userContextService;
+        private readonly IBunnyNetService _bunnyNetService;
 
-        public CreateCourseCommandHandler(INexasDbContext context, IUserContextService userContextService)
+        public CreateCourseCommandHandler(INexasDbContext context, IUserContextService userContextService, IBunnyNetService bunnyNetService)
         {
             _context = context;
             _userContextService = userContextService;
+            _bunnyNetService = bunnyNetService;
         }
 
         public async Task<int> Handle(CreateCourseCommand request, CancellationToken cancellationToken)
         {
             var currentUser = await _userContextService.GetCurrentUserAsync();
+
+            // Create Bunny.net Video Library
+            string? bunnyLibraryId = request.BunnyLibraryId;
+            try
+            {
+                bunnyLibraryId = await _bunnyNetService.CreateVideoLibraryAsync(request.Name);
+            }
+            catch (Exception ex)
+            {
+                // In a production app, maybe log this error. For now, it will throw if AccountApiKey is missing.
+                throw new Exception("Falha ao criar Video Library no Bunny.net. Verifique a configuração da Account API Key.", ex);
+            }
 
             var course = Course.Create(
                 request.Name,
@@ -108,7 +125,7 @@ namespace Nexas.Application.Courses.Commands.CreateCourse
                 request.Level,
                 request.PriceSingle,
                 request.ImgCoverLink,
-                request.BunnyLibraryId,
+                bunnyLibraryId,
                 currentUser.Id
             );
 
@@ -122,6 +139,8 @@ namespace Nexas.Application.Courses.Commands.CreateCourse
                     Course = course
                 });
             }
+
+
 
             foreach (var moduleDto in request.Modules)
             {
@@ -152,6 +171,15 @@ namespace Nexas.Application.Courses.Commands.CreateCourse
 
             _context.Courses.Add(course);
             await _context.SaveChangesAsync(cancellationToken);
+
+            if (request.CategoryIds != null && request.CategoryIds.Any())
+            {
+                foreach (var categoryId in request.CategoryIds.Distinct())
+                {
+                    course.CourseCategories.Add(CourseCourseCategory.Create(course.Id, categoryId));
+                }
+                await _context.SaveChangesAsync(cancellationToken);
+            }
 
             return course.Id;
         }

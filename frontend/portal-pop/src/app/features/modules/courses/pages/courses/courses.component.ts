@@ -39,6 +39,13 @@ export class CoursesComponent implements OnInit {
   isSubmittingCourse = false;
   isSubmittingModule = false;
 
+  categories: any[] = [];
+
+  // Cover Image State
+  selectedCoverImage: File | null = null;
+  coverImagePreview: string | null = null;
+  coverImageError: string | null = null;
+
   @ViewChild('courseModal') courseModalRef!: ElementRef;
   @ViewChild('moduleModal') moduleModalRef!: ElementRef;
 
@@ -47,6 +54,7 @@ export class CoursesComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForms();
+    this.loadCategories();
     this.loadCourses();
   }
 
@@ -63,7 +71,7 @@ export class CoursesComponent implements OnInit {
       level: ['Iniciante', Validators.required],
       priceSingle: [0, [Validators.required, Validators.min(0)]],
       imgCoverLink: [''],
-      bunnyLibraryId: ['']
+      categoryId: ['', Validators.required]
     });
 
     this.moduleForm = this.fb.group({
@@ -79,6 +87,17 @@ export class CoursesComponent implements OnInit {
       description: [''],
       durationSeconds: [0, [Validators.required, Validators.min(1)]],
       bunnyVideoId: ['', Validators.required]
+    });
+  }
+
+  loadCategories() {
+    this.coursesService.getCategories().subscribe({
+      next: (data: any) => {
+        this.categories = data;
+      },
+      error: (err) => {
+        console.error('Error loading categories', err);
+      }
     });
   }
 
@@ -117,8 +136,43 @@ export class CoursesComponent implements OnInit {
   }
 
   openNewCourseModal() {
-    this.courseForm.reset({ level: 'Iniciante', priceSingle: 0 });
+    this.courseForm.reset({ level: 'Iniciante', priceSingle: 0, categoryId: '' });
+    this.selectedCoverImage = null;
+    this.coverImagePreview = null;
+    this.coverImageError = null;
     this.courseModalInstance.show();
+  }
+
+  onCoverImageSelected(event: any) {
+    const file = event.target.files[0] as File;
+    this.coverImageError = null;
+
+    if (!file) {
+      this.selectedCoverImage = null;
+      this.coverImagePreview = null;
+      return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+      this.coverImageError = 'A imagem deve ter no máximo 2MB.';
+      event.target.value = '';
+      return;
+    }
+
+    const img = new Image();
+    img.src = URL.createObjectURL(file);
+    img.onload = () => {
+      const ratio = img.width / img.height;
+      if (ratio < 1.7 || ratio > 1.8) { // Target is 1.77 (16:9)
+        this.coverImageError = 'A imagem deve ter a proporção 16:9 (ex: 1280x720).';
+        this.selectedCoverImage = null;
+        this.coverImagePreview = null;
+        event.target.value = '';
+      } else {
+        this.selectedCoverImage = file;
+        this.coverImagePreview = img.src;
+      }
+    };
   }
 
   saveCourse() {
@@ -128,7 +182,35 @@ export class CoursesComponent implements OnInit {
     }
     
     this.isSubmittingCourse = true;
-    this.coursesService.createCourse(this.courseForm.value).subscribe({
+
+    if (this.selectedCoverImage) {
+      this.coursesService.uploadImage(this.selectedCoverImage).subscribe({
+        next: (response) => {
+          this.courseForm.patchValue({ imgCoverLink: response.url });
+          this.submitCourseData();
+        },
+        error: (err) => {
+          console.error('Error uploading image', err);
+          this.isSubmittingCourse = false;
+          this.coverImageError = 'Erro ao fazer upload da imagem no servidor.';
+        }
+      });
+    } else {
+      this.submitCourseData();
+    }
+  }
+
+  private submitCourseData() {
+    const payload = { ...this.courseForm.value };
+    
+    if (payload.categoryId) {
+      payload.categoryIds = [parseInt(payload.categoryId, 10)];
+    } else {
+      payload.categoryIds = [];
+    }
+    delete payload.categoryId;
+
+    this.coursesService.createCourse(payload).subscribe({
       next: (id) => {
         this.isSubmittingCourse = false;
         this.courseModalInstance.hide();

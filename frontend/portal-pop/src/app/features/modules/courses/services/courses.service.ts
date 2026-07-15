@@ -18,6 +18,10 @@ export class CoursesService extends BaseService {
     return this.http.get<Course[]>(`${this.urlApiNexas}courses`, this.GetAuthHeaderJson());
   }
 
+  getCategories(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.urlApiNexas}course-categories`, this.GetAuthHeaderJson());
+  }
+
   createCourse(courseData: Partial<Course>): Observable<number> {
     return this.http.post<number>(`${this.urlApiNexas}courses`, courseData, this.GetAuthHeaderJson());
   }
@@ -28,6 +32,12 @@ export class CoursesService extends BaseService {
 
   createLesson(lessonData: any): Observable<number> {
     return this.http.post<number>(`${this.urlApiNexas}courses/lessons`, lessonData, this.GetAuthHeaderJson());
+  }
+
+  uploadImage(file: File): Observable<{ url: string }> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<{ url: string }>(`${this.urlApiNexas}uploads/image`, formData, this.GetAuthHeaderUploadJson());
   }
 }
 

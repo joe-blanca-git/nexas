@@ -10,7 +10,7 @@ using Nexas.Application.CourseCategories.Queries.GetCourseCategoryById;
 namespace Nexas.Admin.Api.Controllers;
 
 [Authorize]
-[Route("api/v1/course-categories")]
+[Route("v1/api/course-categories")]
 [Tags("Course Categories")]
 public class CourseCategoriesController : ApiControllerBase
 {

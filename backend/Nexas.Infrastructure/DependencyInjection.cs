@@ -28,8 +28,13 @@ namespace Nexas.Infrastructure
                 client.BaseAddress = new Uri(baseUrl);
                 client.DefaultRequestHeaders.UserAgent.ParseAdd("Nexas.Backend/1.0");
             });
+            services.AddScoped<ICloudflareStorageService, CloudflareStorageService>();
             
-            services.AddScoped<IBunnyNetService, BunnyNetService>();
+            services.AddHttpClient<IBunnyNetService, BunnyNetService>(client =>
+            {
+                client.BaseAddress = new Uri("https://api.bunny.net/");
+                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            });
                                 
             return services;
         }

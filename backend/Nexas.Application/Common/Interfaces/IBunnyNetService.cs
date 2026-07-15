@@ -10,4 +10,11 @@ public interface IBunnyNetService
     /// <param name="expirationMinutes">Expiration time in minutes (default 180).</param>
     /// <returns>A signed URL string, or null if parameters are invalid.</returns>
     string? GenerateSignedVideoUrl(string? libraryId, string? videoId, int expirationMinutes = 180);
+
+    /// <summary>
+    /// Creates a new Video Library in Bunny.net.
+    /// </summary>
+    /// <param name="name">The name of the new library.</param>
+    /// <returns>The ID of the newly created library, or null if it failed.</returns>
+    Task<string?> CreateVideoLibraryAsync(string name);
 }

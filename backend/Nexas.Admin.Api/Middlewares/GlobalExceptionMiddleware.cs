@@ -46,11 +46,12 @@ namespace Nexas.Admin.Api.Middlewares
             var response = new
             {
                 StatusCode = statusCode,
-                Message = env.IsDevelopment() ? exception.Message : "An unexpected error occurred.",
+                Message = exception.Message,
+                InnerException = exception.InnerException?.Message,
                 Errors = exception is ValidationException valEx 
                     ? valEx.Errors.Select(e => new { e.PropertyName, e.ErrorMessage }) 
                     : null,
-                StackTrace = env.IsDevelopment() ? exception.StackTrace : null
+                StackTrace = exception.StackTrace
             };
 
             await context.Response.WriteAsync(JsonSerializer.Serialize(response));

@@ -107,7 +107,7 @@
               <td class="ps-4 py-3">
                 <div class="d-flex align-items-center gap-3">
                   <div class="course-cover-mini rounded-3 overflow-hidden shadow-sm" style="width: 48px; height: 48px; flex-shrink: 0;">
-                    <img [src]="course.imgCoverLink || 'assets/images/defaults/default-cover.jpg'" alt="{{ course.name }}" class="w-100 h-100 object-fit-cover" onerror="this.src='assets/images/defaults/default-cover.jpg'">
+                    <img [src]="course.imgCoverLink || ''" alt="{{ course.name }}" class="w-100 h-100 object-fit-cover" onerror="this.src=''">
                   </div>
                   <div>
                     <h6 class="mb-0 fw-semibold text-dark text-truncate" style="max-width: 300px;">{{ course.name }}</h6>

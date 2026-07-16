@@ -17,4 +17,12 @@ public interface IBunnyNetService
     /// <param name="name">The name of the new library.</param>
     /// <returns>The ID of the newly created library, or null if it failed.</returns>
     Task<string?> CreateVideoLibraryAsync(string name);
+
+    /// <summary>
+    /// Creates a new Collection inside a Video Library in Bunny.net.
+    /// </summary>
+    /// <param name="libraryId">The ID of the video library.</param>
+    /// <param name="name">The name of the new collection (module).</param>
+    /// <returns>The ID (guid) of the newly created collection, or null if it failed.</returns>
+    Task<string?> CreateCollectionAsync(string libraryId, string name);
 }

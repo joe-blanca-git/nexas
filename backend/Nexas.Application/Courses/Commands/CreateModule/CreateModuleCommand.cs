@@ -39,11 +39,13 @@ namespace Nexas.Application.Courses.Commands.CreateModule
     {
         private readonly INexasDbContext _context;
         private readonly IUserContextService _userContextService;
+        private readonly IBunnyNetService _bunnyNetService;
 
-        public CreateModuleCommandHandler(INexasDbContext context, IUserContextService userContextService)
+        public CreateModuleCommandHandler(INexasDbContext context, IUserContextService userContextService, IBunnyNetService bunnyNetService)
         {
             _context = context;
             _userContextService = userContextService;
+            _bunnyNetService = bunnyNetService;
         }
 
         public async Task<int> Handle(CreateModuleCommand request, CancellationToken cancellationToken)
@@ -64,12 +66,26 @@ namespace Nexas.Application.Courses.Commands.CreateModule
             if (!isTeacherOfCourse)
                 throw new UnauthorizedAccessException("Você não tem permissão para adicionar módulos a este curso.");
 
+            string? bunnyCollectionId = request.BunnyCollectionId;
+
+            if (!string.IsNullOrWhiteSpace(course.BunnyLibraryId))
+            {
+                try
+                {
+                    bunnyCollectionId = await _bunnyNetService.CreateCollectionAsync(course.BunnyLibraryId, request.Name);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Falha ao criar Collection no Bunny.net.", ex);
+                }
+            }
+
             var module = Module.Create(
                 request.Name,
                 request.Description,
                 request.DescriptionSub,
                 request.ImgCoverLink,
-                request.BunnyCollectionId,
+                bunnyCollectionId,
                 currentUser.Id
             );
 

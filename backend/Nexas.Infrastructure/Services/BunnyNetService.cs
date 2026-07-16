@@ -54,6 +54,42 @@ public class BunnyNetService : IBunnyNetService
         return null;
     }
 
+    public async Task<string?> CreateCollectionAsync(string libraryId, string name)
+    {
+        var securityKey = _configuration["BunnyNets:ApiKey"];
+        
+        if (string.IsNullOrWhiteSpace(securityKey))
+        {
+            throw new InvalidOperationException("BunnyNets:ApiKey is not configured in appsettings.");
+        }
+
+        // The Stream API uses video.bunnycdn.com
+        var requestUrl = $"https://video.bunnycdn.com/library/{libraryId}/collections";
+        var request = new HttpRequestMessage(HttpMethod.Post, requestUrl);
+        request.Headers.Add("AccessKey", securityKey);
+        
+        var payload = new { name = name };
+        request.Content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
+
+        var response = await _httpClient.SendAsync(request);
+        
+        if (!response.IsSuccessStatusCode)
+        {
+            var errorBody = await response.Content.ReadAsStringAsync();
+            throw new Exception($"Failed to create Bunny.net Collection. Status: {response.StatusCode}, Body: {errorBody}");
+        }
+
+        var responseBody = await response.Content.ReadAsStringAsync();
+        using var document = JsonDocument.Parse(responseBody);
+        
+        if (document.RootElement.TryGetProperty("guid", out var guidElement))
+        {
+            return guidElement.GetString();
+        }
+
+        return null;
+    }
+
     public string? GenerateSignedVideoUrl(string? libraryId, string? videoId, int expirationMinutes = 180)
     {
         if (string.IsNullOrWhiteSpace(libraryId) || string.IsNullOrWhiteSpace(videoId))

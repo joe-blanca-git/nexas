@@ -91,46 +91,46 @@
       </div>
 
       <!-- Table View -->
-      <div class="table-responsive" *ngIf="!isLoading && courses.length > 0">
-        <table class="table table-hover align-middle mb-0 custom-table">
-          <thead class="table-light text-muted small text-uppercase" style="font-size: 0.75rem;">
+      <div class="table-responsive px-4 pb-4" *ngIf="!isLoading && courses.length > 0">
+        <table class="table align-middle mb-0 custom-table">
+          <thead class="text-muted small text-uppercase">
             <tr>
-              <th scope="col" class="ps-4 fw-semibold border-0 py-3">Curso</th>
-              <th scope="col" class="fw-semibold border-0 py-3">Nível</th>
-              <th scope="col" class="fw-semibold border-0 py-3">Módulos</th>
-              <th scope="col" class="fw-semibold border-0 py-3">Preço</th>
-              <th scope="col" class="pe-4 text-end fw-semibold border-0 py-3">Ações</th>
+              <th scope="col" class="ps-3 fw-semibold">Curso</th>
+              <th scope="col" class="fw-semibold">Nível</th>
+              <th scope="col" class="fw-semibold">Módulos</th>
+              <th scope="col" class="fw-semibold">Preço</th>
+              <th scope="col" class="pe-3 text-end fw-semibold">Ações</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let course of courses" class="border-bottom">
-              <td class="ps-4 py-3">
+            <tr *ngFor="let course of courses; trackBy: trackById" class="custom-table-row">
+              <td class="ps-3 py-3">
                 <div class="d-flex align-items-center gap-3">
-                  <div class="course-cover-mini rounded-3 overflow-hidden shadow-sm" style="width: 48px; height: 48px; flex-shrink: 0;">
-                    <img [src]="course.imgCoverLink || ''" alt="{{ course.name }}" class="w-100 h-100 object-fit-cover" onerror="this.src=''">
+                  <div class="course-cover-mini rounded-3 overflow-hidden shadow-sm border border-light-subtle" style="width: 54px; height: 54px; flex-shrink: 0;">
+                    <img [src]="course.imgCoverLink || ''" alt="{{ course.name }}" class="w-100 h-100 object-fit-cover transition-scale" onerror="this.src=''">
                   </div>
                   <div>
-                    <h6 class="mb-0 fw-semibold text-dark text-truncate" style="max-width: 300px;">{{ course.name }}</h6>
-                    <small class="text-muted text-truncate d-block" style="max-width: 300px;">{{ course.descriptionSub }}</small>
+                    <h6 class="mb-1 fw-bold text-dark text-truncate" style="max-width: 300px;">{{ course.name }}</h6>
+                    <small class="text-muted text-truncate d-block fw-medium" style="max-width: 300px;">{{ course.descriptionSub || 'Sem subtítulo' }}</small>
                   </div>
                 </div>
               </td>
               <td class="py-3">
-                <span class="badge rounded-pill bg-light text-dark fw-medium border">{{ course.level || 'Não definido' }}</span>
+                <span class="badge rounded-pill bg-light text-dark fw-semibold border shadow-sm px-3 py-2">{{ course.level || 'Não definido' }}</span>
               </td>
-              <td class="py-3 text-muted">
+              <td class="py-3 text-muted fw-medium">
                 <div class="d-flex align-items-center gap-2">
-                  <span>{{ course.modules?.length || 0 }} módulos</span>
-                  <button class="btn btn-sm btn-light rounded-circle p-1 d-flex align-items-center justify-content-center border" style="width: 28px; height: 28px;" (click)="openAddModuleModal(course.id)" title="Adicionar Módulos">
-                    <i class="fas fa-plus text-primary" style="font-size: 0.75rem;"></i>
+                  <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2 border border-primary border-opacity-25">{{ course.modules?.length || 0 }} módulos</span>
+                  <button class="btn btn-sm btn-white rounded-circle p-1 d-flex align-items-center justify-content-center shadow-sm border btn-add-module" style="width: 32px; height: 32px;" (click)="openAddModuleModal(course.id)" title="Adicionar Módulos">
+                    <i class="fas fa-plus text-primary"></i>
                   </button>
                 </div>
               </td>
-              <td class="py-3 fw-medium text-success">
+              <td class="py-3 fw-bold text-success fs-6">
                 {{ (course.priceSingle || 0) | currency:'BRL':'symbol':'1.2-2' }}
               </td>
-              <td class="pe-4 py-3 text-end">
-                <button class="btn btn-sm btn-outline-secondary rounded-pill px-3">
+              <td class="pe-3 py-3 text-end">
+                <button class="btn btn-sm btn-light border shadow-sm rounded-pill px-4 fw-semibold text-dark hover-primary transition-all">
                   Gerenciar
                 </button>
               </td>
@@ -261,11 +261,11 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body bg-light p-4">
-        <div class="row g-4">
+        <div class="row justify-content-center">
           
           <!-- Module Header Form -->
-          <div class="col-lg-5">
-            <div class="bg-white p-4 rounded-4 shadow-sm border-0 h-100">
+          <div class="col-lg-8">
+            <div class="bg-white p-4 rounded-4 shadow-sm border-0">
               <h6 class="fw-bold mb-4 text-primary"><i class="fas fa-folder me-2"></i>Dados do Módulo</h6>
               <form [formGroup]="moduleForm">
                 <div class="row g-3">
@@ -285,79 +285,16 @@
                     <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.5px; font-size: 0.7rem;">Link da Capa (URL)</label>
                     <input type="url" class="form-control border-light-subtle" formControlName="imgCoverLink" placeholder="https://...">
                   </div>
-                  <div class="col-12">
-                    <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.5px; font-size: 0.7rem;">Bunny Collection ID</label>
-                    <input type="text" class="form-control border-light-subtle" formControlName="bunnyCollectionId">
-                  </div>
                 </div>
               </form>
             </div>
           </div>
-
-          <!-- Lessons Section -->
-          <div class="col-lg-7">
-            <div class="bg-white p-4 rounded-4 shadow-sm border-0 h-100 d-flex flex-column">
-              <h6 class="fw-bold mb-4 text-danger"><i class="fas fa-video me-2"></i>Aulas do Módulo</h6>
-              
-              <!-- Add Lesson Inline Form -->
-              <form [formGroup]="lessonForm" class="bg-light p-3 rounded-4 mb-4 border border-light-subtle shadow-sm">
-                <div class="row g-3 align-items-end">
-                  <div class="col-md-5">
-                    <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.5px; font-size: 0.7rem;">Nome da Aula <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" formControlName="name" placeholder="Ex: Bem-vindo">
-                  </div>
-                  <div class="col-md-3">
-                    <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.5px; font-size: 0.7rem;">Duração (seg) <span class="text-danger">*</span></label>
-                    <input type="number" class="form-control" formControlName="durationSeconds" placeholder="Ex: 600">
-                  </div>
-                  <div class="col-md-4">
-                    <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.5px; font-size: 0.7rem;">Video ID <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" formControlName="bunnyVideoId" placeholder="ID no Bunny">
-                  </div>
-                  <div class="col-md-8 mt-3">
-                    <input type="text" class="form-control bg-white" formControlName="description" placeholder="Descrição curta (opcional)">
-                  </div>
-                  <div class="col-md-4 mt-3">
-                    <button type="button" class="btn btn-dark w-100 fw-medium rounded-3" (click)="addPendingLesson()" [disabled]="lessonForm.invalid">
-                      <i class="fas fa-plus me-2"></i> Adicionar
-                    </button>
-                  </div>
-                </div>
-              </form>
-
-              <!-- Lessons List -->
-              <div class="flex-grow-1 overflow-auto rounded-3 border border-light-subtle bg-light" style="min-height: 200px;">
-                <div *ngIf="pendingLessons.length === 0" class="h-100 d-flex flex-column align-items-center justify-content-center text-muted p-4">
-                  <i class="fas fa-list-ul fs-2 mb-3 text-secondary opacity-50"></i>
-                  <span class="small text-center">Nenhuma aula adicionada ainda.<br>Preencha os campos acima para começar.</span>
-                </div>
-                <div class="list-group list-group-flush rounded-3">
-                  <div class="list-group-item bg-transparent px-3 py-3 border-bottom d-flex justify-content-between align-items-center" *ngFor="let lesson of pendingLessons; let i = index">
-                    <div class="d-flex align-items-center">
-                      <div class="bg-white rounded-circle shadow-sm d-flex align-items-center justify-content-center text-primary fw-bold me-3" style="width: 32px; height: 32px; font-size: 0.85rem;">
-                        {{ i + 1 }}
-                      </div>
-                      <div>
-                        <h6 class="mb-1 text-dark fw-semibold" style="font-size: 0.95rem;">{{ lesson.name }}</h6>
-                        <small class="text-muted" style="font-size: 0.8rem;"><i class="far fa-clock me-1"></i>{{ lesson.durationSeconds }}s <span class="mx-2">|</span> <i class="fas fa-link me-1"></i>ID: {{ lesson.bunnyVideoId }}</small>
-                      </div>
-                    </div>
-                    <button class="btn btn-sm btn-light text-danger rounded-circle p-2" style="width: 35px; height: 35px;" (click)="removePendingLesson(i)" title="Remover">
-                      <i class="fas fa-trash"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
         </div>
       </div>
       <div class="modal-footer bg-white border-top px-4 py-3 rounded-bottom-4">
         <button type="button" class="btn btn-light rounded-pill px-4 fw-medium" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary rounded-pill px-5 fw-bold shadow-sm" (click)="saveModuleWithLessons()" [disabled]="moduleForm.invalid || isSubmittingModule">
-          <span *ngIf="!isSubmittingModule">Salvar Módulo e Aulas</span>
+        <button type="button" class="btn btn-primary rounded-pill px-5 fw-bold shadow-sm" (click)="saveModule()" [disabled]="moduleForm.invalid || isSubmittingModule">
+          <span *ngIf="!isSubmittingModule">Salvar Módulo</span>
           <span *ngIf="isSubmittingModule"><i class="fas fa-spinner fa-spin me-2"></i>Salvando e Processando...</span>
         </button>
       </div>

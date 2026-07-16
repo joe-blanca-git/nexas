@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, inject, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -18,6 +18,7 @@ declare var bootstrap: any;
 export class CoursesComponent implements OnInit {
   private coursesService = inject(CoursesService);
   private fb = inject(FormBuilder);
+  private cdr = inject(ChangeDetectorRef);
   
   courses: Course[] = [];
   isLoading = true;
@@ -31,10 +32,8 @@ export class CoursesComponent implements OnInit {
   // Modals & State
   courseForm!: FormGroup;
   moduleForm!: FormGroup;
-  lessonForm!: FormGroup;
 
   selectedCourseId: number | null = null;
-  pendingLessons: any[] = [];
   
   isSubmittingCourse = false;
   isSubmittingModule = false;
@@ -78,15 +77,7 @@ export class CoursesComponent implements OnInit {
       name: ['', Validators.required],
       description: [''],
       descriptionSub: [''],
-      imgCoverLink: [''],
-      bunnyCollectionId: ['']
-    });
-
-    this.lessonForm = this.fb.group({
-      name: ['', Validators.required],
-      description: [''],
-      durationSeconds: [0, [Validators.required, Validators.min(1)]],
-      bunnyVideoId: ['', Validators.required]
+      imgCoverLink: ['']
     });
   }
 
@@ -127,10 +118,12 @@ export class CoursesComponent implements OnInit {
         this.averageWorkload = this.totalCourses > 0 ? Math.round(totalWorkload / this.totalCourses) : 0;
 
         this.isLoading = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error loading courses', err);
         this.isLoading = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -226,25 +219,10 @@ export class CoursesComponent implements OnInit {
   openAddModuleModal(courseId: number) {
     this.selectedCourseId = courseId;
     this.moduleForm.reset();
-    this.lessonForm.reset({ durationSeconds: 0 });
-    this.pendingLessons = [];
     this.moduleModalInstance.show();
   }
 
-  addPendingLesson() {
-    if (this.lessonForm.invalid) {
-      this.lessonForm.markAllAsTouched();
-      return;
-    }
-    this.pendingLessons.push(this.lessonForm.value);
-    this.lessonForm.reset({ durationSeconds: 0 });
-  }
-
-  removePendingLesson(index: number) {
-    this.pendingLessons.splice(index, 1);
-  }
-
-  saveModuleWithLessons() {
+  saveModule() {
     if (this.moduleForm.invalid || !this.selectedCourseId) {
       this.moduleForm.markAllAsTouched();
       return;
@@ -258,35 +236,7 @@ export class CoursesComponent implements OnInit {
 
     this.coursesService.createModule(modulePayload).subscribe({
       next: (moduleId) => {
-        if (this.pendingLessons.length === 0) {
-          this.finishModuleCreation();
-          return;
-        }
-
-        // Sequential POST for each lesson
-        let completed = 0;
-        this.pendingLessons.forEach(lesson => {
-          const lessonPayload = {
-            ...lesson,
-            moduleId: moduleId
-          };
-          this.coursesService.createLesson(lessonPayload).subscribe({
-            next: () => {
-              completed++;
-              if (completed === this.pendingLessons.length) {
-                this.finishModuleCreation();
-              }
-            },
-            error: (err) => {
-              console.error('Error creating lesson', err);
-              // In a real app, handle partial failure
-              completed++;
-              if (completed === this.pendingLessons.length) {
-                this.finishModuleCreation();
-              }
-            }
-          });
-        });
+        this.finishModuleCreation();
       },
       error: (err) => {
         console.error('Error creating module', err);
@@ -299,5 +249,9 @@ export class CoursesComponent implements OnInit {
     this.isSubmittingModule = false;
     this.moduleModalInstance.hide();
     this.loadCourses(); // Refresh list to update module counts
+  }
+
+  trackById(index: number, item: any): number {
+    return item.id;
   }
 }

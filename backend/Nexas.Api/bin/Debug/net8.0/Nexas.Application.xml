@@ -13,6 +13,40 @@
             <param name="expirationMinutes">Expiration time in minutes (default 180).</param>
             <returns>A signed URL string, or null if parameters are invalid.</returns>
         </member>
+        <member name="M:Nexas.Application.Common.Interfaces.IBunnyNetService.CreateVideoLibraryAsync(System.String)">
+            <summary>
+            Creates a new Video Library in Bunny.net.
+            </summary>
+            <param name="name">The name of the new library.</param>
+            <returns>The ID of the newly created library, or null if it failed.</returns>
+        </member>
+        <member name="M:Nexas.Application.Common.Interfaces.IBunnyNetService.CreateCollectionAsync(System.String,System.String)">
+            <summary>
+            Creates a new Collection inside a Video Library in Bunny.net.
+            </summary>
+            <param name="libraryId">The ID of the video library.</param>
+            <param name="name">The name of the new collection (module).</param>
+            <returns>The ID (guid) of the newly created collection, or null if it failed.</returns>
+        </member>
+        <member name="M:Nexas.Application.Common.Interfaces.ICloudflareStorageService.UploadImageAsync(System.IO.Stream,System.String,System.String)">
+            <summary>
+            Faz o upload de um arquivo para o bucket do Cloudflare R2 e retorna a URL pública gerada.
+            </summary>
+            <param name="fileStream">Stream do arquivo a ser enviado.</param>
+            <param name="fileName">Nome único do arquivo.</param>
+            <param name="contentType">MIME type da imagem (ex: image/jpeg).</param>
+            <returns>A URL pública onde o arquivo ficou acessível.</returns>
+        </member>
+        <member name="P:Nexas.Application.Common.Models.Bunny.VideoUploadInformationDto.UploadUrl">
+            <summary>
+            A URL/Mecanismo oficial suportado pela Bunny Stream para realizar o upload direto (ex: TUS endpoint)
+            </summary>
+        </member>
+        <member name="P:Nexas.Application.Common.Models.Bunny.VideoUploadInformationDto.Headers">
+            <summary>
+            Token ou headers necessários para autenticação temporária do upload (se fornecido oficialmente)
+            </summary>
+        </member>
         <member name="T:Nexas.Application.Courses.Commands.CreateCourse.CreateCourseCommand">
             <summary>
             Comando para criação de um novo curso completo com módulos e aulas.
@@ -46,9 +80,8 @@
             <summary>ID da biblioteca Bunny para o curso.</summary>
             <example>library_12345</example>
         </member>
-        <member name="P:Nexas.Application.Courses.Commands.CreateCourse.CreateCourseCommand.WorkloadHours">
-            <summary>Carga horária total do curso em horas.</summary>
-            <example>40</example>
+        <member name="P:Nexas.Application.Courses.Commands.CreateCourse.CreateCourseCommand.CategoryIds">
+            <summary>Lista de IDs das categorias às quais o curso pertence.</summary>
         </member>
         <member name="P:Nexas.Application.Courses.Commands.CreateCourse.CreateCourseCommand.Modules">
             <summary>Lista de módulos que compõem o curso.</summary>
@@ -115,10 +148,6 @@
         <member name="P:Nexas.Application.Courses.Commands.CreateLesson.CreateLessonCommand.DurationSeconds">
             <summary>Duração estimada da aula em segundos.</summary>
             <example>600</example>
-        </member>
-        <member name="P:Nexas.Application.Courses.Commands.CreateLesson.CreateLessonCommand.BunnyVideoId">
-            <summary>ID do vídeo Bunny para a aula.</summary>
-            <example>video_12345</example>
         </member>
         <member name="T:Nexas.Application.Courses.Commands.CreateModule.CreateModuleCommand">
             <summary>
@@ -282,7 +311,18 @@
         <member name="P:Nexas.Application.Courses.Queries.GetCourseById.GetCourseByIdQuery.Id">
             <summary>ID do curso.</summary>
         </member>
+        <member name="P:Nexas.Application.Courses.Queries.GetCourseById.GetCourseByIdQuery.IncludeInactive">
+            <summary>Indica se deve incluir curso, módulos e aulas inativos (uso em portais admin).</summary>
+        </member>
+        <member name="P:Nexas.Application.Courses.Queries.GetCourseById.GetCourseByIdQuery.FilterByCurrentUserTeacher">
+            <summary>Indica se deve filtrar pelo professor atual.</summary>
+        </member>
         <member name="T:Nexas.Application.Courses.Queries.GetCourses.GetCoursesQuery">
+            <summary>
+            Consulta para obter a lista de cursos ativos com todos os detalhes (módulos e aulas).
+            </summary>
+        </member>
+        <member name="M:Nexas.Application.Courses.Queries.GetCourses.GetCoursesQuery.#ctor(System.Boolean,System.Boolean)">
             <summary>
             Consulta para obter a lista de cursos ativos com todos os detalhes (módulos e aulas).
             </summary>

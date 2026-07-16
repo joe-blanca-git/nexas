@@ -37,6 +37,16 @@
             <param name="contentType">MIME type da imagem (ex: image/jpeg).</param>
             <returns>A URL pública onde o arquivo ficou acessível.</returns>
         </member>
+        <member name="P:Nexas.Application.Common.Models.Bunny.VideoUploadInformationDto.UploadUrl">
+            <summary>
+            A URL/Mecanismo oficial suportado pela Bunny Stream para realizar o upload direto (ex: TUS endpoint)
+            </summary>
+        </member>
+        <member name="P:Nexas.Application.Common.Models.Bunny.VideoUploadInformationDto.Headers">
+            <summary>
+            Token ou headers necessários para autenticação temporária do upload (se fornecido oficialmente)
+            </summary>
+        </member>
         <member name="T:Nexas.Application.Courses.Commands.CreateCourse.CreateCourseCommand">
             <summary>
             Comando para criação de um novo curso completo com módulos e aulas.
@@ -138,10 +148,6 @@
         <member name="P:Nexas.Application.Courses.Commands.CreateLesson.CreateLessonCommand.DurationSeconds">
             <summary>Duração estimada da aula em segundos.</summary>
             <example>600</example>
-        </member>
-        <member name="P:Nexas.Application.Courses.Commands.CreateLesson.CreateLessonCommand.BunnyVideoId">
-            <summary>ID do vídeo Bunny para a aula.</summary>
-            <example>video_12345</example>
         </member>
         <member name="T:Nexas.Application.Courses.Commands.CreateModule.CreateModuleCommand">
             <summary>

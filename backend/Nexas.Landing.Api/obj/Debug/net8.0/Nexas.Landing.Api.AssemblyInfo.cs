@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Nexas.Landing.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2a501db6b64a00c67aa2ece254c88ebc3c0b8bff")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f88d58572d762c62ab5bf1c348d244450bf1471f")]
 [assembly: System.Reflection.AssemblyProductAttribute("Nexas.Landing.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Nexas.Landing.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

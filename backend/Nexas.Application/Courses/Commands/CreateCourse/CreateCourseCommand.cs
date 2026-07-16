@@ -159,9 +159,14 @@ namespace Nexas.Application.Courses.Commands.CreateCourse
                         lessonDto.Name,
                         lessonDto.Description,
                         lessonDto.DurationSeconds,
-                        lessonDto.BunnyVideoId,
                         currentUser.Id
                     );
+                    
+                    if (!string.IsNullOrEmpty(lessonDto.BunnyVideoId))
+                    {
+                        lesson.BunnyVideoId = lessonDto.BunnyVideoId;
+                        lesson.Status = Nexas.Domain.Enums.LessonStatus.PendingUpload; // or Ready depending on your logic
+                    }
 
                     module.Lessons.Add(lesson);
                 }

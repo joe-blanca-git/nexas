@@ -109,6 +109,12 @@ namespace Nexas.Infrastructure.Persistence.Configurations
             builder.Property(l => l.UpdatedBy).HasColumnName("UpdatedBy");
             builder.Property(l => l.BunnyVideoId).HasColumnName("BunnyVideoId").HasMaxLength(100);
 
+            builder.Property(l => l.Status).HasColumnName("Status").HasConversion<string>().HasMaxLength(50);
+            builder.Property(l => l.Thumbnail).HasColumnName("Thumbnail").HasMaxLength(255);
+            builder.Property(l => l.Width).HasColumnName("Width");
+            builder.Property(l => l.Height).HasColumnName("Height");
+            builder.Property(l => l.ProcessedAt).HasColumnName("ProcessedAt");
+
             builder.HasOne(l => l.Module)
                 .WithMany(m => m.Lessons)
                 .HasForeignKey(l => l.ModuleId);

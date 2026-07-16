@@ -5,6 +5,7 @@ using Nexas.Application.Common.Interfaces;
 using Nexas.Infrastructure.Persistence;
 using Nexas.Infrastructure.ExternalServices.Asaas;
 using Nexas.Infrastructure.Services;
+using Nexas.Infrastructure.Jobs;
 
 namespace Nexas.Infrastructure
 {
@@ -35,6 +36,13 @@ namespace Nexas.Infrastructure
                 client.BaseAddress = new Uri("https://api.bunny.net/");
                 client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
             });
+
+            services.AddHttpClient<IBunnyVideoService, BunnyVideoService>(client =>
+            {
+                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            });
+
+            services.AddHostedService<OrphanVideoCleanupBackgroundService>();
                                 
             return services;
         }

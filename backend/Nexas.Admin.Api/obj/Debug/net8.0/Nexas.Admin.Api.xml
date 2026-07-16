@@ -110,6 +110,16 @@
             <param name="command">Dados da aula a ser criada.</param>
             <returns>O ID da aula criada.</returns>
         </member>
+        <member name="M:Nexas.Admin.Api.Controllers.CoursesController.GenerateVideoUpload(System.Int32)">
+            <summary>
+            Gera as credenciais e URL para upload direto de vídeo da aula para a Bunny Stream.
+            </summary>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.CoursesController.CompleteVideoUpload(System.Int32)">
+            <summary>
+            Sinaliza que o frontend concluiu o envio do vídeo para a Bunny Stream.
+            </summary>
+        </member>
         <member name="M:Nexas.Admin.Api.Controllers.CoursesController.UpdateLesson(Nexas.Application.Courses.Commands.UpdateLesson.UpdateLessonCommand)">
             <summary>
             Atualiza os dados de uma aula existente.

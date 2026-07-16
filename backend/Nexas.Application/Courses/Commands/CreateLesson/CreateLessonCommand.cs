@@ -25,10 +25,6 @@ namespace Nexas.Application.Courses.Commands.CreateLesson
         /// <summary>Duração estimada da aula em segundos.</summary>
         /// <example>600</example>
         public int? DurationSeconds { get; init; }
-
-        /// <summary>ID do vídeo Bunny para a aula.</summary>
-        /// <example>video_12345</example>
-        public string? BunnyVideoId { get; init; }
     }
 
     public class CreateLessonCommandHandler : IRequestHandler<CreateLessonCommand, int>
@@ -65,7 +61,6 @@ namespace Nexas.Application.Courses.Commands.CreateLesson
                 request.Name,
                 request.Description,
                 request.DurationSeconds,
-                request.BunnyVideoId,
                 currentUser.Id
             );
 

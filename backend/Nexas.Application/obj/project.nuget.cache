@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "dcQh97T41Ds=",
+  "dgSpecHash": "1emxmStrgzo=",
   "success": true,
-  "projectFilePath": "c:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Application\\Nexas.Application.csproj",
+  "projectFilePath": "C:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Application\\Nexas.Application.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\joeder-blanca\\.nuget\\packages\\fluentvalidation\\11.9.2\\fluentvalidation.11.9.2.nupkg.sha512",
     "C:\\Users\\joeder-blanca\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\11.9.2\\fluentvalidation.dependencyinjectionextensions.11.9.2.nupkg.sha512",

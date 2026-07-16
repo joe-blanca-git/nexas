@@ -32,11 +32,14 @@ export class CoursesComponent implements OnInit {
   // Modals & State
   courseForm!: FormGroup;
   moduleForm!: FormGroup;
+  lessonForm!: FormGroup;
 
   selectedCourseId: number | null = null;
+  selectedCourseForLesson: Course | null = null;
   
   isSubmittingCourse = false;
   isSubmittingModule = false;
+  isSubmittingLesson = false;
 
   categories: any[] = [];
 
@@ -45,11 +48,17 @@ export class CoursesComponent implements OnInit {
   coverImagePreview: string | null = null;
   coverImageError: string | null = null;
 
+  // Lesson Video State
+  selectedLessonVideo: File | null = null;
+  lessonVideoError: string | null = null;
+
   @ViewChild('courseModal') courseModalRef!: ElementRef;
   @ViewChild('moduleModal') moduleModalRef!: ElementRef;
+  @ViewChild('lessonModal') lessonModalRef!: ElementRef;
 
   private courseModalInstance: any;
   private moduleModalInstance: any;
+  private lessonModalInstance: any;
 
   ngOnInit(): void {
     this.initForms();
@@ -60,6 +69,7 @@ export class CoursesComponent implements OnInit {
   ngAfterViewInit() {
     this.courseModalInstance = new bootstrap.Modal(this.courseModalRef.nativeElement);
     this.moduleModalInstance = new bootstrap.Modal(this.moduleModalRef.nativeElement);
+    this.lessonModalInstance = new bootstrap.Modal(this.lessonModalRef.nativeElement);
   }
 
   initForms() {
@@ -78,6 +88,13 @@ export class CoursesComponent implements OnInit {
       description: [''],
       descriptionSub: [''],
       imgCoverLink: ['']
+    });
+
+    this.lessonForm = this.fb.group({
+      moduleId: ['', Validators.required],
+      name: ['', Validators.required],
+      description: [''],
+      durationSeconds: [0, [Validators.required, Validators.min(1)]]
     });
   }
 
@@ -249,6 +266,73 @@ export class CoursesComponent implements OnInit {
     this.isSubmittingModule = false;
     this.moduleModalInstance.hide();
     this.loadCourses(); // Refresh list to update module counts
+  }
+
+  getCourseLessonsCount(course: Course): number {
+    if (!course.modules) return 0;
+    return course.modules.reduce((acc, mod) => acc + (mod.lessons?.length || 0), 0);
+  }
+
+  openAddLessonModal(course: Course) {
+    this.selectedCourseForLesson = course;
+    this.lessonForm.reset({ moduleId: '', durationSeconds: 0 });
+    this.selectedLessonVideo = null;
+    this.lessonVideoError = null;
+    this.lessonModalInstance.show();
+  }
+
+  onLessonVideoSelected(event: any) {
+    const file = event.target.files[0] as File;
+    this.lessonVideoError = null;
+
+    if (!file) {
+      this.selectedLessonVideo = null;
+      return;
+    }
+
+    if (file.size > 2 * 1024 * 1024 * 1024) { // 2GB max for video
+      this.lessonVideoError = 'O vídeo deve ter no máximo 2GB.';
+      event.target.value = '';
+      return;
+    }
+
+    this.selectedLessonVideo = file;
+
+    // Calculate video duration automatically
+    const video = document.createElement('video');
+    video.preload = 'metadata';
+    video.onloadedmetadata = () => {
+      window.URL.revokeObjectURL(video.src);
+      const duration = Math.round(video.duration);
+      if (!isNaN(duration)) {
+        this.lessonForm.patchValue({ durationSeconds: duration });
+        this.cdr.detectChanges();
+      }
+    };
+    video.src = URL.createObjectURL(file);
+  }
+
+  saveLesson() {
+    if (this.lessonForm.invalid) {
+      this.lessonForm.markAllAsTouched();
+      return;
+    }
+
+    this.isSubmittingLesson = true;
+    const payload = this.lessonForm.value;
+    payload.moduleId = parseInt(payload.moduleId, 10);
+
+    this.coursesService.createLesson(payload).subscribe({
+      next: () => {
+        this.isSubmittingLesson = false;
+        this.lessonModalInstance.hide();
+        this.loadCourses(); // refresh
+      },
+      error: (err) => {
+        console.error('Error creating lesson', err);
+        this.isSubmittingLesson = false;
+      }
+    });
   }
 
   trackById(index: number, item: any): number {

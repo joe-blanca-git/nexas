@@ -26,10 +26,7 @@ namespace Nexas.Application.Courses.Commands.CreateLesson
                 .WithMessage("Duração da aula deve ser maior que 0 segundos.")
                 .When(x => x.DurationSeconds.HasValue);
 
-            RuleFor(x => x.BunnyVideoId)
-                .MaximumLength(100)
-                .WithMessage("ID do vídeo Bunny não pode ultrapassar 100 caracteres.")
-                .When(x => !string.IsNullOrEmpty(x.BunnyVideoId));
+
         }
     }
 }

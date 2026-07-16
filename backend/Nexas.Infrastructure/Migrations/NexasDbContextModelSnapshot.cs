@@ -523,6 +523,10 @@ namespace Nexas.Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasColumnName("DurationSeconds");
 
+                    b.Property<int?>("Height")
+                        .HasColumnType("int")
+                        .HasColumnName("Height");
+
                     b.Property<int>("ModuleId")
                         .HasColumnType("int")
                         .HasColumnName("ModuleId");
@@ -533,6 +537,21 @@ namespace Nexas.Infrastructure.Migrations
                         .HasColumnType("varchar(255)")
                         .HasColumnName("Name");
 
+                    b.Property<DateTime?>("ProcessedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("ProcessedAt");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("Status");
+
+                    b.Property<string>("Thumbnail")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("Thumbnail");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime(6)")
                         .HasColumnName("UpdatedAt");
@@ -540,6 +559,10 @@ namespace Nexas.Infrastructure.Migrations
                     b.Property<int?>("UpdatedBy")
                         .HasColumnType("int")
                         .HasColumnName("UpdatedBy");
+
+                    b.Property<int?>("Width")
+                        .HasColumnType("int")
+                        .HasColumnName("Width");
 
                     b.HasKey("Id");
 

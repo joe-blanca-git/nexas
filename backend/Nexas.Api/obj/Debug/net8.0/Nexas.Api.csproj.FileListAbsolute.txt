@@ -389,3 +389,14 @@ C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Api\obj\De
 C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Api\obj\Debug\net8.0\Nexas.Api.csproj.Up2Date
 C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Api\obj\Debug\net8.0\Nexas.Api.genruntimeconfig.cache
 C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Api\obj\Debug\net8.0\ref\Nexas.Api.dll
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Api\bin\Debug\net8.0\AWSSDK.Core.dll
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Api\bin\Debug\net8.0\AWSSDK.S3.dll
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Api\bin\Debug\net8.0\Microsoft.Extensions.Configuration.Abstractions.dll
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Api\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Api\bin\Debug\net8.0\Microsoft.Extensions.Diagnostics.Abstractions.dll
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Api\bin\Debug\net8.0\Microsoft.Extensions.FileProviders.Abstractions.dll
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Api\bin\Debug\net8.0\Microsoft.Extensions.Hosting.Abstractions.dll
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Api\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Api\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Api\bin\Debug\net8.0\Microsoft.Extensions.Primitives.dll
+C:\Users\joeder-blanca\Documents\projetos-joe\git\nexas\backend\Nexas.Api\bin\Debug\net8.0\System.Diagnostics.DiagnosticSource.dll

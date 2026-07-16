@@ -2884,11 +2884,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Infrastructure\\Nexas.Infrastructure.csproj",
+      "projectUniqueName": "c:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Infrastructure\\Nexas.Infrastructure.csproj",
       "projectName": "Nexas.Infrastructure",
-      "projectPath": "C:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Infrastructure\\Nexas.Infrastructure.csproj",
+      "projectPath": "c:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Infrastructure\\Nexas.Infrastructure.csproj",
       "packagesPath": "C:\\Users\\joeder-blanca\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Infrastructure\\obj\\",
+      "outputPath": "c:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\joeder-blanca\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -2903,11 +2903,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Application\\Nexas.Application.csproj": {
-              "projectPath": "C:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Application\\Nexas.Application.csproj"
+            "c:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Application\\Nexas.Application.csproj": {
+              "projectPath": "c:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Application\\Nexas.Application.csproj"
             },
-            "C:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Domain\\Nexas.Domain.csproj": {
-              "projectPath": "C:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Domain\\Nexas.Domain.csproj"
+            "c:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Domain\\Nexas.Domain.csproj": {
+              "projectPath": "c:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Domain\\Nexas.Domain.csproj"
             }
           }
         }

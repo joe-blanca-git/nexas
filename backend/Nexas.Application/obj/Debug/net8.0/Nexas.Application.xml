@@ -20,6 +20,14 @@
             <param name="name">The name of the new library.</param>
             <returns>The ID of the newly created library, or null if it failed.</returns>
         </member>
+        <member name="M:Nexas.Application.Common.Interfaces.IBunnyNetService.CreateCollectionAsync(System.String,System.String)">
+            <summary>
+            Creates a new Collection inside a Video Library in Bunny.net.
+            </summary>
+            <param name="libraryId">The ID of the video library.</param>
+            <param name="name">The name of the new collection (module).</param>
+            <returns>The ID (guid) of the newly created collection, or null if it failed.</returns>
+        </member>
         <member name="M:Nexas.Application.Common.Interfaces.ICloudflareStorageService.UploadImageAsync(System.IO.Stream,System.String,System.String)">
             <summary>
             Faz o upload de um arquivo para o bucket do Cloudflare R2 e retorna a URL pública gerada.

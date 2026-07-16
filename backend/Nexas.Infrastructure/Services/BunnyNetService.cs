@@ -51,6 +51,9 @@ public class BunnyNetService : IBunnyNetService
             return idElement.GetInt64().ToString();
         }
 
+        return null;
+    }
+
     private async Task<string> GetLibraryApiKeyAsync(string libraryId)
     {
         var accountApiKey = _configuration["BunnyNets:AccountApiKey"];

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Domain\\Nexas.Domain.csproj": {}
+    "c:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Domain\\Nexas.Domain.csproj": {}
   },
   "projects": {
-    "C:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Domain\\Nexas.Domain.csproj": {
+    "c:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Domain\\Nexas.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Domain\\Nexas.Domain.csproj",
+        "projectUniqueName": "c:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Domain\\Nexas.Domain.csproj",
         "projectName": "Nexas.Domain",
-        "projectPath": "C:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Domain\\Nexas.Domain.csproj",
+        "projectPath": "c:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Domain\\Nexas.Domain.csproj",
         "packagesPath": "C:\\Users\\joeder-blanca\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Domain\\obj\\",
+        "outputPath": "c:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\joeder-blanca\\AppData\\Roaming\\NuGet\\NuGet.Config"

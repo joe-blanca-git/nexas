@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "pPIojLJ7Msk=",
+  "dgSpecHash": "RM5FruRJhWM=",
   "success": true,
-  "projectFilePath": "C:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Infrastructure\\Nexas.Infrastructure.csproj",
+  "projectFilePath": "c:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Infrastructure\\Nexas.Infrastructure.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\joeder-blanca\\.nuget\\packages\\awssdk.core\\4.0.100.5\\awssdk.core.4.0.100.5.nupkg.sha512",
     "C:\\Users\\joeder-blanca\\.nuget\\packages\\awssdk.s3\\4.0.101.1\\awssdk.s3.4.0.101.1.nupkg.sha512",

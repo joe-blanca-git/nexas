@@ -1,9 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "ZEd3ShMBThY=",
+  "dgSpecHash": "nspcl0y7vzw=",
   "success": true,
-  "projectFilePath": "C:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Api\\Nexas.Api.csproj",
+  "projectFilePath": "c:\\Users\\joeder-blanca\\Documents\\projetos-joe\\git\\nexas\\backend\\Nexas.Api\\Nexas.Api.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\joeder-blanca\\.nuget\\packages\\awssdk.core\\4.0.100.5\\awssdk.core.4.0.100.5.nupkg.sha512",
+    "C:\\Users\\joeder-blanca\\.nuget\\packages\\awssdk.s3\\4.0.101.1\\awssdk.s3.4.0.101.1.nupkg.sha512",
     "C:\\Users\\joeder-blanca\\.nuget\\packages\\fluentvalidation\\11.9.2\\fluentvalidation.11.9.2.nupkg.sha512",
     "C:\\Users\\joeder-blanca\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\11.9.2\\fluentvalidation.dependencyinjectionextensions.11.9.2.nupkg.sha512",
     "C:\\Users\\joeder-blanca\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",

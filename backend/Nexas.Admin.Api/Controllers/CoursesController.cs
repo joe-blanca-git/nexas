@@ -146,6 +146,21 @@ namespace Nexas.Admin.Api.Controllers
         }
 
         /// <summary>
+        /// Alterna o status (Ativo/Inativo) de um curso.
+        /// </summary>
+        /// <param name="id">ID do curso</param>
+        [Authorize(Roles = "Teacher")]
+        [HttpPatch("{id}/toggle-status")]
+        [SwaggerOperation(Summary = "Alterna status do curso", Description = "Ativa um curso inativo ou inativa um curso ativo.")]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        public async Task<IActionResult> ToggleStatus(int id)
+        {
+            var command = new Nexas.Application.Courses.Commands.ToggleCourseStatus.ToggleCourseStatusCommand(id);
+            var result = await _mediator.Send(command);
+            return Ok(new { active = result });
+        }
+
+        /// <summary>
         /// Atualiza as categorias de um curso.
         /// </summary>
         [Authorize(Roles = "Teacher")]

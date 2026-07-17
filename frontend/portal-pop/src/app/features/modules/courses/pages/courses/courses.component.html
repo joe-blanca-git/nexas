@@ -80,6 +80,9 @@
               <td class="py-3">
                 <div class="skeleton rounded" style="height: 16px; width: 60px;"></div>
               </td>
+              <td class="py-3 text-center">
+                <div class="skeleton rounded-pill d-inline-block" style="height: 24px; width: 60px;"></div>
+              </td>
               <td class="pe-4 py-3 text-end">
                 <div class="skeleton rounded-pill d-inline-block" style="height: 30px; width: 90px;"></div>
               </td>
@@ -104,6 +107,7 @@
               <th scope="col" class="fw-semibold">Módulos</th>
               <th scope="col" class="fw-semibold">Aulas</th>
               <th scope="col" class="fw-semibold">Preço</th>
+              <th scope="col" class="fw-semibold text-center">Status</th>
               <th scope="col" class="pe-3 text-end fw-semibold">Ações</th>
             </tr>
           </thead>
@@ -142,9 +146,18 @@
               <td class="py-3 fw-bold text-success fs-6">
                 R$ {{ course.priceSingle }}
               </td>
+              <td class="py-3 text-center">
+                <span class="badge rounded-pill px-3 py-2 border shadow-sm"
+                      [ngClass]="course.active ? 'bg-success bg-opacity-10 text-success border-success' : 'bg-secondary bg-opacity-10 text-secondary border-secondary'">
+                  <i class="fas fa-circle fs-7 me-1" [class.text-success]="course.active" [class.text-secondary]="!course.active" style="font-size: 0.6rem;"></i>
+                  {{ course.active ? 'Ativo' : 'Inativo' }}
+                </span>
+              </td>
               <td class="pe-3 py-3 text-end">
-                <button class="btn btn-sm btn-light border shadow-sm rounded-pill px-4 fw-semibold text-dark hover-primary transition-all">
-                  Gerenciar
+                <button class="btn btn-sm border shadow-sm rounded-pill px-4 fw-semibold transition-all"
+                        [ngClass]="course.active ? 'btn-outline-danger hover-danger' : 'btn-outline-success hover-success'"
+                        (click)="toggleCourseStatus(course)">
+                  {{ course.active ? 'Desativar Curso' : 'Ativar Curso' }}
                 </button>
               </td>
             </tr>

@@ -158,6 +158,23 @@ export class CoursesComponent implements OnInit {
     });
   }
 
+  toggleCourseStatus(course: any) {
+    if (!confirm(`Deseja realmente ${course.active ? 'desativar' : 'ativar'} o curso ${course.name}?`)) {
+      return;
+    }
+    
+    this.coursesService.toggleCourseStatus(course.id).subscribe({
+      next: (res) => {
+        course.active = res.active;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error toggling course status', err);
+        alert('Erro ao alterar status do curso.');
+      }
+    });
+  }
+
   openNewCourseModal() {
     this.courseForm.reset({ level: 'Iniciante', priceSingle: 0, categoryId: '' });
     this.selectedCoverImage = null;

@@ -19,6 +19,7 @@ namespace Nexas.Application.Courses.Queries.GetCourses
         public string? Description { get; init; }
         public string? DescriptionSub { get; init; }
         public string? Level { get; init; }
+        public bool Active { get; init; }
         public decimal? PriceSingle { get; init; }
         public string? ImgCoverLink { get; init; }
         public string? BunnyLibraryId { get; init; }
@@ -101,6 +102,7 @@ namespace Nexas.Application.Courses.Queries.GetCourses
                     Description = c.Description,
                     DescriptionSub = c.DescriptionSub,
                     Level = c.Level,
+                    Active = c.Active,
                     PriceSingle = c.PriceSingle,
                     ImgCoverLink = c.ImgCoverLink,
                     BunnyLibraryId = c.BunnyLibraryId,

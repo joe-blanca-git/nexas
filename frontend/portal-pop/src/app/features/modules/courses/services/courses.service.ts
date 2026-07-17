@@ -26,6 +26,10 @@ export class CoursesService extends BaseService {
     return this.http.post<number>(`${this.urlApiNexas}courses`, courseData, this.GetAuthHeaderJson());
   }
 
+  toggleCourseStatus(id: number): Observable<{ active: boolean }> {
+    return this.http.patch<{ active: boolean }>(`${this.urlApiNexas}courses/${id}/toggle-status`, {}, this.GetAuthHeaderJson());
+  }
+
   createModule(moduleData: any): Observable<number> {
     return this.http.post<number>(`${this.urlApiNexas}courses/modules`, moduleData, this.GetAuthHeaderJson());
   }

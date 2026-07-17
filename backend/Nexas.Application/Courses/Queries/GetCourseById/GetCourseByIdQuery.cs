@@ -58,6 +58,7 @@ namespace Nexas.Application.Courses.Queries.GetCourseById
                     Description = c.Description,
                     DescriptionSub = c.DescriptionSub,
                     Level = c.Level,
+                    Active = c.Active,
                     PriceSingle = c.PriceSingle,
                     ImgCoverLink = c.ImgCoverLink,
                     BunnyLibraryId = c.BunnyLibraryId,

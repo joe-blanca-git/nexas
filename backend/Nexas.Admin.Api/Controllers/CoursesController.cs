@@ -287,7 +287,7 @@ namespace Nexas.Admin.Api.Controllers
         /// Gera as credenciais e URL para upload direto de vídeo da aula para a Bunny Stream.
         /// </summary>
         [Authorize(Roles = "Teacher")]
-        [HttpPost("lessons/{lessonId}/video")]
+        [HttpPost("lessons/{lessonId:int}/video")]
         [SwaggerOperation(Summary = "Gera credenciais de upload de vídeo para a aula")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -302,7 +302,7 @@ namespace Nexas.Admin.Api.Controllers
         /// Sinaliza que o frontend concluiu o envio do vídeo para a Bunny Stream.
         /// </summary>
         [Authorize(Roles = "Teacher")]
-        [HttpPost("lessons/{lessonId}/video/complete")]
+        [HttpPost("lessons/{lessonId:int}/video/complete")]
         [SwaggerOperation(Summary = "Informa conclusão de upload de vídeo")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

@@ -54,6 +54,12 @@
             </remarks>
             <param name="command">Dados com o ID do curso a ser inativado.</param>
         </member>
+        <member name="M:Nexas.Admin.Api.Controllers.CoursesController.ToggleStatus(System.Int32)">
+            <summary>
+            Alterna o status (Ativo/Inativo) de um curso.
+            </summary>
+            <param name="id">ID do curso</param>
+        </member>
         <member name="M:Nexas.Admin.Api.Controllers.CoursesController.AssignCategories(System.Int32,System.Collections.Generic.List{System.Int32})">
             <summary>
             Atualiza as categorias de um curso.

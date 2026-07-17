@@ -440,3 +440,40 @@
     </div>
   </div>
 </div>
+<!-- Confirm Toggle Status Modal -->
+<div class="modal fade" id="confirmToggleModal" tabindex="-1" #confirmToggleModal>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 border-0 shadow">
+      <div class="modal-header border-bottom-0 pb-0">
+        <h5 class="modal-title fw-bold text-dark"><i class="fas fa-exclamation-triangle me-2 text-warning"></i>Confirmação</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center py-4">
+        <div class="mb-3">
+          <div class="d-inline-flex align-items-center justify-content-center bg-light rounded-circle" style="width: 80px; height: 80px;">
+            <i class="fas fs-1" [ngClass]="courseToToggle?.active ? 'fa-ban text-danger' : 'fa-check-circle text-success'"></i>
+          </div>
+        </div>
+        <h5 class="fw-bold mb-2">Deseja realmente {{ courseToToggle?.active ? 'desativar' : 'ativar' }} este curso?</h5>
+        <p class="text-muted mb-0">O curso <strong class="text-dark">{{ courseToToggle?.name }}</strong> será {{ courseToToggle?.active ? 'ocultado' : 'visível' }} para os alunos.</p>
+      </div>
+      <div class="modal-footer bg-light border-top-0 px-4 py-3 d-flex justify-content-center gap-2">
+        <button type="button" class="btn btn-white border rounded-pill px-4 fw-semibold text-muted shadow-sm hover-primary transition-all" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+        <button type="button" class="btn rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2" 
+                [ngClass]="courseToToggle?.active ? 'btn-danger' : 'btn-success'"
+                (click)="confirmToggleStatus()"
+                [disabled]="isTogglingStatus">
+          <span *ngIf="!isTogglingStatus">
+            <i class="fas" [ngClass]="courseToToggle?.active ? 'fa-ban' : 'fa-check'"></i>
+            Sim, {{ courseToToggle?.active ? 'desativar' : 'ativar' }}
+          </span>
+          <span *ngIf="isTogglingStatus">
+            <i class="fas fa-spinner fa-spin"></i> Aguarde...
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

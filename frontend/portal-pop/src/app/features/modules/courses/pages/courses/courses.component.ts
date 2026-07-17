@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CoursesService } from '../../services/courses.service';
 import { Course } from '../../models/course.model';
+import { ToastService } from '../../../../../core/services/toast.service';
 
 // Declare bootstrap variable to use native Bootstrap modals
 declare var bootstrap: any;
@@ -20,6 +21,7 @@ export class CoursesComponent implements OnInit {
   private coursesService = inject(CoursesService);
   private fb = inject(FormBuilder);
   private cdr = inject(ChangeDetectorRef);
+  private toastService = inject(ToastService);
   
   courses: Course[] = [];
   isLoading = true;
@@ -41,6 +43,7 @@ export class CoursesComponent implements OnInit {
   isSubmittingCourse = false;
   isSubmittingModule = false;
   isSavingLesson = false;
+  isTogglingStatus = false;
 
   categories: any[] = [];
 
@@ -61,10 +64,14 @@ export class CoursesComponent implements OnInit {
   @ViewChild('courseModal') courseModalRef!: ElementRef;
   @ViewChild('moduleModal') moduleModalRef!: ElementRef;
   @ViewChild('lessonModal') lessonModalRef!: ElementRef;
+  @ViewChild('confirmToggleModal') confirmToggleModalRef!: ElementRef;
 
   private courseModalInstance: any;
   private moduleModalInstance: any;
   private lessonModalInstance: any;
+  private confirmToggleModalInstance: any;
+
+  courseToToggle: any = null;
 
   @HostListener('window:beforeunload', ['$event'])
   unloadNotification($event: any) {
@@ -83,6 +90,7 @@ export class CoursesComponent implements OnInit {
     this.courseModalInstance = new bootstrap.Modal(this.courseModalRef.nativeElement);
     this.moduleModalInstance = new bootstrap.Modal(this.moduleModalRef.nativeElement);
     this.lessonModalInstance = new bootstrap.Modal(this.lessonModalRef.nativeElement);
+    this.confirmToggleModalInstance = new bootstrap.Modal(this.confirmToggleModalRef.nativeElement);
   }
 
   initForms() {
@@ -159,18 +167,29 @@ export class CoursesComponent implements OnInit {
   }
 
   toggleCourseStatus(course: any) {
-    if (!confirm(`Deseja realmente ${course.active ? 'desativar' : 'ativar'} o curso ${course.name}?`)) {
-      return;
-    }
+    this.courseToToggle = course;
+    this.confirmToggleModalInstance.show();
+  }
+
+  confirmToggleStatus() {
+    if (!this.courseToToggle) return;
     
-    this.coursesService.toggleCourseStatus(course.id).subscribe({
+    this.isTogglingStatus = true;
+    this.coursesService.toggleCourseStatus(this.courseToToggle.id).subscribe({
       next: (res) => {
-        course.active = res.active;
+        this.courseToToggle.active = res.active;
+        this.confirmToggleModalInstance.hide();
+        this.toastService.success(`Curso ${res.active ? 'ativado' : 'desativado'} com sucesso!`);
+        this.courseToToggle = null;
+        this.isTogglingStatus = false;
         this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error toggling course status', err);
-        alert('Erro ao alterar status do curso.');
+        this.toastService.error('Erro ao alterar status do curso.');
+        this.confirmToggleModalInstance.hide();
+        this.courseToToggle = null;
+        this.isTogglingStatus = false;
       }
     });
   }

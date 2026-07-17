@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Nexas.Admin.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+62b8580a571bcbbb96318cc3b4335e13ede18ce7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ae93e2ad86902c510b8cabfcc20ff90d0cccb38d")]
 [assembly: System.Reflection.AssemblyProductAttribute("Nexas.Admin.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Nexas.Admin.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

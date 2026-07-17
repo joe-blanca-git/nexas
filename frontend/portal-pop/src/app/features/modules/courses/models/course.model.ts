@@ -44,6 +44,7 @@ export interface Course {
   name: string;
   description: string;
   descriptionSub: string;
+  active: boolean;
   level: string;
   priceSingle: number;
   imgCoverLink: string;

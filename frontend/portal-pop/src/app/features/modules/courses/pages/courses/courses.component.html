@@ -285,6 +285,7 @@
 
       <div class="modal-body p-4">
         <form [formGroup]="moduleForm">
+          <fieldset [disabled]="isSubmittingModule">
           <div class="row g-4">
             
             <div class="col-12">
@@ -316,6 +317,7 @@
             </div>
             
           </div>
+          </fieldset>
         </form>
       </div>
 
@@ -347,11 +349,12 @@
             <small class="text-muted fw-medium">Adicione uma aula a um módulo existente</small>
           </div>
         </div>
-        <button type="button" class="btn-close position-absolute top-0 end-0 mt-4 me-4" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close position-absolute top-0 end-0 mt-4 me-4" data-bs-dismiss="modal" aria-label="Close" [disabled]="isSavingLesson"></button>
       </div>
 
       <div class="modal-body p-4">
         <form [formGroup]="lessonForm">
+          <fieldset [disabled]="isSavingLesson">
           <div class="row g-4">
             
             <div class="col-12">
@@ -394,16 +397,31 @@
             </div>
             
           </div>
+          </fieldset>
         </form>
+
+        <!-- Progress Area -->
+        <div *ngIf="isSavingLesson && uploadStatusMessage" class="mt-4 p-3 bg-light rounded-3 border border-light-subtle">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="fw-medium text-primary small"><i class="fas fa-spinner fa-spin me-2"></i>{{ uploadStatusMessage }}</span>
+            <span class="fw-bold text-dark small" *ngIf="tusUploadInstance">{{ uploadProgress }}%</span>
+          </div>
+          <div class="progress" style="height: 10px;" *ngIf="tusUploadInstance">
+            <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" [style.width.%]="uploadProgress" [attr.aria-valuenow]="uploadProgress" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+          <div class="text-end mt-2" *ngIf="tusUploadInstance">
+             <button class="btn btn-sm btn-outline-danger py-1 px-3 rounded-pill" (click)="cancelUpload()">Cancelar Upload</button>
+          </div>
+        </div>
       </div>
 
       <div class="modal-footer bg-light border-top-0 px-4 py-3 d-flex justify-content-between align-items-center">
-        <button type="button" class="btn btn-white border rounded-pill px-4 fw-semibold text-muted shadow-sm hover-primary transition-all" data-bs-dismiss="modal">
+        <button type="button" class="btn btn-white border rounded-pill px-4 fw-semibold text-muted shadow-sm hover-primary transition-all" data-bs-dismiss="modal" [disabled]="isSavingLesson">
           Cancelar
         </button>
-        <button type="button" class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2" (click)="saveLesson()" [disabled]="lessonForm.invalid || isSubmittingLesson">
-          <span *ngIf="!isSubmittingLesson"><i class="fas fa-check-circle"></i> Salvar Aula</span>
-          <span *ngIf="isSubmittingLesson"><i class="fas fa-spinner fa-spin"></i> Processando...</span>
+        <button type="button" class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2" (click)="saveLesson()" [disabled]="lessonForm.invalid || isSavingLesson">
+          <span *ngIf="!isSavingLesson"><i class="fas fa-check-circle"></i> Salvar Aula</span>
+          <span *ngIf="isSavingLesson"><i class="fas fa-spinner fa-spin"></i> Aguarde...</span>
         </button>
       </div>
     </div>

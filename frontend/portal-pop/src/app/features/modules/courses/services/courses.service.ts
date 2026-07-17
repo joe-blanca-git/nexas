@@ -39,6 +39,14 @@ export class CoursesService extends BaseService {
     formData.append('file', file);
     return this.http.post<{ url: string }>(`${this.urlApiNexas}uploads/image`, formData, this.GetAuthHeaderUploadJson());
   }
+
+  generateVideoUpload(lessonId: number): Observable<any> {
+    return this.http.post<any>(`${this.urlApiNexas}courses/lessons/${lessonId}/video`, {}, this.GetAuthHeaderJson());
+  }
+
+  completeVideoUpload(lessonId: number): Observable<any> {
+    return this.http.post<any>(`${this.urlApiNexas}courses/lessons/${lessonId}/video/complete`, {}, this.GetAuthHeaderJson());
+  }
 }
 
 const COURSES_MOCK: Course[] = [

@@ -1,4 +1,5 @@
-import { Component, OnInit, inject, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, inject, ViewChild, ElementRef, ChangeDetectorRef, HostListener } from '@angular/core';
+import * as tus from 'tus-js-client';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -39,7 +40,7 @@ export class CoursesComponent implements OnInit {
   
   isSubmittingCourse = false;
   isSubmittingModule = false;
-  isSubmittingLesson = false;
+  isSavingLesson = false;
 
   categories: any[] = [];
 
@@ -52,6 +53,11 @@ export class CoursesComponent implements OnInit {
   selectedLessonVideo: File | null = null;
   lessonVideoError: string | null = null;
 
+  // TUS Upload State
+  uploadProgress: number = 0;
+  uploadStatusMessage: string = '';
+  tusUploadInstance: tus.Upload | null = null;
+
   @ViewChild('courseModal') courseModalRef!: ElementRef;
   @ViewChild('moduleModal') moduleModalRef!: ElementRef;
   @ViewChild('lessonModal') lessonModalRef!: ElementRef;
@@ -59,6 +65,13 @@ export class CoursesComponent implements OnInit {
   private courseModalInstance: any;
   private moduleModalInstance: any;
   private lessonModalInstance: any;
+
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: any) {
+    if (this.isSavingLesson && this.tusUploadInstance) {
+      $event.returnValue = true;
+    }
+  }
 
   ngOnInit(): void {
     this.initForms();
@@ -278,6 +291,9 @@ export class CoursesComponent implements OnInit {
     this.lessonForm.reset({ moduleId: '', durationSeconds: 0 });
     this.selectedLessonVideo = null;
     this.lessonVideoError = null;
+    this.uploadProgress = 0;
+    this.uploadStatusMessage = '';
+    this.tusUploadInstance = null;
     this.lessonModalInstance.show();
   }
 
@@ -318,21 +334,106 @@ export class CoursesComponent implements OnInit {
       return;
     }
 
-    this.isSubmittingLesson = true;
+    this.isSavingLesson = true;
+    this.uploadStatusMessage = 'Criando aula...';
+    
     const payload = this.lessonForm.value;
     payload.moduleId = parseInt(payload.moduleId, 10);
 
     this.coursesService.createLesson(payload).subscribe({
-      next: () => {
-        this.isSubmittingLesson = false;
-        this.lessonModalInstance.hide();
-        this.loadCourses(); // refresh
+      next: (lessonId) => {
+        if (!this.selectedLessonVideo) {
+          // If no video, we are done
+          this.finishLessonUpload();
+          return;
+        }
+        this.startVideoUpload(lessonId, this.selectedLessonVideo);
       },
       error: (err) => {
         console.error('Error creating lesson', err);
-        this.isSubmittingLesson = false;
+        this.uploadStatusMessage = 'Falha ao criar rascunho da aula.';
+        this.isSavingLesson = false;
       }
     });
+  }
+
+  private startVideoUpload(lessonId: number, file: File) {
+    this.uploadStatusMessage = 'Preparando upload...';
+
+    this.coursesService.generateVideoUpload(lessonId).subscribe({
+      next: (info) => {
+        this.uploadStatusMessage = 'Enviando vídeo: 0%...';
+        this.uploadProgress = 0;
+
+        this.tusUploadInstance = new tus.Upload(file, {
+          endpoint: info.uploadUrl,
+          retryDelays: [0, 1000, 3000, 5000, 10000],
+          headers: info.headers,
+          metadata: {
+            filename: file.name,
+            filetype: file.type
+          },
+          onError: (error) => {
+            console.error('Upload failed:', error);
+            this.uploadStatusMessage = 'Erro no upload. Tente novamente mais tarde.';
+            this.isSavingLesson = false;
+            this.tusUploadInstance = null;
+          },
+          onProgress: (bytesUploaded, bytesTotal) => {
+            const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(0);
+            this.uploadProgress = parseInt(percentage, 10);
+            this.uploadStatusMessage = `Enviando vídeo: ${percentage}%...`;
+            this.cdr.detectChanges();
+          },
+          onSuccess: () => {
+            this.uploadStatusMessage = 'Processando vídeo...';
+            this.tusUploadInstance = null;
+            
+            // Call complete API
+            this.coursesService.completeVideoUpload(lessonId).subscribe({
+              next: () => {
+                this.uploadStatusMessage = 'Concluído.';
+                setTimeout(() => this.finishLessonUpload(), 1000);
+              },
+              error: (err) => {
+                console.error('Error completing upload', err);
+                this.uploadStatusMessage = 'Erro ao processar. O vídeo foi enviado, mas pode demorar a aparecer.';
+                setTimeout(() => this.finishLessonUpload(), 3000);
+              }
+            });
+          }
+        });
+
+        // Check if there are any previous uploads to continue (though we generate a fresh signature usually)
+        this.tusUploadInstance.start();
+      },
+      error: (err) => {
+        console.error('Error generating upload', err);
+        this.uploadStatusMessage = 'Falha na preparação. O rascunho da aula foi salvo.';
+        this.isSavingLesson = false;
+      }
+    });
+  }
+
+  cancelUpload() {
+    if (this.tusUploadInstance) {
+      this.tusUploadInstance.abort(true).then(() => {
+        this.uploadStatusMessage = 'Upload cancelado.';
+        this.isSavingLesson = false;
+        this.tusUploadInstance = null;
+        this.uploadProgress = 0;
+      }).catch(err => {
+        console.error('Failed to abort upload', err);
+      });
+    }
+  }
+
+  private finishLessonUpload() {
+    this.isSavingLesson = false;
+    this.uploadStatusMessage = '';
+    this.uploadProgress = 0;
+    this.lessonModalInstance.hide();
+    this.loadCourses(); // refresh
   }
 
   trackById(index: number, item: any): number {

@@ -97,7 +97,7 @@ namespace Nexas.Infrastructure.Services
             // AuthorizationSignature = SHA256(LibraryApiKey + VideoId + ExpirationTime)
             
             var expirationTime = DateTimeOffset.UtcNow.AddHours(2).ToUnixTimeSeconds();
-            var hashSource = $"{libraryApiKey}{bunnyVideoId}{expirationTime}";
+            var hashSource = $"{libraryId}{libraryApiKey}{expirationTime}{bunnyVideoId}";
 
             using var sha256 = SHA256.Create();
             var hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(hashSource));

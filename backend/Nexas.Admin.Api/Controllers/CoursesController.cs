@@ -287,11 +287,9 @@ namespace Nexas.Admin.Api.Controllers
         /// Gera as credenciais e URL para upload direto de vídeo da aula para a Bunny Stream.
         /// </summary>
         [Authorize(Roles = "Teacher")]
-        [HttpPost("lessons/{lessonId:int}/video")]
+        [HttpPost("lessons/{lessonId}/video")]
         [SwaggerOperation(Summary = "Gera credenciais de upload de vídeo para a aula")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> GenerateVideoUpload([FromRoute] int lessonId)
+        public async Task<IActionResult> GenerateVideoUpload(int lessonId)
         {
             var command = new GenerateLessonVideoUploadCommand { LessonId = lessonId };
             var result = await _mediator.Send(command);
@@ -302,11 +300,9 @@ namespace Nexas.Admin.Api.Controllers
         /// Sinaliza que o frontend concluiu o envio do vídeo para a Bunny Stream.
         /// </summary>
         [Authorize(Roles = "Teacher")]
-        [HttpPost("lessons/{lessonId:int}/video/complete")]
+        [HttpPost("lessons/{lessonId}/video/complete")]
         [SwaggerOperation(Summary = "Informa conclusão de upload de vídeo")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> CompleteVideoUpload([FromRoute] int lessonId)
+        public async Task<IActionResult> CompleteVideoUpload(int lessonId)
         {
             var command = new CompleteLessonVideoUploadCommand { LessonId = lessonId };
             await _mediator.Send(command);

@@ -341,7 +341,8 @@ export class CoursesComponent implements OnInit {
     payload.moduleId = parseInt(payload.moduleId, 10);
 
     this.coursesService.createLesson(payload).subscribe({
-      next: (lessonId) => {
+      next: (response: any) => {
+        const lessonId = typeof response === 'object' ? response.id : response;
         if (!this.selectedLessonVideo) {
           // If no video, we are done
           this.finishLessonUpload();

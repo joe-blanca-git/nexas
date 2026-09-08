@@ -54,6 +54,41 @@
             Reabre um tópico resolvido.
             </summary>
         </member>
+        <member name="M:Nexas.Api.Controllers.PortalTicketCategoriesController.GetCategories">
+            <summary>
+            Lista as categorias ativas de suporte.
+            </summary>
+        </member>
+        <member name="M:Nexas.Api.Controllers.PortalTicketsController.CreateTicket(Nexas.Application.Portal.Tickets.Commands.CreateTicket.CreateTicketCommand)">
+            <summary>
+            Cria um novo ticket de suporte.
+            </summary>
+        </member>
+        <member name="M:Nexas.Api.Controllers.PortalTicketsController.GetTickets(System.Nullable{Nexas.Domain.Enums.TicketStatus},System.Nullable{System.Int32},System.String,System.Int32,System.Int32)">
+            <summary>
+            Lista os tickets do aluno com paginação e filtros.
+            </summary>
+        </member>
+        <member name="M:Nexas.Api.Controllers.PortalTicketsController.GetTicketDetails(System.Int32)">
+            <summary>
+            Traz os detalhes completos de um ticket (mensagens, anexos).
+            </summary>
+        </member>
+        <member name="M:Nexas.Api.Controllers.PortalTicketsController.ReplyTicket(System.Int32,Nexas.Application.Portal.Tickets.Commands.ReplyTicket.ReplyTicketCommand)">
+            <summary>
+            Adiciona uma nova resposta do aluno ao ticket.
+            </summary>
+        </member>
+        <member name="M:Nexas.Api.Controllers.PortalTicketsController.UploadAttachment(System.Int32,System.Int32,Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            Faz upload de anexo para uma resposta.
+            </summary>
+        </member>
+        <member name="M:Nexas.Api.Controllers.PortalTicketsController.GetTimeline(System.Int32)">
+            <summary>
+            Lista todo o histórico de eventos/auditoria do ticket.
+            </summary>
+        </member>
         <member name="T:Nexas.Api.Controllers.PurchasesController">
             <summary>
             Controller responsável pelas operações de compra no Painel do Aluno (PAN).
@@ -101,6 +136,16 @@
             <param name="purchaseId">ID da compra a ser estornada.</param>
             <returns>Resultado da operação de refund.</returns>
         </member>
+        <member name="M:Nexas.Api.Controllers.PurchasesController.Cancel(System.Int32)">
+            <summary>
+            Cancela uma compra no sistema e no Asaas.
+            </summary>
+            <remarks>
+            Exemplo de request: POST /api/purchases/123/cancel
+            </remarks>
+            <param name="purchaseId">ID da compra a ser cancelada.</param>
+            <returns>Resultado da operação de cancelamento.</returns>
+        </member>
         <member name="M:Nexas.Api.Controllers.PurchasesController.GetMyPurchases">
             <summary>
             Retorna a lista de compras do usuário autenticado.
@@ -109,6 +154,11 @@
             Endpoint: GET /api/purchases/my-purchases
             </remarks>
             <returns>Lista de objetos UserPurchaseDto contendo detalhes das compras.</returns>
+        </member>
+        <member name="M:Nexas.Api.Controllers.ResendWebhooksController.HandleResendWebhook(Nexas.Application.Tickets.Commands.ProcessResendWebhook.ProcessResendWebhookCommand)">
+            <summary>
+            Recebe eventos de e-mail inbound do Resend.
+            </summary>
         </member>
         <member name="M:Nexas.Api.Controllers.V1.CertificatesController.GenerateCertificate(Nexas.Api.Controllers.V1.GenerateCertificateRequest)">
             <summary>

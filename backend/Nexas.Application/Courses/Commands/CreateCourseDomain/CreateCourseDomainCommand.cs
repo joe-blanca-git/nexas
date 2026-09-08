@@ -24,7 +24,7 @@ namespace Nexas.Application.Courses.Commands.CreateCourseDomain
         public async Task<int> Handle(CreateCourseDomainCommand request, CancellationToken cancellationToken)
         {
             var course = await _context.Courses
-                .FirstOrDefaultAsync(c => c.Id == request.CourseId && c.Active, cancellationToken);
+                .FirstOrDefaultAsync(c => c.Id == request.CourseId, cancellationToken);
 
             if (course == null)
             {

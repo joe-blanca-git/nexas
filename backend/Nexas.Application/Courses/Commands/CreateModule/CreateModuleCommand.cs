@@ -61,10 +61,11 @@ namespace Nexas.Application.Courses.Commands.CreateModule
             if (course == null)
                 throw new InvalidOperationException($"Curso com ID {request.CourseId} não encontrado.");
 
-            // Check if current user is a teacher of this course
-            bool isTeacherOfCourse = course.CourseTeachers.Any(ct => ct.Teacher.IdAgivys == currentUser.ExternalId);
-            if (!isTeacherOfCourse)
+            var currentTeacher = await _context.Teachers.FirstOrDefaultAsync(t => t.IdAgivys == currentUser.ExternalId, cancellationToken);
+            if (currentTeacher == null || (currentTeacher.Role != "Admin" && !course.CourseTeachers.Any(ct => ct.TeacherId == currentTeacher.Id)))
+            {
                 throw new UnauthorizedAccessException("Você não tem permissão para adicionar módulos a este curso.");
+            }
 
             string? bunnyCollectionId = request.BunnyCollectionId;
 

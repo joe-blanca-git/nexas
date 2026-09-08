@@ -18,10 +18,10 @@ public class ReplyForumTopicCommandHandler : IRequestHandler<ReplyForumTopicComm
 
     public async Task<int> Handle(ReplyForumTopicCommand request, CancellationToken cancellationToken)
     {
-        var topicExists = await _context.ForumTopics.AnyAsync(t => t.Id == request.TopicId, cancellationToken);
+        var topic = await _context.ForumTopics.FirstOrDefaultAsync(t => t.Id == request.TopicId, cancellationToken);
 
-        if (!topicExists)
-            throw new Exception("Tópico não encontrado.");
+        if (topic == null)
+            throw new Nexas.Application.Common.Exceptions.NotFoundException("Tópico não encontrado.");
 
         var currentUser = await _userContextService.GetCurrentUserAsync();
 

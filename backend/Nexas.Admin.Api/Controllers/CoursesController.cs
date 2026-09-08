@@ -29,8 +29,7 @@ namespace Nexas.Admin.Api.Controllers
     /// </summary>
     [Authorize]
     [ApiController]
-    [Route("v1/api/[controller]")]
-    [Produces("application/json")]
+    [Route("api/v1/[controller]")]
     public class CoursesController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -50,7 +49,7 @@ namespace Nexas.Admin.Api.Controllers
         /// cursos → módulos → aulas com todos os detalhes.
         /// Usado principalmente pela Landing Page e páginas de detalhes de cursos.
         /// </remarks>
-        [AllowAnonymous]
+        [Authorize(Roles = "Teacher,Admin")]
         [HttpGet]
         [SwaggerOperation(Summary = "Lista cursos com módulos e aulas", Description = "Retorna uma lista completa de cursos ativos com todos os módulos e aulas inclusos.")]
         [ProducesResponseType(typeof(List<CourseDto>), StatusCodes.Status200OK)]
@@ -149,7 +148,7 @@ namespace Nexas.Admin.Api.Controllers
         /// Alterna o status (Ativo/Inativo) de um curso.
         /// </summary>
         /// <param name="id">ID do curso</param>
-        [Authorize(Roles = "Teacher")]
+        [Authorize(Roles = "Admin")]
         [HttpPatch("{id}/toggle-status")]
         [SwaggerOperation(Summary = "Alterna status do curso", Description = "Ativa um curso inativo ou inativa um curso ativo.")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
@@ -172,6 +171,27 @@ namespace Nexas.Admin.Api.Controllers
             var command = new Nexas.Application.Courses.Commands.AssignCategories.AssignCourseCategoriesCommand(id, categoryIds);
             await _mediator.Send(command);
             return NoContent();
+        }
+
+        /// <summary>
+        /// Atualiza os professores vinculados a um curso e suas cotas (total deve ser 100%).
+        /// </summary>
+        [Authorize(Roles = "Admin")]
+        [HttpPatch("{id}/teachers")]
+        [SwaggerOperation(Summary = "Atualiza professores vinculados", Description = "Remove vínculos antigos e insere os novos professores com as cotas informadas.")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> UpdateTeachers(int id, [FromBody] List<Nexas.Application.Teachers.Commands.UpdateCourseTeachers.TeacherShareDto> teachers)
+        {
+            var command = new Nexas.Application.Teachers.Commands.UpdateCourseTeachers.UpdateCourseTeachersCommand
+            {
+                CourseId = id,
+                Teachers = teachers
+            };
+            var result = await _mediator.Send(command);
+            if (!result.Success)
+                return BadRequest(new { message = result.Message });
+            
+            return Ok(new { message = result.Message });
         }
 
         #endregion

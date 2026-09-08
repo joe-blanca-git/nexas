@@ -14,11 +14,105 @@ namespace Nexas.Api.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<WebhooksController> _logger;
 
-        public WebhooksController(IMediator mediator, IConfiguration configuration)
+        public WebhooksController(IMediator mediator, IConfiguration configuration, ILogger<WebhooksController> logger)
         {
             _mediator = mediator;
             _configuration = configuration;
+            _logger = logger;
+        }
+
+        [HttpPost("asaas")]
+        [HttpPost("/v1/webhooks/asaas")]
+        [HttpPost("/api/v1/webhooks/asaas")]
+        [Microsoft.AspNetCore.Authorization.AllowAnonymous]
+        public async Task<IActionResult> AsaasWebhook()
+        {
+            Request.EnableBuffering();
+            Request.Body.Position = 0;
+
+            using var reader = new System.IO.StreamReader(Request.Body, leaveOpen: true);
+            var body = await reader.ReadToEndAsync();
+            Request.Body.Position = 0;
+
+            if (string.IsNullOrWhiteSpace(body))
+            {
+                _logger.LogWarning("[WEBHOOK ASAAS] Recebeu payload vazio. Retornando 200 OK para evitar penalizações.");
+                return Ok(new { message = "Payload vazio ignorado" });
+            }
+
+            _logger.LogInformation($"[WEBHOOK ASAAS] Recebido payload: {body}");
+            try
+            {
+                var jsonBody = body;
+                if (jsonBody.StartsWith("data=", System.StringComparison.OrdinalIgnoreCase) || jsonBody.Contains("data=%7B") || jsonBody.Contains("data=%7b"))
+                {
+                    var parsed = System.Web.HttpUtility.ParseQueryString(jsonBody);
+                    var dataParam = parsed["data"];
+                    if (!string.IsNullOrEmpty(dataParam))
+                    {
+                        jsonBody = dataParam;
+                    }
+                    else
+                    {
+                        var dataIndex = jsonBody.IndexOf("data=", System.StringComparison.OrdinalIgnoreCase);
+                        if (dataIndex >= 0)
+                        {
+                            var rawData = jsonBody.Substring(dataIndex + 5);
+                            var ampIndex = rawData.IndexOf('&');
+                            if (ampIndex >= 0) rawData = rawData.Substring(0, ampIndex);
+                            jsonBody = System.Net.WebUtility.UrlDecode(rawData);
+                        }
+                    }
+                }
+
+                using var document = System.Text.Json.JsonDocument.Parse(jsonBody);
+                var payload = document.RootElement;
+
+                string? eventType = null;
+                string? paymentId = null;
+                string? customerId = null;
+                string? externalReference = null;
+
+                if (payload.TryGetProperty("event", out var eventProp))
+                    eventType = eventProp.GetString();
+
+                if (payload.TryGetProperty("payment", out var paymentProp))
+                {
+                    if (paymentProp.TryGetProperty("id", out var idProp))
+                        paymentId = idProp.GetString();
+
+                    if (paymentProp.TryGetProperty("customer", out var custProp))
+                        customerId = custProp.GetString();
+
+                    if (paymentProp.TryGetProperty("externalReference", out var extProp))
+                        externalReference = extProp.GetString();
+                }
+
+                if (string.IsNullOrEmpty(eventType) || (string.IsNullOrEmpty(paymentId) && string.IsNullOrEmpty(customerId)))
+                {
+                    _logger.LogWarning($"[WEBHOOK ASAAS] Payload não contém event ou payment.id/customer. Event: {eventType}, PaymentId: {paymentId}");
+                    return Ok(new { message = "Payload ignorado (incompatível)" });
+                }
+
+                var command = new Nexas.Application.Webhooks.Commands.ProcessAsaasWebhookCommand
+                {
+                    Event = eventType,
+                    PaymentId = paymentId ?? string.Empty,
+                    CustomerId = customerId,
+                    ExternalReference = externalReference
+                };
+
+                var result = await _mediator.Send(command);
+
+                return Ok(new { success = result });
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex, "[WEBHOOK ASAAS] Erro ao processar webhook.");
+                return Ok(new { message = "Erro interno ao processar webhook, retornado OK." });
+            }
         }
 
         [HttpPost("bunny")]

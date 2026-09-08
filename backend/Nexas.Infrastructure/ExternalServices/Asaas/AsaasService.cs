@@ -163,10 +163,11 @@ public class AsaasService : IAsaasService
 
         var requestData = new {
             customer = purchase.User.AsaasCustomerId,
-            billingType = purchase.PaymentMethod == "PIX" ? "PIX" : "CREDIT_CARD",
+            billingType = purchase.PaymentMethod == "PIX" ? "PIX" : (purchase.PaymentMethod == "DEBIT" ? "DEBIT_CARD" : "CREDIT_CARD"),
             value = purchase.Amount,
             dueDate = DateTime.UtcNow.AddDays(1).ToString("yyyy-MM-dd"),
             externalReference = purchase.Id.ToString(),
+            description = $"Compra de Curso ID: {purchase.CourseId}",
             // Dados do cartão se fornecidos (Checkout Transparente)
             creditCard = card != null ? new {
                 holderName = card.HolderName,
@@ -204,6 +205,18 @@ public class AsaasService : IAsaasService
     }
 
 
+
+    public async Task CancelPaymentAsync(string asaasPaymentId, CancellationToken ct)
+    {
+        if (string.IsNullOrWhiteSpace(asaasPaymentId)) throw new ArgumentException("asaasPaymentId is required");
+
+        var response = await _httpClient.DeleteAsync($"payments/{asaasPaymentId}", ct);
+        if (!response.IsSuccessStatusCode)
+        {
+            var body = await response.Content.ReadAsStringAsync(ct);
+            throw new InvalidOperationException($"Asaas.CancelPaymentAsync failed: {(int)response.StatusCode} - {response.ReasonPhrase}. Body: {body}");
+        }
+    }
 
     public async Task RefundPaymentAsync(string asaasPaymentId, CancellationToken ct)
     {

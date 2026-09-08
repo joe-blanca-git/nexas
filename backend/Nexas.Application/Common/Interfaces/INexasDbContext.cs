@@ -23,7 +23,19 @@ namespace Nexas.Application.Common.Interfaces
         DbSet<ForumMessage> ForumMessages { get; }
         DbSet<CourseRate> CourseRates { get; }
         DbSet<Certificate> Certificates { get; }
+        DbSet<AppRole> AppRoles { get; }
+        DbSet<AppUserRole> AppUserRoles { get; }
 
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+        DbSet<FinancialTax> FinancialTaxes { get; }
+        DbSet<FinancialClosing> FinancialClosings { get; }
+        DbSet<FinancialClosingItem> FinancialClosingItems { get; }
+        DbSet<RefundRequest> RefundRequests { get; }
+            DbSet<TicketCategory> TicketCategories { get; }
+    DbSet<Ticket> Tickets { get; }
+    DbSet<TicketMessage> TicketMessages { get; }
+    DbSet<TicketAttachment> TicketAttachments { get; }
+    DbSet<TicketTimeline> TicketTimelines { get; }
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }
+

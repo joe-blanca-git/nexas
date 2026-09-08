@@ -15,6 +15,9 @@ namespace Nexas.Domain.Entities
         public int? UpdatedBy { get; set; }
         public string? BunnyLibraryId { get; set; }
         public int WorkloadHours { get; set; }
+        
+        public bool IsComingSoon { get; set; } = false;
+        public DateTime? ReleaseDate { get; set; }
 
         // Relations
         public virtual ICollection<Module> Modules { get; set; } = new List<Module>();

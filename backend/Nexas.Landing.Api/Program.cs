@@ -9,16 +9,26 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using Nexas.Infrastructure.Configuration;
+using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var agivysEmail = builder.Configuration["Agivys:Email"];
+var agivysPassword = builder.Configuration["Agivys:Password"];
+if (!string.IsNullOrEmpty(agivysEmail) && !string.IsNullOrEmpty(agivysPassword))
+{
+    builder.Configuration.AddAgivysConfiguration(agivysEmail, agivysPassword);
+}
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("DevelopmentCors", policy =>
     {
         policy.SetIsOriginAllowed(origin => 
-                new Uri(origin).Host == "localhost" || 
-                new Uri(origin).Host.EndsWith("joederblanca.com.br"))
+                new Uri(origin).Host.EndsWith("portalnexas.com.br") || 
+                new Uri(origin).Host == "localhost")
               .AllowAnyMethod()
               .AllowAnyHeader()
               .AllowCredentials();
@@ -32,6 +42,21 @@ builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IPaymentEventPublisher, PaymentEventPublisher>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSignalR();
+builder.Services.AddRateLimiter(options =>
+{
+    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? httpContext.Request.Headers.Host.ToString(),
+            factory: partition => new FixedWindowRateLimiterOptions
+            {
+                AutoReplenishment = true,
+                PermitLimit = 120,
+                QueueLimit = 2,
+                QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                Window = TimeSpan.FromMinutes(1)
+            }));
+    options.RejectionStatusCode = 429;
+});
 builder.Services.AddSingleton<Microsoft.AspNetCore.SignalR.IUserIdProvider, CustomUserIdProvider>();
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(options =>
@@ -58,30 +83,16 @@ builder.Services.AddControllers()
         };
     });
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerSetup();
+// builder.Services.AddSwaggerSetup();
 
 var app = builder.Build();
 
-// Removida a verificação IsDevelopment() para garantir que a correção do proxy 
-// seja aplicada mesmo rodando como Development no Docker.
-app.UseSwagger(c =>
-{
-    c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
-    {
-        swaggerDoc.Servers = new List<OpenApiServer>
-        {
-            new OpenApiServer { Url = "https://joederblanca.com.br/nexas-landing-api" }
-        };
-    });
-});
+// Swagger desabilitado
+// app.UseSwagger(...);
+// app.UseSwaggerUI(...);
 
-app.UseSwaggerUI(c =>
-{
-    // Caminho relativo para encontrar o JSON do Swagger de forma segura
-    c.SwaggerEndpoint("v1/swagger.json", "Nexas Landing API");
-    c.RoutePrefix = "swagger";
-});
-
+app.UseSecurityHeaders();
+app.UseRateLimiter();
 app.UseCors("DevelopmentCors");
 app.UseGlobalExceptionHandler();
 

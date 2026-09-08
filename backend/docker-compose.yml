@@ -1,0 +1,85 @@
+version: '3.8'
+
+services:
+  # Banco de Dados MySQL
+  mysql_banco:
+    image: mysql:8.0
+    container_name: nexas-mysql-db
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: Likeaboos1970
+      MYSQL_DATABASE: nexas_bd
+    ports:
+      - "3307:3306"
+    volumes:
+      - nexas_db_data:/var/lib/mysql
+    networks:
+      - nexas-network
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pLikeaboos1970"]
+      timeout: 20s
+      retries: 10
+
+  # 1. Nexas Admin API (POPT) - Porta 5012
+  nexas-admin-api:
+    build:
+      context: .
+      dockerfile: Nexas.Admin.Api/Dockerfile
+    container_name: nexas-admin-api-container
+    ports:
+      - "5012:8080"
+    env_file:
+      - .env
+    depends_on:
+      mysql_banco:
+        condition: service_healthy
+    networks:
+      - nexas-network
+      - agivys_default
+    restart: always
+
+  # 2. Nexas API (PAT) - Porta 5011
+  nexas-api:
+    build:
+      context: .
+      dockerfile: Nexas.Api/Dockerfile
+    container_name: nexas-api-container
+    ports:
+      - "5011:8080"
+    env_file:
+      - .env
+    depends_on:
+      mysql_banco:
+        condition: service_healthy
+    networks:
+      - nexas-network
+      - agivys_default
+    restart: always
+
+  # 3. Nexas Landing API - Porta 5013
+  nexas-landing-api:
+    build:
+      context: .
+      dockerfile: Nexas.Landing.Api/Dockerfile
+    container_name: nexas-landing-api-container
+    ports:
+      - "5013:8080"
+    env_file:
+      - .env
+    depends_on:
+      mysql_banco:
+        condition: service_healthy
+    networks:
+      - nexas-network
+      - agivys_default
+    restart: always
+
+networks:
+  nexas-network:
+    driver: bridge
+  agivys_default:
+    external: true
+
+volumes:
+  nexas_db_data:

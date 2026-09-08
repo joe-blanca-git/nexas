@@ -19,8 +19,9 @@ public class UpdateForumCategoryCommandHandler : IRequestHandler<UpdateForumCate
         if (category == null)
             throw new Exception("Categoria não encontrada.");
 
-        category.Update(request.Name, request.Description);
+        category.Update(request.Name, request.Description, request.Icon);
 
         await _context.SaveChangesAsync(cancellationToken);
     }
 }
+

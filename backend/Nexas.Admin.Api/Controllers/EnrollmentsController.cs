@@ -6,7 +6,7 @@ using MediatR;
 namespace Nexas.Admin.Api.Controllers;
 
 [Authorize]
-[Route("api/enrollments")]
+[Route("api/v1/[controller]")]
 [ApiExplorerSettings(IgnoreApi = true)]
 public class EnrollmentsController : ApiControllerBase
 {

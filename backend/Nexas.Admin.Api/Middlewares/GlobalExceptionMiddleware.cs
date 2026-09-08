@@ -36,6 +36,8 @@ namespace Nexas.Admin.Api.Middlewares
             {
                 ValidationException => (int)HttpStatusCode.BadRequest,
                 UnauthorizedAccessException => (int)HttpStatusCode.Unauthorized,
+                Nexas.Application.Common.Exceptions.NotFoundException => (int)HttpStatusCode.NotFound,
+                Nexas.Application.Common.Exceptions.BadRequestException => (int)HttpStatusCode.BadRequest,
                 _ => (int)HttpStatusCode.InternalServerError
             };
 
@@ -46,12 +48,13 @@ namespace Nexas.Admin.Api.Middlewares
             var response = new
             {
                 StatusCode = statusCode,
-                Message = exception.Message,
-                InnerException = exception.InnerException?.Message,
+                Message = (env.IsDevelopment() || exception is Nexas.Application.Common.Exceptions.BadRequestException) 
+                    ? exception.Message 
+                    : "An unexpected error occurred.",
                 Errors = exception is ValidationException valEx 
                     ? valEx.Errors.Select(e => new { e.PropertyName, e.ErrorMessage }) 
                     : null,
-                StackTrace = exception.StackTrace
+                StackTrace = env.IsDevelopment() ? exception.StackTrace : null
             };
 
             await context.Response.WriteAsync(JsonSerializer.Serialize(response));

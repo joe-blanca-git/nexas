@@ -13,4 +13,11 @@ public interface ICloudflareStorageService
     /// <param name="contentType">MIME type da imagem (ex: image/jpeg).</param>
     /// <returns>A URL pública onde o arquivo ficou acessível.</returns>
     Task<string> UploadImageAsync(Stream fileStream, string fileName, string contentType);
+
+    /// <summary>
+    /// Deleta um arquivo do bucket do Cloudflare R2 a partir da URL pública.
+    /// </summary>
+    /// <param name="fileUrl">A URL pública do arquivo.</param>
+    /// <returns>True se deletado com sucesso, false caso contrário.</returns>
+    Task<bool> DeleteImageAsync(string fileUrl);
 }

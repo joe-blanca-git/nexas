@@ -7,5 +7,7 @@ namespace Nexas.Domain.Entities
         
         public int TeacherId { get; set; }
         public virtual Teacher Teacher { get; set; } = null!;
+
+        public decimal ParticipationPercentage { get; set; }
     }
 }

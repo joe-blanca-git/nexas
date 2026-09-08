@@ -12,7 +12,7 @@ namespace Nexas.Landing.Api.Controllers
     /// </summary>
     [AllowAnonymous]
     [ApiController]
-    [Route("v1/api/Courses")]
+    [Route("api/v1/Courses")]
     [Produces("application/json")]
     public class LandingCoursesController : ControllerBase
     {

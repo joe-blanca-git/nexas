@@ -62,6 +62,9 @@ public class GetCourseDetailQueryHandler : IRequestHandler<GetCourseDetailQuery,
         var totalRatings = courseRatings.Count;
         var averageRate = totalRatings > 0 ? courseRatings.Average(cr => cr.Rate) : 0;
 
+        // 2.2 Check if user is enrolled
+        bool isReleased = course.PriceSingle == 0 || await _context.Enrollments.AnyAsync(e => e.UserId == currentUser.Id && e.CourseId == request.CourseId && e.Active, cancellationToken);
+
         // 3. Build DTOs
         var response = new GetCourseDetailResponseDto
         {
@@ -73,6 +76,9 @@ public class GetCourseDetailQueryHandler : IRequestHandler<GetCourseDetailQuery,
             Teacher = course.CourseTeachers.FirstOrDefault()?.Teacher?.Name,
             Level = course.Level,
             Category = course.CourseCategories.FirstOrDefault()?.Category?.Name,
+            Released = isReleased,
+            IsComingSoon = course.IsComingSoon,
+            ReleaseDate = course.ReleaseDate,
             TotalLessons = courseLessonIds.Count,
             CompletedLessons = completedLessonIds.Count,
             ProgressPercentage = courseLessonIds.Count > 0 ? (completedLessonIds.Count * 100) / courseLessonIds.Count : 0,

@@ -19,7 +19,7 @@ public class ReopenForumTopicCommandHandler : IRequestHandler<ReopenForumTopicCo
         var topic = await _context.ForumTopics.FindAsync(new object[] { request.Id }, cancellationToken);
 
         if (topic == null)
-            throw new Exception("Tópico não encontrado.");
+            throw new Nexas.Application.Common.Exceptions.NotFoundException("Tópico não encontrado.");
 
         var currentUser = await _userContextService.GetCurrentUserAsync();
         if (topic.AuthorId != currentUser.Id)

@@ -25,22 +25,36 @@ public class GetMyTransactionsQueryHandler : IRequestHandler<GetMyTransactionsQu
         var currentUser = await _userContextService.GetCurrentUserAsync();
 
         var purchases = await _context.Purchases
-            .Include(p => p.Course)
-            .AsNoTracking()
             .Where(p => p.UserId == currentUser.Id)
-            .OrderByDescending(p => p.CreatedAt)
+            .Select(p => new {
+                Purchase = p,
+                Course = p.Course,
+                TotalLessons = p.Course != null ? p.Course.Modules.SelectMany(m => m.Lessons).Count(l => l.Active) : 0,
+                CompletedLessons = p.Course != null ? p.Course.Modules.SelectMany(m => m.Lessons).SelectMany(l => l.LessonViews).Count(lv => lv.UserId == currentUser.Id) : 0
+            })
+            .OrderByDescending(x => x.Purchase.CreatedAt)
             .ToListAsync(cancellationToken);
 
-        return purchases.Select(p => new GetMyTransactionsResponseDto
-        {
-            Id = p.Id,
-            Name = $"Compra do curso {p.Course?.Name}",
-            Value = p.Amount,
-            PaymentMethod = p.PaymentMethod,
-            Status = p.Status.ToString(), // Pode mapear para português se desejar depois
-            PaymentDate = p.CreatedAt,
-            TransactionCode = p.AsaasPaymentId ?? $"NEXAS-{p.Id}",
-            CourseId = p.CourseId
+        return purchases.Select(x => {
+            double progress = x.TotalLessons > 0 ? (x.CompletedLessons * 100.0) / x.TotalLessons : 0;
+            
+            bool isRefundable = x.Purchase.Status == Domain.Enums.PurchaseStatus.Approved
+                                && (DateTime.UtcNow <= x.Purchase.CreatedAt.AddDays(7))
+                                && progress <= 20;
+
+            return new GetMyTransactionsResponseDto
+            {
+                Id = x.Purchase.Id,
+                Name = $"Compra do curso {x.Course?.Name}",
+                Value = x.Purchase.Amount,
+                PaymentMethod = x.Purchase.PaymentMethod,
+                Status = x.Purchase.Status.ToString(),
+                PaymentDate = x.Purchase.CreatedAt,
+                TransactionCode = x.Purchase.AsaasPaymentId ?? $"NEXAS-{x.Purchase.Id}",
+                CourseId = x.Purchase.CourseId,
+                IsRefundable = isRefundable,
+                Progress = progress
+            };
         }).ToList();
     }
 }

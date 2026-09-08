@@ -30,6 +30,11 @@ namespace Nexas.Application.Courses.Commands.UpdateLesson
                 .MaximumLength(100)
                 .WithMessage("ID do vídeo Bunny não pode ultrapassar 100 caracteres.")
                 .When(x => !string.IsNullOrEmpty(x.BunnyVideoId));
+
+            RuleFor(x => x.Thumbnail)
+                .MaximumLength(2000)
+                .WithMessage("Link da miniatura não pode ultrapassar 2000 caracteres.")
+                .When(x => !string.IsNullOrEmpty(x.Thumbnail));
         }
     }
 }

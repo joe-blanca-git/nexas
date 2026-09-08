@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Nexas.Application.Common.Interfaces;
 using Nexas.Domain.Entities;
+using Nexas.Domain.Enums;
 
 namespace Nexas.Application.Purchases.Commands.RefundCourse;
 
@@ -22,7 +23,7 @@ public class RefundCourseCommandHandler : IRequestHandler<RefundCourseCommand, R
     {
         var currentUser = await _userContextService.GetCurrentUserAsync();
             var purchase = await _context.Purchases
-                .FirstOrDefaultAsync(p => p.Id == request.PurchaseId && p.UserId == currentUser.Id, cancellationToken);
+                .FirstOrDefaultAsync(p => p.Id == request.PurchaseId, cancellationToken);
 
             if (purchase == null)
             {
@@ -61,23 +62,57 @@ public class RefundCourseCommandHandler : IRequestHandler<RefundCourseCommand, R
                 };
             }
 
-            await _asaasService.RefundPaymentAsync(purchase.AsaasPaymentId, cancellationToken);
+            var courseData = await _context.Courses
+                .Where(c => c.Id == purchase.CourseId)
+                .Select(c => new {
+                    TotalLessons = c.Modules.SelectMany(m => m.Lessons).Count(l => l.Active),
+                    CompletedLessons = c.Modules.SelectMany(m => m.Lessons).SelectMany(l => l.LessonViews).Count(lv => lv.UserId == purchase.UserId)
+                })
+                .FirstOrDefaultAsync(cancellationToken);
 
-            var enrollment = await _context.Enrollments
-                .FirstOrDefaultAsync(e => e.UserId == purchase.UserId && e.CourseId == purchase.CourseId, cancellationToken);
-
-            if (enrollment != null)
+            if (courseData != null)
             {
-                _context.Enrollments.Remove(enrollment);
+                double progress = courseData.TotalLessons > 0 ? (courseData.CompletedLessons * 100.0) / courseData.TotalLessons : 0;
+                if (progress > 20)
+                {
+                    return new RefundCourseResponseDto
+                    {
+                        Success = false,
+                        Message = "O estorno não pode ser realizado porque o progresso do curso ultrapassou 20%."
+                    };
+                }
             }
 
-            purchase.Refund();
+            purchase.MarkAsRefundRequested();
+
+            var requestCode = $"REF-{DateTime.UtcNow:yyyyMMdd}-{Guid.NewGuid().ToString().Substring(0, 6).ToUpper()}";
+            
+            // Criação automática de Chamado (Ticket)
+            var category = await _context.TicketCategories.FirstOrDefaultAsync(c => c.Active && (c.Description.Contains("Financeiro") || c.Description.Contains("Reembolso")), cancellationToken)
+                        ?? await _context.TicketCategories.FirstOrDefaultAsync(c => c.Active, cancellationToken);
+            
+            var ticket = Ticket.Create(purchase.UserId, category?.Id ?? 1, $"Solicitação de Reembolso - Pedido {requestCode}", TicketPriority.High);
+            
+            // Agora adicionamos a primeira mensagem e a timeline no mesmo objeto ticket
+            var msg = TicketMessage.Create(ticket.Id, purchase.UserId, Nexas.Domain.Enums.TicketOrigin.Portal, "Solicitação de reembolso aberta através do Portal do Aluno.", null);
+            ticket.Messages.Add(msg);
+
+            var timeline = TicketTimeline.Create(ticket.Id, purchase.UserId, TicketTimelineEvent.Created, "Ticket de reembolso criado automaticamente.");
+            ticket.Timelines.Add(timeline);
+
+            _context.Tickets.Add(ticket);
+            
+            // Salvamos o ticket para o EF Core gerar e preencher o ticket.Id (auto-increment)
+            await _context.SaveChangesAsync(cancellationToken);
+
+            var refundRequest = RefundRequest.Create(purchase.Id, requestCode, "Solicitado pelo aluno no portal", ticket.Id.ToString());
+            _context.RefundRequests.Add(refundRequest);
             await _context.SaveChangesAsync(cancellationToken);
 
             return new RefundCourseResponseDto
             {
                 Success = true,
-                Message = "Estorno processado e matrícula cancelada com sucesso."
+                Message = "Sua solicitação de estorno foi enviada e está em análise."
             };
     }
 }

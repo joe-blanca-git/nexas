@@ -58,4 +58,34 @@ public class CloudflareStorageService : ICloudflareStorageService
         var finalUrl = _publicUrl.EndsWith("/") ? $"{_publicUrl}{fileName}" : $"{_publicUrl}/{fileName}";
         return finalUrl;
     }
+
+    public async Task<bool> DeleteImageAsync(string fileUrl)
+    {
+        if (string.IsNullOrWhiteSpace(fileUrl)) return false;
+
+        try
+        {
+            var publicUrlPrefix = _publicUrl.EndsWith("/") ? _publicUrl : $"{_publicUrl}/";
+            if (!fileUrl.StartsWith(publicUrlPrefix, StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
+            var key = fileUrl.Substring(publicUrlPrefix.Length);
+            
+            var deleteRequest = new Amazon.S3.Model.DeleteObjectRequest
+            {
+                BucketName = _bucketName,
+                Key = key
+            };
+
+            await _s3Client.DeleteObjectAsync(deleteRequest);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao deletar arquivo do Cloudflare S3: {ex.Message}");
+            return false;
+        }
+    }
 }

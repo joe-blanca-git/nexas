@@ -92,14 +92,32 @@ public class GetHomeQueryHandler : IRequestHandler<GetHomeQuery, PortalHomeDto>
             );
         }
 
-        var summaryData = await _context.Enrollments
+        // Pegar todos os CourseIds de matrículas ativas
+        var enrolledCourseIds = await _context.Enrollments
             .AsNoTracking()
             .Where(e => e.UserId == user.Id && e.Active && e.Course.Active)
-            .Select(e => new
+            .Select(e => e.CourseId)
+            .ToListAsync(cancellationToken);
+
+        // Pegar todos os CourseIds de cursos que o usuário já assistiu (ex: cursos gratuitos)
+        var viewedCourseIds = await _context.LessonViews
+            .AsNoTracking()
+            .Where(lv => lv.UserId == user.Id && lv.Lesson.Module.Course.Active)
+            .Select(lv => lv.Lesson.Module.CourseId)
+            .Distinct()
+            .ToListAsync(cancellationToken);
+
+        // Unir os IDs
+        var allCourseIds = enrolledCourseIds.Union(viewedCourseIds).Distinct().ToList();
+
+        var summaryData = await _context.Courses
+            .AsNoTracking()
+            .Where(c => allCourseIds.Contains(c.Id))
+            .Select(c => new
             {
-                CourseId = e.CourseId,
-                TotalLessons = _context.Lessons.Count(l => l.Module.CourseId == e.CourseId && l.Active && l.Module.Active),
-                ViewedLessons = _context.LessonViews.Where(lv => lv.UserId == user.Id && lv.Lesson.Module.CourseId == e.CourseId).Select(lv => lv.LessonId).Distinct().Count()
+                CourseId = c.Id,
+                TotalLessons = _context.Lessons.Count(l => l.Module.CourseId == c.Id && l.Active && l.Module.Active),
+                ViewedLessons = _context.LessonViews.Where(lv => lv.UserId == user.Id && lv.Lesson.Module.CourseId == c.Id).Select(lv => lv.LessonId).Distinct().Count()
             })
             .ToListAsync(cancellationToken);
 

@@ -1,5 +1,7 @@
 using MediatR;
 using Nexas.Application.Common.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Nexas.Application.Courses.Commands.UpdateCourse
 {
@@ -35,26 +37,59 @@ namespace Nexas.Application.Courses.Commands.UpdateCourse
 
         /// <summary>Novo ID da biblioteca Bunny para o curso.</summary>
         public string? BunnyLibraryId { get; init; }
+
+        /// <summary>Flag para indicar se o curso é uma estreia futura (Vem aí).</summary>
+        public bool IsComingSoon { get; init; }
+
+        /// <summary>Nova data de estreia do curso.</summary>
+        public DateTime? ReleaseDate { get; init; }
     }
 
     public class UpdateCourseCommandHandler : IRequestHandler<UpdateCourseCommand, Unit>
     {
         private readonly INexasDbContext _context;
         private readonly IUserContextService _userContextService;
+        private readonly ICloudflareStorageService _cloudflareStorageService;
 
-        public UpdateCourseCommandHandler(INexasDbContext context, IUserContextService userContextService)
+        public UpdateCourseCommandHandler(INexasDbContext context, IUserContextService userContextService, ICloudflareStorageService cloudflareStorageService)
         {
             _context = context;
             _userContextService = userContextService;
+            _cloudflareStorageService = cloudflareStorageService;
         }
 
         public async Task<Unit> Handle(UpdateCourseCommand request, CancellationToken cancellationToken)
         {
             var currentUser = await _userContextService.GetCurrentUserAsync();
 
-            var course = await _context.Courses.FindAsync(new object[] { request.Id }, cancellationToken: cancellationToken);
+            var course = await _context.Courses
+                .Include(c => c.CourseTeachers)
+                .FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken);
+                
             if (course == null)
                 throw new InvalidOperationException($"Curso com ID {request.Id} não encontrado.");
+
+            var currentTeacher = await _context.Teachers.FirstOrDefaultAsync(t => t.IdAgivys == currentUser.ExternalId, cancellationToken);
+            if (currentTeacher == null || (currentTeacher.Role != "Admin" && !course.CourseTeachers.Any(ct => ct.TeacherId == currentTeacher.Id)))
+            {
+                throw new UnauthorizedAccessException("Você não tem permissão para modificar este curso.");
+            }
+
+            // Se a imagem de capa foi alterada, exclui a antiga do Cloudflare
+            if (!string.Equals(course.ImgCoverLink, request.ImgCoverLink, StringComparison.OrdinalIgnoreCase))
+            {
+                if (!string.IsNullOrEmpty(course.ImgCoverLink))
+                {
+                    try
+                    {
+                        await _cloudflareStorageService.DeleteImageAsync(course.ImgCoverLink);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Erro ao excluir imagem antiga do Cloudflare: {ex.Message}");
+                    }
+                }
+            }
 
             course.Name = request.Name;
             course.Description = request.Description;
@@ -63,6 +98,8 @@ namespace Nexas.Application.Courses.Commands.UpdateCourse
             course.PriceSingle = request.PriceSingle;
             course.ImgCoverLink = request.ImgCoverLink;
             course.BunnyLibraryId = request.BunnyLibraryId;
+            course.IsComingSoon = request.IsComingSoon;
+            course.ReleaseDate = request.ReleaseDate;
             course.UpdatedBy = currentUser.Id;
 
             _context.Courses.Update(course);

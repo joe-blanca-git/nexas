@@ -53,6 +53,7 @@ public class GetCheckoutPendenciasQueryHandler : IRequestHandler<GetCheckoutPend
             if (pendingPurchase != null)
             {
                 response.TemPendencia = true;
+                response.PurchaseId = pendingPurchase.Id;
                 response.Status = "PENDING";
                 response.MetodoPagamento = pendingPurchase.PaymentMethod;
 
@@ -65,12 +66,12 @@ public class GetCheckoutPendenciasQueryHandler : IRequestHandler<GetCheckoutPend
                         response.QrCodeBase64 = qrCodeData.EncodedImage;
                         response.Mensagem = "Você já possui um PIX aguardando pagamento para este item.";
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         // Failed to retrieve QR Code from Asaas (might be expired, deleted, or API error)
                         // We DO NOT cancel the purchase here automatically anymore. 
                         // The user will just see that it is pending but without a QR Code.
-                        response.Mensagem = $"Houve um erro ao recuperar o QR Code do PIX. (Erro: {ex.Message})";
+                        response.Mensagem = "O PIX gerado expirou ou não pode mais ser pago. Por favor, cancele-o para selecionar uma nova forma de pagamento.";
                     }
                 }
                 else if (pendingPurchase.PaymentMethod.Contains("CREDIT") || pendingPurchase.PaymentMethod.Contains("DEBIT"))

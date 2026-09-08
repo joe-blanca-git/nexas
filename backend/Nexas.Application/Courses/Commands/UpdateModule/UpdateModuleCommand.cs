@@ -1,5 +1,6 @@
 using MediatR;
 using Nexas.Application.Common.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Nexas.Application.Courses.Commands.UpdateModule
 {
@@ -44,9 +45,19 @@ namespace Nexas.Application.Courses.Commands.UpdateModule
         {
             var currentUser = await _userContextService.GetCurrentUserAsync();
 
-            var module = await _context.Modules.FindAsync(new object[] { request.Id }, cancellationToken: cancellationToken);
+            var module = await _context.Modules
+                .Include(m => m.Course)
+                .ThenInclude(c => c.CourseTeachers)
+                .FirstOrDefaultAsync(m => m.Id == request.Id, cancellationToken);
+                
             if (module == null)
                 throw new InvalidOperationException($"Módulo com ID {request.Id} não encontrado.");
+
+            var currentTeacher = await _context.Teachers.FirstOrDefaultAsync(t => t.IdAgivys == currentUser.ExternalId, cancellationToken);
+            if (currentTeacher == null || (currentTeacher.Role != "Admin" && !module.Course.CourseTeachers.Any(ct => ct.TeacherId == currentTeacher.Id)))
+            {
+                throw new UnauthorizedAccessException("Você não tem permissão para modificar este módulo.");
+            }
 
             module.Name = request.Name;
             module.Description = request.Description;

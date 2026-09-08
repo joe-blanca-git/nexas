@@ -37,4 +37,5 @@ public class Enrollment : BaseEntity
     }
 
     public void Deactivate() => Active = false;
+    public void Activate() => Active = true;
 }

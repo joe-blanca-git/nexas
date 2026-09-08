@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Nexas.Application.Common.Interfaces;
 using Nexas.Domain.Entities;
 
@@ -20,14 +21,24 @@ namespace Nexas.Application.Teachers.Commands.CreateTeacher
     public class CreateTeacherCommandHandler : IRequestHandler<CreateTeacherCommand, int>
     {
         private readonly INexasDbContext _context;
+        private readonly IUserContextService _userContextService;
 
-        public CreateTeacherCommandHandler(INexasDbContext context)
+        public CreateTeacherCommandHandler(INexasDbContext context, IUserContextService userContextService)
         {
             _context = context;
+            _userContextService = userContextService;
         }
 
         public async Task<int> Handle(CreateTeacherCommand request, CancellationToken cancellationToken)
         {
+            var currentUser = await _userContextService.GetCurrentUserAsync();
+            var loggedTeacher = await _context.Teachers.FirstOrDefaultAsync(t => t.IdAgivys == currentUser.ExternalId, cancellationToken);
+
+            if (loggedTeacher == null || loggedTeacher.Role != "Admin")
+            {
+                throw new UnauthorizedAccessException("Apenas administradores podem criar professores.");
+            }
+
             var teacher = Teacher.Create(
                 request.Name,
                 request.Role,

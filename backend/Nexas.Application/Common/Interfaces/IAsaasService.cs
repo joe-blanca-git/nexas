@@ -13,6 +13,8 @@ public interface IAsaasService
     Task<string> CreatePixPaymentAsync(string asaasCustomerId, decimal amount, string description, CancellationToken ct);
     Task<PixQrCodeResponseDto> GetPixQrCodeAsync(string asaasPaymentId, CancellationToken ct);
 
+    Task CancelPaymentAsync(string asaasPaymentId, CancellationToken ct);
+
     Task RefundPaymentAsync(string asaasPaymentId, CancellationToken ct);
 
     Task<string> GetPaymentStatusAsync(string asaasPaymentId, CancellationToken ct);

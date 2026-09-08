@@ -69,6 +69,24 @@ public class PurchasesController : ApiControllerBase
     }
 
     /// <summary>
+    /// Cancela uma compra no sistema e no Asaas.
+    /// </summary>
+    /// <remarks>
+    /// Exemplo de request: POST /api/purchases/123/cancel
+    /// </remarks>
+    /// <param name="purchaseId">ID da compra a ser cancelada.</param>
+    /// <returns>Resultado da operação de cancelamento.</returns>
+    [HttpPost("{purchaseId}/cancel")]
+    [ProducesResponseType(typeof(Nexas.Application.Purchases.Commands.CancelPurchase.CancelPurchaseResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Cancel([FromRoute] int purchaseId)
+    {
+        var result = await Mediator.Send(new Nexas.Application.Purchases.Commands.CancelPurchase.CancelPurchaseCommand(purchaseId));
+        if (!result.Success) return BadRequest(result);
+        return Ok(result);
+    }
+
+    /// <summary>
     /// Retorna a lista de compras do usuário autenticado.
     /// </summary>
     /// <remarks>

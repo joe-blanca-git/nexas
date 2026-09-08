@@ -61,6 +61,9 @@ namespace Nexas.Infrastructure.Persistence.Configurations
             builder.Property(c => c.UpdatedAt).HasColumnName("UpdatedAt");
             builder.Property(c => c.UpdatedBy).HasColumnName("UpdatedBy");
             builder.Property(c => c.BunnyLibraryId).HasColumnName("BunnyLibraryId").HasMaxLength(100);
+
+            builder.Property(c => c.IsComingSoon).HasColumnName("IsComingSoon").HasDefaultValue(false);
+            builder.Property(c => c.ReleaseDate).HasColumnName("ReleaseDate");
         }
     }
 

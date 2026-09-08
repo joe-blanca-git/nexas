@@ -23,6 +23,11 @@ public class GetMyCoursesQueryHandler : IRequestHandler<GetMyCoursesQuery, List<
             .Where(e => e.UserId == user.Id && e.Active)
             .Select(e => e.CourseId)
             .ToListAsync(cancellationToken);
+
+        var pendingCourseIds = await _context.Purchases
+            .Where(p => p.UserId == user.Id && p.Status == Nexas.Domain.Enums.PurchaseStatus.Pending)
+            .Select(p => p.CourseId)
+            .ToListAsync(cancellationToken);
             
         var courses = await _context.Courses
             .AsNoTracking()
@@ -30,7 +35,8 @@ public class GetMyCoursesQueryHandler : IRequestHandler<GetMyCoursesQuery, List<
             .Select(c => new {
                 Course = c,
                 Categories = c.CourseCategories.Select(cc => cc.Category).ToList(),
-                Released = enrolledCourseIds.Contains(c.Id),
+                Released = enrolledCourseIds.Contains(c.Id) || c.PriceSingle == 0,
+                HasPendingPurchase = pendingCourseIds.Contains(c.Id),
                 TotalLessons = c.Modules.SelectMany(m => m.Lessons).Count(l => l.Active),
                 CompletedLessons = c.Modules.SelectMany(m => m.Lessons).SelectMany(l => l.LessonViews).Count(lv => lv.UserId == user.Id),
                 AverageRating = c.CourseRates.Any() ? c.CourseRates.Average(r => (double)r.Rate) : 0.0
@@ -53,7 +59,10 @@ public class GetMyCoursesQueryHandler : IRequestHandler<GetMyCoursesQuery, List<
                 progress,
                 x.CompletedLessons,
                 x.TotalLessons,
-                x.Categories.Select(cat => new Nexas.Application.Courses.Common.CourseCategoryBasicDto(cat.Id, cat.Name)).ToList()
+                x.Categories.Select(cat => new Nexas.Application.Courses.Common.CourseCategoryBasicDto(cat.Id, cat.Name)).ToList(),
+                x.HasPendingPurchase,
+                x.Course.IsComingSoon,
+                x.Course.ReleaseDate
             );
         }).ToList();
         

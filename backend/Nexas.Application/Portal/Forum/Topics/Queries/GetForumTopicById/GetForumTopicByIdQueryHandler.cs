@@ -27,7 +27,7 @@ public class GetForumTopicByIdQueryHandler : IRequestHandler<GetForumTopicByIdQu
             .FirstOrDefaultAsync(t => t.Id == request.Id, cancellationToken);
 
         if (topic == null)
-            throw new Exception("Tópico não encontrado.");
+            throw new Nexas.Application.Common.Exceptions.NotFoundException("Tópico não encontrado.");
 
         var dto = new ForumTopicDetailDto
         {
@@ -36,17 +36,17 @@ public class GetForumTopicByIdQueryHandler : IRequestHandler<GetForumTopicByIdQu
             Subject = topic.Subject,
             Content = topic.Content,
             Status = topic.Status.ToString(),
-            CategoryName = topic.Category.Name,
-            AuthorName = topic.Author.FullName ?? "Anônimo",
+            CategoryName = topic.Category?.Name ?? string.Empty,
+            AuthorName = topic.Author?.FullName ?? "Anônimo",
             LessonName = topic.Lesson?.Name,
             CreatedAt = topic.CreatedAt,
-            Messages = topic.Messages.Select(m => new ForumMessageDto
+            Messages = topic.Messages?.Select(m => new ForumMessageDto
             {
                 Id = m.Id,
                 Content = m.Content,
-                AuthorName = m.Author.FullName ?? "Anônimo",
+                AuthorName = m.Author?.FullName ?? "Anônimo",
                 CreatedAt = m.CreatedAt
-            }).ToList(),
+            }).ToList() ?? new List<ForumMessageDto>(),
             IsOwn = false // To be filled below
         };
         

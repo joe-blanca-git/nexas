@@ -34,4 +34,14 @@ public class PaymentEventPublisher : IPaymentEventPublisher
             cursoId 
         });
     }
+
+    public async Task PublishPaymentCanceledAsync(string externalUserId, string tipoCompra, int cursoId)
+    {
+        await _hubContext.Clients.User(externalUserId).SendAsync("PaymentCanceled", new 
+        { 
+            sucesso = false, 
+            tipoCompra, 
+            cursoId 
+        });
+    }
 }

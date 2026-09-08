@@ -6,6 +6,7 @@ namespace Nexas.Domain.Enums
         Approved,
         Refunded,
         Canceled,
-        Expired
+        Expired,
+        RefundRequested
     }
 }

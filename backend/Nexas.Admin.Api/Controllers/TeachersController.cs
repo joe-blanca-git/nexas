@@ -5,12 +5,13 @@ using Nexas.Application.Teachers.Commands.DeleteTeacher;
 using Nexas.Application.Teachers.Commands.AssignTeacher;
 using Nexas.Application.Teachers.Queries.GetTeachers;
 using Nexas.Application.Teachers.Queries.GetTeacherById;
+using Nexas.Application.Teachers.Queries.GetTeacherDashboard;
 using Nexas.Application.Teachers.Common;
 
 namespace Nexas.Admin.Api.Controllers;
 
 [ApiController]
-[Route("v1/api/[controller]")]
+[Route("api/v1/[controller]")]
 public class TeachersController : ApiControllerBase
 {
     /// <summary>
@@ -75,9 +76,46 @@ public class TeachersController : ApiControllerBase
     [HttpPost("assign")]
     public async Task<ActionResult> AssignTeacher(AssignTeacherCommand command)
     {
-        var success = await Mediator.Send(command);
-        if (!success) return BadRequest("Não foi possível vincular o professor ao curso. Verifique se ambos existem.");
+        var result = await Mediator.Send(command);
+        if (!result.Success) return BadRequest(result.Message);
 
-        return Ok();
+        return Ok(new { message = result.Message });
+    }
+
+    /// <summary>
+    /// Desvincula um professor de um curso específico.
+    /// </summary>
+    [HttpPost("unassign")]
+    public async Task<ActionResult> UnassignTeacher(Nexas.Application.Teachers.Commands.UnassignTeacher.UnassignTeacherCommand command)
+    {
+        var result = await Mediator.Send(command);
+        if (!result.Success) return BadRequest(result.Message);
+
+        return Ok(new { message = result.Message });
+    }
+    /// <summary>
+    /// Obtém o dashboard completo (global para Admin, filtrado para professor).
+    /// </summary>
+    [HttpGet("dashboard")]
+    public async Task<ActionResult<TeacherDashboardDto>> GetTeacherDashboard()
+    {
+        // Extract IdAgivys from current user context token claims
+        var idAgivys = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+                    ?? User.FindFirst("nameid")?.Value
+                    ?? User.FindFirst("sub")?.Value;
+
+        // In Admin API (portal-popt), default to admin view unless explicitly restricted
+        bool isAdmin = true;
+        if (User?.Identity?.IsAuthenticated == true)
+        {
+            var roles = User.Claims.Where(c => c.Type == "role" || c.Type == System.Security.Claims.ClaimTypes.Role).Select(c => c.Value).ToList();
+            if (roles.Count > 0 && !roles.Any(r => r.Equals("Admin", StringComparison.OrdinalIgnoreCase) || r.Equals("Administrador", StringComparison.OrdinalIgnoreCase)))
+            {
+                isAdmin = false;
+            }
+        }
+
+        var dto = await Mediator.Send(new GetTeacherDashboardQuery { IdAgivys = idAgivys ?? string.Empty, IsAdmin = isAdmin });
+        return Ok(dto);
     }
 }

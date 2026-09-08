@@ -1,5 +1,6 @@
 using MediatR;
 using Nexas.Application.Common.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Nexas.Application.Courses.Commands.DeactivateCourse
 {
@@ -28,9 +29,18 @@ namespace Nexas.Application.Courses.Commands.DeactivateCourse
         {
             var currentUser = await _userContextService.GetCurrentUserAsync();
 
-            var course = await _context.Courses.FindAsync(new object[] { request.Id }, cancellationToken: cancellationToken);
+            var course = await _context.Courses
+                .Include(c => c.CourseTeachers)
+                .FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken);
+                
             if (course == null)
                 throw new InvalidOperationException($"Curso com ID {request.Id} não encontrado.");
+
+            var currentTeacher = await _context.Teachers.FirstOrDefaultAsync(t => t.IdAgivys == currentUser.ExternalId, cancellationToken);
+            if (currentTeacher == null || (currentTeacher.Role != "Admin" && !course.CourseTeachers.Any(ct => ct.TeacherId == currentTeacher.Id)))
+            {
+                throw new UnauthorizedAccessException("Você não tem permissão para inativar este curso.");
+            }
 
             course.Active = false;
             course.UpdatedBy = currentUser.Id;

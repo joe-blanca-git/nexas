@@ -15,7 +15,7 @@ public class CreateForumCategoryCommandHandler : IRequestHandler<CreateForumCate
 
     public async Task<int> Handle(CreateForumCategoryCommand request, CancellationToken cancellationToken)
     {
-        var category = ForumCategory.Create(request.Name, request.Description);
+        var category = ForumCategory.Create(request.Name, request.Description, request.Icon);
 
         _context.ForumCategories.Add(category);
         await _context.SaveChangesAsync(cancellationToken);
@@ -23,3 +23,4 @@ public class CreateForumCategoryCommandHandler : IRequestHandler<CreateForumCate
         return category.Id;
     }
 }
+

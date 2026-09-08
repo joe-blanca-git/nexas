@@ -38,6 +38,12 @@ namespace Nexas.Application.Courses.Commands.CreateCourse
         /// <example>library_12345</example>
         public string? BunnyLibraryId { get; init; }
 
+        /// <summary>Flag para indicar se o curso é uma estreia futura (Vem aí).</summary>
+        public bool IsComingSoon { get; init; } = false;
+
+        /// <summary>Data de estreia do curso, caso IsComingSoon seja verdadeiro.</summary>
+        public DateTime? ReleaseDate { get; init; }
+
         /// <summary>Lista de IDs das categorias às quais o curso pertence.</summary>
         public List<int> CategoryIds { get; init; } = new();
 
@@ -129,6 +135,9 @@ namespace Nexas.Application.Courses.Commands.CreateCourse
                 currentUser.Id
             );
 
+            course.IsComingSoon = request.IsComingSoon;
+            course.ReleaseDate = request.ReleaseDate;
+
             // Fetch Teacher profile and link to course
             var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.IdAgivys == currentUser.ExternalId, cancellationToken);
             if (teacher != null)
@@ -136,7 +145,8 @@ namespace Nexas.Application.Courses.Commands.CreateCourse
                 course.CourseTeachers.Add(new CourseTeacher
                 {
                     TeacherId = teacher.Id,
-                    Course = course
+                    Course = course,
+                    ParticipationPercentage = 100m
                 });
             }
 

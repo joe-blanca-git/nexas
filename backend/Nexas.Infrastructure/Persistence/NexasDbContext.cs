@@ -29,6 +29,17 @@ namespace Nexas.Infrastructure.Persistence
         public DbSet<ForumMessage> ForumMessages => Set<ForumMessage>();
         public DbSet<CourseRate> CourseRates => Set<CourseRate>();
         public DbSet<Certificate> Certificates => Set<Certificate>();
+        public DbSet<AppRole> AppRoles => Set<AppRole>();
+        public DbSet<AppUserRole> AppUserRoles => Set<AppUserRole>();
+        public DbSet<TicketCategory> TicketCategories => Set<TicketCategory>();
+        public DbSet<Ticket> Tickets => Set<Ticket>();
+        public DbSet<TicketMessage> TicketMessages => Set<TicketMessage>();
+        public DbSet<TicketAttachment> TicketAttachments => Set<TicketAttachment>();
+        public DbSet<TicketTimeline> TicketTimelines => Set<TicketTimeline>();
+        public DbSet<FinancialTax> FinancialTaxes => Set<FinancialTax>();
+        public DbSet<FinancialClosing> FinancialClosings => Set<FinancialClosing>();
+        public DbSet<FinancialClosingItem> FinancialClosingItems => Set<FinancialClosingItem>();
+        public DbSet<RefundRequest> RefundRequests => Set<RefundRequest>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -42,3 +53,4 @@ namespace Nexas.Infrastructure.Persistence
         }
     }
 }
+

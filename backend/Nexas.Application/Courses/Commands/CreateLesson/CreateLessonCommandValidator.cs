@@ -26,6 +26,11 @@ namespace Nexas.Application.Courses.Commands.CreateLesson
                 .WithMessage("Duração da aula deve ser maior que 0 segundos.")
                 .When(x => x.DurationSeconds.HasValue);
 
+            RuleFor(x => x.Thumbnail)
+                .MaximumLength(2000)
+                .WithMessage("Link da miniatura não pode ultrapassar 2000 caracteres.")
+                .When(x => !string.IsNullOrEmpty(x.Thumbnail));
+
 
         }
     }

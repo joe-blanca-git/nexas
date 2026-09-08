@@ -44,9 +44,12 @@ namespace Nexas.Infrastructure.Services
             var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
             using var document = JsonDocument.Parse(responseBody);
             
-            if (document.RootElement.TryGetProperty("ApiKey", out var keyElement))
+            foreach (var prop in document.RootElement.EnumerateObject())
             {
-                return keyElement.GetString() ?? throw new Exception("Library ApiKey is null in Bunny.net response.");
+                if (prop.Name.Equals("ApiKey", StringComparison.OrdinalIgnoreCase))
+                {
+                    return prop.Value.GetString() ?? throw new Exception("Library ApiKey is null in Bunny.net response.");
+                }
             }
             
             throw new Exception("Could not find ApiKey in Bunny.net Library response.");
@@ -79,7 +82,15 @@ namespace Nexas.Infrastructure.Services
             var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
             using var document = JsonDocument.Parse(responseBody);
             
-            var guid = document.RootElement.GetProperty("guid").GetString();
+            string? guid = null;
+            foreach (var prop in document.RootElement.EnumerateObject())
+            {
+                if (prop.Name.Equals("guid", StringComparison.OrdinalIgnoreCase))
+                {
+                    guid = prop.Value.GetString();
+                    break;
+                }
+            }
             
             return new VideoResponseDto 
             { 
@@ -138,9 +149,19 @@ namespace Nexas.Infrastructure.Services
             var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
             using var document = JsonDocument.Parse(responseBody);
             
-            var guid = document.RootElement.GetProperty("guid").GetString() ?? "";
-            var title = document.RootElement.GetProperty("title").GetString() ?? "";
-            var status = document.RootElement.GetProperty("status").GetInt32();
+            string guid = "";
+            string title = "";
+            int status = 0;
+            
+            foreach (var prop in document.RootElement.EnumerateObject())
+            {
+                if (prop.Name.Equals("guid", StringComparison.OrdinalIgnoreCase))
+                    guid = prop.Value.GetString() ?? "";
+                else if (prop.Name.Equals("title", StringComparison.OrdinalIgnoreCase))
+                    title = prop.Value.GetString() ?? "";
+                else if (prop.Name.Equals("status", StringComparison.OrdinalIgnoreCase))
+                    status = prop.Value.GetInt32();
+            }
             
             return new VideoResponseDto 
             { 

@@ -22,7 +22,8 @@ public class GetForumCategoriesQueryHandler : IRequestHandler<GetForumCategories
                 Id = c.Id,
                 Name = c.Name,
                 Description = c.Description,
-                Active = c.Active
+                Active = c.Active,
+                Icon = c.Icon
             })
             .ToListAsync(cancellationToken);
     }

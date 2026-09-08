@@ -10,4 +10,6 @@ public class GetMyTransactionsResponseDto
     public DateTime PaymentDate { get; set; }
     public string TransactionCode { get; set; } = string.Empty;
     public int? CourseId { get; set; }
+    public bool IsRefundable { get; set; }
+    public double Progress { get; set; }
 }

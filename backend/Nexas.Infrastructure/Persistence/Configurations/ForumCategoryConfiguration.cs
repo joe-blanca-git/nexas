@@ -21,5 +21,8 @@ public class ForumCategoryConfiguration : IEntityTypeConfiguration<ForumCategory
 
         builder.Property(e => e.Active)
             .IsRequired();
+            
+        builder.Property(e => e.Icon)
+            .HasMaxLength(100);
     }
 }

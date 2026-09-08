@@ -5,33 +5,50 @@ using Nexas.Domain.Entities;
 
 namespace Nexas.Application.Teachers.Commands.AssignTeacher
 {
-    public record AssignTeacherCommand : IRequest<bool>
+    public record AssignTeacherResult(bool Success, string Message);
+
+    public record AssignTeacherCommand : IRequest<AssignTeacherResult>
     {
         public int TeacherId { get; init; }
         public int CourseId { get; init; }
     }
 
-    public class AssignTeacherCommandHandler : IRequestHandler<AssignTeacherCommand, bool>
+    public class AssignTeacherCommandHandler : IRequestHandler<AssignTeacherCommand, AssignTeacherResult>
     {
         private readonly INexasDbContext _context;
+        private readonly IUserContextService _userContextService;
 
-        public AssignTeacherCommandHandler(INexasDbContext context)
+        public AssignTeacherCommandHandler(INexasDbContext context, IUserContextService userContextService)
         {
             _context = context;
+            _userContextService = userContextService;
         }
 
-        public async Task<bool> Handle(AssignTeacherCommand request, CancellationToken cancellationToken)
+        public async Task<AssignTeacherResult> Handle(AssignTeacherCommand request, CancellationToken cancellationToken)
         {
-            var teacherExists = await _context.Teachers.AnyAsync(t => t.Id == request.TeacherId && t.Active, cancellationToken);
-            if (!teacherExists) return false;
+            var currentUser = await _userContextService.GetCurrentUserAsync();
+            var loggedTeacher = await _context.Teachers.FirstOrDefaultAsync(t => t.IdAgivys == currentUser.ExternalId, cancellationToken);
 
-            var courseExists = await _context.Courses.AnyAsync(c => c.Id == request.CourseId && c.Active, cancellationToken);
-            if (!courseExists) return false;
+            if (loggedTeacher == null || loggedTeacher.Role != "Admin")
+            {
+                return new AssignTeacherResult(false, "Apenas administradores podem vincular professores.");
+            }
+            var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.Id == request.TeacherId, cancellationToken);
+            if (teacher == null) 
+                return new AssignTeacherResult(false, "O professor informado não existe.");
+            if (!teacher.Active) 
+                return new AssignTeacherResult(false, "O professor informado está inativo e não pode ser vinculado.");
+
+            var course = await _context.Courses.FirstOrDefaultAsync(c => c.Id == request.CourseId, cancellationToken);
+            if (course == null) 
+                return new AssignTeacherResult(false, "O curso informado não existe.");
+            if (!course.Active) 
+                return new AssignTeacherResult(false, "O curso informado está inativo e não pode receber professores.");
 
             var alreadyAssigned = await _context.CourseTeachers
                 .AnyAsync(ct => ct.TeacherId == request.TeacherId && ct.CourseId == request.CourseId, cancellationToken);
 
-            if (alreadyAssigned) return true; // Already assigned, idempotent
+            if (alreadyAssigned) return new AssignTeacherResult(true, "O professor já está vinculado a este curso.");
 
             var courseTeacher = new CourseTeacher
             {
@@ -42,7 +59,7 @@ namespace Nexas.Application.Teachers.Commands.AssignTeacher
             _context.CourseTeachers.Add(courseTeacher);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return true;
+            return new AssignTeacherResult(true, "Professor vinculado com sucesso.");
         }
     }
 }

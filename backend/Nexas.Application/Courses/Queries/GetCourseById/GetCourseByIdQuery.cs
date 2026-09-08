@@ -41,7 +41,12 @@ namespace Nexas.Application.Courses.Queries.GetCourseById
             if (request.FilterByCurrentUserTeacher)
             {
                 var currentUser = await _userContextService.GetCurrentUserAsync();
-                query = query.Where(c => c.CourseTeachers.Any(ct => ct.Teacher.IdAgivys == currentUser.ExternalId));
+                var currentTeacher = await _context.Teachers.FirstOrDefaultAsync(t => t.IdAgivys == currentUser.ExternalId, cancellationToken);
+                
+                if (currentTeacher == null || currentTeacher.Role != "Admin")
+                {
+                    query = query.Where(c => c.CourseTeachers.Any(ct => ct.Teacher.IdAgivys == currentUser.ExternalId));
+                }
             }
 
             return await query
@@ -62,6 +67,8 @@ namespace Nexas.Application.Courses.Queries.GetCourseById
                     PriceSingle = c.PriceSingle,
                     ImgCoverLink = c.ImgCoverLink,
                     BunnyLibraryId = c.BunnyLibraryId,
+                    IsComingSoon = c.IsComingSoon,
+                    ReleaseDate = c.ReleaseDate,
                     Modules = c.Modules.Where(m => request.IncludeInactive || m.Active).Select(m => new ModuleDto
                     {
                         Id = m.Id,
@@ -76,7 +83,8 @@ namespace Nexas.Application.Courses.Queries.GetCourseById
                             Name = l.Name,
                             Description = l.Description,
                             DurationSeconds = l.DurationSeconds,
-                            BunnyVideoId = l.BunnyVideoId
+                            BunnyVideoId = l.BunnyVideoId,
+                            Thumbnail = l.Thumbnail
                         }).ToList()
                     }).ToList(),
                     Domains = c.Domains.Select(d => new CourseDomainDto

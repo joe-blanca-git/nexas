@@ -31,6 +31,10 @@ namespace Nexas.Infrastructure
             });
             services.AddScoped<ICloudflareStorageService, CloudflareStorageService>();
             
+            // Helpdesk services
+            services.AddHttpClient<IEmailService, ResendEmailService>();
+            services.AddScoped<IFileStorageService, DummyFileStorageService>();
+            
             services.AddHttpClient<IBunnyNetService, BunnyNetService>(client =>
             {
                 client.BaseAddress = new Uri("https://api.bunny.net/");

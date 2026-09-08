@@ -5,7 +5,7 @@ using Nexas.Application.Portal.Financial.Queries.GetMyTransactions;
 namespace Nexas.Api.Controllers;
 
 [Authorize]
-[Route("api/v1/portal/financial")]
+[Route("api/v1/financial")]
 [Tags("Portal Pan - Financeiro")]
 public class PortalFinancialController : ApiControllerBase
 {

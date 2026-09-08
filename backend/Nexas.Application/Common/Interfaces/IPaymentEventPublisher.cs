@@ -4,4 +4,5 @@ public interface IPaymentEventPublisher
 {
     Task PublishPaymentConfirmedAsync(string userId, string tipoCompra, int cursoId);
     Task PublishPaymentRefundedAsync(string userId, string tipoCompra, int cursoId);
+    Task PublishPaymentCanceledAsync(string userId, string tipoCompra, int cursoId);
 }

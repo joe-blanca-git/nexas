@@ -20,11 +20,13 @@ public class FinancialCheckoutController : ApiControllerBase
         {
             if (request.TipoCompra?.ToUpper() == "AVULSO")
             {
-                var command = new CreatePurchaseCommand(request.CursoId, request.Valor, "PIX", request.Cpf);
+                var command = new CreatePurchaseCommand(request.CursoId, request.Valor, "PIX", request.Cpf, null, request.HolderName);
+                
                 var result = await Mediator.Send(command);
                 return Ok(new CheckoutPixResponseDto
                 {
                     Sucesso = true,
+                    PurchaseId = result.PurchaseId,
                     CobrancaId = result.AsaasPaymentId,
                     PixCopiaECola = result.PixCopyPaste ?? string.Empty,
                     QrCode = result.PixQrCode ?? string.Empty
@@ -36,6 +38,45 @@ public class FinancialCheckoutController : ApiControllerBase
         catch (Exception ex)
         {
             return BadRequest(new { Message = "Erro ao processar checkout PIX", Detalhe = ex.Message });
+        }
+    }
+
+    [HttpPost("card")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CheckoutCardResponseDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CheckoutCard([FromBody] CheckoutCardRequestDto request)
+    {
+        try
+        {
+            if (request.TipoCompra?.ToUpper() == "AVULSO")
+            {
+                var cardInfo = new CreditCardInfo(
+                    request.HolderName,
+                    request.Number,
+                    request.ExpiryMonth,
+                    request.ExpiryYear,
+                    request.Ccv,
+                    request.Cpf
+                );
+
+                var method = request.PaymentMethod?.ToUpper() == "DEBIT" ? "DEBIT" : "CREDIT";
+                var command = new CreatePurchaseCommand(request.CursoId, request.Valor, method, request.Cpf, cardInfo);
+                
+                var result = await Mediator.Send(command);
+                return Ok(new CheckoutCardResponseDto
+                {
+                    Sucesso = true,
+                    PurchaseId = result.PurchaseId,
+                    CobrancaId = result.AsaasPaymentId,
+                    Status = result.Status
+                });
+            }
+
+            return BadRequest(new { Message = "Tipo de compra inválido." });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { Message = "Erro ao processar checkout por Cartão", Detalhe = ex.Message });
         }
     }
 

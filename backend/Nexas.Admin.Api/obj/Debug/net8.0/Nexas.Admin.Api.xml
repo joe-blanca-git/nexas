@@ -65,6 +65,11 @@
             Atualiza as categorias de um curso.
             </summary>
         </member>
+        <member name="M:Nexas.Admin.Api.Controllers.CoursesController.UpdateTeachers(System.Int32,System.Collections.Generic.List{Nexas.Application.Teachers.Commands.UpdateCourseTeachers.TeacherShareDto})">
+            <summary>
+            Atualiza os professores vinculados a um curso e suas cotas (total deve ser 100%).
+            </summary>
+        </member>
         <member name="M:Nexas.Admin.Api.Controllers.CoursesController.CreateModule(Nexas.Application.Courses.Commands.CreateModule.CreateModuleCommand)">
             <summary>
             Cria um novo módulo em um curso existente.
@@ -170,6 +175,46 @@
             Deleta permanentemente um domínio de um curso.
             </summary>
         </member>
+        <member name="M:Nexas.Admin.Api.Controllers.FinancialClosingsController.GetSummary">
+            <summary>
+            Obtém o resumo financeiro global do professor logado (Dashboard).
+            </summary>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.FinancialClosingsController.Simulate">
+            <summary>
+            Simula um fechamento com base nas vendas elegíveis (mais antigas que 7 dias).
+            </summary>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.FinancialClosingsController.GetHistory(System.Nullable{System.Int32})">
+            <summary>
+            Obtém o histórico de faturamentos/fechamentos.
+            </summary>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.FinancialClosingsController.ProcessClosing(Nexas.Application.FinancialClosings.Commands.ProcessProfessorClosingCommand)">
+            <summary>
+            Processa o faturamento das vendas elegíveis para um professor.
+            </summary>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.FinancialClosingsController.PayClosing(System.Int32,System.String,Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            Realiza a baixa do pagamento (com anexo PIX) do faturamento.
+            </summary>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.FinancialTaxesController.GetAll">
+            <summary>
+            Obtém todas as taxas financeiras cadastradas.
+            </summary>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.FinancialTaxesController.Create(Nexas.Application.FinancialTaxes.Commands.CreateFinancialTaxCommand)">
+            <summary>
+            Cria uma nova taxa financeira.
+            </summary>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.FinancialTaxesController.ToggleStatus(System.Int32)">
+            <summary>
+            Alterna o status (Ativo/Inativo) de uma taxa financeira.
+            </summary>
+        </member>
         <member name="M:Nexas.Admin.Api.Controllers.TeachersController.GetTeachers">
             <summary>
             Lista todos os professores ativos.
@@ -198,6 +243,71 @@
         <member name="M:Nexas.Admin.Api.Controllers.TeachersController.AssignTeacher(Nexas.Application.Teachers.Commands.AssignTeacher.AssignTeacherCommand)">
             <summary>
             Vincula um professor a um curso específico.
+            </summary>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.TeachersController.UnassignTeacher(Nexas.Application.Teachers.Commands.UnassignTeacher.UnassignTeacherCommand)">
+            <summary>
+            Desvincula um professor de um curso específico.
+            </summary>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.TeachersController.GetTeacherDashboard">
+            <summary>
+            Obtém o dashboard completo (global para Admin, filtrado para professor).
+            </summary>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.TicketCategoriesController.GetCategories">
+            <summary>
+            Lista as categorias ativas de suporte.
+            </summary>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.TicketsController.GetTickets(System.Nullable{Nexas.Domain.Enums.TicketStatus},System.Nullable{System.Int32},System.Nullable{Nexas.Domain.Enums.TicketPriority},System.Nullable{System.Int32},System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Boolean},System.Int32,System.Int32)">
+            <summary>
+            Lista os tickets com paginação e filtros detalhados.
+            </summary>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.TicketsController.SearchTickets(System.String,System.Int32,System.Int32)">
+            <summary>
+            Busca rápida por tickets (assunto ou nome do aluno).
+            </summary>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.TicketsController.GetTicketDetails(System.Int32)">
+            <summary>
+            Traz todos os detalhes de um ticket (Histórico, Aluno, Mensagens, Anexos).
+            </summary>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.TicketsController.ReplyTicket(System.Int32,Nexas.Application.Tickets.Commands.AdminReplyTicket.AdminReplyTicketCommand)">
+            <summary>
+            Professor responde ao ticket. (Muda status para Open e avisa o aluno por e-mail).
+            </summary>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.TicketsController.ChangeStatus(System.Int32,Nexas.Application.Tickets.Commands.ChangeTicketStatus.ChangeTicketStatusCommand)">
+            <summary>
+            Altera o status do ticket (Open, Pending, Answered, Closed).
+            </summary>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.TicketsController.ChangePriority(System.Int32,Nexas.Application.Tickets.Commands.ChangeTicketPriority.ChangeTicketPriorityCommand)">
+            <summary>
+            Altera a prioridade do ticket (Low, Normal, High, Critical).
+            </summary>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.TicketsController.ChangeCategory(System.Int32,Nexas.Application.Tickets.Commands.ChangeTicketCategory.ChangeTicketCategoryCommand)">
+            <summary>
+            Transfere o ticket para outra categoria.
+            </summary>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.TicketsController.GetDashboard">
+            <summary>
+            Retorna KPIs da tela inicial (Tickets Abertos, Pendentes, Tempo Médio).
+            </summary>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.TicketsController.GetStats">
+            <summary>
+            Retorna dados agrupados (Ex: Quantidade por Categoria/Status) para Gráficos.
+            </summary>
+        </member>
+        <member name="M:Nexas.Admin.Api.Controllers.UsersController.GetUsers">
+            <summary>
+            Lista todos os usuários.
             </summary>
         </member>
     </members>

@@ -46,9 +46,14 @@ public class BunnyNetService : IBunnyNetService
         var responseBody = await response.Content.ReadAsStringAsync();
         using var document = JsonDocument.Parse(responseBody);
         
-        if (document.RootElement.TryGetProperty("Id", out var idElement))
+        foreach (var prop in document.RootElement.EnumerateObject())
         {
-            return idElement.GetInt64().ToString();
+            if (prop.Name.Equals("Id", StringComparison.OrdinalIgnoreCase))
+            {
+                if (prop.Value.ValueKind == JsonValueKind.Number)
+                    return prop.Value.GetInt64().ToString();
+                return prop.Value.GetString();
+            }
         }
 
         return null;
@@ -74,9 +79,12 @@ public class BunnyNetService : IBunnyNetService
         var responseBody = await response.Content.ReadAsStringAsync();
         using var document = JsonDocument.Parse(responseBody);
         
-        if (document.RootElement.TryGetProperty("ApiKey", out var keyElement))
+        foreach (var prop in document.RootElement.EnumerateObject())
         {
-            return keyElement.GetString() ?? throw new Exception("Library ApiKey is null in Bunny.net response.");
+            if (prop.Name.Equals("ApiKey", StringComparison.OrdinalIgnoreCase))
+            {
+                return prop.Value.GetString() ?? throw new Exception("Library ApiKey is null in Bunny.net response.");
+            }
         }
         
         throw new Exception("Could not find ApiKey in Bunny.net Library response.");
@@ -106,9 +114,12 @@ public class BunnyNetService : IBunnyNetService
         var responseBody = await response.Content.ReadAsStringAsync();
         using var document = JsonDocument.Parse(responseBody);
         
-        if (document.RootElement.TryGetProperty("guid", out var guidElement))
+        foreach (var prop in document.RootElement.EnumerateObject())
         {
-            return guidElement.GetString();
+            if (prop.Name.Equals("guid", StringComparison.OrdinalIgnoreCase))
+            {
+                return prop.Value.GetString();
+            }
         }
 
         return null;

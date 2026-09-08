@@ -23,6 +23,8 @@ namespace Nexas.Application.Courses.Queries.GetCourses
         public decimal? PriceSingle { get; init; }
         public string? ImgCoverLink { get; init; }
         public string? BunnyLibraryId { get; init; }
+        public bool IsComingSoon { get; init; }
+        public DateTime? ReleaseDate { get; init; }
         public List<ModuleDto> Modules { get; init; } = new();
         public List<CourseDomainDto> Domains { get; init; } = new();
         public List<Nexas.Application.Teachers.Common.TeacherDto> Teachers { get; init; } = new();
@@ -63,6 +65,7 @@ namespace Nexas.Application.Courses.Queries.GetCourses
         public string? Description { get; init; }
         public int? DurationSeconds { get; init; }
         public string? BunnyVideoId { get; init; }
+        public string? Thumbnail { get; init; }
     }
 
     public class GetCoursesQueryHandler : IRequestHandler<GetCoursesQuery, List<CourseDto>>
@@ -86,7 +89,12 @@ namespace Nexas.Application.Courses.Queries.GetCourses
             if (request.FilterByCurrentUserTeacher)
             {
                 var currentUser = await _userContextService.GetCurrentUserAsync();
-                query = query.Where(c => c.CourseTeachers.Any(ct => ct.Teacher.IdAgivys == currentUser.ExternalId));
+                var currentTeacher = await _context.Teachers.FirstOrDefaultAsync(t => t.IdAgivys == currentUser.ExternalId, cancellationToken);
+                
+                if (currentTeacher == null || currentTeacher.Role != "Admin")
+                {
+                    query = query.Where(c => c.CourseTeachers.Any(ct => ct.Teacher.IdAgivys == currentUser.ExternalId));
+                }
             }
 
             return await query
@@ -106,6 +114,8 @@ namespace Nexas.Application.Courses.Queries.GetCourses
                     PriceSingle = c.PriceSingle,
                     ImgCoverLink = c.ImgCoverLink,
                     BunnyLibraryId = c.BunnyLibraryId,
+                    IsComingSoon = c.IsComingSoon,
+                    ReleaseDate = c.ReleaseDate,
                     Modules = c.Modules.Where(m => request.IncludeInactive || m.Active).Select(m => new ModuleDto
                     {
                         Id = m.Id,
@@ -120,7 +130,8 @@ namespace Nexas.Application.Courses.Queries.GetCourses
                             Name = l.Name,
                             Description = l.Description,
                             DurationSeconds = l.DurationSeconds,
-                            BunnyVideoId = l.BunnyVideoId
+                            BunnyVideoId = l.BunnyVideoId,
+                            Thumbnail = l.Thumbnail
                         }).ToList()
                     }).ToList(),
                     Domains = c.Domains.Select(d => new CourseDomainDto

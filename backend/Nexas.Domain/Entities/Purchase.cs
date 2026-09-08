@@ -63,6 +63,12 @@ public class Purchase : BaseEntity
         UpdatedAt = DateTime.UtcNow;
     }
 
+    public void MarkAsRefundRequested()
+    {
+        Status = PurchaseStatus.RefundRequested;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
     public void Refund()
     {
         Status = PurchaseStatus.Refunded;

@@ -12,5 +12,8 @@ public record PortalMyCourseDto(
     int Progress,
     int CompletedLessons,
     int TotalLessons,
-    List<Nexas.Application.Courses.Common.CourseCategoryBasicDto>? Categories = null
+    List<Nexas.Application.Courses.Common.CourseCategoryBasicDto>? Categories = null,
+    bool HasPendingPurchase = false,
+    bool IsComingSoon = false,
+    DateTime? ReleaseDate = null
 );

@@ -1,5 +1,6 @@
 public enum EnrollmentOrigin
 {
     Purchase,
-    Subscription
+    Subscription,
+    Manual
 }

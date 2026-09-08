@@ -5,6 +5,7 @@ namespace Nexas.Application.Checkout.Queries;
 public class CheckoutPendenciasResponseDto
 {
     public bool TemPendencia { get; set; }
+    public int? PurchaseId { get; set; }
     public string? Status { get; set; }
     public string? MetodoPagamento { get; set; }
     public string? PixCopiaECola { get; set; }

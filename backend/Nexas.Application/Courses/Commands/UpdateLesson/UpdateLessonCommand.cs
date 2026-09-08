@@ -1,5 +1,6 @@
 using MediatR;
 using Nexas.Application.Common.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Nexas.Application.Courses.Commands.UpdateLesson
 {
@@ -24,6 +25,9 @@ namespace Nexas.Application.Courses.Commands.UpdateLesson
 
         /// <summary>Novo ID do vídeo Bunny para a aula.</summary>
         public string? BunnyVideoId { get; init; }
+
+        /// <summary>Nova miniatura para a aula.</summary>
+        public string? Thumbnail { get; init; }
     }
 
     public class UpdateLessonCommandHandler : IRequestHandler<UpdateLessonCommand, Unit>
@@ -41,14 +45,26 @@ namespace Nexas.Application.Courses.Commands.UpdateLesson
         {
             var currentUser = await _userContextService.GetCurrentUserAsync();
 
-            var lesson = await _context.Lessons.FindAsync(new object[] { request.Id }, cancellationToken: cancellationToken);
+            var lesson = await _context.Lessons
+                .Include(l => l.Module)
+                .ThenInclude(m => m.Course)
+                .ThenInclude(c => c.CourseTeachers)
+                .FirstOrDefaultAsync(l => l.Id == request.Id, cancellationToken);
+                
             if (lesson == null)
                 throw new InvalidOperationException($"Aula com ID {request.Id} não encontrada.");
+
+            var currentTeacher = await _context.Teachers.FirstOrDefaultAsync(t => t.IdAgivys == currentUser.ExternalId, cancellationToken);
+            if (currentTeacher == null || (currentTeacher.Role != "Admin" && !lesson.Module.Course.CourseTeachers.Any(ct => ct.TeacherId == currentTeacher.Id)))
+            {
+                throw new UnauthorizedAccessException("Você não tem permissão para modificar esta aula.");
+            }
 
             lesson.Name = request.Name;
             lesson.Description = request.Description;
             lesson.DurationSeconds = request.DurationSeconds;
             lesson.BunnyVideoId = request.BunnyVideoId;
+            lesson.Thumbnail = request.Thumbnail;
             lesson.UpdatedBy = currentUser.Id;
 
             _context.Lessons.Update(lesson);

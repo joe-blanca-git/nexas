@@ -32,8 +32,8 @@ namespace Nexas.Application.Courses.Commands.UpdateCourse
                 .When(x => !string.IsNullOrEmpty(x.Level));
 
             RuleFor(x => x.PriceSingle)
-                .GreaterThan(0)
-                .WithMessage("Preço do curso deve ser maior que 0.")
+                .GreaterThanOrEqualTo(0m)
+                .WithMessage("Preço do curso deve ser maior ou igual a 0.")
                 .When(x => x.PriceSingle.HasValue);
 
             RuleFor(x => x.ImgCoverLink)

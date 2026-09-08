@@ -25,6 +25,10 @@ namespace Nexas.Application.Courses.Commands.CreateLesson
         /// <summary>Duração estimada da aula em segundos.</summary>
         /// <example>600</example>
         public int? DurationSeconds { get; init; }
+
+        /// <summary>Link da imagem de miniatura da aula.</summary>
+        /// <example>https://cdn.example.com/thumbnails/lesson-thumb.jpg</example>
+        public string? Thumbnail { get; init; }
     }
 
     public class CreateLessonCommandHandler : IRequestHandler<CreateLessonCommand, int>
@@ -52,10 +56,11 @@ namespace Nexas.Application.Courses.Commands.CreateLesson
             if (module == null)
                 throw new InvalidOperationException($"Módulo com ID {request.ModuleId} não encontrado.");
 
-            // Verificar se o usuário atual é professor do curso vinculado a este módulo
-            bool isTeacherOfCourse = module.Course.CourseTeachers.Any(ct => ct.Teacher.IdAgivys == currentUser.ExternalId);
-            if (!isTeacherOfCourse)
+            var currentTeacher = await _context.Teachers.FirstOrDefaultAsync(t => t.IdAgivys == currentUser.ExternalId, cancellationToken);
+            if (currentTeacher == null || (currentTeacher.Role != "Admin" && !module.Course.CourseTeachers.Any(ct => ct.Teacher.IdAgivys == currentUser.ExternalId)))
+            {
                 throw new UnauthorizedAccessException("Você não tem permissão para adicionar aulas a este módulo/curso.");
+            }
 
             var lesson = Lesson.Create(
                 request.Name,
@@ -65,6 +70,7 @@ namespace Nexas.Application.Courses.Commands.CreateLesson
             );
 
             lesson.ModuleId = request.ModuleId;
+            lesson.Thumbnail = request.Thumbnail;
 
             _context.Lessons.Add(lesson);
             await _context.SaveChangesAsync(cancellationToken);

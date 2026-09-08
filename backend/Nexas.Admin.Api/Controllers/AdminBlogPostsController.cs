@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Nexas.Application.BlogPosts.Commands.CreateBlogPost;
 using Nexas.Application.BlogPosts.Commands.UpdateBlogPost;
 using Nexas.Application.BlogPosts.Commands.DeleteBlogPost;
+using Nexas.Application.BlogPosts.Queries.GetBlogPostById;
+using Nexas.Application.BlogPosts.Queries.GetBlogPosts;
+using Nexas.Application.BlogPosts.DTOs;
 using Swashbuckle.AspNetCore.Annotations;
 using Microsoft.AspNetCore.Http;
 
@@ -12,6 +15,24 @@ namespace Nexas.Admin.Api.Controllers;
 [Route("api/v1/BlogPosts")]
 public class AdminBlogPostsController : ApiControllerBase
 {
+    [HttpGet("{id}")]
+    [SwaggerOperation(Summary = "Obter um blog post pelo ID", Description = "Retorna os detalhes de um post específico pelo seu ID.")]
+    [ProducesResponseType(typeof(BlogPostDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetById(int id)
+    {
+        var result = await Mediator.Send(new GetBlogPostByIdQuery(id));
+        return Ok(result);
+    }
+
+    [HttpGet]
+    [SwaggerOperation(Summary = "Listar todos os blog posts", Description = "Retorna uma lista contendo todos os posts do blog.")]
+    [ProducesResponseType(typeof(List<BlogPostDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAll()
+    {
+        var result = await Mediator.Send(new GetBlogPostsQuery());
+        return Ok(result);
+    }
     [HttpPost]
     [SwaggerOperation(Summary = "Criar um novo blog post", Description = "Cria um novo post no blog e retorna o seu ID.")]
     [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
@@ -19,7 +40,7 @@ public class AdminBlogPostsController : ApiControllerBase
     public async Task<IActionResult> Create([FromBody] CreateBlogPostCommand command)
     {
         var result = await Mediator.Send(command);
-        return CreatedAtAction(nameof(Create), new { id = result }, result); // changed from GetById to Create because GetById is not here
+        return CreatedAtAction(nameof(GetById), new { id = result }, result);
     }
 
     [HttpPut("{id}")]

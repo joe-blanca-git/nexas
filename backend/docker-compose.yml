@@ -10,7 +10,7 @@ services:
       MYSQL_ROOT_PASSWORD: Likeaboos1970
       MYSQL_DATABASE: nexas_bd
     ports:
-      - "3307:3306"
+      - "3317:3306"
     volumes:
       - nexas_db_data:/var/lib/mysql
     networks:
@@ -28,7 +28,7 @@ services:
       dockerfile: Nexas.Admin.Api/Dockerfile
     container_name: nexas-admin-api-container
     ports:
-      - "5012:8080"
+      - "6012:8080"
     env_file:
       - .env
     depends_on:
@@ -46,7 +46,7 @@ services:
       dockerfile: Nexas.Api/Dockerfile
     container_name: nexas-api-container
     ports:
-      - "5011:8080"
+      - "6011:8080"
     env_file:
       - .env
     depends_on:
@@ -64,7 +64,7 @@ services:
       dockerfile: Nexas.Landing.Api/Dockerfile
     container_name: nexas-landing-api-container
     ports:
-      - "5013:8080"
+      - "6013:8080"
     env_file:
       - .env
     depends_on:

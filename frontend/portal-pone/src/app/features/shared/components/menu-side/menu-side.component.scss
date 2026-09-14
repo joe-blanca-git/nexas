@@ -1,0 +1,60 @@
+/* menu-side.component.scss — Nexas Dark Theme */
+
+$transition-speed: 0.3s;
+$cubic-bezier: cubic-bezier(0.4, 0, 0.2, 1);
+
+.menu-nav-item {
+  color: #B0B0B0 !important;  // $text-secondary
+  text-decoration: none;
+  border-left: 3px solid transparent;
+  display: flex;
+  align-items: center;
+  transition: all $transition-speed $cubic-bezier;
+
+  &:hover {
+    color: #FFFFFF !important;
+    background-color: #252525;  // $hover-bg
+
+    .menu-icon-container i {
+      padding: 1rem;
+      transform: scale(1.1);
+      color: #FFFFFF;
+    }
+  }
+
+  &.active {
+    color: #FFFFFF !important;
+    background-color: rgba(198, 40, 40, 0.12) !important;  // $nexas-primary-light
+    border-left-color: #C62828 !important;  // $nexas-primary
+
+    .menu-icon-container i {
+      color: #C62828 !important;  // $nexas-primary
+    }
+  }
+
+  .menu-icon-container {
+    width: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    i {
+      transition: all 0.2s ease;
+      color: #7A7A7A;  // $text-placeholder
+    }
+  }
+
+  &.collapsed-item {
+    justify-content: center;
+    padding: 0.75rem 0 !important;
+    margin: 0.3rem 0.5rem !important;
+
+    .menu-icon-container {
+      margin: 0 !important;
+    }
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

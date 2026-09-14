@@ -1,0 +1,22 @@
+<div class="custom-floating-toast"
+     *ngIf="toast"
+     [ngClass]="{
+        'toast-error': toast.type === 'error',
+        'toast-success': toast.type === 'success',
+        'toast-warning': toast.type === 'warning',
+        'toast-info': toast.type === 'info'
+     }">
+  
+  <div class="toast-icon-wrapper">
+    <i class="fas fa-times-circle" *ngIf="toast.type === 'error'"></i>
+    <i class="fas fa-check-circle" *ngIf="toast.type === 'success'"></i>
+    <i class="fas fa-exclamation-triangle" *ngIf="toast.type === 'warning'"></i>
+    <i class="fas fa-info-circle" *ngIf="toast.type === 'info'"></i>
+  </div>
+
+  <div class="toast-content">
+    <span class="toast-message">{{ toast.message }}</span>
+  </div>
+
+  <button type="button" class="btn-close btn-close-white toast-close" aria-label="Close" (click)="close()"></button>
+</div>

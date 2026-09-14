@@ -1,0 +1,110 @@
+<div class="custom-modal-backdrop animated-fade-in d-flex align-items-center justify-content-center">
+  <div class="custom-modal-dialog bg-dark rounded-4 shadow-lg overflow-hidden d-flex flex-column" style="width: 90%; max-width: 800px; max-height: 90vh;">
+    
+    <!-- Modal Header -->
+    <div class="modal-header bg-dark border-bottom-0 pb-3 pt-4 px-4 rounded-top-4 position-relative overflow-hidden">
+      <div class="position-absolute top-0 end-0 p-3 opacity-25">
+        <i class="fas fa-layer-group text-white" style="font-size: 8rem; transform: translate(20%, -30%);"></i>
+      </div>
+      <div class="d-flex align-items-center gap-3">
+        <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center shadow-sm flex-shrink-0" style="width: 48px; height: 48px;">
+          <i class="fas fa-layer-group fs-5"></i>
+        </div>
+        <div>
+          <h5 class="modal-title fw-bolder text-white mb-0 fs-5">{{ moduleData.id && moduleData.name !== '' ? 'Editar Módulo' : 'Novo Módulo' }}</h5>
+          <small class="text-white-50 fw-medium d-block">Configure os detalhes deste módulo e suas aulas.</small>
+        </div>
+      </div>
+      <button type="button" class="btn-close position-absolute top-0 end-0 mt-4 me-4" (click)="cancel()" aria-label="Close"></button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-body p-4 overflow-auto custom-scrollbar">
+      <form [formGroup]="moduleForm" class="d-flex flex-column gap-4">
+        
+        <div class="form-group">
+          <label class="form-label text-white-50 small fw-semibold text-uppercase">Nome do Módulo <span class="text-danger">*</span></label>
+          <input type="text" class="form-control bg-secondary bg-opacity-10 border-0 text-white rounded-3 py-2.5 px-3" formControlName="name" placeholder="Ex: Módulo 1 - Introdução"
+                 [ngClass]="{'is-invalid': f['name'].invalid && f['name'].touched}">
+        </div>
+
+        <div class="row g-4 mb-4">
+          <div class="col-12 col-md-6">
+            <div class="form-group">
+              <label class="form-label text-white-50 small fw-semibold text-uppercase">Subtítulo</label>
+              <input type="text" class="form-control bg-secondary bg-opacity-10 border-0 text-white rounded-3 py-2.5 px-3" formControlName="descriptionSub" placeholder="Resumo do módulo">
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="form-group">
+              <label class="form-label text-white-50 small fw-semibold text-uppercase">Descrição Curta</label>
+              <input type="text" class="form-control bg-secondary bg-opacity-10 border-0 text-white rounded-3 py-2.5 px-3" formControlName="description" placeholder="Objetivos do módulo">
+            </div>
+          </div>
+        </div>
+
+      </form>
+
+      <hr class="my-4">
+
+      <!-- Seção de Aulas -->
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h6 class="mb-0 fw-bold text-light"><i class="fas fa-play-circle text-white-50 me-2"></i>Aulas</h6>
+        <button type="button" class="btn btn-sm btn-primary rounded-pill px-3" (click)="openLessonModal()">
+          <i class="fas fa-plus me-1"></i> Adicionar Aula
+        </button>
+      </div>
+
+      <div class="text-center py-4 bg-secondary bg-opacity-10 rounded-3 border" *ngIf="lessons.length === 0">
+        <i class="fas fa-video-slash fs-3 text-white-50 opacity-50 mb-2"></i>
+        <p class="text-white-50 small mb-0">Nenhuma aula adicionada neste módulo.</p>
+      </div>
+
+      <div class="d-flex flex-column gap-2" *ngIf="lessons.length > 0">
+        <div class="card border shadow-sm rounded-3" *ngFor="let lesson of lessons; let i = index">
+          <div class="card-body p-2 px-3 d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-3">
+              <span class="badge bg-secondary rounded-pill">{{ i + 1 }}</span>
+              <div>
+                <h6 class="mb-0 fw-semibold text-light fs-6">{{ lesson.name }}</h6>
+                <small class="text-white-50" *ngIf="lesson.durationSeconds">{{ lesson.durationSeconds / 60 | number:'1.0-0' }} minutos</small>
+              </div>
+            </div>
+            <div class="d-flex gap-1">
+              <button type="button" class="btn btn-sm btn-light rounded-circle" (click)="moveLessonUp(i)" [disabled]="i === 0" title="Subir">
+                <i class="fas fa-arrow-up text-white-50" style="font-size: 0.75rem;"></i>
+              </button>
+              <button type="button" class="btn btn-sm btn-light rounded-circle" (click)="moveLessonDown(i)" [disabled]="i === lessons.length - 1" title="Descer">
+                <i class="fas fa-arrow-down text-white-50" style="font-size: 0.75rem;"></i>
+              </button>
+              <button type="button" class="btn btn-sm btn-light rounded-circle text-primary" (click)="openLessonModal(lesson, i)" title="Editar Aula">
+                <i class="fas fa-pen" style="font-size: 0.75rem;"></i>
+              </button>
+              <button type="button" class="btn btn-sm btn-light rounded-circle text-danger" (click)="removeLesson(i)" title="Excluir Aula">
+                <i class="fas fa-trash" style="font-size: 0.75rem;"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="modal-footer bg-secondary bg-opacity-10 border-top-0 px-4 py-3 d-flex justify-content-between align-items-center">
+      <button type="button" class="btn btn-white border rounded-pill px-4 fw-semibold text-white-50 shadow-sm hover-primary transition-all" (click)="cancel()">Cancelar</button>
+      <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm text-white d-flex align-items-center gap-2" (click)="save()">
+        <i class="fas fa-save"></i> Salvar Módulo
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal de Aula Overlay (Sub-modal) -->
+<app-lesson-modal 
+  *ngIf="isLessonModalOpen" 
+  [lessonData]="selectedLesson!" 
+  (closeModal)="closeLessonModal()"
+  (saveLessonEvent)="saveLesson($event)">
+</app-lesson-modal>

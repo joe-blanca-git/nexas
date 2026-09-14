@@ -1,0 +1,428 @@
+<div class="container-fluid py-4 animated-fade-in">
+
+  <!-- SKELETON LOADER DA PÁGINA INTEIRA -->
+  <div class="row g-4 placeholder-glow" *ngIf="isInitializing">
+    <!-- Skeleton: Identificação do Usuário -->
+    <div class="col-12 col-lg-4">
+      <div class="profile-card h-100 bg-dark rounded-4 shadow border-0 overflow-hidden">
+        <div class="profile-header-bg placeholder" style="height: 100px; width: 100%;"></div>
+        <div class="text-center px-4 pb-4 position-relative" style="margin-top: -50px;">
+          <div class="avatar-profile rounded-circle mx-auto mb-3 shadow-lg bg-secondary bg-opacity-25 placeholder" style="width: 100px; height: 100px;"></div>
+          <h4 class="mb-2"><span class="placeholder col-6"></span></h4>
+          <p class="mb-3"><span class="placeholder col-8"></span></p>
+          <span class="placeholder col-4 rounded-pill py-3"></span>
+        </div>
+        <div class="border-top border-secondary border-opacity-10 p-3 p-md-4 bg-secondary bg-opacity-10 bg-opacity-50 h-100">
+          <div class="d-flex flex-column gap-3">
+            <span class="placeholder col-12 rounded py-3"></span>
+            <span class="placeholder col-12 rounded py-3"></span>
+            <span class="placeholder col-12 rounded py-3"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skeleton: Conteúdo da Aba (Dados Cadastrais simulado) -->
+    <div class="col-12 col-lg-8">
+      <div class="card bg-dark border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-header bg-transparent border-bottom border-secondary border-opacity-10 pt-3 pt-md-4 px-3 px-md-4 pb-2 pb-md-3">
+          <span class="placeholder col-3 mb-1"></span>
+        </div>
+        <div class="card-body p-3 p-md-4">
+          <div class="row g-3">
+            <div class="col-12 col-md-6"><span class="placeholder col-4 mb-1"></span><span class="placeholder col-12 form-control bg-secondary bg-opacity-10 border-0"></span></div>
+            <div class="col-12 col-md-6"><span class="placeholder col-4 mb-1"></span><span class="placeholder col-12 form-control bg-secondary bg-opacity-10 border-0"></span></div>
+            <div class="col-12 col-md-4"><span class="placeholder col-4 mb-1"></span><span class="placeholder col-12 form-control bg-secondary bg-opacity-10 border-0"></span></div>
+            <div class="col-12 col-md-4"><span class="placeholder col-4 mb-1"></span><span class="placeholder col-12 form-control bg-secondary bg-opacity-10 border-0"></span></div>
+            <div class="col-12 col-md-4"><span class="placeholder col-4 mb-1"></span><span class="placeholder col-12 form-control bg-secondary bg-opacity-10 border-0"></span></div>
+          </div>
+          <div class="d-flex justify-content-end mt-4"><span class="placeholder col-3 btn py-2 border-0"></span></div>
+        </div>
+      </div>
+      <div class="card bg-dark border-0 shadow-sm rounded-4">
+        <div class="card-header bg-transparent border-bottom border-secondary border-opacity-10 pt-3 pt-md-4 px-3 px-md-4 pb-2 pb-md-3 d-flex justify-content-between align-items-center">
+          <span class="placeholder col-4 mb-1"></span>
+          <span class="placeholder col-2 btn rounded-pill px-3 border-0"></span>
+        </div>
+        <div class="card-body p-3 p-md-4">
+          <div class="row g-3">
+            <div class="col-12 col-md-6">
+              <div class="card bg-secondary bg-opacity-10 border-0 h-100 rounded-4 p-3">
+                <span class="placeholder col-5 mb-2"></span><br>
+                <span class="placeholder col-8 mb-1"></span><br>
+                <span class="placeholder col-7 mb-1"></span><br>
+                <span class="placeholder col-4 mt-2"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTEÚDO REAL -->
+  <div class="row g-4" *ngIf="!isInitializing">
+    <!-- Identificação do Usuário -->
+    <div class="col-12 col-lg-4">
+      <div class="profile-card h-100 bg-dark rounded-4 shadow border-0 overflow-hidden">
+        <div class="profile-header-bg" style="height: 100px; background: linear-gradient(135deg, var(--bs-primary) 0%, #1e1e1e 100%);"></div>
+        <div class="text-center px-4 pb-4 position-relative" style="margin-top: -50px;">
+          <div class="avatar-profile rounded-circle mx-auto mb-3 shadow-lg d-flex justify-content-center align-items-center bg-secondary bg-opacity-25 text-white fw-bold fs-1 border border-3 border-dark overflow-hidden" style="width: 100px; height: 100px;">
+            <img *ngIf="avatarPreview" [src]="avatarPreview" class="w-100 h-100 object-fit-cover" alt="Avatar">
+            <span *ngIf="!avatarPreview">{{ getInitials(userName) }}</span>
+          </div>
+          <h4 class="fw-bold text-white mb-1">{{ userName }}</h4>
+          <p class="text-white-50 mb-3">{{ userEmail }}</p>
+          
+          <div class="badge bg-indigo-light rounded-pill px-3 py-2 fw-semibold border border-indigo opacity-75" style="color: #6b75ff;">
+            <i class="fas fa-shield-alt me-1"></i> Acesso: {{ userRole }}
+          </div>
+        </div>
+
+        <div class="border-top border-secondary border-opacity-10 p-3 p-md-4 bg-secondary bg-opacity-10 bg-opacity-50 h-100">
+          <ul class="nav nav-pills flex-column gap-2 custom-nav-pills">
+            <li class="nav-item">
+              <button class="nav-link w-100 text-start fw-semibold py-3 border-0 bg-transparent" [class.active]="activeTab === 'cadastrais'" (click)="switchTab('cadastrais')">
+                <i class="fas fa-user-edit me-2 text-center" style="width: 20px;"></i> Dados Cadastrais
+              </button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link w-100 text-start fw-semibold py-3 border-0 bg-transparent" [class.active]="activeTab === 'professor'" (click)="switchTab('professor')">
+                <i class="fas fa-chalkboard-teacher me-2 text-center" style="width: 20px;"></i> Dados do Professor
+              </button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link w-100 text-start fw-semibold py-3 border-0 bg-transparent" [class.active]="activeTab === 'seguranca'" (click)="switchTab('seguranca')">
+                <i class="fas fa-lock me-2 text-center" style="width: 20px;"></i> Segurança e Acesso
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Conteúdo da Aba -->
+    <div class="col-12 col-lg-8">
+      
+      <!-- ABA: DADOS CADASTRAIS (Igual Portal Aluno) -->
+      <div *ngIf="activeTab === 'cadastrais'" class="animated-slide-in">
+        <div class="card bg-dark border-0 shadow-sm rounded-4 mb-4">
+          <div class="card-header bg-transparent border-bottom border-secondary border-opacity-10 pt-3 pt-md-4 px-3 px-md-4 pb-2 pb-md-3">
+            <h5 class="fw-bold text-white mb-0"><i class="fas fa-address-card text-white-50 me-2"></i> Meus Dados</h5>
+          </div>
+          <div class="card-body p-3 p-md-4">
+            <form [formGroup]="personForm" (ngSubmit)="onSubmitPerson()">
+              <div class="row g-3">
+                <div class="col-12 col-md-6">
+                  <label class="form-label fw-semibold text-white small">Nome Completo</label>
+                  <input type="text" class="form-control bg-secondary bg-opacity-10 border-secondary border-opacity-25 text-white" formControlName="name">
+                </div>
+                <div class="col-12 col-md-6">
+                  <label class="form-label fw-semibold text-white small">E-mail</label>
+                  <input type="email" class="form-control bg-secondary bg-opacity-10 border-secondary border-opacity-25 text-white" formControlName="email">
+                </div>
+                <div class="col-12 col-md-4">
+                  <label class="form-label fw-semibold text-white small">Data de Nascimento</label>
+                  <input type="date" class="form-control bg-secondary bg-opacity-10 border-secondary border-opacity-25 text-white" formControlName="birthDate">
+                </div>
+                <div class="col-12 col-md-4">
+                  <label class="form-label fw-semibold text-white small">Telefone</label>
+                  <div class="input-group">
+                    <select class="form-select bg-secondary bg-opacity-10 border-secondary border-opacity-25 text-white" formControlName="countryCode" style="max-width: 120px;">
+                      <option *ngFor="let c of countries" [value]="c.code" class="text-dark">{{ c.name }}</option>
+                    </select>
+                    <input type="text" class="form-control bg-secondary bg-opacity-10 border-secondary border-opacity-25 text-white" formControlName="phone" placeholder="(11) 99999-9999" (input)="onPhoneInput($event)">
+                  </div>
+                </div>
+                <div class="col-12 col-md-4">
+                  <label class="form-label fw-semibold text-white small">Documento (CPF)</label>
+                  <input type="text" class="form-control bg-secondary bg-opacity-10 border-secondary border-opacity-25 text-white" formControlName="document" placeholder="000.000.000-00">
+                </div>
+              </div>
+              <div class="d-flex justify-content-end mt-4">
+                <button type="submit" class="btn btn-primary fw-bold px-4 py-2" [disabled]="personForm.invalid || isLoading">
+                  <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+                  Salvar Alterações
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="card bg-dark border-0 shadow-sm rounded-4">
+          <div class="card-header bg-transparent border-bottom border-secondary border-opacity-10 pt-3 pt-md-4 px-3 px-md-4 pb-2 pb-md-3 d-flex justify-content-between align-items-center">
+            <h5 class="fw-bold text-white mb-0"><i class="fas fa-map-marker-alt text-white-50 me-2"></i> Meus Endereços</h5>
+            <button class="btn btn-sm btn-outline-light rounded-pill px-3" (click)="openAddressModal()">
+              <i class="fas fa-plus me-1"></i> Adicionar
+            </button>
+          </div>
+          <div class="card-body p-3 p-md-4">
+            <div *ngIf="addresses.length === 0" class="text-center py-4 text-white-50">
+              <i class="fas fa-home fs-1 mb-3 opacity-25"></i>
+              <p class="mb-0">Nenhum endereço cadastrado.</p>
+            </div>
+            
+            <div class="row g-3">
+              <div class="col-12 col-md-6" *ngFor="let addr of addresses">
+                <div class="card bg-secondary bg-opacity-10 border-secondary border-opacity-25 h-100 rounded-4">
+                  <div class="card-body position-relative">
+                    <div class="position-absolute top-0 end-0 mt-3 me-3">
+                      <button class="btn btn-sm btn-link text-white-50 p-0 me-3" (click)="openAddressModal(addr)"><i class="fas fa-edit"></i></button>
+                      <button class="btn btn-sm btn-link text-danger p-0" (click)="deleteAddress(addr.id)"><i class="fas fa-trash-alt"></i></button>
+                    </div>
+                    <h6 class="fw-bold text-white mb-2"><i class="fas fa-map-pin me-2 text-primary"></i>{{ addr.description }}</h6>
+                    <p class="text-white-50 small mb-1">{{ addr.street }}, {{ addr.number }}<span *ngIf="addr.complement"> - {{ addr.complement }}</span></p>
+                    <p class="text-white-50 small mb-1">{{ addr.neighborhood }}, {{ addr.city }} - {{ addr.state }}</p>
+                    <p class="text-white-50 small mb-0"><i class="fas fa-envelope-open-text me-1 opacity-50"></i> {{ addr.zipCode }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ABA: DADOS DO PROFESSOR -->
+      <div *ngIf="activeTab === 'professor'" class="animated-slide-in">
+        <div class="card bg-dark border-0 shadow-sm rounded-4 mb-4">
+          <div class="card-header bg-transparent border-bottom border-secondary border-opacity-10 pt-3 pt-md-4 px-3 px-md-4 pb-2 pb-md-3">
+            <h5 class="fw-bold text-white mb-0"><i class="fas fa-chalkboard-teacher text-white-50 me-2"></i> Perfil do Professor</h5>
+          </div>
+          <div class="card-body p-3 p-md-4">
+            
+            <!-- SKELETON LOADER -->
+            <div *ngIf="isFetchingTeacher" class="placeholder-glow">
+              <div class="row g-3">
+                <div class="col-12 mb-3">
+                  <span class="placeholder col-2 mb-1"></span>
+                  <div class="d-flex align-items-center gap-3">
+                    <span class="placeholder rounded-circle" style="width: 60px; height: 60px;"></span>
+                    <div class="flex-grow-1">
+                      <span class="placeholder col-8 mb-1"></span><br>
+                      <span class="placeholder col-4"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <span class="placeholder col-2 mb-1"></span>
+                  <span class="placeholder col-12 form-control bg-secondary bg-opacity-10 border-0"></span>
+                </div>
+                <div class="col-12 col-md-6">
+                  <span class="placeholder col-3 mb-1"></span>
+                  <span class="placeholder col-12 form-control bg-secondary bg-opacity-10 border-0"></span>
+                </div>
+                <div class="col-12 col-md-6">
+                  <span class="placeholder col-3 mb-1"></span>
+                  <span class="placeholder col-12 form-control bg-secondary bg-opacity-10 border-0"></span>
+                </div>
+                <div class="col-12 col-md-6">
+                  <span class="placeholder col-3 mb-1"></span>
+                  <span class="placeholder col-12 form-control bg-secondary bg-opacity-10 border-0"></span>
+                </div>
+                <div class="col-12 col-md-6">
+                  <span class="placeholder col-3 mb-1"></span>
+                  <span class="placeholder col-12 form-control bg-secondary bg-opacity-10 border-0"></span>
+                </div>
+                <div class="col-12">
+                  <span class="placeholder col-2 mb-1"></span>
+                  <span class="placeholder col-12 form-control bg-secondary bg-opacity-10 border-0" style="height: 100px;"></span>
+                </div>
+                <div class="col-12 d-flex justify-content-end mt-4">
+                  <span class="placeholder col-3 btn btn-primary py-2 border-0"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- FORMULÁRIO -->
+            <form *ngIf="!isFetchingTeacher" [formGroup]="teacherForm" (ngSubmit)="onSubmitTeacher()">
+              <div class="row g-3">
+                
+                <div class="col-12 mb-3">
+                  <label class="form-label text-white small fw-semibold">Avatar</label>
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="bg-secondary bg-opacity-25 border border-secondary border-opacity-25 rounded-circle d-flex align-items-center justify-content-center overflow-hidden flex-shrink-0" style="width: 60px; height: 60px;">
+                      <img *ngIf="avatarPreview" [src]="avatarPreview" alt="Avatar" class="w-100 h-100 object-fit-cover">
+                      <i *ngIf="!avatarPreview" class="fas fa-user-circle text-white-50 fs-3"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                      <input type="file" class="form-control bg-secondary bg-opacity-10 border-secondary border-opacity-25 text-white" accept="image/*" (change)="onAvatarSelected($event)">
+                      <small class="text-white-50 d-block mt-1">Apenas imagens (Max 1MB)</small>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12 col-md-12">
+                  <label class="form-label fw-semibold text-white small">Nome Completo <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control bg-secondary bg-opacity-10 border-secondary border-opacity-25 text-white" formControlName="name">
+                  <div *ngIf="teacherForm.get('name')?.invalid && teacherForm.get('name')?.touched" class="text-danger small mt-1">Nome é obrigatório.</div>
+                </div>
+                
+                <div class="col-12 col-md-6">
+                  <label class="form-label fw-semibold text-white small">Papel (Role)</label>
+                  <input type="text" class="form-control bg-secondary bg-opacity-10 border-secondary border-opacity-25 text-white" formControlName="role">
+                </div>
+                
+                <div class="col-12 col-md-6">
+                  <label class="form-label fw-semibold text-white small">Cargo (Position)</label>
+                  <input type="text" class="form-control bg-secondary bg-opacity-10 border-secondary border-opacity-25 text-white" formControlName="position" placeholder="Ex: Professor Titular">
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label fw-semibold text-white small">Instagram (Link)</label>
+                  <input type="text" class="form-control bg-secondary bg-opacity-10 border-secondary border-opacity-25 text-white" formControlName="instagramLink" placeholder="https://instagram.com/...">
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label fw-semibold text-white small">LinkedIn (Link)</label>
+                  <input type="text" class="form-control bg-secondary bg-opacity-10 border-secondary border-opacity-25 text-white" formControlName="linkedinLink" placeholder="https://linkedin.com/in/...">
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label fw-semibold text-white small">Biografia</label>
+                  <textarea class="form-control bg-secondary bg-opacity-10 border-secondary border-opacity-25 text-white" rows="4" formControlName="bio" placeholder="Breve currículo ou biografia"></textarea>
+                </div>
+
+              </div>
+              <div class="d-flex justify-content-end mt-4">
+                <button type="submit" class="btn btn-primary fw-bold px-4 py-2" [disabled]="teacherForm.invalid || isLoading">
+                  <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+                  Salvar Perfil de Professor
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- ABA: SEGURANÇA -->
+      <div *ngIf="activeTab === 'seguranca'" class="animated-slide-in">
+        <div class="card bg-dark border-0 shadow-sm rounded-4 h-100">
+          <div class="card-header bg-transparent border-bottom border-secondary border-opacity-10 pt-3 pt-md-4 px-3 px-md-4 pb-2 pb-md-3">
+            <h5 class="fw-bold text-white mb-0"><i class="fas fa-lock text-white-50 me-2"></i> Segurança e Acesso</h5>
+          </div>
+          <div class="card-body p-3 p-md-4">
+            
+            <div class="alert alert-primary bg-primary bg-opacity-10 border-0 rounded-3 mb-4 d-flex align-items-center">
+              <i class="fas fa-info-circle fs-4 text-primary me-3"></i>
+              <div class="small fw-semibold" style="color: #ff6b6b;">
+                Recomendamos que você altere sua senha periodicamente para manter a segurança da sua conta. Use pelo menos 6 caracteres.
+              </div>
+            </div>
+
+            <form (submit)="onSubmitPassword($event)">
+              <div class="row mb-4">
+                <div class="col-12 col-md-8 col-lg-7">
+                  <label class="form-label fw-semibold text-white small">Senha Atual</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-secondary bg-opacity-10 border-end-0 text-white-50 border-secondary border-opacity-25"><i class="fas fa-key"></i></span>
+                    <input [type]="showCurrentPassword ? 'text' : 'password'" class="form-control bg-secondary bg-opacity-10 border-start-0 border-end-0 ps-0 fs-6 text-white border-secondary border-opacity-25" placeholder="Digite sua senha atual" [(ngModel)]="currentPassword" name="currentPassword" required>
+                    <button type="button" class="btn btn-outline-secondary border-secondary border-opacity-25 bg-secondary bg-opacity-10 text-white-50 border-start-0" (click)="showCurrentPassword = !showCurrentPassword" tabindex="-1">
+                      <i class="fas" [ngClass]="showCurrentPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <hr class="border-secondary border-opacity-10 mb-4">
+
+              <div class="row g-3 mb-4">
+                <div class="col-12 col-md-6">
+                  <label class="form-label fw-semibold text-white small">Nova Senha</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-secondary bg-opacity-10 border-end-0 text-white-50 border-secondary border-opacity-25"><i class="fas fa-lock"></i></span>
+                    <input [type]="showNewPassword ? 'text' : 'password'" class="form-control bg-secondary bg-opacity-10 border-start-0 border-end-0 ps-0 fs-6 text-white border-secondary border-opacity-25" placeholder="Nova senha segura" [(ngModel)]="newPassword" name="newPassword" required minlength="6">
+                    <button type="button" class="btn btn-outline-secondary border-secondary border-opacity-25 bg-secondary bg-opacity-10 text-white-50 border-start-0" (click)="showNewPassword = !showNewPassword" tabindex="-1">
+                      <i class="fas" [ngClass]="showNewPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <label class="form-label fw-semibold text-white small">Confirmar Nova Senha</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-secondary bg-opacity-10 border-end-0 text-white-50 border-secondary border-opacity-25"><i class="fas fa-lock"></i></span>
+                    <input [type]="showConfirmPassword ? 'text' : 'password'" class="form-control bg-secondary bg-opacity-10 border-start-0 border-end-0 ps-0 fs-6 text-white border-secondary border-opacity-25" placeholder="Repita a nova senha" [(ngModel)]="confirmPassword" name="confirmPassword" required minlength="6">
+                    <button type="button" class="btn btn-outline-secondary border-secondary border-opacity-25 bg-secondary bg-opacity-10 text-white-50 border-start-0" (click)="showConfirmPassword = !showConfirmPassword" tabindex="-1">
+                      <i class="fas" [ngClass]="showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="d-flex flex-column flex-sm-row justify-content-end gap-2 mt-4">
+                <button type="button" class="btn btn-light fw-semibold px-4 py-2 w-100 w-sm-auto order-2 order-sm-1" (click)="currentPassword=''; newPassword=''; confirmPassword=''">Cancelar</button>
+                <button type="submit" class="btn btn-primary fw-bold px-4 py-2 d-flex align-items-center justify-content-center gap-2 w-100 w-sm-auto order-1 order-sm-2 shadow-sm" [disabled]="isSubmitting">
+                  <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  {{ isSubmitting ? 'Atualizando...' : 'Atualizar Senha' }}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ENDEREÇO -->
+<div class="modal fade show d-block" *ngIf="showAddressModal" tabindex="-1" style="background: rgba(0,0,0,0.85); z-index: 1055;">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content bg-dark border-secondary border-opacity-25 shadow-lg rounded-4">
+      <div class="modal-header border-bottom border-secondary border-opacity-10 p-3 p-md-4">
+        <h5 class="modal-title fw-bold text-white"><i class="fas fa-map-marked-alt text-primary me-2"></i>{{ isEditingAddress ? 'Editar Endereço' : 'Novo Endereço' }}</h5>
+        <button type="button" class="btn-close btn-close-white" (click)="closeAddressModal()"></button>
+      </div>
+      <div class="modal-body p-3 p-md-4">
+        <form [formGroup]="addressForm">
+          <div class="row g-3">
+            <div class="col-12 col-md-4">
+              <label class="form-label text-white small fw-semibold">Identificação (Ex: Casa)</label>
+              <input type="text" class="form-control bg-secondary bg-opacity-10 border-secondary border-opacity-25 text-white" formControlName="description">
+            </div>
+            <div class="col-12 col-md-4">
+              <label class="form-label text-white small fw-semibold">CEP</label>
+              <input type="text" class="form-control bg-secondary bg-opacity-10 border-secondary border-opacity-25 text-white" formControlName="zipCode" (input)="onCepInput($event)" (blur)="onCepChange()" placeholder="00000-000">
+            </div>
+            <div class="col-12 col-md-8">
+              <label class="form-label text-white small fw-semibold">Rua / Logradouro</label>
+              <input type="text" class="form-control bg-secondary bg-opacity-10 border-secondary border-opacity-25 text-white" formControlName="street">
+            </div>
+            <div class="col-12 col-md-4">
+              <label class="form-label text-white small fw-semibold">Número</label>
+              <input type="text" class="form-control bg-secondary bg-opacity-10 border-secondary border-opacity-25 text-white" formControlName="number">
+            </div>
+            <div class="col-12 col-md-4">
+              <label class="form-label text-white small fw-semibold">Complemento</label>
+              <input type="text" class="form-control bg-secondary bg-opacity-10 border-secondary border-opacity-25 text-white" formControlName="complement">
+            </div>
+            <div class="col-12 col-md-4">
+              <label class="form-label text-white small fw-semibold">Bairro</label>
+              <input type="text" class="form-control bg-secondary bg-opacity-10 border-secondary border-opacity-25 text-white" formControlName="neighborhood">
+            </div>
+            <div class="col-12 col-md-4">
+              <label class="form-label text-white small fw-semibold">Cidade</label>
+              <input type="text" class="form-control bg-secondary bg-opacity-10 border-secondary border-opacity-25 text-white" formControlName="city">
+            </div>
+            <div class="col-12 col-md-4">
+              <label class="form-label text-white small fw-semibold">Estado (UF)</label>
+              <input type="text" class="form-control bg-secondary bg-opacity-10 border-secondary border-opacity-25 text-white" formControlName="state">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer border-top border-secondary border-opacity-10 p-3 p-md-4">
+        <button type="button" class="btn btn-light fw-semibold px-4" (click)="closeAddressModal()">Cancelar</button>
+        <button type="button" class="btn btn-primary fw-bold px-4" [disabled]="addressForm.invalid || isLoading" (click)="onSubmitAddress()">
+          <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+          Salvar Endereço
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="custom-floating-toast rounded-4 p-3 shadow-lg border-0 d-flex align-items-center gap-2.5 animated-slide-in" [ngClass]="toastClass" *ngIf="showToast">
+  <i class="fas fs-5" [ngClass]="toastClass.includes('danger') ? 'fa-exclamation-circle' : 'fa-check-circle'"></i>
+  <span class="small fw-semibold">{{ toastMessage }}</span>
+</div>

@@ -1,0 +1,413 @@
+/* ═══════════════════════════════════════════════════════
+   home.component.scss — Nexas Portal Professor Layout
+   Todas as cores referenciam a paleta central em _variables.scss
+   ═══════════════════════════════════════════════════════ */
+
+@import '../../../../../styles/variables';
+
+$transition-speed: 0.3s;
+$cubic-bezier: cubic-bezier(0.4, 0, 0.2, 1);
+
+:host {
+  display: block;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+  background-color: $bg-principal;
+  font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* ─── Layout Structure ─────────────────────────── */
+#wrapper {
+  overflow-x: hidden;
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* ─── Sidebar ──────────────────────────────────── */
+.sidebar {
+  width: 260px;
+  min-height: 100vh;
+  background-color: $bg-navbar-sidebar !important;
+  transition: width $transition-speed $cubic-bezier;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 1000;
+  overflow: hidden;
+  border-right: 1px solid $border-subtle;
+
+  &.collapsed {
+    width: 80px;
+
+    .brand-text, .menu-nav-text, .sidebar-widget, .sidebar-collapse-trigger span {
+      display: none !important;
+    }
+
+    .sidebar-logo {
+      width: 42px;
+      margin: 0 auto;
+    }
+
+    .logo-wrapper {
+      width: 100%;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
+
+.sidebar-logo {
+  width: 100px;
+  height: auto;
+  transition: all $transition-speed $cubic-bezier;
+}
+
+.sidebar-menu-list {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 2px;
+  }
+}
+
+.bg-dark-widget {
+  background-color: $bg-surface;
+}
+
+.progress-bar.bg-success-glow {
+  background-color: $success !important;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+}
+
+.sidebar-collapse-trigger {
+  color: $text-secondary !important;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: $text-title !important;
+  }
+}
+
+/* ─── Main Layout & Navbar ─────────────────────── */
+.main-layout-wrapper {
+  margin-left: 260px;
+  transition: margin-left $transition-speed $cubic-bezier;
+  min-height: 100vh;
+  background-color: $bg-principal;
+  width: calc(100% - 260px);
+  max-width: 100%;
+  min-width: 0;
+
+  &.shifted {
+    margin-left: 80px;
+    width: calc(100% - 80px);
+  }
+
+  @media (max-width: 768px) {
+    margin-left: 0 !important;
+    width: 100% !important;
+    overflow-x: hidden;
+  }
+}
+
+/* Navbar — MESMA COR da Sidebar (#151515) */
+.navbar {
+  height: 70px;
+  background-color: $bg-navbar-sidebar !important;
+  backdrop-filter: none;
+  z-index: 999;
+  border-bottom: 1px solid $border-subtle !important;
+}
+
+.header-menu-toggle {
+  &:hover {
+    background-color: $hover-bg;
+  }
+}
+
+.header-icon-btn {
+  &:hover {
+    background-color: $hover-bg !important;
+  }
+}
+
+/* ─── Avatars ──────────────────────────────────── */
+.avatar-circle-sm {
+  width: 34px;
+  height: 34px;
+  font-size: 0.8rem;
+  letter-spacing: 0.02rem;
+}
+
+.avatar-circle-lg {
+  width: 76px;
+  height: 76px;
+}
+
+.bg-gradient-avatar {
+  background: linear-gradient(135deg, $nexas-primary 0%, darken($nexas-primary, 15%) 100%);
+}
+
+/* ─── Dropdowns ────────────────────────────────── */
+.dropdown-menu-custom {
+  display: block;
+  pointer-events: auto;
+  border-radius: 1rem !important;
+  border: 1px solid $border-subtle !important;
+  background-color: $bg-modais-dropdowns !important;
+}
+
+.notification-item-card {
+  border-left: 3px solid transparent;
+
+  &.unread-bg {
+    background-color: $nexas-primary-light;
+    border-left-color: $nexas-primary;
+  }
+
+  &:hover {
+    background-color: $hover-bg;
+  }
+}
+
+.list-scroll-container {
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: $border-subtle;
+    border-radius: 3px;
+  }
+}
+
+.dropdown-item {
+  &.text-muted-hover:hover {
+    background-color: $hover-bg;
+    color: $text-title !important;
+  }
+
+  &.transition-bg-danger:hover {
+    background-color: rgba($danger, 0.1);
+    color: $danger !important;
+  }
+}
+
+/* ─── Metric Cards ─────────────────────────────── */
+.metric-card {
+  transition: all 0.25s ease-in-out;
+  border: 1px solid $border-subtle !important;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: $box-shadow !important;
+  }
+}
+
+/* ─── Course Cards ─────────────────────────────── */
+.course-interactive-card {
+  border: 1px solid $border-subtle !important;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: $box-shadow-lg !important;
+  }
+}
+
+.course-gradient-banner {
+  padding: 1.5rem !important;
+}
+
+.text-truncate-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ─── Tables ───────────────────────────────────── */
+.table-dark-header {
+  th {
+    background-color: $bg-navbar-sidebar !important;
+    color: $text-title !important;
+    font-weight: 600 !important;
+    font-size: 0.78rem !important;
+    letter-spacing: 0.02rem;
+    padding: 1rem 0.75rem !important;
+    border-bottom: 1px solid $border-subtle !important;
+
+    &:first-child {
+      border-top-left-radius: 0.75rem !important;
+    }
+    &:last-child {
+      border-top-right-radius: 0.75rem !important;
+    }
+  }
+}
+
+.custom-grades-table, .custom-financial-table, .custom-secretaria-table {
+  tbody tr {
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid $border-subtle !important;
+
+    &:hover {
+      background-color: $hover-bg !important;
+    }
+
+    td {
+      padding: 1rem 0.75rem !important;
+      border: none !important;
+    }
+  }
+}
+
+.bg-warning-light {
+  background-color: rgba($warning, 0.1) !important;
+  color: $warning !important;
+}
+
+.bg-success-light {
+  background-color: rgba($success, 0.08) !important;
+  color: $success !important;
+}
+
+/* ─── FAQ Accordion ────────────────────────────── */
+.faq-accordion-item {
+  border: 1px solid $border-subtle !important;
+  overflow: hidden;
+
+  &.faq-open {
+    border-color: rgba($nexas-primary, 0.3) !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2) !important;
+
+    button {
+      background-color: $nexas-primary-light !important;
+    }
+  }
+}
+
+/* ─── Modals ───────────────────────────────────── */
+.custom-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 1rem;
+}
+
+.custom-modal-box {
+  width: 100%;
+  max-width: 500px;
+  background-color: $bg-modais-dropdowns;
+  border: 1px solid $border-subtle;
+}
+
+/* ─── Toasts ───────────────────────────────────── */
+.custom-floating-toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 3000;
+  min-width: 250px;
+  border: 1px solid $border-subtle;
+  box-shadow: $box-shadow-lg !important;
+
+  @media (max-width: 576px) {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    min-width: 0;
+    width: calc(100% - 2rem);
+  }
+}
+
+/* Mobile dropdown */
+@media (max-width: 576px) {
+  .dropdown-menu-custom {
+    width: calc(100vw - 2rem) !important;
+    max-width: 320px !important;
+    right: -10px !important;
+  }
+}
+
+/* ─── Animations ───────────────────────────────── */
+.animated-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.animated-slide-in {
+  animation: slideInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-scale-up {
+  animation: scaleUp 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes scaleUp {
+  from { transform: scale(0.92); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* ─── Responsive Sidebar Drawer ────────────────── */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(0);
+    width: 280px !important;
+    box-shadow: 0 0 24px rgba(0, 0, 0, 0.4) !important;
+
+    .brand-text, .menu-nav-text, .sidebar-widget, .sidebar-collapse-trigger span {
+      display: inline-block !important;
+    }
+
+    .sidebar-logo {
+      width: 100px;
+    }
+
+    &.collapsed {
+      transform: translateX(-100%);
+      width: 280px !important;
+      box-shadow: none !important;
+    }
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

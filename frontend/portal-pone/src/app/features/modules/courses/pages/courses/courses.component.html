@@ -1,0 +1,1193 @@
+<div class="tab-pane-content animated-fade-in p-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h5 class="fw-bold mb-0">Gestão e Listagem de Cursos</h5>
+  </div>
+
+  <!-- Discreet Metrics Dashboard -->
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+      <div class="card border-0 shadow-sm rounded-4 h-100 px-3 py-3 d-flex align-items-center justify-content-center text-center">
+        <div class="text-white-50 small fw-semibold text-uppercase mb-1" style="font-size: 0.7rem; letter-spacing: 0.5px;">Cursos Ativos</div>
+        <h3 class="fw-bold mb-0 text-white" *ngIf="!isLoading">{{ totalCourses }}</h3>
+        <div class="skeleton rounded" style="height: 30px; width: 50px;" *ngIf="isLoading"></div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card border-0 shadow-sm rounded-4 h-100 px-3 py-3 d-flex align-items-center justify-content-center text-center">
+        <div class="text-white-50 small fw-semibold text-uppercase mb-1" style="font-size: 0.7rem; letter-spacing: 0.5px;">Total de Módulos</div>
+        <h3 class="fw-bold mb-0 text-success" *ngIf="!isLoading">{{ totalModules }}</h3>
+        <div class="skeleton rounded" style="height: 30px; width: 50px;" *ngIf="isLoading"></div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card border-0 shadow-sm rounded-4 h-100 px-3 py-3 d-flex align-items-center justify-content-center text-center">
+        <div class="text-white-50 small fw-semibold text-uppercase mb-1" style="font-size: 0.7rem; letter-spacing: 0.5px;">Total de Aulas</div>
+        <h3 class="fw-bold mb-0 text-primary" *ngIf="!isLoading">{{ totalLessons }}</h3>
+        <div class="skeleton rounded" style="height: 30px; width: 50px;" *ngIf="isLoading"></div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card border-0 shadow-sm rounded-4 h-100 px-3 py-3 d-flex align-items-center justify-content-center text-center">
+        <div class="text-white-50 small fw-semibold text-uppercase mb-1" style="font-size: 0.7rem; letter-spacing: 0.5px;">Carga Horária Total</div>
+        <div class="d-flex align-items-center gap-2" *ngIf="!isLoading">
+          <h3 class="fw-bold mb-0 text-warning">{{ averageWorkload }}h</h3>
+        </div>
+        <div class="skeleton rounded" style="height: 30px; width: 80px;" *ngIf="isLoading"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Courses Table -->
+  <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
+    <div class="card-body p-4 bg-light bg-opacity-50">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 class="fw-bold mb-0">Listagem de Cursos</h5>
+        <button class="btn btn-primary px-4 rounded-pill shadow-sm" (click)="openNewCourseModal()">
+          <i class="fas fa-plus me-2"></i> Novo Curso
+        </button>
+      </div>
+      
+      <!-- Loading State (Skeleton Table) -->
+      <div class="table-responsive bg-white rounded-3 shadow-sm" *ngIf="isLoading">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th scope="col" class="ps-4">Curso</th>
+              <th scope="col">Nível</th>
+              <th scope="col">Módulos</th>
+              <th scope="col">Aulas</th>
+              <th scope="col">Domínios</th>
+              <th scope="col">Professores</th>
+              <th scope="col">Preço</th>
+              <th scope="col" class="pe-4 text-end">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let i of [1,2,3]" class="border-bottom">
+              <td class="ps-4 py-3">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="skeleton rounded-3" style="width: 48px; height: 48px; flex-shrink: 0;"></div>
+                  <div class="w-100">
+                    <div class="skeleton rounded mb-2" style="height: 16px; width: 60%; max-width: 200px;"></div>
+                    <div class="skeleton rounded" style="height: 12px; width: 40%; max-width: 150px;"></div>
+                  </div>
+                </div>
+              </td>
+              <td class="py-3">
+                <div class="skeleton rounded-pill" style="height: 24px; width: 80px;"></div>
+              </td>
+              <td class="py-3">
+                <div class="skeleton rounded" style="height: 16px; width: 70px;"></div>
+              </td>
+              <td class="py-3">
+                <div class="skeleton rounded" style="height: 16px; width: 70px;"></div>
+              </td>
+              <td class="py-3">
+                <div class="skeleton rounded" style="height: 16px; width: 70px;"></div>
+              </td>
+              <td class="py-3">
+                <div class="skeleton rounded" style="height: 16px; width: 70px;"></div>
+              </td>
+              <td class="py-3">
+                <div class="skeleton rounded" style="height: 16px; width: 60px;"></div>
+              </td>
+              <td class="py-3 text-center">
+                <div class="skeleton rounded-pill d-inline-block" style="height: 24px; width: 60px;"></div>
+              </td>
+              <td class="pe-4 py-3 text-end">
+                <div class="skeleton rounded-pill d-inline-block" style="height: 30px; width: 90px;"></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Empty State -->
+      <div class="text-center py-5 bg-white rounded-3 shadow-sm" *ngIf="!isLoading && courses.length === 0">
+        <i class="fas fa-folder-open text-muted fs-1 mb-3 opacity-50"></i>
+        <h6 class="text-muted mb-0">Nenhum curso encontrado.</h6>
+      </div>
+
+      <!-- Table View -->
+      <div class="table-responsive bg-white rounded-3 shadow-sm" *ngIf="!isLoading && courses.length > 0">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th scope="col" class="ps-4">Curso</th>
+              <th scope="col">Nível</th>
+              <th scope="col">Módulos</th>
+              <th scope="col">Aulas</th>
+              <th scope="col">Domínios</th>
+              <th scope="col">Professores</th>
+              <th scope="col">Preço</th>
+              <th scope="col" class="text-center">Status</th>
+              <th scope="col" class="pe-4 text-end" *ngIf="isAdmin">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let course of courses; trackBy: trackById">
+              <td class="ps-4 py-3">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center shadow-sm" style="width: 48px; height: 48px; overflow: hidden; border: 1px solid rgba(0,0,0,0.05); flex-shrink: 0;">
+                    <img *ngIf="course.imgCoverLink" [src]="course.imgCoverLink" alt="{{ course.name }}" class="w-100 h-100 object-fit-cover" onerror="this.style.display='none'">
+                    <i *ngIf="!course.imgCoverLink" class="fas fa-image"></i>
+                  </div>
+                  <div>
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                      <h6 class="mb-0 fw-semibold text-dark text-truncate" style="max-width: 200px;">{{ course.name }}</h6>
+                      <button class="btn btn-sm btn-light text-primary rounded-circle p-1 d-flex align-items-center justify-content-center shadow-sm" style="width: 24px; height: 24px;" (click)="openEditCourseModal(course)" title="Editar Curso">
+                        <i class="fas fa-pen" style="font-size: 0.7rem;"></i>
+                      </button>
+                    </div>
+                    <small class="text-muted text-truncate d-block" style="max-width: 240px;">{{ course.descriptionSub || 'Sem subtítulo' }}</small>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="badge rounded-pill bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 px-3 py-2">{{ course.level || 'Não definido' }}</span>
+              </td>
+              <td class="text-muted">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2 border border-primary border-opacity-25">{{ course.modules.length || 0 }} módulos</span>
+                  <button class="btn btn-sm btn-light text-primary rounded-circle p-1 d-flex align-items-center justify-content-center shadow-sm" style="width: 32px; height: 32px;" (click)="openModuleListModal(course)" title="Ver Módulos">
+                    <i class="fas fa-list"></i>
+                  </button>
+                  <button class="btn btn-sm btn-light text-primary rounded-circle p-1 d-flex align-items-center justify-content-center shadow-sm" style="width: 32px; height: 32px;" (click)="openAddModuleModal(course.id)" title="Adicionar Módulo">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </div>
+              </td>
+              <td class="text-muted">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 py-2 border border-danger border-opacity-25">{{ getCourseLessonsCount(course) }} aulas</span>
+                  <button class="btn btn-sm btn-light text-danger rounded-circle p-1 d-flex align-items-center justify-content-center shadow-sm" style="width: 32px; height: 32px;" (click)="openLessonListModal(course)" title="Ver Aulas">
+                    <i class="fas fa-list"></i>
+                  </button>
+                  <button class="btn btn-sm btn-light text-danger rounded-circle p-1 d-flex align-items-center justify-content-center shadow-sm" style="width: 32px; height: 32px;" (click)="openAddLessonModal(course)" title="Adicionar Aula">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </div>
+              </td>
+              <td class="text-muted">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="badge bg-info bg-opacity-10 text-info rounded-pill px-3 py-2 border border-info border-opacity-25">{{ course.domains.length || 0 }} domínios</span>
+                  <button class="btn btn-sm btn-light text-info rounded-circle p-1 d-flex align-items-center justify-content-center shadow-sm" style="width: 32px; height: 32px;" (click)="openDomainListModal(course)" title="Ver Domínios">
+                    <i class="fas fa-list"></i>
+                  </button>
+                  <button class="btn btn-sm btn-light text-info rounded-circle p-1 d-flex align-items-center justify-content-center shadow-sm" style="width: 32px; height: 32px;" (click)="openAddDomainModal(course.id)" title="Adicionar Domínio">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </div>
+              </td>
+              <td class="text-muted">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="badge text-uppercase bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 rounded-pill px-3 py-2">{{ course.teachers.length || 0 }} professores</span>
+                  <button class="btn btn-sm btn-light text-secondary rounded-circle p-1 d-flex align-items-center justify-content-center shadow-sm" style="width: 32px; height: 32px;" (click)="openTeacherListModal(course)" title="Ver Professores">
+                    <i class="fas fa-list"></i>
+                  </button>
+                  <button class="btn btn-sm btn-light text-secondary rounded-circle p-1 d-flex align-items-center justify-content-center shadow-sm" style="width: 32px; height: 32px;" (click)="openAssignTeacherModal(course.id)" title="Vincular Professor">
+                    <i class="fas fa-link"></i>
+                  </button>
+                </div>
+              </td>
+              <td class="fw-bold text-success fs-6">
+                R$ {{ course.priceSingle }}
+              </td>
+              <td class="text-center d-flex flex-column align-items-center gap-1 justify-content-center h-100 py-3">
+                <span class="badge rounded-pill px-3 py-2 border shadow-sm"
+                      [ngClass]="course.active ? 'bg-success bg-opacity-10 text-success border-success' : 'bg-secondary bg-opacity-10 text-secondary border-secondary'">
+                  <i class="fas fa-circle fs-7 me-1" [class.text-success]="course.active" [class.text-secondary]="!course.active" style="font-size: 0.6rem;"></i>
+                  {{ course.active ? 'Ativo' : 'Inativo' }}
+                </span>
+                <span *ngIf="course.isComingSoon" class="badge rounded-pill px-3 py-1 bg-warning text-dark shadow-sm border border-warning" style="font-size: 0.7rem;">
+                  <i class="fas fa-star me-1"></i> Vem aí
+                </span>
+              </td>
+              <td class="pe-4 text-end" *ngIf="isAdmin">
+                <button class="btn btn-sm border shadow-sm rounded-pill px-4 fw-semibold transition-all"
+                        [ngClass]="course.active ? 'btn-outline-danger hover-danger' : 'btn-outline-success hover-success'"
+                        (click)="toggleCourseStatus(course)">
+                  {{ course.active ? 'Desativar Curso' : 'Ativar Curso' }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Course Modal -->
+<div class="modal fade" id="courseModal" tabindex="-1" #courseModal>
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content rounded-4 border-0 shadow-lg d-flex flex-column" style="height: 90vh;">
+      <!-- Premium Header -->
+      <div class="modal-header bg-dark border-bottom-0 pb-3 pt-4 px-4 rounded-top-4 position-relative overflow-hidden flex-shrink-0">
+        <div class="position-absolute top-0 end-0 p-3 opacity-25">
+          <i class="fas fa-graduation-cap text-white" style="font-size: 8rem; transform: translate(20%, -30%);"></i>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <div class="bg-success bg-opacity-10 text-success rounded-circle d-flex align-items-center justify-content-center shadow-sm flex-shrink-0" style="width: 48px; height: 48px;">
+            <i class="fas fa-graduation-cap fs-5"></i>
+          </div>
+          <div>
+            <h5 class="modal-title fw-bolder text-white mb-0 fs-5">{{ courseToEdit ? 'Editar Curso' : 'Novo Curso' }}</h5>
+            
+          </div>
+        </div>
+        <button type="button" class="btn-close position-absolute top-0 end-0 mt-4 me-4" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form [formGroup]="courseForm" (ngSubmit)="saveCourse()" class="d-flex flex-column overflow-hidden flex-grow-1">
+        <div class="modal-body bg-secondary bg-opacity-10 p-4 overflow-auto custom-scrollbar flex-grow-1">
+          <div class="row g-4">
+            
+            <!-- Bloco Principal -->
+            <div class="col-lg-8">
+              <div class="bg-dark p-4 rounded-4 shadow-sm border-0 h-100">
+                <h6 class="fw-bold mb-4 text-primary"><i class="fas fa-info-circle me-2"></i>Informações Principais</h6>
+                <div class="row g-3">
+                  <div class="col-12">
+                    <label class="form-label small fw-bold text-white-50 text-uppercase" style="letter-spacing: 0.5px; font-size: 0.7rem;">Nome do Curso <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-lg fs-6 border-light-subtle" formControlName="name" placeholder="Ex: Masterclass de Angular">
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label small fw-bold text-white-50 text-uppercase" style="letter-spacing: 0.5px; font-size: 0.7rem;">Sub-título (Curto)</label>
+                    <input type="text" class="form-control border-light-subtle" formControlName="descriptionSub" placeholder="Uma frase de efeito para a capa...">
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label small fw-bold text-white-50 text-uppercase" style="letter-spacing: 0.5px; font-size: 0.7rem;">Descrição Completa <span class="text-danger">*</span></label>
+                    <textarea class="form-control border-light-subtle" rows="5" formControlName="description" placeholder="Descreva o que o aluno vai aprender..."></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bloco Lateral -->
+            <div class="col-lg-4">
+              <div class="bg-dark p-4 rounded-4 shadow-sm border-0 h-100">
+                <h6 class="fw-bold mb-4 text-primary"><i class="fas fa-tags me-2"></i>Classificação</h6>
+                <div class="row g-4">
+                  <div class="col-12">
+                    <label class="form-label small fw-bold text-white-50 text-uppercase" style="letter-spacing: 0.5px; font-size: 0.7rem;">Categoria <span class="text-danger">*</span></label>
+                    <select class="form-select border-light-subtle" formControlName="categoryId">
+                      <option value="" disabled selected>Selecione...</option>
+                      <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name }}</option>
+                    </select>
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label small fw-bold text-white-50 text-uppercase" style="letter-spacing: 0.5px; font-size: 0.7rem;">Nível <span class="text-danger">*</span></label>
+                    <select class="form-select border-light-subtle" formControlName="level">
+                      <option value="Iniciante">Iniciante</option>
+                      <option value="Intermediário">Intermediário</option>
+                      <option value="Avançado">Avançado</option>
+                    </select>
+                  </div>
+                  
+                  <div class="col-12 mt-4">
+                    <hr class="border-secondary border-opacity-25 my-0">
+                  </div>
+
+                  <div class="col-12">
+                    <div class="form-check form-switch d-flex align-items-center gap-2">
+                      <input class="form-check-input" type="checkbox" role="switch" id="isComingSoonSwitch" formControlName="isComingSoon" style="width: 2.5em; height: 1.25em;">
+                      <label class="form-check-label fw-bold text-white mb-0" for="isComingSoonSwitch">Vem aí (Estreia)</label>
+                    </div>
+                  </div>
+
+                  <div class="col-12" *ngIf="courseForm.get('isComingSoon')?.value">
+                    <label class="form-label small fw-bold text-white-50 text-uppercase" style="letter-spacing: 0.5px; font-size: 0.7rem;">Data de Estreia</label>
+                    <input type="date" class="form-control border-light-subtle" formControlName="releaseDate">
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label small fw-bold text-white-50 text-uppercase" style="letter-spacing: 0.5px; font-size: 0.7rem;">Preço (R$) <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                      <span class="input-group-text bg-secondary bg-opacity-10 border-light-subtle text-white-50">R$</span>
+                      <input type="number" step="0.01" class="form-control border-light-subtle border-start-0 ps-2" formControlName="priceSingle" placeholder="0,00">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bloco de Mídia (Largura Total) -->
+            <div class="col-12">
+              <div class="bg-dark p-4 rounded-4 shadow-sm border-0">
+                <h6 class="fw-bold mb-4 text-primary"><i class="fas fa-image me-2"></i>Aparência Visual</h6>
+                <div class="row g-4 align-items-center">
+                  <div class="col-md-4 text-center">
+                    <div *ngIf="coverImagePreview" class="rounded-4 overflow-hidden shadow-sm mx-auto" style="width: 240px; height: 135px; border: 3px solid #f8f9fa;">
+                      <img [src]="coverImagePreview" class="w-100 h-100 object-fit-cover" alt="Preview Capa">
+                    </div>
+                    <div *ngIf="!coverImagePreview" class="rounded-4 bg-secondary bg-opacity-10 border mx-auto d-flex flex-column align-items-center justify-content-center text-white-50" style="width: 240px; height: 135px; border-style: dashed !important;">
+                      <i class="fas fa-cloud-upload-alt fs-1 mb-2 text-secondary opacity-50"></i>
+                      <span class="small fw-semibold">1280 x 720</span>
+                    </div>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="mb-2">
+                      <label class="form-label small fw-bold text-white-50 text-uppercase" style="letter-spacing: 0.5px; font-size: 0.7rem;">Capa do Curso</label>
+                      <input type="file" class="form-control form-control-lg fs-6 border-light-subtle" accept="image/png, image/jpeg, image/webp" (change)="onCoverImageSelected($event)">
+                      <div class="mt-2 d-flex align-items-center text-white-50 small">
+                        <i class="fas fa-info-circle me-2 text-primary opacity-75"></i>
+                        <span>Recomendado: <strong>Proporção 16:9</strong> (Max 2MB). Formatos: JPG, PNG, WEBP.</span>
+                      </div>
+                      <div class="mt-2 text-danger small fw-bold d-flex align-items-center" *ngIf="coverImageError">
+                        <i class="fas fa-exclamation-circle me-2"></i> {{ coverImageError }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-footer bg-dark border-top px-4 py-3 rounded-bottom-4">
+          <button type="button" class="btn btn-light rounded-pill px-4 fw-medium" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary rounded-pill px-5 fw-bold shadow-sm" [disabled]="courseForm.invalid || isSubmittingCourse">
+            <span *ngIf="!isSubmittingCourse">{{ courseToEdit ? 'Salvar Alterações' : 'Criar Curso' }}</span>
+            <span *ngIf="isSubmittingCourse"><i class="fas fa-spinner fa-spin me-2"></i>Salvando e Processando...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Module Modal -->
+<div class="modal fade" id="moduleModal" tabindex="-1" #moduleModal style="z-index: 1060;">
+  <div class="modal-dialog modal-dialog-centered modal-md">
+    <div class="modal-content rounded-4 border-0 shadow-lg overflow-hidden">
+      <!-- Premium Header -->
+      <div class="modal-header bg-dark border-bottom-0 pb-3 pt-4 px-4 rounded-top-4 position-relative overflow-hidden flex-shrink-0">
+        <div class="position-absolute top-0 end-0 p-3 opacity-25">
+          <i class="fas fa-layer-group text-white" style="font-size: 8rem; transform: translate(20%, -30%);"></i>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center shadow-sm flex-shrink-0" style="width: 48px; height: 48px;">
+            <i class="fas fa-layer-group fs-5"></i>
+          </div>
+          <div>
+            <h5 class="modal-title fw-bolder text-white mb-0 fs-5">{{ moduleToEdit ? 'Editar Módulo' : 'Novo Módulo' }}</h5>
+            <small class="text-white-50 fw-medium d-block" style="max-width: 300px;">{{ moduleToEdit ? 'Altere as informações do módulo' : 'Adicione uma nova seção ao curso' }}</small>
+          </div>
+        </div>
+        <button type="button" class="btn-close position-absolute top-0 end-0 mt-4 me-4" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4">
+        <form [formGroup]="moduleForm">
+          <fieldset [disabled]="isSubmittingModule">
+          <div class="row g-4">
+            
+            <div class="col-12">
+              <div class="form-floating shadow-sm rounded-3">
+                <input type="text" class="form-control border-light-subtle rounded-3" id="modName" formControlName="name" placeholder="Ex: Introdução">
+                <label for="modName" class="text-white-50">Nome do Módulo <span class="text-danger">*</span></label>
+              </div>
+            </div>
+            
+            <div class="col-12">
+              <div class="form-floating shadow-sm rounded-3">
+                <input type="text" class="form-control border-light-subtle rounded-3" id="modSub" formControlName="descriptionSub" placeholder="Frase de apoio...">
+                <label for="modSub" class="text-white-50">Sub-título ou Tema Central</label>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="form-floating shadow-sm rounded-3">
+                <textarea class="form-control border-light-subtle rounded-3" id="modDesc" formControlName="description" placeholder="Resumo do que será visto..." style="height: 100px; resize: none;"></textarea>
+                <label for="modDesc" class="text-white-50">Descrição Detalhada</label>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="form-floating shadow-sm rounded-3">
+                <input type="url" class="form-control border-light-subtle rounded-3" id="modCover" formControlName="imgCoverLink" placeholder="https://...">
+                <label for="modCover" class="text-white-50">Link da Capa (Opcional)</label>
+              </div>
+            </div>
+            
+          </div>
+          </fieldset>
+        </form>
+      </div>
+
+      <div class="modal-footer bg-secondary bg-opacity-10 border-top-0 px-4 py-3 d-flex justify-content-between align-items-center">
+        <button type="button" class="btn btn-white border rounded-pill px-4 fw-semibold text-white-50 shadow-sm hover-primary transition-all" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+        <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2" (click)="saveModule()" [disabled]="moduleForm.invalid || isSubmittingModule">
+          <span *ngIf="!isSubmittingModule"><i class="fas" [ngClass]="moduleToEdit ? 'fa-save' : 'fa-check-circle'"></i> {{ moduleToEdit ? 'Salvar Módulo' : 'Criar Módulo' }}</span>
+          <span *ngIf="isSubmittingModule"><i class="fas fa-spinner fa-spin"></i> Processando...</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Lesson Modal -->
+<div class="modal fade" id="lessonModal" tabindex="-1" #lessonModal style="z-index: 1060;">
+  <div class="modal-dialog modal-dialog-centered modal-md">
+    <div class="modal-content rounded-4 border-0 shadow-lg overflow-hidden">
+      <!-- Premium Header -->
+      <div class="modal-header bg-dark border-bottom-0 pb-3 pt-4 px-4 rounded-top-4 position-relative overflow-hidden flex-shrink-0">
+        <div class="position-absolute top-0 end-0 p-3 opacity-25">
+          <i class="fas fa-play-circle text-white" style="font-size: 8rem; transform: translate(20%, -30%);"></i>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <div class="bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center shadow-sm flex-shrink-0" style="width: 48px; height: 48px;">
+            <i class="fas fa-play-circle fs-5"></i>
+          </div>
+          <div>
+            <h5 class="modal-title fw-bolder text-white mb-0 fs-5">{{ lessonToEdit ? 'Editar Aula' : 'Nova Aula' }}</h5>
+            <small class="text-white-50 fw-medium d-block" style="max-width: 300px;">{{ lessonToEdit ? 'Altere as informações da aula' : 'Adicione uma aula a um módulo existente' }}</small>
+          </div>
+        </div>
+        <button type="button" class="btn-close position-absolute top-0 end-0 mt-4 me-4" data-bs-dismiss="modal" [disabled]="isSavingLesson" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4">
+        <form [formGroup]="lessonForm">
+          <fieldset [disabled]="isSavingLesson">
+          <div class="row g-4">
+            
+            <div class="col-12">
+              <div class="form-floating shadow-sm rounded-3">
+                <select class="form-select border-light-subtle rounded-3" id="lessonMod" formControlName="moduleId">
+                  <option value="" disabled selected>Selecione um módulo...</option>
+                  <option *ngFor="let mod of selectedCourseForLesson?.modules" [value]="mod.id">{{ mod.name }}</option>
+                </select>
+                <label for="lessonMod" class="text-white-50">Módulo <span class="text-danger">*</span></label>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="form-floating shadow-sm rounded-3">
+                <input type="text" class="form-control border-light-subtle rounded-3" id="lessonName" formControlName="name" placeholder="Ex: Bem-vindo">
+                <label for="lessonName" class="text-white-50">Nome da Aula <span class="text-danger">*</span></label>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="form-floating shadow-sm rounded-3">
+                <textarea class="form-control border-light-subtle rounded-3" id="lessonDesc" formControlName="description" placeholder="Resumo do que será visto..." style="height: 100px; resize: none;"></textarea>
+                <label for="lessonDesc" class="text-white-50">Descrição</label>
+              </div>
+            </div>
+            
+            <div class="col-md-6">
+              <div class="form-floating shadow-sm rounded-3">
+                <input type="number" class="form-control border-light-subtle rounded-3 bg-secondary bg-opacity-10" id="lessonDuration" formControlName="durationSeconds" placeholder="600" readonly>
+                <label for="lessonDuration" class="text-white-50">Duração (seg) (Auto)</label>
+              </div>
+            </div>
+
+            <div class="col-md-6" *ngIf="!lessonToEdit">
+              <div class="form-floating shadow-sm rounded-3">
+                <input type="file" class="form-control border-light-subtle rounded-3 pt-3 pb-2" id="lessonVideoFile" accept="video/*" (change)="onLessonVideoSelected($event)">
+                <label for="lessonVideoFile" class="text-white-50" style="padding-top: 0.5rem; font-size: 0.8rem;">Arquivo de Vídeo (Opcional por enquanto)</label>
+              </div>
+              <div *ngIf="lessonVideoError" class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ lessonVideoError }}</div>
+            </div>
+
+            <!-- Capa da Aula -->
+            <div class="col-12 mt-4">
+              <h6 class="fw-bold mb-3 text-primary"><i class="fas fa-image me-2"></i>Miniatura da Aula (Opcional)</h6>
+              <div class="row g-4 align-items-center bg-dark p-3 rounded-4 shadow-sm border border-secondary border-opacity-25 mx-0">
+                <div class="col-md-4 text-center">
+                  <div *ngIf="lessonThumbnailPreview" class="rounded-4 overflow-hidden shadow-sm mx-auto position-relative" style="width: 100%; max-width: 240px; aspect-ratio: 16/9; border: 2px solid #f8f9fa;">
+                    <img [src]="lessonThumbnailPreview" class="w-100 h-100 object-fit-cover" alt="Preview Miniatura Aula">
+                    <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-2 rounded-circle" style="width: 28px; height: 28px; padding: 0;" (click)="removeLessonThumbnail()" title="Remover imagem">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                  <div *ngIf="!lessonThumbnailPreview" class="rounded-4 bg-secondary bg-opacity-10 border mx-auto d-flex flex-column align-items-center justify-content-center text-white-50" style="width: 100%; max-width: 240px; aspect-ratio: 16/9; border-style: dashed !important;">
+                    <i class="fas fa-cloud-upload-alt fs-2 mb-2 text-secondary opacity-50"></i>
+                    <span class="small fw-semibold">16:9 / 1080x720</span>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="mb-2">
+                    <input type="file" class="form-control border-light-subtle" id="lessonThumbnailFile" accept="image/png, image/jpeg, image/webp" (change)="onLessonThumbnailChange($event)">
+                    <div class="mt-2 d-flex align-items-center text-white-50 small">
+                      <i class="fas fa-info-circle me-2 text-primary opacity-75"></i>
+                      <span>Recomendado: <strong>Proporção 16:9</strong> (Max 1.5MB). Formatos: JPG, PNG, WEBP.</span>
+                    </div>
+                    <div class="mt-2 text-danger small fw-bold d-flex align-items-center" *ngIf="lessonThumbnailError">
+                      <i class="fas fa-exclamation-circle me-2"></i> {{ lessonThumbnailError }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            
+          </div>
+          </fieldset>
+        </form>
+
+        <!-- Progress Area -->
+        <div *ngIf="isSavingLesson && uploadStatusMessage" class="mt-4 p-3 bg-secondary bg-opacity-10 rounded-3 border border-light-subtle">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="fw-medium text-primary small"><i class="fas fa-spinner fa-spin me-2"></i>{{ uploadStatusMessage }}</span>
+            <span class="fw-bold text-white small" *ngIf="tusUploadInstance">{{ uploadProgress }}%</span>
+          </div>
+          <div class="progress" style="height: 10px;" *ngIf="tusUploadInstance">
+            <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" [style.width.%]="uploadProgress" [attr.aria-valuenow]="uploadProgress" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+          <div class="text-end mt-2" *ngIf="tusUploadInstance">
+             <button class="btn btn-sm btn-outline-danger py-1 px-3 rounded-pill" (click)="cancelUpload()">Cancelar Upload</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer bg-secondary bg-opacity-10 border-top-0 px-4 py-3 d-flex justify-content-between align-items-center">
+        <button type="button" class="btn btn-white border rounded-pill px-4 fw-semibold text-white-50 shadow-sm hover-primary transition-all" data-bs-dismiss="modal" [disabled]="isSavingLesson">
+          Cancelar
+        </button>
+        <button type="button" class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2" (click)="saveLesson()" [disabled]="lessonForm.invalid || isSavingLesson">
+          <span *ngIf="!isSavingLesson"><i class="fas" [ngClass]="lessonToEdit ? 'fa-save' : 'fa-check-circle'"></i> {{ lessonToEdit ? 'Salvar Alterações' : 'Salvar Aula' }}</span>
+          <span *ngIf="isSavingLesson"><i class="fas fa-spinner fa-spin"></i> Aguarde...</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Confirm Toggle Status Modal -->
+<div class="modal fade" id="confirmToggleModal" tabindex="-1" #confirmToggleModal>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 border-0 shadow">
+      <!-- Premium Header -->
+      <div class="modal-header bg-dark border-bottom-0 pb-3 pt-4 px-4 rounded-top-4 position-relative overflow-hidden flex-shrink-0">
+        <div class="position-absolute top-0 end-0 p-3 opacity-25">
+          <i class="fas fa-exclamation-triangle text-white" style="font-size: 8rem; transform: translate(20%, -30%);"></i>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <div class="bg-warning bg-opacity-10 text-warning rounded-circle d-flex align-items-center justify-content-center shadow-sm flex-shrink-0" style="width: 48px; height: 48px;">
+            <i class="fas fa-exclamation-triangle fs-5"></i>
+          </div>
+          <div>
+            <h5 class="modal-title fw-bolder text-white mb-0 fs-5">Confirmação</h5>
+            
+          </div>
+        </div>
+        <button type="button" class="btn-close position-absolute top-0 end-0 mt-4 me-4" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center py-4">
+        <div class="mb-3">
+          <div class="d-inline-flex align-items-center justify-content-center bg-secondary bg-opacity-10 rounded-circle" style="width: 80px; height: 80px;">
+            <i class="fas fs-1" [ngClass]="courseToToggle?.active ? 'fa-ban text-danger' : 'fa-check-circle text-success'"></i>
+          </div>
+        </div>
+        <h5 class="fw-bold mb-2">Deseja realmente {{ courseToToggle?.active ? 'desativar' : 'ativar' }} este curso?</h5>
+        <p class="text-white-50 mb-0">O curso <strong class="text-white">{{ courseToToggle?.name }}</strong> será {{ courseToToggle?.active ? 'ocultado' : 'visível' }} para os alunos.</p>
+      </div>
+      <div class="modal-footer bg-secondary bg-opacity-10 border-top-0 px-4 py-3 d-flex justify-content-center gap-2">
+        <button type="button" class="btn btn-white border rounded-pill px-4 fw-semibold text-white-50 shadow-sm hover-primary transition-all" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+        <button type="button" class="btn rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2" 
+                [ngClass]="courseToToggle?.active ? 'btn-danger' : 'btn-success'"
+                (click)="confirmToggleStatus()"
+                [disabled]="isTogglingStatus">
+          <span *ngIf="!isTogglingStatus">
+            <i class="fas" [ngClass]="courseToToggle?.active ? 'fa-ban' : 'fa-check'"></i>
+            Sim, {{ courseToToggle?.active ? 'desativar' : 'ativar' }}
+          </span>
+          <span *ngIf="isTogglingStatus">
+            <i class="fas fa-spinner fa-spin"></i> Aguarde...
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Module List Modal -->
+<div class="modal fade" id="moduleListModal" tabindex="-1" #moduleListModal>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content rounded-4 border-0 shadow-lg overflow-hidden">
+      <!-- Premium Header -->
+      <div class="modal-header bg-dark border-bottom-0 pb-3 pt-4 px-4 rounded-top-4 position-relative overflow-hidden flex-shrink-0">
+        <div class="position-absolute top-0 end-0 p-3 opacity-25">
+          <i class="fas fa-layer-group text-white" style="font-size: 8rem; transform: translate(20%, -30%);"></i>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center shadow-sm flex-shrink-0" style="width: 48px; height: 48px;">
+            <i class="fas fa-layer-group fs-5"></i>
+          </div>
+          <div>
+            <h5 class="modal-title fw-bolder text-white mb-0 fs-5">Módulos do Curso</h5>
+            <small class="text-white-50 fw-medium d-block" style="max-width: 300px;">{{ selectedCourseForModules?.name }}</small>
+          </div>
+        </div>
+        <button type="button" class="btn-close position-absolute top-0 end-0 mt-4 me-4" (click)="closeModuleListModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4 bg-secondary bg-opacity-10">
+        
+        <!-- Empty State -->
+        <div class="text-center py-5" *ngIf="!selectedCourseForModules?.modules || selectedCourseForModules?.modules?.length === 0">
+          <i class="fas fa-folder-open text-white-50 fs-1 mb-3 opacity-50"></i>
+          <h6 class="text-white-50">Nenhum módulo cadastrado neste curso.</h6>
+        </div>
+
+        <!-- Modules List -->
+        <div class="d-flex flex-column gap-3" *ngIf="selectedCourseForModules?.modules && selectedCourseForModules?.modules!.length > 0">
+          <div class="card border-0 shadow-sm bg-dark rounded-4" *ngFor="let module of selectedCourseForModules?.modules; let i = index">
+            <div class="card-body p-3 d-flex align-items-center">
+              <div class="d-flex align-items-center gap-3 flex-grow-1 overflow-hidden">
+                <span class="badge bg-secondary bg-opacity-25 text-white-50 rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; flex-shrink: 0;">{{ i + 1 }}</span>
+                <div class="flex-grow-1 overflow-hidden pe-3">
+                  <h6 class="mb-0 fw-bold text-white text-truncate">{{ module.name }}</h6>
+                  <small class="text-white-50 text-truncate d-block">{{ module.descriptionSub || module.description || 'Sem descrição' }}</small>
+                </div>
+              </div>
+              <div class="d-flex gap-2 flex-shrink-0">
+                <button type="button" class="btn btn-sm btn-white border rounded-circle text-primary shadow-sm hover-primary transition-all d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;" (click)="openEditModuleModal(module, selectedCourseForModules!.id)" title="Editar Módulo">
+                  <i class="fas fa-pen"></i>
+                </button>
+                <button type="button" class="btn btn-sm btn-white border rounded-circle text-danger shadow-sm hover-danger transition-all d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;" (click)="confirmDeleteModule(module)" title="Excluir Módulo">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer bg-secondary bg-opacity-10 border-top-0 px-4 py-3 d-flex justify-content-between align-items-center">
+        <button type="button" class="btn btn-white border rounded-pill px-4 fw-semibold text-white-50 shadow-sm hover-primary transition-all" (click)="closeModuleListModal()">
+          Fechar
+        </button>
+        <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2" (click)="openAddModuleModal(selectedCourseForModules!.id)">
+          <i class="fas fa-plus"></i> Adicionar Módulo
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Delete Module Modal -->
+<div class="modal fade" id="confirmDeleteModuleModal" tabindex="-1" #confirmDeleteModuleModal style="z-index: 1060;">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 border-0 shadow">
+      <!-- Premium Header -->
+      <div class="modal-header bg-dark border-bottom-0 pb-3 pt-4 px-4 rounded-top-4 position-relative overflow-hidden flex-shrink-0">
+        <div class="position-absolute top-0 end-0 p-3 opacity-25">
+          <i class="fas fa-layer-group text-white" style="font-size: 8rem; transform: translate(20%, -30%);"></i>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center shadow-sm flex-shrink-0" style="width: 48px; height: 48px;">
+            <i class="fas fa-layer-group fs-5"></i>
+          </div>
+          <div>
+            <h5 class="modal-title fw-bolder text-white mb-0 fs-5">Excluir Módulo</h5>
+            
+          </div>
+        </div>
+        <button type="button" class="btn-close position-absolute top-0 end-0 mt-4 me-4" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center py-4">
+        <div class="mb-3">
+          <div class="d-inline-flex align-items-center justify-content-center bg-danger bg-opacity-10 rounded-circle" style="width: 80px; height: 80px;">
+            <i class="fas fa-trash-alt fs-1 text-danger"></i>
+          </div>
+        </div>
+        <h5 class="fw-bold mb-2">Tem certeza?</h5>
+        <p class="text-white-50 mb-0">O módulo <strong class="text-white">{{ moduleToDelete?.name }}</strong> será excluído permanentemente.<br>Esta ação não pode ser desfeita.</p>
+      </div>
+      <div class="modal-footer bg-secondary bg-opacity-10 border-top-0 px-4 py-3 d-flex justify-content-center gap-2">
+        <button type="button" class="btn btn-white border rounded-pill px-4 fw-semibold text-white-50 shadow-sm hover-primary transition-all" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+        <button type="button" class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2" 
+                (click)="executeDeleteModule()"
+                [disabled]="isDeletingModule">
+          <span *ngIf="!isDeletingModule">
+            <i class="fas fa-trash"></i> Sim, excluir
+          </span>
+          <span *ngIf="isDeletingModule">
+            <i class="fas fa-spinner fa-spin"></i> Excluindo...
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Lesson List Modal -->
+<div class="modal fade" id="lessonListModal" tabindex="-1" #lessonListModal>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content rounded-4 border-0 shadow-lg overflow-hidden">
+      <!-- Premium Header -->
+      <div class="modal-header bg-dark border-bottom-0 pb-3 pt-4 px-4 rounded-top-4 position-relative overflow-hidden flex-shrink-0">
+        <div class="position-absolute top-0 end-0 p-3 opacity-25">
+          <i class="fas fa-play-circle text-white" style="font-size: 8rem; transform: translate(20%, -30%);"></i>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <div class="bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center shadow-sm flex-shrink-0" style="width: 48px; height: 48px;">
+            <i class="fas fa-play-circle fs-5"></i>
+          </div>
+          <div>
+            <h5 class="modal-title fw-bolder text-white mb-0 fs-5">Aulas do Curso</h5>
+            <small class="text-white-50 fw-medium d-block" style="max-width: 300px;">{{ selectedCourseForLessons?.name }}</small>
+          </div>
+        </div>
+        <button type="button" class="btn-close position-absolute top-0 end-0 mt-4 me-4" (click)="closeLessonListModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4 bg-secondary bg-opacity-10">
+        
+        <!-- Empty State -->
+        <div class="text-center py-5" *ngIf="!selectedCourseForLessons?.modules || selectedCourseForLessons?.modules?.length === 0 || getCourseLessonsCount(selectedCourseForLessons!) === 0">
+          <i class="fas fa-folder-open text-white-50 fs-1 mb-3 opacity-50"></i>
+          <h6 class="text-white-50">Nenhuma aula cadastrada neste curso.</h6>
+        </div>
+
+        <!-- Lessons List grouped by Module (Collapsible) -->
+        <div class="d-flex flex-column gap-3" *ngIf="selectedCourseForLessons?.modules && selectedCourseForLessons?.modules!.length > 0">
+          <div class="accordion custom-accordion" id="lessonAccordion">
+            <ng-container *ngFor="let module of selectedCourseForLessons?.modules; let i = index">
+              <div class="accordion-item bg-transparent border-0 mb-2" *ngIf="module.lessons && module.lessons.length > 0">
+                <h2 class="accordion-header" [id]="'headingModule' + i">
+                  <button class="accordion-button bg-dark text-white rounded-4 shadow-sm border-0 d-flex align-items-center justify-content-between p-3 collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapseModule' + i" aria-expanded="false" [attr.aria-controls]="'collapseModule' + i">
+                    <div class="d-flex align-items-center gap-2">
+                      <span class="fw-bold fs-6 text-white text-truncate" style="max-width: 300px;">{{ module.name }}</span>
+                      <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill">{{ module.lessons.length }} aulas</span>
+                    </div>
+                  </button>
+                </h2>
+                <div [id]="'collapseModule' + i" class="accordion-collapse collapse mt-2" [attr.aria-labelledby]="'headingModule' + i" data-bs-parent="#lessonAccordion">
+                  <div class="accordion-body p-0 ps-3 border-start border-2 border-danger border-opacity-25 ms-2">
+                    <div class="card border-0 shadow-sm bg-dark bg-opacity-50 rounded-4 mb-2" *ngFor="let lesson of module.lessons; let j = index">
+                      <div class="card-body p-3 d-flex align-items-center">
+                        <div class="d-flex align-items-center gap-3 flex-grow-1 overflow-hidden">
+                          <span class="badge bg-secondary bg-opacity-25 text-white-50 rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; flex-shrink: 0;">{{ j + 1 }}</span>
+                          <div class="flex-grow-1 overflow-hidden pe-3">
+                            <h6 class="mb-0 fw-bold text-white text-truncate">{{ lesson.name }}</h6>
+                            <small class="text-white-50 text-truncate d-block">{{ lesson.description || 'Sem descrição' }}</small>
+                          </div>
+                        </div>
+                        <div class="d-flex gap-2 flex-shrink-0">
+                          <button type="button" class="btn btn-sm btn-white border rounded-circle text-primary shadow-sm hover-primary transition-all d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;" (click)="openEditLessonModal(lesson, module.id, selectedCourseForLessons!.id)" title="Editar Aula">
+                            <i class="fas fa-pen"></i>
+                          </button>
+                          <button type="button" class="btn btn-sm btn-white border rounded-circle text-danger shadow-sm hover-danger transition-all d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;" (click)="confirmDeleteLesson(lesson)" title="Excluir Aula">
+                            <i class="fas fa-trash"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer bg-secondary bg-opacity-10 border-top-0 px-4 py-3 d-flex justify-content-between align-items-center">
+        <button type="button" class="btn btn-white border rounded-pill px-4 fw-semibold text-white-50 shadow-sm hover-primary transition-all" (click)="closeLessonListModal()">
+          Fechar
+        </button>
+        <button type="button" class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2" (click)="openAddLessonModal(selectedCourseForLessons!)">
+          <i class="fas fa-plus"></i> Adicionar Aula
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Delete Lesson Modal -->
+<div class="modal fade" id="confirmDeleteLessonModal" tabindex="-1" #confirmDeleteLessonModal style="z-index: 1060;">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 border-0 shadow">
+      <!-- Premium Header -->
+      <div class="modal-header bg-dark border-bottom-0 pb-3 pt-4 px-4 rounded-top-4 position-relative overflow-hidden flex-shrink-0">
+        <div class="position-absolute top-0 end-0 p-3 opacity-25">
+          <i class="fas fa-play text-white" style="font-size: 8rem; transform: translate(20%, -30%);"></i>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <div class="bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center shadow-sm flex-shrink-0" style="width: 48px; height: 48px;">
+            <i class="fas fa-play fs-5"></i>
+          </div>
+          <div>
+            <h5 class="modal-title fw-bolder text-white mb-0 fs-5">Excluir Aula</h5>
+            
+          </div>
+        </div>
+        <button type="button" class="btn-close position-absolute top-0 end-0 mt-4 me-4" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center py-4">
+        <div class="mb-3">
+          <div class="d-inline-flex align-items-center justify-content-center bg-danger bg-opacity-10 rounded-circle" style="width: 80px; height: 80px;">
+            <i class="fas fa-trash-alt fs-1 text-danger"></i>
+          </div>
+        </div>
+        <h5 class="fw-bold mb-2">Tem certeza?</h5>
+        <p class="text-white-50 mb-0">A aula <strong class="text-white">{{ lessonToDelete?.name }}</strong> e seu respectivo vídeo serão excluídos permanentemente.<br>Esta ação não pode ser desfeita.</p>
+      </div>
+      <div class="modal-footer bg-secondary bg-opacity-10 border-top-0 px-4 py-3 d-flex justify-content-center gap-2">
+        <button type="button" class="btn btn-white border rounded-pill px-4 fw-semibold text-white-50 shadow-sm hover-primary transition-all" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+        <button type="button" class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2" 
+                (click)="executeDeleteLesson()"
+                [disabled]="isDeletingLesson">
+          <span *ngIf="!isDeletingLesson">
+            <i class="fas fa-trash"></i> Sim, excluir
+          </span>
+          <span *ngIf="isDeletingLesson">
+            <i class="fas fa-spinner fa-spin"></i> Excluindo...
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Domain Modal -->
+<div class="modal fade" id="domainModal" tabindex="-1" #domainModal style="z-index: 1060;">
+  <div class="modal-dialog modal-dialog-centered modal-md">
+    <div class="modal-content rounded-4 border-0 shadow-lg overflow-hidden">
+      <!-- Premium Header -->
+      <div class="modal-header bg-dark border-bottom-0 pb-3 pt-4 px-4 rounded-top-4 position-relative overflow-hidden flex-shrink-0">
+        <div class="position-absolute top-0 end-0 p-3 opacity-25">
+          <i class="fas fa-globe text-white" style="font-size: 8rem; transform: translate(20%, -30%);"></i>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <div class="bg-info bg-opacity-10 text-info rounded-circle d-flex align-items-center justify-content-center shadow-sm flex-shrink-0" style="width: 48px; height: 48px;">
+            <i class="fas fa-globe fs-5"></i>
+          </div>
+          <div>
+            <h5 class="modal-title fw-bolder text-white mb-0 fs-5">{{ domainToEdit ? 'Editar Domínio' : 'Novo Domínio' }}</h5>
+            <small class="text-white-50 fw-medium d-block" style="max-width: 300px;">{{ domainToEdit ? 'Altere as informações do domínio' : 'Adicione um novo domínio/benefício ao curso' }}</small>
+          </div>
+        </div>
+        <button type="button" class="btn-close position-absolute top-0 end-0 mt-4 me-4" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4">
+        <form [formGroup]="domainForm">
+          <fieldset [disabled]="isSubmittingDomain">
+          <div class="row g-4">
+            
+            <div class="col-12">
+              <div class="form-floating shadow-sm rounded-3">
+                <input type="text" class="form-control border-light-subtle rounded-3" id="domTitle" formControlName="title" placeholder="Ex: Acesso Vitalício">
+                <label for="domTitle" class="text-white-50">Título do Domínio <span class="text-danger">*</span></label>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="form-floating shadow-sm rounded-3">
+                <textarea class="form-control border-light-subtle rounded-3" id="domDesc" formControlName="description" placeholder="Detalhes do domínio..." style="height: 100px; resize: none;"></textarea>
+                <label for="domDesc" class="text-white-50">Descrição</label>
+              </div>
+            </div>
+            
+          </div>
+          </fieldset>
+        </form>
+      </div>
+
+      <div class="modal-footer bg-secondary bg-opacity-10 border-top-0 px-4 py-3 d-flex justify-content-between align-items-center">
+        <button type="button" class="btn btn-white border rounded-pill px-4 fw-semibold text-white-50 shadow-sm hover-primary transition-all" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+        <button type="button" class="btn btn-info rounded-pill px-4 fw-bold shadow-sm text-white d-flex align-items-center gap-2" (click)="saveDomain()" [disabled]="domainForm.invalid || isSubmittingDomain">
+          <span *ngIf="!isSubmittingDomain"><i class="fas" [ngClass]="domainToEdit ? 'fa-save' : 'fa-check-circle'"></i> {{ domainToEdit ? 'Salvar Domínio' : 'Criar Domínio' }}</span>
+          <span *ngIf="isSubmittingDomain"><i class="fas fa-spinner fa-spin"></i> Processando...</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Domain List Modal -->
+<div class="modal fade" id="domainListModal" tabindex="-1" #domainListModal>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content rounded-4 border-0 shadow-lg overflow-hidden">
+      <!-- Premium Header -->
+      <div class="modal-header bg-dark border-bottom-0 pb-3 pt-4 px-4 rounded-top-4 position-relative overflow-hidden flex-shrink-0">
+        <div class="position-absolute top-0 end-0 p-3 opacity-25">
+          <i class="fas fa-globe text-white" style="font-size: 8rem; transform: translate(20%, -30%);"></i>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <div class="bg-info bg-opacity-10 text-info rounded-circle d-flex align-items-center justify-content-center shadow-sm flex-shrink-0" style="width: 48px; height: 48px;">
+            <i class="fas fa-globe fs-5"></i>
+          </div>
+          <div>
+            <h5 class="modal-title fw-bolder text-white mb-0 fs-5">Domínios / Benefícios</h5>
+            <small class="text-white-50 fw-medium d-block" style="max-width: 300px;">{{ selectedCourseForDomains?.name }}</small>
+          </div>
+        </div>
+        <button type="button" class="btn-close position-absolute top-0 end-0 mt-4 me-4" (click)="closeDomainListModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4 bg-secondary bg-opacity-10">
+        
+        <!-- Empty State -->
+        <div class="text-center py-5" *ngIf="!selectedCourseForDomains?.domains || selectedCourseForDomains?.domains?.length === 0">
+          <i class="fas fa-folder-open text-white-50 fs-1 mb-3 opacity-50"></i>
+          <h6 class="text-white-50">Nenhum domínio cadastrado neste curso.</h6>
+        </div>
+
+        <!-- Domains List -->
+        <div class="d-flex flex-column gap-3" *ngIf="selectedCourseForDomains?.domains && selectedCourseForDomains?.domains!.length > 0">
+          <div class="card border-0 shadow-sm bg-dark rounded-4" *ngFor="let domain of selectedCourseForDomains?.domains; let i = index">
+            <div class="card-body p-3 d-flex align-items-center">
+              <div class="d-flex align-items-center gap-3 flex-grow-1 overflow-hidden">
+                <span class="badge bg-secondary bg-opacity-25 text-white-50 rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; flex-shrink: 0;">{{ i + 1 }}</span>
+                <div class="flex-grow-1 overflow-hidden pe-3">
+                  <h6 class="mb-0 fw-bold text-white text-truncate">{{ domain.title }}</h6>
+                  <small class="text-white-50 text-truncate d-block">{{ domain.description || 'Sem descrição' }}</small>
+                </div>
+              </div>
+              <div class="d-flex gap-2 flex-shrink-0">
+                <button type="button" class="btn btn-sm btn-white border rounded-circle text-primary shadow-sm hover-primary transition-all d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;" (click)="openEditDomainModal(domain, selectedCourseForDomains!.id)" title="Editar Domínio">
+                  <i class="fas fa-pen"></i>
+                </button>
+                <button type="button" class="btn btn-sm btn-white border rounded-circle text-danger shadow-sm hover-danger transition-all d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;" (click)="confirmDeleteDomain(domain, selectedCourseForDomains!.id)" title="Excluir Domínio">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer bg-secondary bg-opacity-10 border-top-0 px-4 py-3 d-flex justify-content-between align-items-center">
+        <button type="button" class="btn btn-white border rounded-pill px-4 fw-semibold text-white-50 shadow-sm hover-primary transition-all" (click)="closeDomainListModal()">
+          Fechar
+        </button>
+        <button type="button" class="btn btn-info rounded-pill px-4 fw-bold shadow-sm text-white d-flex align-items-center gap-2" (click)="openAddDomainModal(selectedCourseForDomains!.id)">
+          <i class="fas fa-plus"></i> Adicionar Domínio
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Delete Domain Modal -->
+<div class="modal fade" id="confirmDeleteDomainModal" tabindex="-1" #confirmDeleteDomainModal style="z-index: 1060;">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 border-0 shadow">
+      <!-- Premium Header -->
+      <div class="modal-header bg-dark border-bottom-0 pb-3 pt-4 px-4 rounded-top-4 position-relative overflow-hidden flex-shrink-0">
+        <div class="position-absolute top-0 end-0 p-3 opacity-25">
+          <i class="fas fa-globe text-white" style="font-size: 8rem; transform: translate(20%, -30%);"></i>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <div class="bg-info bg-opacity-10 text-info rounded-circle d-flex align-items-center justify-content-center shadow-sm flex-shrink-0" style="width: 48px; height: 48px;">
+            <i class="fas fa-globe fs-5"></i>
+          </div>
+          <div>
+            <h5 class="modal-title fw-bolder text-white mb-0 fs-5">Excluir Domínio</h5>
+            
+          </div>
+        </div>
+        <button type="button" class="btn-close position-absolute top-0 end-0 mt-4 me-4" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center py-4">
+        <div class="mb-3">
+          <div class="d-inline-flex align-items-center justify-content-center bg-danger bg-opacity-10 rounded-circle" style="width: 80px; height: 80px;">
+            <i class="fas fa-trash-alt fs-1 text-danger"></i>
+          </div>
+        </div>
+        <h5 class="fw-bold mb-2">Tem certeza?</h5>
+        <p class="text-white-50 mb-0">O domínio <strong class="text-white">{{ domainToDelete?.title }}</strong> será excluído permanentemente.<br>Esta ação não pode ser desfeita.</p>
+      </div>
+      <div class="modal-footer bg-secondary bg-opacity-10 border-top-0 px-4 py-3 d-flex justify-content-center gap-2">
+        <button type="button" class="btn btn-white border rounded-pill px-4 fw-semibold text-white-50 shadow-sm hover-primary transition-all" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+        <button type="button" class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2" 
+                (click)="executeDeleteDomain()"
+                [disabled]="isDeletingDomain">
+          <span *ngIf="!isDeletingDomain">
+            <i class="fas fa-trash"></i> Sim, excluir
+          </span>
+          <span *ngIf="isDeletingDomain">
+            <i class="fas fa-spinner fa-spin"></i> Excluindo...
+          </span>
+        </button>
+      </div>
+</div>
+  </div>
+</div>
+
+<!-- Teacher List Modal -->
+<div class="modal fade" id="teacherListModal" tabindex="-1" #teacherListModal>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content rounded-4 border-0 shadow">
+      
+      <div class="modal-header bg-dark border-bottom-0 pb-3 pt-4 px-4 rounded-top-4 position-relative overflow-hidden">
+        <div class="position-absolute top-0 end-0 p-3 opacity-25">
+          <i class="fas fa-chalkboard-teacher text-white" style="font-size: 8rem; transform: translate(20%, -30%);"></i>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 48px; height: 48px;">
+            <i class="fas fa-list fs-5"></i>
+          </div>
+          <div>
+            <h5 class="modal-title fw-bolder text-white mb-0 fs-5">Professores Vinculados</h5>
+            <small class="text-white-50 fw-medium text-truncate d-block" style="max-width: 300px;">{{ selectedCourseForTeachers?.name }}</small>
+          </div>
+        </div>
+        <button type="button" class="btn-close position-absolute top-0 end-0 mt-4 me-4" (click)="closeTeacherListModal()" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body p-4 bg-secondary bg-opacity-10">
+        
+        <!-- Empty State -->
+        <div class="text-center py-5" *ngIf="!selectedCourseForTeachers?.teachers || selectedCourseForTeachers?.teachers?.length === 0">
+          <i class="fas fa-folder-open text-white-50 fs-1 mb-3 opacity-50"></i>
+          <h6 class="text-white-50">Nenhum professor vinculado a este curso.</h6>
+        </div>
+
+        <!-- Teachers List -->
+        <div class="d-flex flex-column gap-3" *ngIf="selectedCourseForTeachers?.teachers && selectedCourseForTeachers?.teachers!.length > 0">
+          <div class="card border-0 shadow-sm bg-dark rounded-4" *ngFor="let teacher of selectedCourseForTeachers?.teachers">
+            <div class="card-body p-3 d-flex align-items-center">
+              <div class="d-flex align-items-center gap-3 flex-grow-1 overflow-hidden">
+                <div class="rounded-circle overflow-hidden shadow-sm" style="width: 48px; height: 48px; flex-shrink: 0;">
+                  <img [src]="teacher.avatar || ''" alt="{{ teacher.name }}" class="w-100 h-100 object-fit-cover" onerror="this.onerror=null; this.style.display='none';">
+                </div>
+                <div class="flex-grow-1 overflow-hidden pe-3">
+                  <h6 class="mb-0 fw-bold text-white text-truncate">{{ teacher.name }}</h6>
+                  <small class="text-white-50 text-truncate d-block">{{ teacher.role || 'Sem cargo' }}</small>
+                </div>
+              </div>
+              <div class="d-flex gap-2 flex-shrink-0">
+                <button type="button" class="btn btn-sm btn-white border rounded-circle text-danger shadow-sm hover-danger transition-all d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;" (click)="unassignTeacher(teacher)" title="Desvincular Professor">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer bg-secondary bg-opacity-10 border-top-0 px-4 py-3 d-flex justify-content-between align-items-center">
+        <button type="button" class="btn btn-white border rounded-pill px-4 fw-semibold text-white-50 shadow-sm hover-primary transition-all" (click)="closeTeacherListModal()">
+          Fechar
+        </button>
+        <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm text-white d-flex align-items-center gap-2" (click)="openAssignTeacherModal(selectedCourseForTeachers!.id); closeTeacherListModal()">
+          <i class="fas fa-link"></i> Vincular Professor
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Assign Teacher Modal -->
+<div class="modal fade" id="teacherAssignModal" tabindex="-1" #teacherAssignModal>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 border-0 shadow">
+      
+      <!-- Premium Header -->
+      <div class="modal-header bg-dark border-bottom-0 pb-3 pt-4 px-4 rounded-top-4 position-relative overflow-hidden flex-shrink-0">
+        <div class="position-absolute top-0 end-0 p-3 opacity-25">
+          <i class="fas fa-chalkboard-teacher text-white" style="font-size: 8rem; transform: translate(20%, -30%);"></i>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center shadow-sm flex-shrink-0" style="width: 48px; height: 48px;">
+            <i class="fas fa-chalkboard-teacher fs-5"></i>
+          </div>
+          <div>
+            <h5 class="modal-title fw-bolder text-white mb-0 fs-5">Vincular Professor</h5>
+            
+          </div>
+        </div>
+        <button type="button" class="btn-close position-absolute top-0 end-0 mt-4 me-4" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <form [formGroup]="teacherAssignForm" (ngSubmit)="saveTeacherAssignment()">
+        <div class="modal-body bg-secondary bg-opacity-10 p-4">
+          <div class="bg-dark p-4 rounded-4 shadow-sm border-0">
+            <h6 class="fw-bold mb-4 text-primary"><i class="fas fa-user-tie me-2"></i>Selecione o Professor</h6>
+            
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-white-50 text-uppercase" style="letter-spacing: 0.5px; font-size: 0.7rem;">Professor <span class="text-danger">*</span></label>
+              <select class="form-select border-light-subtle form-select-lg" formControlName="teacherId">
+                <option value="" disabled selected>Selecione um professor...</option>
+                <option *ngFor="let teacher of availableTeachers" [value]="teacher.id">{{ teacher.name }} - {{ teacher.role }}</option>
+              </select>
+              <div class="text-danger small mt-1" *ngIf="teacherAssignForm.get('teacherId')?.invalid && teacherAssignForm.get('teacherId')?.touched">
+                Campo obrigatório.
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="modal-footer bg-secondary bg-opacity-10 border-top-0 px-4 py-3 d-flex justify-content-between align-items-center">
+          <button type="button" class="btn btn-white border rounded-pill px-4 fw-semibold text-white-50 shadow-sm hover-primary transition-all" data-bs-dismiss="modal">
+            Cancelar
+          </button>
+          
+          <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2" [disabled]="isAssigningTeacher">
+            <span *ngIf="!isAssigningTeacher">
+              <i class="fas fa-check"></i> Vincular
+            </span>
+            <span *ngIf="isAssigningTeacher">
+              <i class="fas fa-spinner fa-spin"></i> Vinculando...
+            </span>
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Unassign Teacher Modal -->
+<div class="modal fade" id="confirmUnassignTeacherModal" tabindex="-1" #confirmUnassignTeacherModal style="z-index: 1060;">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 border-0 shadow">
+      <!-- Premium Header -->
+      <div class="modal-header bg-dark border-bottom-0 pb-3 pt-4 px-4 rounded-top-4 position-relative overflow-hidden flex-shrink-0">
+        <div class="position-absolute top-0 end-0 p-3 opacity-25">
+          <i class="fas fa-chalkboard-teacher text-white" style="font-size: 8rem; transform: translate(20%, -30%);"></i>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <div class="bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center shadow-sm flex-shrink-0" style="width: 48px; height: 48px;">
+            <i class="fas fa-chalkboard-teacher fs-5"></i>
+          </div>
+          <div>
+            <h5 class="modal-title fw-bolder text-white mb-0 fs-5">Desvincular Professor</h5>
+          </div>
+        </div>
+        <button type="button" class="btn-close position-absolute top-0 end-0 mt-4 me-4" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center py-4">
+        <div class="mb-3">
+          <div class="d-inline-flex align-items-center justify-content-center bg-danger bg-opacity-10 rounded-circle" style="width: 80px; height: 80px;">
+            <i class="fas fa-trash-alt fs-1 text-danger"></i>
+          </div>
+        </div>
+        <h5 class="fw-bold mb-2">Tem certeza?</h5>
+        <p class="text-white-50 mb-0">O professor <strong class="text-white">{{ teacherToUnassign?.name }}</strong> será desvinculado deste curso.<br>Esta ação pode ser desfeita vinculando-o novamente.</p>
+      </div>
+      <div class="modal-footer bg-secondary bg-opacity-10 border-top-0 px-4 py-3 d-flex justify-content-center gap-2">
+        <button type="button" class="btn btn-white border rounded-pill px-4 fw-semibold text-white-50 shadow-sm hover-primary transition-all" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+        <button type="button" class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2" 
+                (click)="executeUnassignTeacher()"
+                [disabled]="isUnassigningTeacher">
+          <span *ngIf="!isUnassigningTeacher">
+            <i class="fas fa-trash"></i> Sim, desvincular
+          </span>
+          <span *ngIf="isUnassigningTeacher">
+            <i class="fas fa-spinner fa-spin"></i> Desvinculando...
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

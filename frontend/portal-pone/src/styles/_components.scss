@@ -1,0 +1,335 @@
+// _components.scss — Nexas Dark Theme Components
+// ═══════════════════════════════════════════════════
+// Overrides e estilos globais de componentes.
+// Todas as cores devem referenciar variáveis de _variables.scss.
+
+// ─── 1. Cards ────────────────────────────────────
+.card {
+  border-radius: $border-radius-xl;
+  border: 1px solid $border-subtle;
+  box-shadow: $box-shadow-sm;
+  transition: all 0.2s ease-in-out;
+  background-color: $bg-surface;
+  color: $text-main;
+
+  .card-header {
+    background-color: $bg-surface;
+    border-bottom: 1px solid $border-subtle;
+    color: $text-title;
+  }
+
+  .card-footer {
+    background-color: $bg-surface;
+    border-top: 1px solid $border-subtle;
+  }
+
+  &.hover-elevate:hover {
+    transform: translateY(-2px);
+    box-shadow: $box-shadow;
+    border-color: lighten($border-subtle, 5%);
+  }
+}
+
+// ─── 2. Botões ───────────────────────────────────
+.btn {
+  font-weight: 600;
+  border-radius: $border-radius;
+  padding: 0.5rem 1rem;
+  transition: all 0.2s ease-in-out;
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 0.2rem $nexas-primary-glow;
+  }
+}
+
+.btn-primary {
+  background-color: $nexas-primary;
+  border-color: $nexas-primary;
+  color: #fff;
+
+  &:hover, &:focus {
+    background-color: $nexas-primary-hover;
+    border-color: $nexas-primary-hover;
+    color: #fff;
+  }
+
+  &:disabled {
+    background-color: lighten($bg-inputs, 5%);
+    border-color: $border-subtle;
+    color: $text-placeholder;
+  }
+}
+
+.btn-outline-primary {
+  color: $nexas-primary;
+  border-color: $nexas-primary;
+
+  &:hover {
+    background-color: $nexas-primary-light;
+    color: lighten($nexas-primary, 15%);
+    border-color: $nexas-primary;
+  }
+}
+
+.btn-light {
+  background-color: $hover-bg;
+  border-color: $border-subtle;
+  color: $text-main;
+
+  &:hover {
+    background-color: lighten($hover-bg, 3%);
+    color: $text-title;
+  }
+}
+
+.btn-outline-light {
+  color: $text-secondary;
+  border-color: $border-subtle;
+
+  &:hover {
+    background-color: $hover-bg;
+    color: $text-title;
+  }
+}
+
+.btn-dark {
+  background-color: $bg-navbar-sidebar;
+  border-color: $border-subtle;
+  color: $text-main;
+
+  &:hover {
+    background-color: $hover-bg;
+    color: $text-title;
+  }
+}
+
+// ─── 3. Inputs ───────────────────────────────────
+.form-control, .form-select {
+  border-radius: $border-radius;
+  border: 1px solid $border-subtle;
+  padding: 0.625rem 1rem;
+  color: $text-main;
+  background-color: $bg-inputs;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+  &:focus {
+    border-color: $nexas-primary;
+    box-shadow: 0 0 0 0.2rem $nexas-primary-glow;
+    background-color: $bg-inputs;
+    color: $text-title;
+  }
+
+  &::placeholder {
+    color: $text-placeholder;
+  }
+
+  &:disabled, &[readonly] {
+    background-color: $bg-secundario;
+    color: $text-secondary;
+    opacity: 0.7;
+  }
+}
+
+.input-group-text {
+  background-color: $bg-inputs;
+  border-color: $border-subtle;
+  color: $text-secondary;
+}
+
+.form-label {
+  color: $text-secondary;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.form-check-input {
+  background-color: $bg-inputs;
+  border-color: $border-subtle;
+
+  &:checked {
+    background-color: $nexas-primary;
+    border-color: $nexas-primary;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 0.2rem $nexas-primary-glow;
+    border-color: $nexas-primary;
+  }
+}
+
+// ─── 4. Badges ───────────────────────────────────
+.badge {
+  font-weight: 600;
+  padding: 0.35em 0.65em;
+  border-radius: 9999px;
+}
+
+// ─── 5. Tooltips ─────────────────────────────────
+.tooltip-inner {
+  background-color: $bg-modais-dropdowns;
+  border-radius: $border-radius;
+  padding: 0.5rem 0.75rem;
+  color: $text-main;
+}
+
+// ─── 6. Modais ───────────────────────────────────
+.modal-content {
+  background-color: $bg-modais-dropdowns;
+  border: 1px solid $border-subtle;
+  color: $text-main;
+}
+
+.modal-header {
+  background-color: $bg-modais-dropdowns;
+  border-bottom: 1px solid $border-subtle;
+  color: $text-title;
+
+  .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+  }
+}
+
+.modal-footer {
+  background-color: $bg-modais-dropdowns;
+  border-top: 1px solid $border-subtle;
+}
+
+.modal-backdrop, .custom-modal-backdrop, .modal {
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+// ─── 7. Dropdowns ────────────────────────────────
+.dropdown-menu {
+  background-color: $bg-modais-dropdowns;
+  border: 1px solid $border-subtle;
+  box-shadow: $box-shadow-lg;
+
+  .dropdown-item {
+    color: $text-main;
+
+    &:hover, &:focus {
+      background-color: $hover-bg;
+      color: $text-title;
+    }
+
+    &.active {
+      background-color: $nexas-primary;
+      color: #fff;
+    }
+  }
+
+  .dropdown-divider {
+    border-color: $border-subtle;
+  }
+}
+
+// ─── 8. Tabelas ──────────────────────────────────
+.table {
+  color: $text-main;
+  border-color: $border-subtle;
+
+  thead th {
+    background-color: $bg-navbar-sidebar;
+    color: $text-title;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    border-bottom: 1px solid $border-subtle;
+    padding: 0.875rem 0.75rem;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid $border-subtle;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: $hover-bg;
+    }
+
+    td {
+      padding: 0.875rem 0.75rem;
+      border: none;
+      vertical-align: middle;
+    }
+  }
+}
+
+// ─── 9. Paginação ────────────────────────────────
+.page-link {
+  background-color: $bg-surface;
+  border-color: $border-subtle;
+  color: $text-main;
+
+  &:hover {
+    background-color: $hover-bg;
+    color: $text-title;
+    border-color: $border-subtle;
+  }
+
+  &.active, .active > & {
+    background-color: $nexas-primary;
+    border-color: $nexas-primary;
+    color: #fff;
+  }
+}
+
+// ─── 10. Alerts ──────────────────────────────────
+.alert {
+  border-radius: $border-radius;
+  border: 1px solid $border-subtle;
+  background-color: $bg-surface;
+  color: $text-main;
+}
+
+// ─── 11. Overrides de Utilitários Bootstrap ──────
+// Forçamos as classes utilitárias do Bootstrap a
+// respeitar nossa paleta dark ao invés do padrão claro.
+
+.bg-white {
+  background-color: $bg-surface !important;
+}
+.bg-light {
+  background-color: $bg-secundario !important;
+}
+.bg-dark {
+  background-color: $bg-navbar-sidebar !important;
+}
+.bg-secondary {
+  background-color: $hover-bg !important;
+}
+.bg-body {
+  background-color: $bg-principal !important;
+}
+
+.text-dark {
+  color: $text-title !important;
+}
+.text-muted {
+  color: $text-secondary !important;
+}
+.text-body {
+  color: $text-main !important;
+}
+.text-white-50 {
+  color: $text-secondary !important;
+}
+
+.border, .border-top, .border-bottom, .border-start, .border-end {
+  border-color: $border-subtle !important;
+}
+.border-light, .border-light-subtle {
+  border-color: $border-subtle !important;
+}
+.border-secondary {
+  border-color: $border-subtle !important;
+}
+
+.bg-light-modern {
+  background-color: $bg-principal !important;
+}

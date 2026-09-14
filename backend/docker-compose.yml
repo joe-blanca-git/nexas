@@ -21,7 +21,7 @@ services:
       timeout: 20s
       retries: 10
 
-  # 1. Nexas Admin API (POPT) - Porta 5012
+  # 1. Nexas Admin API (pon) - Porta 5012
   nexas-admin-api:
     build:
       context: .

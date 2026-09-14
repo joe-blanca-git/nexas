@@ -51,7 +51,7 @@ Cada projeto de backend .NET segue o mesmo padrão de solution: `<Nome>.Domain`,
 | `theos-landing-api-container` | Theos | backend-theos-landing-api | 5013→8080 | idem |
 | `theos-landing-container` | Theos (frontend) | frontend-theos-landing | 4210→80 | — |
 | `theos-portal-pat-container` | Theos (frontend, alunos) | frontend-theos-portal-pat | 4211→80 | — |
-| `theos-portal-popt-container` | Theos (frontend, professores) | frontend-theos-portal-popt | 4212→80 | — |
+| `theos-portal-pon-container` | Theos (frontend, professores) | frontend-theos-portal-pon | 4212→80 | — |
 | `agivys-db` | Agivys | mysql:8.0 | 3306→3306 | `agivys_default` |
 | `agivys-api-container` | Agivys | agivys-agivys-api | 5000→5000 | `agivys_default` |
 | `agivys-landing-container` | Agivys | agivys-agivys-landing | 4213→80 | `agivys_default` |

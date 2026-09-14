@@ -1,0 +1,598 @@
+<div class="container-fluid py-4">
+
+
+
+
+  <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
+    <div class="card-header bg-white border-bottom-0 pt-4 px-4 pb-0">
+      <ul class="nav nav-tabs card-header-tabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link fw-semibold" [class.active]="activeTab === 'categories'" (click)="switchTab('categories')" type="button" role="tab">Categorias</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link fw-semibold" [class.active]="activeTab === 'teachers'" (click)="switchTab('teachers')" type="button" role="tab">Professores</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link fw-semibold" [class.active]="activeTab === 'administrators'" (click)="switchTab('administrators')" type="button" role="tab">Administradores</button>
+        </li>
+      </ul>
+    </div>
+    
+    <div class="card-body p-4 bg-light bg-opacity-50">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 class="fw-bold mb-0">
+          {{ activeTab === 'categories' ? 'Gerenciamento de Categorias' : activeTab === 'teachers' ? 'Listagem de Professores' : 'Administradores' }}
+        </h5>
+        <button class="btn btn-primary px-4 rounded-pill shadow-sm" 
+                [disabled]="isLoading"
+                (click)="activeTab === 'categories' ? openAddCategoryModal() : activeTab === 'teachers' ? openAddTeacherModal() : openAddAdminModal()">
+          <i class="fas fa-plus me-2"></i> Adicionar {{ activeTab === 'categories' ? (activeCategoryTab === 'courses' ? 'Categoria de Curso' : 'Categoria de Fórum') : activeTab === 'teachers' ? 'Professor' : 'Administrador' }}
+        </button>
+      </div>
+
+      <!-- Categories Content -->
+      <div *ngIf="activeTab === 'categories'">
+        <!-- Sub navigation -->
+        <ul class="nav nav-pills mb-3 gap-2" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link rounded-pill px-4" [class.active]="activeCategoryTab === 'courses'" [class.bg-white]="activeCategoryTab !== 'courses'" [class.text-dark]="activeCategoryTab !== 'courses'" [class.shadow-sm]="activeCategoryTab !== 'courses'" (click)="switchCategoryTab('courses')" type="button" role="tab">Cursos</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link rounded-pill px-4" [class.active]="activeCategoryTab === 'forums'" [class.bg-white]="activeCategoryTab !== 'forums'" [class.text-dark]="activeCategoryTab !== 'forums'" [class.shadow-sm]="activeCategoryTab !== 'forums'" (click)="switchCategoryTab('forums')" type="button" role="tab">Fórum</button>
+          </li>
+        </ul>
+
+        <!-- Course Categories Table -->
+        <div *ngIf="activeCategoryTab === 'courses'" class="table-responsive bg-white rounded-3 shadow-sm">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th scope="col" class="ps-4">ID</th>
+              <th scope="col">Nome</th>
+              <th scope="col">Descrição</th>
+              <th scope="col" class="text-end pe-4">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="isLoading">
+              <td class="ps-4">
+                <div class="skeleton rounded" style="height: 16px; width: 40px;"></div>
+              </td>
+              <td>
+                <div class="skeleton rounded" style="height: 16px; width: 150px;"></div>
+              </td>
+              <td>
+                <div class="skeleton rounded" style="height: 16px; width: 250px;"></div>
+              </td>
+              <td class="text-end pe-4">
+                <div class="d-flex justify-content-end gap-2">
+                  <div class="skeleton rounded-circle" style="width: 32px; height: 32px;"></div>
+                  <div class="skeleton rounded-circle" style="width: 32px; height: 32px;"></div>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="!isLoading && categories.length === 0">
+              <td colspan="4" class="text-center py-4 text-muted">Nenhuma categoria encontrada.</td>
+            </tr>
+            <tr *ngFor="let cat of categories">
+              <td class="ps-4 fw-medium text-muted">#{{ cat.id }}</td>
+              <td class="fw-semibold">{{ cat.name }}</td>
+              <td>{{ cat.description || '-' }}</td>
+              <td class="text-end pe-4 text-nowrap">
+                <button class="btn btn-sm btn-light text-primary me-2 rounded-circle shadow-sm d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px;" (click)="openEditCategoryModal(cat)" title="Editar">
+                  <i class="fas fa-pen"></i>
+                </button>
+                <button class="btn btn-sm btn-light text-danger rounded-circle shadow-sm d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px;" (click)="confirmDeleteCategory(cat)" title="Excluir">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+        <!-- Forum Categories Table -->
+        <div *ngIf="activeCategoryTab === 'forums'" class="table-responsive bg-white rounded-3 shadow-sm">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th scope="col" class="ps-4">ID</th>
+                <th scope="col">Nome (Fórum)</th>
+                <th scope="col">Descrição</th>
+                <th scope="col" class="text-end pe-4">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngIf="isLoading">
+                <td class="ps-4">
+                  <div class="skeleton rounded" style="height: 16px; width: 40px;"></div>
+                </td>
+                <td>
+                  <div class="skeleton rounded" style="height: 16px; width: 150px;"></div>
+                </td>
+                <td>
+                  <div class="skeleton rounded" style="height: 16px; width: 250px;"></div>
+                </td>
+                <td class="text-end pe-4">
+                  <div class="d-flex justify-content-end gap-2">
+                    <div class="skeleton rounded-circle" style="width: 32px; height: 32px;"></div>
+                    <div class="skeleton rounded-circle" style="width: 32px; height: 32px;"></div>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="!isLoading && forumCategories.length === 0">
+                <td colspan="4" class="text-center py-4 text-muted">Nenhuma categoria de fórum encontrada.</td>
+              </tr>
+              <tr *ngFor="let cat of forumCategories">
+                <td class="ps-4 fw-medium text-muted">#{{ cat.id }}</td>
+                <td class="fw-semibold">{{ cat.name }}</td>
+                <td>{{ cat.description || '-' }}</td>
+                <td class="text-end pe-4 text-nowrap">
+                  <button class="btn btn-sm btn-light text-primary me-2 rounded-circle shadow-sm d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px;" (click)="openEditCategoryModal(cat)" title="Editar">
+                    <i class="fas fa-pen"></i>
+                  </button>
+                  <button class="btn btn-sm btn-light text-danger rounded-circle shadow-sm d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px;" (click)="confirmDeleteCategory(cat)" title="Excluir">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Teachers Table -->
+      <div *ngIf="activeTab === 'teachers'" class="table-responsive bg-white rounded-3 shadow-sm">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th scope="col" class="ps-4">Professor</th>
+              <th scope="col">Papel</th>
+              <th scope="col">Cargo</th>
+              <th scope="col" class="text-end pe-4">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="isLoading">
+              <td class="ps-4">
+                <div class="d-flex align-items-center">
+                  <div class="skeleton rounded-circle me-3" style="width: 40px; height: 40px;"></div>
+                  <div>
+                    <div class="skeleton rounded mb-1" style="height: 16px; width: 120px;"></div>
+                    <div class="skeleton rounded" style="height: 12px; width: 80px;"></div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="skeleton rounded-pill" style="height: 24px; width: 80px;"></div>
+              </td>
+              <td>
+                <div class="skeleton rounded" style="height: 16px; width: 150px;"></div>
+              </td>
+              <td class="text-end pe-4">
+                <div class="d-flex justify-content-end gap-2">
+                  <div class="skeleton rounded-circle" style="width: 32px; height: 32px;"></div>
+                  <div class="skeleton rounded-circle" style="width: 32px; height: 32px;"></div>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="!isLoading && teachers.length === 0">
+              <td colspan="4" class="text-center py-4 text-muted">Nenhum professor encontrado.</td>
+            </tr>
+            <tr *ngFor="let teacher of teachers">
+              <td class="ps-4">
+                <div class="d-flex align-items-center">
+                  <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; overflow: hidden;">
+                    <img *ngIf="teacher.avatar" [src]="teacher.avatar" alt="Avatar" class="w-100 h-100 object-fit-cover">
+                    <i *ngIf="!teacher.avatar" class="fas fa-user"></i>
+                  </div>
+                  <div>
+                    <div class="fw-semibold">{{ teacher.name }}</div>
+                    <small class="text-muted" *ngIf="teacher.idAgivys">ID Agivys: {{ teacher.idAgivys }}</small>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25">{{ teacher.role || 'Padrão' }}</span>
+              </td>
+              <td>{{ teacher.position || '-' }}</td>
+              <td class="text-end pe-4 text-nowrap">
+                <button class="btn btn-sm btn-light text-primary me-2 rounded-circle shadow-sm d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px;" (click)="openEditTeacherModal(teacher)" title="Editar">
+                  <i class="fas fa-pen"></i>
+                </button>
+                <button class="btn btn-sm btn-light text-danger rounded-circle shadow-sm d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px;" (click)="confirmDeleteTeacher(teacher)" title="Excluir">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- Administrators Table -->
+      <div *ngIf="activeTab === 'administrators'" class="table-responsive bg-white rounded-3 shadow-sm">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th scope="col" class="ps-4">Administrador</th>
+              <th scope="col">Papel no Sistema</th>
+              <th scope="col" class="text-end pe-4">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="isLoading">
+              <td class="ps-4">
+                <div class="d-flex align-items-center">
+                  <div class="skeleton rounded-circle me-3" style="width: 40px; height: 40px;"></div>
+                  <div>
+                    <div class="skeleton rounded mb-1" style="height: 16px; width: 120px;"></div>
+                    <div class="skeleton rounded" style="height: 12px; width: 80px;"></div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="skeleton rounded-pill" style="height: 24px; width: 80px;"></div>
+              </td>
+              <td class="text-end pe-4">
+                <div class="d-flex justify-content-end gap-2">
+                  <div class="skeleton rounded-circle" style="width: 32px; height: 32px;"></div>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="!isLoading && administrators.length === 0">
+              <td colspan="3" class="text-center py-4 text-muted">Nenhum administrador encontrado.</td>
+            </tr>
+            <tr *ngFor="let admin of administrators">
+              <td class="ps-4">
+                <div class="d-flex align-items-center">
+                  <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; overflow: hidden;">
+                    <img *ngIf="admin.avatar" [src]="admin.avatar" alt="Avatar" class="w-100 h-100 object-fit-cover">
+                    <i *ngIf="!admin.avatar" class="fas fa-user-shield"></i>
+                  </div>
+                  <div>
+                    <div class="fw-semibold">{{ admin.name }}</div>
+                    <small class="text-muted" *ngIf="admin.idAgivys">ID Agivys: {{ admin.idAgivys }}</small>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25"><i class="fas fa-shield-alt me-1"></i> Admin</span>
+              </td>
+              <td class="text-end pe-4 text-nowrap">
+                <button class="btn btn-sm btn-light text-danger rounded-circle shadow-sm d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px;" (click)="confirmDeleteAdmin(admin)" title="Remover Privilégio">
+                  <i class="fas fa-user-times"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ======================= MODALS ======================= -->
+
+<!-- Category Modal (Padrão Ouro) -->
+<div class="modal fade" id="categoryModal" #categoryModal tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 border-0 shadow-lg d-flex flex-column">
+      
+      <div class="modal-header bg-dark border-bottom-0 pb-3 pt-4 px-4 rounded-top-4 position-relative overflow-hidden flex-shrink-0">
+        <div class="position-absolute top-0 end-0 p-3 opacity-25">
+          <i class="fas fa-layer-group text-white" style="font-size: 8rem; transform: translate(20%, -30%);"></i>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center shadow-sm flex-shrink-0" style="width: 48px; height: 48px;">
+            <i class="fas fa-layer-group fs-5"></i>
+          </div>
+          <div>
+            <h5 class="modal-title fw-bolder text-white mb-0 fs-5">{{ categoryToEdit ? 'Editar Categoria' : 'Nova Categoria' }}</h5>
+          </div>
+        </div>
+        <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 mt-4 me-4" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body bg-secondary bg-opacity-10 p-4 overflow-auto custom-scrollbar flex-grow-1">
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
+          <div class="card-body p-4">
+            <form id="categoryForm" [formGroup]="categoryForm" (ngSubmit)="saveCategory()">
+              <div class="mb-3">
+                <label class="form-label fw-semibold text-dark">Nome <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" formControlName="name" placeholder="Ex: Programação">
+                <div *ngIf="categoryForm.get('name')?.invalid && categoryForm.get('name')?.touched" class="text-danger small mt-1">Nome é obrigatório.</div>
+              </div>
+              <div class="mb-4">
+                <label class="form-label fw-semibold text-dark">Descrição</label>
+                <textarea class="form-control" rows="3" formControlName="description" placeholder="Opcional"></textarea>
+              </div>
+              
+              <div class="mb-4" *ngIf="activeCategoryTab === 'forums'">
+                <label class="form-label fw-semibold text-dark">Ícone (FontAwesome)</label>
+                <input type="text" class="form-control" formControlName="icon" placeholder="Ex: fa-solid fa-code">
+                <small class="text-muted d-block mt-1">Deixe em branco para usar o ícone padrão.</small>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-footer bg-secondary bg-opacity-10 border-top-0 px-4 py-3 d-flex justify-content-between align-items-center">
+        <button type="button" class="btn btn-light text-secondary border rounded-pill px-4 fw-semibold shadow-sm" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" form="categoryForm" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2" [disabled]="isSubmittingCategory">
+          <span *ngIf="isSubmittingCategory" class="spinner-border spinner-border-sm"></span>
+          <i class="fas fa-save" *ngIf="!isSubmittingCategory"></i> Salvar
+        </button>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Delete Category Modal (Padrão Ouro) -->
+<div class="modal fade" id="confirmDeleteCategoryModal" #confirmDeleteCategoryModal tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 border-0 shadow-lg d-flex flex-column">
+      <div class="modal-header bg-dark border-bottom-0 pb-3 pt-4 px-4 rounded-top-4 position-relative overflow-hidden flex-shrink-0">
+        <div class="position-absolute top-0 end-0 p-3 opacity-25">
+          <i class="fas fa-trash text-white" style="font-size: 8rem; transform: translate(20%, -30%);"></i>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <div class="bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center shadow-sm flex-shrink-0" style="width: 48px; height: 48px;">
+            <i class="fas fa-trash fs-5"></i>
+          </div>
+          <div>
+            <h5 class="modal-title fw-bolder text-white mb-0 fs-5">Excluir Categoria</h5>
+          </div>
+        </div>
+        <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 mt-4 me-4" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body text-center py-4 bg-light">
+        <div class="mb-3">
+          <div class="d-inline-flex align-items-center justify-content-center bg-danger bg-opacity-10 rounded-circle text-danger" style="width: 80px; height: 80px;">
+            <i class="fas fa-trash fs-1"></i>
+          </div>
+        </div>
+        <h5 class="fw-bold mb-2">Confirmar Exclusão</h5>
+        <p class="text-muted mb-0">Tem certeza que deseja excluir a categoria <strong>{{ categoryToDelete?.name }}</strong>?</p>
+      </div>
+      <div class="modal-footer bg-light border-top-0 px-4 py-3 d-flex justify-content-center gap-2 rounded-bottom-4">
+        <button type="button" class="btn btn-light text-secondary border rounded-pill px-4 fw-semibold shadow-sm" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2" (click)="executeDeleteCategory()" [disabled]="isDeletingCategory">
+          <span *ngIf="isDeletingCategory" class="spinner-border spinner-border-sm"></span>
+          <i class="fas fa-trash" *ngIf="!isDeletingCategory"></i> Sim, Excluir
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Teacher Modal (Padrão Ouro) -->
+<div class="modal fade" id="teacherModal" #teacherModal tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content rounded-4 border-0 shadow-lg d-flex flex-column">
+      
+      <div class="modal-header bg-dark border-bottom-0 pb-3 pt-4 px-4 rounded-top-4 position-relative overflow-hidden flex-shrink-0">
+        <div class="position-absolute top-0 end-0 p-3 opacity-25">
+          <i class="fas fa-chalkboard-teacher text-white" style="font-size: 8rem; transform: translate(20%, -30%);"></i>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center shadow-sm flex-shrink-0" style="width: 48px; height: 48px;">
+            <i class="fas fa-chalkboard-teacher fs-5"></i>
+          </div>
+          <div>
+            <h5 class="modal-title fw-bolder text-white mb-0 fs-5">{{ teacherToEdit ? 'Editar Professor' : 'Novo Professor' }}</h5>
+          </div>
+        </div>
+        <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 mt-4 me-4" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body bg-secondary bg-opacity-10 p-4 overflow-auto custom-scrollbar flex-grow-1" style="max-height: 80vh;">
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
+          <div class="card-body p-4">
+            <form id="teacherForm" [formGroup]="teacherForm" (ngSubmit)="saveTeacher()">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label fw-semibold text-dark">Nome <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" formControlName="name" placeholder="Nome Completo">
+                  <div *ngIf="teacherForm.get('name')?.invalid && teacherForm.get('name')?.touched" class="text-danger small mt-1">Nome é obrigatório.</div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label fw-semibold text-dark">Papel (Role)</label>
+                  <input type="text" class="form-control" formControlName="role" placeholder="Ex: Coordenador">
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label fw-semibold text-dark">Cargo (Position)</label>
+                  <input type="text" class="form-control" formControlName="position" placeholder="Ex: Professor Titular">
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label fw-semibold text-dark">Usuário</label>
+                  <select class="form-select" formControlName="idAgivys">
+                    <option value="">Selecione um usuário...</option>
+                    <option *ngFor="let user of systemUsers" [value]="user.externalId">
+                      {{ user.name }}
+                    </option>
+                  </select>
+                </div>
+                <div class="col-12 mb-3">
+                  <label class="form-label fw-semibold text-dark">Avatar</label>
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="bg-light border rounded-circle d-flex align-items-center justify-content-center overflow-hidden flex-shrink-0" style="width: 60px; height: 60px;">
+                      <img *ngIf="avatarPreview" [src]="avatarPreview" alt="Avatar" class="w-100 h-100 object-fit-cover">
+                      <i *ngIf="!avatarPreview" class="fas fa-user-circle text-muted fs-3"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                      <input type="file" class="form-control" accept="image/*" (change)="onAvatarSelected($event)">
+                      <small class="text-muted d-block mt-1">Apenas imagens (Max 1MB)</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label fw-semibold text-dark">Instagram (Link)</label>
+                  <input type="text" class="form-control" formControlName="instagramLink" placeholder="https://instagram.com/...">
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label fw-semibold text-dark">LinkedIn (Link)</label>
+                  <input type="text" class="form-control" formControlName="linkedinLink" placeholder="https://linkedin.com/in/...">
+                </div>
+                <div class="col-12 mb-4">
+                  <label class="form-label fw-semibold text-dark">Biografia</label>
+                  <textarea class="form-control" rows="4" formControlName="bio" placeholder="Breve currículo ou biografia"></textarea>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-footer bg-secondary bg-opacity-10 border-top-0 px-4 py-3 d-flex justify-content-between align-items-center">
+        <button type="button" class="btn btn-light text-secondary border rounded-pill px-4 fw-semibold shadow-sm" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" form="teacherForm" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2" [disabled]="isSubmittingTeacher">
+          <span *ngIf="isSubmittingTeacher" class="spinner-border spinner-border-sm"></span>
+          <i class="fas fa-save" *ngIf="!isSubmittingTeacher"></i> Salvar
+        </button>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Delete Teacher Modal (Padrão Ouro) -->
+<div class="modal fade" id="confirmDeleteTeacherModal" #confirmDeleteTeacherModal tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 border-0 shadow-lg d-flex flex-column">
+      <div class="modal-header bg-dark border-bottom-0 pb-3 pt-4 px-4 rounded-top-4 position-relative overflow-hidden flex-shrink-0">
+        <div class="position-absolute top-0 end-0 p-3 opacity-25">
+          <i class="fas fa-user-times text-white" style="font-size: 8rem; transform: translate(20%, -30%);"></i>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <div class="bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center shadow-sm flex-shrink-0" style="width: 48px; height: 48px;">
+            <i class="fas fa-trash fs-5"></i>
+          </div>
+          <div>
+            <h5 class="modal-title fw-bolder text-white mb-0 fs-5">Inativar Professor</h5>
+          </div>
+        </div>
+        <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 mt-4 me-4" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body text-center py-4 bg-light">
+        <div class="mb-3">
+          <div class="d-inline-flex align-items-center justify-content-center bg-danger bg-opacity-10 rounded-circle text-danger" style="width: 80px; height: 80px;">
+            <i class="fas fa-user-times fs-1"></i>
+          </div>
+        </div>
+        <h5 class="fw-bold mb-2">Confirmar Inativação</h5>
+        <p class="text-muted mb-0">Tem certeza que deseja inativar o professor <strong>{{ teacherToDelete?.name }}</strong>?</p>
+      </div>
+      <div class="modal-footer bg-light border-top-0 px-4 py-3 d-flex justify-content-center gap-2 rounded-bottom-4">
+        <button type="button" class="btn btn-light text-secondary border rounded-pill px-4 fw-semibold shadow-sm" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2" (click)="executeDeleteTeacher()" [disabled]="isDeletingTeacher">
+          <span *ngIf="isDeletingTeacher" class="spinner-border spinner-border-sm"></span>
+          <i class="fas fa-user-times" *ngIf="!isDeletingTeacher"></i> Sim, Inativar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Admin Modal (Padrão Ouro) -->
+<div class="modal fade" id="adminModal" #adminModal tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 border-0 shadow-lg d-flex flex-column">
+      
+      <div class="modal-header bg-dark border-bottom-0 pb-3 pt-4 px-4 rounded-top-4 position-relative overflow-hidden flex-shrink-0">
+        <div class="position-absolute top-0 end-0 p-3 opacity-25">
+          <i class="fas fa-user-shield text-white" style="font-size: 8rem; transform: translate(20%, -30%);"></i>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center shadow-sm flex-shrink-0" style="width: 48px; height: 48px;">
+            <i class="fas fa-user-shield fs-5"></i>
+          </div>
+          <div>
+            <h5 class="modal-title fw-bolder text-white mb-0 fs-5">Novo Administrador</h5>
+          </div>
+        </div>
+        <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 mt-4 me-4" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body bg-secondary bg-opacity-10 p-4 overflow-auto custom-scrollbar flex-grow-1">
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
+          <div class="card-body p-4">
+            <form id="adminForm" [formGroup]="adminForm" (ngSubmit)="saveAdmin()">
+              <div class="mb-3">
+                <label class="form-label fw-semibold text-dark">Professor <span class="text-danger">*</span></label>
+                <select class="form-select" formControlName="teacherId">
+                  <option value="">Selecione um professor...</option>
+                  <option *ngFor="let teacher of nonAdminTeachers" [value]="teacher.id">
+                    {{ teacher.name }}
+                  </option>
+                </select>
+                <div *ngIf="adminForm.get('teacherId')?.invalid && adminForm.get('teacherId')?.touched" class="text-danger small mt-1">Professor é obrigatório.</div>
+                <div *ngIf="nonAdminTeachers.length === 0" class="text-warning small mt-1">
+                  Nenhum professor disponível para adicionar.
+                </div>
+              </div>
+              <div class="mb-4">
+                <label class="form-label fw-semibold text-dark">Papel (Role) no Agivys <span class="text-danger">*</span></label>
+                <select class="form-select bg-light" formControlName="roleName" style="pointer-events: none; opacity: 0.8;" tabindex="-1">
+                  <option value="">Selecione uma role...</option>
+                  <option *ngFor="let role of agivysRoles" [value]="role.name">
+                    {{ role.name }}
+                  </option>
+                </select>
+                <div *ngIf="adminForm.get('roleName')?.invalid && adminForm.get('roleName')?.touched" class="text-danger small mt-1">Role é obrigatória.</div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-footer bg-secondary bg-opacity-10 border-top-0 px-4 py-3 d-flex justify-content-between align-items-center">
+        <button type="button" class="btn btn-light text-secondary border rounded-pill px-4 fw-semibold shadow-sm" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" form="adminForm" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2" [disabled]="isSubmittingAdmin">
+          <span *ngIf="isSubmittingAdmin" class="spinner-border spinner-border-sm"></span>
+          <i class="fas fa-save" *ngIf="!isSubmittingAdmin"></i> Salvar
+        </button>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Delete Admin Modal (Padrão Ouro) -->
+<div class="modal fade" id="confirmDeleteAdminModal" #confirmDeleteAdminModal tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 border-0 shadow-lg d-flex flex-column">
+      <div class="modal-header bg-dark border-bottom-0 pb-3 pt-4 px-4 rounded-top-4 position-relative overflow-hidden flex-shrink-0">
+        <div class="position-absolute top-0 end-0 p-3 opacity-25">
+          <i class="fas fa-user-times text-white" style="font-size: 8rem; transform: translate(20%, -30%);"></i>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <div class="bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center shadow-sm flex-shrink-0" style="width: 48px; height: 48px;">
+            <i class="fas fa-user-times fs-5"></i>
+          </div>
+          <div>
+            <h5 class="modal-title fw-bolder text-white mb-0 fs-5">Revogar Privilégio</h5>
+          </div>
+        </div>
+        <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 mt-4 me-4" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body text-center py-4 bg-light">
+        <div class="mb-3">
+          <div class="d-inline-flex align-items-center justify-content-center bg-danger bg-opacity-10 rounded-circle text-danger" style="width: 80px; height: 80px;">
+            <i class="fas fa-user-times fs-1"></i>
+          </div>
+        </div>
+        <h5 class="fw-bold mb-2">Confirmar Revogação</h5>
+        <p class="text-muted mb-0">Tem certeza que deseja revogar o acesso administrativo de <strong>{{ adminToDelete?.name }}</strong>?</p>
+      </div>
+      <div class="modal-footer bg-light border-top-0 px-4 py-3 d-flex justify-content-center gap-2 rounded-bottom-4">
+        <button type="button" class="btn btn-light text-secondary border rounded-pill px-4 fw-semibold shadow-sm" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2" (click)="executeDeleteAdmin()" [disabled]="isDeletingAdmin">
+          <span *ngIf="isDeletingAdmin" class="spinner-border spinner-border-sm"></span>
+          <i class="fas fa-user-times" *ngIf="!isDeletingAdmin"></i> Sim, Revogar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

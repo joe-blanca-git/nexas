@@ -1,0 +1,178 @@
+<div class="row g-0 h-100 flex-grow-1" style="min-height: 0;">
+  <!-- Lado Esquerdo: Lista de Chamados (Inbox) -->
+  <div class="col-12 col-md-5 col-lg-4 border-end d-flex flex-column h-100 overflow-hidden bg-white" style="min-height: 0;">
+    <!-- Cabeçalho / Filtros -->
+    <div class="p-3 border-bottom bg-light bg-opacity-25">
+      <div class="input-group input-group-sm mb-2 shadow-sm rounded-pill overflow-hidden">
+        <span class="input-group-text bg-white border-end-0 border-secondary border-opacity-25 text-muted px-3">
+          <i class="fas fa-search"></i>
+        </span>
+        <input type="text" class="form-control border-start-0 border-secondary border-opacity-25 ps-0 bg-white" 
+               placeholder="Buscar chamados..." (keyup)="onSearch($event)">
+      </div>
+      <div class="d-flex align-items-center gap-2 mb-2">
+        <select class="form-select form-select-sm border-secondary border-opacity-25 rounded-pill shadow-sm" style="flex: 1;" (change)="onFilterStatus($event)">
+          <option value="">Todos os status</option>
+          <option value="0">Aberto</option>
+          <option value="1">Pendente</option>
+          <option value="3">Fechado</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Lista -->
+    <div class="flex-grow-1 overflow-auto bg-white custom-scrollbar">
+      
+      <!-- Loading State -->
+      <div *ngIf="isLoading" class="p-3">
+        <div class="skeleton rounded mb-3" style="height: 80px; width: 100%;"></div>
+        <div class="skeleton rounded mb-3" style="height: 80px; width: 100%;"></div>
+        <div class="skeleton rounded" style="height: 80px; width: 100%;"></div>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="!isLoading && tickets.length === 0" class="text-center py-5 px-3 text-muted">
+        <i class="fas fa-inbox fs-1 mb-3 text-secondary opacity-50"></i>
+        <p class="mb-0">Nenhum chamado encontrado.</p>
+      </div>
+
+      <!-- Tickets Items -->
+      <div class="list-group list-group-flush rounded-0" *ngIf="!isLoading">
+        <button *ngFor="let ticket of tickets" 
+                class="list-group-item list-group-item-action p-3 border-bottom ticket-item"
+                [class.active-ticket]="selectedTicket?.id === ticket.id"
+                (click)="selectTicket(ticket)">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <h6 class="mb-0 fw-bold text-truncate me-2" [class.text-primary]="selectedTicket?.id === ticket.id" style="font-size: 0.95rem;">
+              {{ ticket.studentName }}
+            </h6>
+            <small class="text-muted" style="font-size: 0.75rem;">{{ ticket.createdAt | date:'shortDate' }}</small>
+          </div>
+          <div class="fw-semibold text-dark text-truncate mb-1" style="font-size: 0.85rem;">{{ ticket.subject }}</div>
+          <div class="d-flex justify-content-between align-items-center mt-2">
+            <div>
+              <span class="badge border border-opacity-25 rounded-pill me-1" [ngClass]="getStatusBadgeClass(ticket.status)">
+                {{ getStatusName(ticket.status) }}
+              </span>
+            </div>
+            <small class="text-muted" style="font-size: 0.75rem;">
+              <i class="fas fa-tag me-1"></i>{{ ticket.categoryName }}
+            </small>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lado Direito: Visualização do Chamado (Reading Pane) -->
+  <div class="col-12 col-md-7 col-lg-8 d-flex flex-column h-100 overflow-hidden bg-light bg-opacity-25" style="min-height: 0;">
+    
+    <!-- Empty State (No ticket selected) -->
+    <div *ngIf="!selectedTicket" class="flex-grow-1 d-flex flex-column align-items-center justify-content-center text-muted p-5">
+      <div class="bg-white rounded-circle shadow-sm d-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+        <i class="fas fa-envelope-open-text fs-2 text-secondary opacity-50"></i>
+      </div>
+      <h5 class="fw-bold">Selecione um chamado</h5>
+      <p>Clique em um chamado na lista ao lado para visualizar a conversa e responder.</p>
+    </div>
+
+    <!-- Ticket View -->
+    <ng-container *ngIf="selectedTicket">
+      <!-- Header do Chamado -->
+      <div class="p-4 border-bottom bg-white shadow-sm z-1">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+          
+          <!-- Subject and Category -->
+          <div class="flex-grow-1">
+            <h5 class="fw-bold mb-1">{{ selectedTicket.subject }}</h5>
+            <div class="d-flex align-items-center gap-2">
+              <span class="badge border border-opacity-25 rounded-pill" [ngClass]="getStatusBadgeClass(selectedTicket.status)">
+                {{ getStatusName(selectedTicket.status) }}
+              </span>
+              <span class="text-muted small ms-2"><i class="fas fa-folder me-1"></i>{{ selectedTicket.categoryName }}</span>
+            </div>
+          </div>
+          
+          <!-- User Info -->
+          <div class="d-flex align-items-center border-start ps-3">
+            <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center me-3 fw-bold shadow-sm" style="width: 45px; height: 45px;">
+              {{ selectedTicket.studentName.charAt(0) }}
+            </div>
+            <div>
+              <div class="fw-bold">{{ selectedTicket.studentName }}</div>
+              <div class="text-muted small">{{ selectedTicket.studentEmail }} &bull; {{ selectedTicket.createdAt | date:'short' }}</div>
+            </div>
+          </div>
+
+          <!-- Close Button Mobile -->
+          <button class="btn btn-sm btn-light rounded-circle shadow-sm d-md-none" (click)="closeTicketView()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Histórico de Mensagens -->
+      <div class="flex-grow-1 p-4 overflow-auto custom-scrollbar bg-light bg-opacity-50">
+        <div *ngFor="let msg of selectedTicket.messages" class="mb-4 d-flex" [ngClass]="{'justify-content-end': isSupportMessage(msg)}">
+          
+          <!-- Avatar Usuário -->
+          <div *ngIf="!isSupportMessage(msg)" class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm flex-shrink-0 fw-bold" style="width: 40px; height: 40px; font-size: 0.9rem;">
+            {{ getInitials(msg.senderName || selectedTicket.studentName) }}
+          </div>
+
+          <!-- Balão de Mensagem -->
+          <div class="p-3 rounded-4 shadow-sm" 
+               style="max-width: 80%;"
+               [ngClass]="isSupportMessage(msg) ? 'bg-primary text-white rounded-bottom-end-0' : 'bg-white border rounded-bottom-start-0'">
+            <div class="d-flex justify-content-between align-items-center mb-2 gap-3">
+              <span class="fw-bold small" [ngClass]="isSupportMessage(msg) ? 'text-white-50' : 'text-muted'">
+                {{ msg.senderName || (isSupportMessage(msg) ? 'Suporte' : selectedTicket.studentName) }}
+              </span>
+              <span class="small" [ngClass]="isSupportMessage(msg) ? 'text-white-50' : 'text-muted'" style="font-size: 0.7rem;">
+                {{ msg.createdAt | date:'shortTime' }}
+              </span>
+            </div>
+            <div class="mb-0 message-content" style="white-space: pre-wrap; font-size: 0.95rem;">{{ msg.content }}</div>
+          </div>
+
+          <!-- Avatar Suporte -->
+          <div *ngIf="isSupportMessage(msg)" class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center ms-3 shadow-sm flex-shrink-0" style="width: 40px; height: 40px;">
+            <i class="fas fa-headset"></i>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Área de Resposta -->
+      <div class="p-4 bg-white border-top shadow-sm z-1">
+        <form [formGroup]="replyForm" (ngSubmit)="submitReply()">
+          <div class="mb-3">
+            <textarea class="form-control bg-light border-secondary border-opacity-25 rounded-4 p-3" 
+                      rows="4" 
+                      formControlName="content"
+                      placeholder="Escreva sua resposta ao usuário..."></textarea>
+          </div>
+          
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <!-- Ações de Status -->
+            <div class="d-flex gap-2">
+              <button type="button" class="btn btn-outline-success rounded-pill fw-semibold shadow-sm d-inline-flex align-items-center" 
+                      *ngIf="selectedTicket.status !== '3'"
+                      (click)="changeStatus('3')">
+                <i class="fas fa-check-circle me-2"></i> Finalizar
+              </button>
+            </div>
+            
+            <!-- Botão Enviar -->
+            <button type="submit" class="btn btn-primary rounded-pill px-4 fw-semibold shadow-sm d-inline-flex align-items-center" [disabled]="replyForm.invalid || isReplying">
+              <i class="fas fa-paper-plane me-2" *ngIf="!isReplying"></i>
+              <span class="spinner-border spinner-border-sm me-2" *ngIf="isReplying"></span>
+              {{ isReplying ? 'Enviando...' : 'Responder' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </ng-container>
+
+  </div>
+</div>

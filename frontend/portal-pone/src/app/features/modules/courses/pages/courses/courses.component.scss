@@ -1,0 +1,180 @@
+.bg-blur {
+  background: rgba(255, 255, 255, 0.09) !important;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+.welcome-hero-banner {
+  position: relative;
+  
+  .hero-bg-circle {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 1;
+
+    &.circle-1 {
+      width: 400px;
+      height: 400px;
+      right: -100px;
+      top: -150px;
+    }
+
+    &.circle-2 {
+      width: 300px;
+      height: 300px;
+      left: 10%;
+      bottom: -150px;
+    }
+  }
+}
+
+.text-light-muted {
+  color: #cbd5e1 !important;
+}
+
+.text-indigo {
+  color: #EF5350 !important; /* Sleek light-indigo accent */
+}
+
+.fw-extrabold {
+  font-weight: 800;
+}
+
+.animated-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.custom-table {
+  border-collapse: separate;
+  border-spacing: 0 10px;
+
+  th {
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #7A7A7A;
+    border: none;
+    padding-bottom: 0.25rem;
+  }
+  
+  td {
+    vertical-align: middle;
+    background-color: #1B1B1B;
+    border-top: 1px solid #f8f9fa;
+    border-bottom: 1px solid #f8f9fa;
+    
+    &:first-child {
+      border-left: 1px solid #f8f9fa;
+      border-top-left-radius: 12px;
+      border-bottom-left-radius: 12px;
+    }
+    
+    &:last-child {
+      border-right: 1px solid #f8f9fa;
+      border-top-right-radius: 12px;
+      border-bottom-right-radius: 12px;
+    }
+  }
+
+  .custom-table-row {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.06);
+      
+      .transition-scale {
+        transform: scale(1.05);
+      }
+    }
+  }
+}
+
+.transition-scale {
+  transition: transform 0.3s ease;
+}
+
+.transition-all {
+  transition: all 0.2s ease;
+}
+
+.hover-primary {
+  &:hover {
+    background-color: #252525 !important;
+    color: #B71C1C !important;
+    border-color: #d1d5db !important;
+  }
+}
+
+.btn-add-module {
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  &:hover {
+    transform: scale(1.1);
+    background-color: #202020 !important;
+  }
+}
+
+.object-fit-cover {
+  object-fit: cover;
+}
+
+
+
+/* Custom Modal Scroll and Height */
+.modal-content {
+  max-height: 90vh;
+}
+
+.modal-body {
+  overflow-y: auto;
+  
+  /* Custom Scrollbar for Webkit */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+  }
+}
+
+/* Custom Accordion override */
+.custom-accordion .accordion-button::after {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+.custom-accordion .accordion-button:not(.collapsed) {
+  background-color: #212529;
+  color: white;
+  box-shadow: none;
+}
+.custom-accordion .accordion-button:focus {
+  box-shadow: none;
+}
+
+/* Fix for stacked modals backdrops in Bootstrap 5 */
+::ng-deep .modal-backdrop ~ .modal-backdrop {
+  z-index: 1056 !important;
+}

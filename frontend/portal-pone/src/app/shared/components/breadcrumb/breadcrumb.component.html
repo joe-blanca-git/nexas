@@ -1,0 +1,19 @@
+<nav aria-label="breadcrumb" *ngIf="breadcrumbs.length > 0" class="breadcrumb-container mt-3 mx-4 mb-0">
+  <ol class="breadcrumb mb-0">
+    <li class="breadcrumb-item">
+      <a routerLink="/home" class="d-inline-flex align-items-center gap-1">
+        <i class="fas fa-home"></i> Home
+      </a>
+    </li>
+    
+    <ng-container *ngFor="let crumb of breadcrumbs; let last = last; let i = index">
+      <!-- Evita repetir a home se já mostramos o ícone -->
+      <ng-container *ngIf="crumb.url !== '/home'">
+        <li class="breadcrumb-item" [class.active]="last" [attr.aria-current]="last ? 'page' : null">
+          <a *ngIf="!last" [routerLink]="crumb.url">{{ crumb.label }}</a>
+          <span *ngIf="last">{{ crumb.label }}</span>
+        </li>
+      </ng-container>
+    </ng-container>
+  </ol>
+</nav>

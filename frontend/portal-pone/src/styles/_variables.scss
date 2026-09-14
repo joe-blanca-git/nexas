@@ -1,0 +1,133 @@
+// _variables.scss — Nexas Dark Theme Design System
+// ═══════════════════════════════════════════════════
+// Fonte única de verdade para todas as cores do projeto.
+// Nenhum componente deve definir cores diretamente.
+
+// ─── 1. Tipografia ───────────────────────────────
+$font-family-sans-serif: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
+$headings-font-family: 'Outfit', $font-family-sans-serif;
+$headings-font-weight: 700;
+
+// ─── 2. Paleta de Superfícies (Dark Theme) ───────
+$bg-principal:          #0B0B0B;  // Body / fundo geral
+$bg-secundario:         #121212;  // Fundo alternativo
+$bg-navbar-sidebar:     #151515;  // Navbar + Sidebar (mesma cor, sempre)
+$bg-surface:            #1B1B1B;  // Cards
+$bg-modais-dropdowns:   #1A1A1A;  // Modais, dropdowns, popovers
+$bg-inputs:             #202020;  // Campos de formulário
+$hover-bg:              #252525;  // Hover state genérico
+$border-subtle:         #2C2C2C;  // Bordas de componentes
+
+// ─── 3. Cor Primária (Marca Nexas) ───────────────
+$nexas-primary:         #284ac6;  // Primária institucional
+$nexas-primary-hover:   #142379;  // Hover em elementos primários
+$nexas-primary-light:   rgba(40, 66, 198, 0.15); // Fundo sutil p/ badges/alerts
+$nexas-primary-glow:    rgba(40, 66, 198, 0.35); // Glow do foco
+
+// ─── 4. Cores Funcionais ─────────────────────────
+$success:  #10b981;
+$warning:  #f59e0b;
+$danger:   #ef4444;
+$info:     #06b6d4;
+
+// ─── 5. Tipografia / Texto ───────────────────────
+$text-title:       #FFFFFF;  // Títulos (h1-h6)
+$text-main:        #E0E0E0;  // Corpo de texto
+$text-secondary:   #B0B0B0;  // Texto auxiliar / muted
+$text-placeholder: #7A7A7A;  // Placeholders de inputs
+
+// ─── 6. Mapeamento Bootstrap ─────────────────────
+// Essas variáveis são lidas pelo @import 'bootstrap/scss/bootstrap'
+// e propagadas automaticamente para os componentes do framework.
+$primary:   $nexas-primary;
+$secondary: $text-secondary;
+$light:     $bg-surface;
+$dark:      $bg-navbar-sidebar;
+
+$body-bg:    $bg-principal;
+$body-color: $text-main;
+
+$card-bg:           $bg-surface;
+$card-border-color: $border-subtle;
+$card-cap-bg:       $bg-surface;
+
+$input-bg:                $bg-inputs;
+$input-color:             $text-main;
+$input-border-color:      $border-subtle;
+$input-placeholder-color: $text-placeholder;
+$input-focus-border-color: $nexas-primary;
+$input-focus-box-shadow:   0 0 0 0.2rem $nexas-primary-glow;
+$input-focus-bg:           $bg-inputs;
+$input-focus-color:        $text-title;
+
+$modal-content-bg:            $bg-modais-dropdowns;
+$modal-content-border-color:  $border-subtle;
+$modal-backdrop-bg:           #000;
+$modal-backdrop-opacity:      0.7;
+
+$dropdown-bg:           $bg-modais-dropdowns;
+$dropdown-border-color: $border-subtle;
+$dropdown-link-color:   $text-main;
+$dropdown-link-hover-bg:   $hover-bg;
+$dropdown-link-hover-color: $text-title;
+$dropdown-divider-bg:   $border-subtle;
+
+$navbar-dark-color:           $text-main;
+$navbar-dark-hover-color:     $text-title;
+$navbar-dark-active-color:    $text-title;
+$navbar-dark-toggler-border-color: $border-subtle;
+
+$table-bg:        transparent;
+$table-color:     $text-main;
+$table-border-color: $border-subtle;
+$table-striped-bg:   rgba(255, 255, 255, 0.02);
+$table-hover-bg:     $hover-bg;
+
+$tooltip-bg:    $bg-modais-dropdowns;
+$tooltip-color: $text-main;
+
+$pagination-bg:          $bg-surface;
+$pagination-border-color: $border-subtle;
+$pagination-color:       $text-main;
+$pagination-hover-bg:    $hover-bg;
+$pagination-hover-color: $text-title;
+$pagination-active-bg:   $nexas-primary;
+$pagination-active-border-color: $nexas-primary;
+
+$breadcrumb-divider-color: $text-secondary;
+$breadcrumb-active-color:  $text-secondary;
+
+$alert-border-radius: 0.75rem;
+
+$list-group-bg:           $bg-surface;
+$list-group-border-color: $border-subtle;
+$list-group-hover-bg:     $hover-bg;
+$list-group-action-color: $text-main;
+$list-group-action-hover-color: $text-title;
+
+$accordion-bg:           $bg-surface;
+$accordion-border-color: $border-subtle;
+$accordion-button-bg:    $bg-surface;
+$accordion-button-active-bg: $hover-bg;
+$accordion-button-active-color: $text-title;
+
+// ─── 7. Sombras e Bordas ─────────────────────────
+$border-radius:    0.5rem;
+$border-radius-sm: 0.25rem;
+$border-radius-lg: 1rem;
+$border-radius-xl: 1.5rem;
+$border-radius-2xl: 2rem;
+
+$box-shadow:    0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+$box-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+$box-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+
+// ─── 8. Grid (sem alteração) ─────────────────────
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px
+);

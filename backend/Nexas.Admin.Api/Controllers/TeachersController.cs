@@ -104,7 +104,7 @@ public class TeachersController : ApiControllerBase
                     ?? User.FindFirst("nameid")?.Value
                     ?? User.FindFirst("sub")?.Value;
 
-        // In Admin API (portal-popt), default to admin view unless explicitly restricted
+        // In Admin API (portal-pon), default to admin view unless explicitly restricted
         bool isAdmin = true;
         if (User?.Identity?.IsAuthenticated == true)
         {

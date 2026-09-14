@@ -1,0 +1,62 @@
+// _typography.scss — Nexas Dark Theme Typography
+// ═══════════════════════════════════════════════════
+
+body {
+  font-family: $font-family-sans-serif;
+  color: $text-main;
+  background-color: $bg-principal;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: $headings-font-family;
+  font-weight: $headings-font-weight;
+  color: $text-title;
+  margin-bottom: 0.5rem;
+}
+
+h1, .h1 { font-size: 2.5rem; letter-spacing: -0.025em; }
+h2, .h2 { font-size: 2rem; letter-spacing: -0.025em; }
+h3, .h3 { font-size: 1.75rem; letter-spacing: -0.025em; }
+h4, .h4 { font-size: 1.5rem; letter-spacing: -0.025em; }
+h5, .h5 { font-size: 1.25rem; letter-spacing: -0.01em; }
+h6, .h6 { font-size: 1rem; letter-spacing: -0.01em; }
+
+.small, small {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: $text-main;
+}
+
+label {
+  font-weight: 500;
+  color: $text-secondary;
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}
+
+a {
+  color: $nexas-primary;
+  text-decoration: none;
+
+  &:hover {
+    color: lighten($nexas-primary, 10%);
+  }
+}
+
+// Utilitários de texto
+.fw-extrabold {
+  font-weight: 800;
+}
+
+.text-indigo {
+  color: $nexas-primary !important; // Redireciona referência legada
+}

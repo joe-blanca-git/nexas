@@ -1,0 +1,18 @@
+// 1. Variáveis do Design System (Sobrescreve o Bootstrap)
+@import './styles/variables';
+
+// 2. Importar o Bootstrap
+@import 'bootstrap/scss/bootstrap';
+
+// 3. Tipografia e Estilos Base
+@import './styles/typography';
+
+// 4. Componentes Globais
+@import './styles/components';
+
+// 5. Skeleton Loadings
+@import './styles/skeletons';
+
+// 6. Tema e Cores customizados antigos (Moveremos a lógica deles aos poucos)
+@import './custom-theme/bg-colors.scss';
+@import './custom-theme/theme.scss';

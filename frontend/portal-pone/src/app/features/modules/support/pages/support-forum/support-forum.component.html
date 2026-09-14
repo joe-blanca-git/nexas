@@ -1,0 +1,170 @@
+<!-- Cabeçalho / Filtros -->
+<div class="p-4 pb-2">
+  <div class="row g-2">
+    <div class="col-12 col-md-4">
+      <div class="input-group input-group-sm shadow-sm rounded-pill overflow-hidden">
+        <span class="input-group-text bg-white border-end-0 border-secondary border-opacity-25 text-muted px-3">
+          <i class="fas fa-search"></i>
+        </span>
+        <input type="text" class="form-control border-start-0 border-secondary border-opacity-25 ps-0 bg-white" 
+               placeholder="Pesquisar no fórum..." (keyup)="onSearch($event)">
+      </div>
+    </div>
+    <div class="col-12 col-md-3">
+      <select class="form-select form-select-sm border-secondary border-opacity-25 rounded-pill shadow-sm" (change)="onFilterCategory($event)">
+        <option value="">Todas as categorias</option>
+        <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name || cat.description }}</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- Tabela de Fórum -->
+<div class="table-responsive bg-white rounded-3 shadow-sm m-4 mt-0">
+  <table class="table table-hover align-middle mb-0">
+    <thead class="table-light">
+      <tr>
+        <th scope="col" class="ps-4" style="width: 40%">Tópico</th>
+        <th scope="col">Autor</th>
+        <th scope="col">Data</th>
+        <th scope="col">Status</th>
+        <th scope="col" class="text-end pe-4">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Loading State -->
+      <ng-container *ngIf="isLoading">
+        <tr *ngFor="let i of [1,2,3,4]">
+          <td class="ps-4">
+            <div class="skeleton rounded mb-1" style="height: 16px; width: 60%;"></div>
+            <div class="skeleton rounded" style="height: 12px; width: 40%;"></div>
+          </td>
+          <td><div class="skeleton rounded" style="height: 16px; width: 100px;"></div></td>
+          <td><div class="skeleton rounded" style="height: 16px; width: 80px;"></div></td>
+          <td><div class="skeleton rounded-pill" style="height: 24px; width: 120px;"></div></td>
+          <td class="text-end pe-4">
+            <div class="skeleton rounded-circle ms-auto" style="width: 32px; height: 32px;"></div>
+          </td>
+        </tr>
+      </ng-container>
+
+      <!-- Empty State -->
+      <tr *ngIf="!isLoading && topics.length === 0">
+        <td colspan="5" class="text-center py-5 text-muted">Nenhum tópico encontrado no fórum.</td>
+      </tr>
+
+      <!-- Data -->
+      <ng-container *ngIf="!isLoading">
+        <tr *ngFor="let topic of topics">
+          <td class="ps-4">
+            <div class="fw-semibold text-dark">{{ topic.title }}</div>
+            <small class="text-muted">{{ topic.repliesCount }} resposta(s)</small>
+          </td>
+          <td>
+            <div class="d-flex align-items-center gap-2">
+              <div class="bg-light rounded-circle d-flex align-items-center justify-content-center text-primary fw-bold" style="width: 32px; height: 32px; font-size: 0.8rem;">
+                {{ topic.authorName.charAt(0) | uppercase }}
+              </div>
+              <span class="text-dark">{{ topic.authorName }}</span>
+            </div>
+          </td>
+          <td class="text-muted">{{ topic.createdAt | date:'shortDate' }}</td>
+          <td>
+            <span class="badge border border-opacity-25 rounded-pill" [ngClass]="getStatusBadgeClass(topic.status)">
+              {{ topic.status }}
+            </span>
+          </td>
+          <td class="text-end pe-4 text-nowrap">
+            <button class="btn btn-light btn-sm rounded-circle shadow-sm" style="width: 32px; height: 32px;" (click)="openTopicModal(topic)">
+              <i class="fas fa-chevron-right text-muted"></i>
+            </button>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal: Visualização de Tópico -->
+<div class="custom-modal-backdrop animated-fade-in d-flex align-items-center justify-content-center" *ngIf="showTopicModal" (click)="closeModal()">
+  <div class="custom-modal-content card bg-white border-0 shadow-lg rounded-4 overflow-hidden" 
+       style="width: 100%; max-width: 900px; max-height: 90vh; display: flex; flex-direction: column;" 
+       (click)="$event.stopPropagation()">
+    
+    <!-- Modal Header -->
+    <div class="card-header bg-light bg-opacity-25 border-bottom p-4 d-flex justify-content-between align-items-start">
+      <div *ngIf="selectedTopic">
+        <h4 class="fw-bold mb-2">{{ selectedTopic.title }}</h4>
+        <div class="d-flex align-items-center gap-2">
+          <span class="badge border border-opacity-25 rounded-pill" [ngClass]="getStatusBadgeClass(selectedTopic.status)">
+            {{ selectedTopic.status }}
+          </span>
+          <span class="text-muted small">Criado por {{ selectedTopic.authorName }} em {{ selectedTopic.createdAt | date:'short' }}</span>
+        </div>
+      </div>
+      <button class="btn btn-sm btn-light rounded-circle shadow-sm" (click)="closeModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <!-- Modal Body (Mensagens) -->
+    <div class="card-body p-4 overflow-auto custom-scrollbar bg-light bg-opacity-50" *ngIf="selectedTopic">
+      <div *ngFor="let msg of selectedTopic.messages" class="mb-4 d-flex" [ngClass]="{'justify-content-end': msg.authorName !== selectedTopic.authorName}">
+        
+        <!-- Avatar Usuário -->
+        <div *ngIf="msg.authorName === selectedTopic.authorName" class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm flex-shrink-0 fw-bold" style="width: 40px; height: 40px;">
+          {{ msg.authorName.charAt(0) }}
+        </div>
+
+        <!-- Balão de Mensagem -->
+        <div class="p-3 rounded-4 shadow-sm" 
+             style="max-width: 85%;"
+             [ngClass]="msg.authorName !== selectedTopic.authorName ? 'bg-primary text-white rounded-bottom-end-0' : 'bg-white border rounded-bottom-start-0'">
+          <div class="d-flex justify-content-between align-items-center mb-2 gap-3">
+            <span class="fw-bold small" [ngClass]="msg.authorName !== selectedTopic.authorName ? 'text-white-50' : 'text-muted'">
+              {{ msg.authorName }}
+            </span>
+            <span class="small" [ngClass]="msg.authorName !== selectedTopic.authorName ? 'text-white-50' : 'text-muted'" style="font-size: 0.7rem;">
+              {{ msg.createdAt | date:'shortTime' }}
+            </span>
+          </div>
+          <div class="mb-0" style="white-space: pre-wrap; font-size: 0.95rem;">{{ msg.content }}</div>
+        </div>
+
+        <!-- Avatar Suporte -->
+        <div *ngIf="msg.authorName !== selectedTopic.authorName" class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center ms-3 shadow-sm flex-shrink-0" style="width: 40px; height: 40px;">
+          <i class="fas fa-headset"></i>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Modal Footer (Área de Resposta) -->
+    <div class="card-footer bg-white border-top p-4" *ngIf="selectedTopic">
+      <form [formGroup]="replyForm" (ngSubmit)="submitReply()">
+        <div class="mb-3">
+          <textarea class="form-control bg-light border-secondary border-opacity-25 rounded-4 p-3" 
+                    rows="3" 
+                    formControlName="content"
+                    placeholder="Adicionar resposta ao tópico..."></textarea>
+        </div>
+        
+        <div class="d-flex justify-content-between align-items-center">
+          <button type="button" class="btn btn-outline-success rounded-pill fw-semibold shadow-sm d-inline-flex align-items-center" 
+                  *ngIf="selectedTopic.status !== 'Resolved'"
+                  (click)="changeStatus('Resolved')">
+            <i class="fas fa-check-circle me-2"></i> Finalizar Tópico
+          </button>
+          <div *ngIf="selectedTopic.status === 'Resolved'"></div> <!-- Espaçador -->
+          
+          <button type="submit" class="btn btn-primary rounded-pill px-4 fw-semibold shadow-sm d-inline-flex align-items-center" [disabled]="replyForm.invalid || isReplying">
+            <i class="fas fa-paper-plane me-2" *ngIf="!isReplying"></i>
+            <span class="spinner-border spinner-border-sm me-2" *ngIf="isReplying"></span>
+            {{ isReplying ? 'Enviando...' : 'Responder' }}
+          </button>
+        </div>
+      </form>
+    </div>
+    
+  </div>
+</div>

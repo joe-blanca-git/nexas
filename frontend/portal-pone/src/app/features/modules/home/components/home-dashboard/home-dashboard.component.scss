@@ -1,0 +1,129 @@
+/* ==========================================================================
+   Cards
+   ========================================================================== */
+.dashboard-card, .kpi-card {
+  background-color: #09090b; /* base bg */
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  
+  &:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+}
+
+.dashboard-title {
+  font-size: 1.75rem;
+  letter-spacing: -0.025em;
+  color: #fff;
+}
+
+.dashboard-subtitle {
+  font-size: 0.95rem;
+  color: #a1a1aa;
+}
+
+/* KPI Specifics */
+.kpi-title {
+  font-size: 0.875rem;
+  color: #a1a1aa;
+}
+
+.kpi-value {
+  font-size: 1.875rem;
+  letter-spacing: -0.025em;
+  color: #f8fafc;
+}
+
+.kpi-icon-wrapper {
+  width: 36px;
+  height: 36px;
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: #a1a1aa;
+  font-size: 1rem;
+}
+
+/* Summary Specifics */
+.summary-item {
+  background-color: rgba(255, 255, 255, 0.02);
+  border: 1px solid transparent;
+  transition: background-color 0.2s ease;
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.05);
+  }
+  
+  .summary-icon {
+    width: 32px;
+    height: 32px;
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #e4e4e7;
+    font-size: 0.85rem;
+  }
+}
+
+/* ==========================================================================
+   Badges (Soft Colors)
+   ========================================================================== */
+.badge-soft-success {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.badge-soft-primary {
+  background-color: rgba(99, 102, 241, 0.1);
+  color: #818cf8;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.badge-soft-secondary {
+  background-color: rgba(161, 161, 170, 0.1);
+  color: #a1a1aa;
+  border: 1px solid rgba(161, 161, 170, 0.2);
+}
+
+/* ==========================================================================
+   shadcn/ui style Table
+   ========================================================================== */
+.custom-table {
+  color: #e4e4e7;
+  
+  th {
+    color: #a1a1aa;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 1rem;
+    background: transparent;
+  }
+  
+  td {
+    padding: 1rem 0.5rem;
+    font-size: 0.875rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    background: transparent;
+    vertical-align: middle;
+  }
+  
+  tbody tr {
+    transition: background-color 0.15s ease;
+    
+    &:hover td {
+      background-color: rgba(255, 255, 255, 0.02);
+    }
+  }
+  
+  .topic-link {
+    color: #f4f4f5;
+    transition: color 0.15s ease;
+    
+    &:hover {
+      color: #818cf8;
+    }
+  }
+}

@@ -1,0 +1,195 @@
+.login-right {
+    padding: 10rem;
+    background-image: url('../../../../../../public/backgrounds/background-dark.jpeg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+
+    img {
+        width: 100%;
+        max-width: 450px;
+        height: auto;
+    }
+}
+
+.login-left {
+    min-height: 100vh;
+    padding-top: 2rem;
+    padding-bottom: 4rem;
+    background-color: #0B0B0B;
+
+    .card {
+        max-width: 500px;
+        border-radius: 2rem;
+        background: rgba(15, 15, 15, 0.85);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    }
+}
+
+/* --- Input Enhancements --- */
+.form-control, .form-select {
+    border-radius: 0.6rem; /* Standard rounded edges for plain inputs */
+    border-color: rgba(255, 255, 255, 0.15);
+    background-color: rgba(0, 0, 0, 0.2) !important;
+    color: #fff !important;
+    transition: all 0.2s ease-in-out;
+    
+    &.is-invalid {
+        border-color: #C62828 !important;
+        &:focus {
+            border-color: #C62828 !important;
+            box-shadow: 0 0 0 0.25rem rgba(227, 59, 59, 0.15) !important;
+        }
+    }
+    
+    &.is-valid {
+        border-color: #10b981 !important;
+        &:focus {
+            border-color: #10b981 !important;
+            box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.15) !important;
+        }
+    }
+    
+    &:focus {
+        box-shadow: none;
+        border-color: #C62828;
+        background-color: rgba(0, 0, 0, 0.4) !important;
+    }
+
+    &::placeholder {
+        color: #B0B0B0;
+    }
+}
+
+.input-group {
+    border-radius: 0; /* Disable rounded container on parent */
+    
+    .input-group-text, .form-control, .form-select {
+        border-color: rgba(255, 255, 255, 0.15);
+        background-color: rgba(0, 0, 0, 0.2) !important;
+        color: #B0B0B0;
+    }
+    
+    /* Rounded corners on the first child of the input-group */
+    > :first-child {
+        border-top-left-radius: 0.6rem !important;
+        border-bottom-left-radius: 0.6rem !important;
+        border-top-right-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+    }
+    
+    /* Rounded corners on the last child of the input-group */
+    > :last-child {
+        border-top-right-radius: 0.6rem !important;
+        border-bottom-right-radius: 0.6rem !important;
+        border-top-left-radius: 0 !important;
+        border-bottom-left-radius: 0 !important;
+    }
+
+    /* Any middle child stays completely square */
+    > :not(:first-child):not(:last-child) {
+        border-radius: 0 !important;
+    }
+}
+
+/* Valid / Invalid input group styling (icon + border coloring together) */
+.input-group:has(.is-invalid) {
+    .input-group-text, .form-control, .form-select {
+        border-color: #C62828 !important;
+    }
+    .form-control:focus, .form-select:focus {
+        box-shadow: 0 0 0 0.25rem rgba(227, 59, 59, 0.15) !important;
+    }
+}
+
+.input-group:has(.is-valid) {
+    .input-group-text, .form-control, .form-select {
+        border-color: #10b981 !important;
+    }
+    .form-control:focus, .form-select:focus {
+        box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.15) !important;
+    }
+}
+
+/* Eye button icon fix */
+.input-group-text.bg-light {
+    border-color: rgba(255, 255, 255, 0.15);
+}
+button.input-group-text {
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background-color: rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Link Hover */
+.hover-link {
+    transition: color 0.2s ease-in-out;
+    &:hover {
+        color: #C62828 !important;
+        text-decoration: underline !important;
+    }
+}
+
+/* --- Footer Positioning --- */
+.footer {
+    z-index: 10;
+    @media (max-width: 768px) {
+        position: relative !important;
+        margin-top: 3rem;
+        padding-top: 1rem;
+        padding-bottom: 2rem;
+    }
+}
+
+/* --- Responsive Media Queries --- */
+@media (max-width: 768px) {
+    .login-left {
+        background-image: url('../../../../../../public/backgrounds/background-light.jpeg');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        padding-top: 2rem;
+        padding-bottom: 4rem;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+
+        .card {
+            margin: 15px;
+            border-radius: 1.5rem;
+        }
+    }
+    .login-right {
+        display: none !important; /* Hide decorative column on small screens */
+    }
+}
+
+/* Extra small devices (phones, 576px and down) */
+@media (max-width: 576px) {
+    h3 {
+        font-size: 1.4rem !important;
+    }
+
+    .form-label {
+        font-size: 0.82rem !important;
+    }
+
+    .form-control, .form-select, .input-group-text {
+        font-size: 0.85rem !important;
+        padding: 0.45rem 0.75rem !important;
+    }
+
+    .btn {
+        font-size: 0.85rem !important;
+        padding: 0.5rem 1rem !important;
+    }
+
+    .card-body {
+        padding: 1.5rem 1rem !important;
+    }
+    
+    .login-left {
+        padding-top: 1rem;
+        padding-bottom: 2rem;
+    }
+}

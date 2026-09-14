@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">Curso — Nexas</title>
+<meta name="description" id="pageDescription" content="Detalhes da trilha na Nexas.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./css/style.css">
+<link rel="icon" href="./assets/favicon.ico" type="image/x-icon">
+</head>
+<body>
+
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+<nav class="rail-nav" aria-label="Navegação por seções">
+  <a class="rail-dot" href="#topo" data-target="topo" aria-label="Início"></a>
+  <a class="rail-dot" href="#aprender" data-target="aprender" aria-label="O que você vai aprender"></a>
+  <a class="rail-dot" href="#conteudo-programatico" data-target="conteudo-programatico" aria-label="Conteúdo"></a>
+  <a class="rail-dot" href="#para-quem" data-target="para-quem" aria-label="Para quem é"></a>
+  <a class="rail-dot" href="#instrutor" data-target="instrutor" aria-label="Instrutor"></a>
+  <a class="rail-dot" href="#duvidas-curso" data-target="duvidas-curso" aria-label="Dúvidas"></a>
+  <a class="rail-dot" href="#matricular" data-target="matricular" aria-label="Matricular-se"></a>
+</nav>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="index.html" class="logo" aria-label="Nexas — página inicial">
+      <img class="logo-mark" src="assets/logo.png" alt="" aria-hidden="true">
+      <span class="logo-word">NEXAS</span>
+    </a>
+
+    <input type="checkbox" id="nav-toggle" class="nav-toggle-input" hidden>
+
+    <nav class="main-nav" aria-label="Navegação principal">
+      <ul class="nav-links">
+        <li><a href="index.html#cursos">Cursos</a></li>
+        <li><a href="nexpace.html">Nexpace</a></li>
+        <li><a href="index.html#metodologia">Como funciona</a></li>
+        <li><a href="index.html#trilhas">Trilhas</a></li>
+        <li><a href="for-enterprises.html">Para empresas</a></li>
+        <li><a href="sobre.html">Sobre</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="index.html#entrar" class="link-muted">Entrar</a>
+        <a href="index.html#comecar" class="btn btn-primary btn-sm">Começar agora</a>
+      </div>
+    </nav>
+
+    <label for="nav-toggle" class="nav-toggle-label" aria-label="Abrir menu">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+        <path d="M3 6h16M3 11h16M3 16h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+    </label>
+  </div>
+</header>
+
+<main id="conteudo">
+
+  <!-- HERO DO CURSO -->
+  <section class="hero course-hero" id="topo">
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <nav class="breadcrumb" aria-label="Trilha de navegação">
+          <a href="index.html">Início</a>
+          <span aria-hidden="true">/</span>
+          <a href="index.html#cursos">Cursos</a>
+          <span aria-hidden="true">/</span>
+          <span id="cdBreadcrumb">Curso</span>
+        </nav>
+
+        <p class="eyebrow"><span class="live-dot" aria-hidden="true"></span><span id="cdCategory">// categoria</span></p>
+
+        <h1 class="hero-title course-detail-title" id="cdTitle">Carregando curso...</h1>
+
+        <p class="hero-sub" id="cdShortDesc"></p>
+
+        <div class="course-stat-row" id="cdStatRow"></div>
+
+        <div class="hero-ctas">
+          <a href="#matricular" class="btn btn-primary btn-lg">Matricular-se</a>
+          <a href="index.html#cursos" class="btn btn-secondary btn-lg">Ver outros cursos</a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-photo-wrap">
+          <div class="hero-photo bracket-frame">
+            <span class="corner corner-tl"></span><span class="corner corner-tr"></span><span class="corner corner-bl"></span><span class="corner corner-br"></span>
+            <div id="cdCoverWrap" class="course-hero-cover"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- O QUE VOCÊ VAI APRENDER -->
+  <section class="section" id="aprender">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">// o que você vai aprender</p>
+        <h2 class="section-title">Habilidades que você sai sabendo aplicar.</h2>
+      </div>
+      <ul class="outcomes-grid" id="cdOutcomes"></ul>
+    </div>
+  </section>
+
+  <!-- CONTEÚDO PROGRAMÁTICO -->
+  <section class="section" id="conteudo-programatico">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">// conteúdo programático</p>
+        <h2 class="section-title">Trilha completa, módulo a módulo.</h2>
+      </div>
+      <div class="modules-list" id="cdModules"></div>
+    </div>
+  </section>
+
+  <!-- PARA QUEM É -->
+  <section class="section" id="para-quem">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">// para quem é</p>
+        <h2 class="section-title">Esse curso é para você se...</h2>
+        <p class="section-sub" id="cdAudience"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSTRUTOR -->
+  <section class="section" id="instrutor">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">// instrutor</p>
+        <h2 class="section-title">Quem vai te ensinar.</h2>
+      </div>
+
+      <div class="instructor-card bracket-frame reveal">
+        <span class="corner corner-tl"></span><span class="corner corner-tr"></span><span class="corner corner-bl"></span><span class="corner corner-br"></span>
+        <span class="avatar" id="cdInstructorAvatar"></span>
+        <div class="instructor-text">
+          <strong id="cdInstructorName"></strong>
+          <span id="cdInstructorRole"></span>
+          <p id="cdInstructorBio"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ DO CURSO -->
+  <section class="section faq" id="duvidas-curso">
+    <div class="container faq-container">
+      <div class="section-head reveal">
+        <p class="eyebrow">// dúvidas sobre esse curso</p>
+        <h2 class="section-title">Perguntas frequentes sobre a trilha.</h2>
+      </div>
+      <div class="faq-list" id="cdFaq"></div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="cta-final" id="matricular">
+    <div class="container">
+      <div class="cta-frame bracket-frame reveal">
+        <span class="corner corner-tl"></span><span class="corner corner-tr"></span><span class="corner corner-bl"></span><span class="corner corner-br"></span>
+        <p class="eyebrow">// matricule-se</p>
+        <h2>Pronto para começar essa trilha?</h2>
+        <p class="cta-sub">Comece hoje e evolua no seu ritmo, com projetos práticos do início ao fim.</p>
+        <div class="hero-ctas">
+          <a href="#" class="btn btn-primary btn-lg">Matricular-se agora</a>
+          <a href="index.html#cursos" class="btn btn-secondary btn-lg">Ver outros cursos</a>
+        </div>
+        <p class="cta-note">Comece gratuitamente. Sem compromisso.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-col footer-brand">
+      <a href="index.html" class="logo">
+        <img class="logo-mark" src="assets/logo.png" alt="" aria-hidden="true">
+        <span class="logo-word">NEXAS</span>
+      </a>
+      <p>Tecnologia para quem quer evoluir.</p>
+      <div class="social-links">
+        <a href="#" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6"/><circle cx="17.2" cy="6.8" r="1" fill="currentColor"/></svg></a>
+        <a href="#" aria-label="LinkedIn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.6"/><path d="M7.5 10v6.5M7.5 7.5v.01M12 16.5V12.7c0-1.5 1-2.7 2.5-2.7s2 1.2 2 2.7v3.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></a>
+        <a href="#" aria-label="YouTube"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="2.5" y="6" width="19" height="12" rx="4" stroke="currentColor" stroke-width="1.6"/><path d="M10.5 9.5l5 2.5-5 2.5v-5z" fill="currentColor"/></svg></a>
+        <a href="#" aria-label="GitHub"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3a9 9 0 00-2.85 17.54c.45.08.62-.2.62-.43v-1.7c-2.51.55-3.04-1.08-3.04-1.08-.41-1.05-1-1.33-1-1.33-.82-.56.06-.55.06-.55.9.06 1.38.93 1.38.93.8 1.38 2.11.98 2.62.75.08-.58.31-.98.57-1.21-2-.23-4.1-1-4.1-4.45 0-.98.35-1.79.92-2.42-.09-.23-.4-1.15.09-2.4 0 0 .76-.24 2.5.92a8.6 8.6 0 014.55 0c1.73-1.16 2.5-.92 2.5-.92.49 1.25.18 2.17.09 2.4.57.63.92 1.44.92 2.42 0 3.46-2.11 4.22-4.11 4.44.32.28.61.83.61 1.68v2.48c0 .24.16.52.62.43A9 9 0 0012 3z" fill="currentColor"/></svg></a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h4>Plataforma</h4>
+      <ul>
+        <li><a href="index.html#cursos">Cursos</a></li>
+        <li><a href="nexpace.html">Nexpace</a></li>
+        <li><a href="index.html#precos">Preços</a></li>
+        <li><a href="index.html#trilhas">Trilhas</a></li>
+        <li><a href="index.html#metodologia">Como funciona</a></li>
+        <li><a href="certificados.html">Certificados</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Empresa</h4>
+      <ul>
+        <li><a href="sobre.html">Sobre</a></li>
+        <li><a href="for-enterprises.html">Para empresas</a></li>
+        <li><a href="contato.html">Contato</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Suporte</h4>
+      <ul>
+        <li><a href="central-de-ajuda.html">Central de ajuda</a></li>
+        <li><a href="termos-de-uso.html">Termos de uso</a></li>
+        <li><a href="politica-de-privacidade.html">Política de privacidade</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col footer-newsletter">
+      <h4>Fique por dentro</h4>
+      <p>Receba conteúdos sobre tecnologia e carreira.</p>
+      <form class="newsletter-form" onsubmit="return false;">
+        <label for="newsletter-email" class="sr-only">Seu melhor e-mail</label>
+        <input type="email" id="newsletter-email" placeholder="Seu melhor e-mail" required>
+        <button type="submit" class="btn btn-primary btn-sm">Inscrever</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="container footer-bottom">
+    <span>© 2026 Nexas. Todos os direitos reservados.</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  var COVERS = {
+    "excel-power-bi": '<svg class="course-cover-art" viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Capa do curso"><defs><linearGradient id="cov1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#132038"/><stop offset="1" stop-color="#0B1120"/></linearGradient></defs><rect width="400" height="225" fill="url(#cov1)"/><g stroke="#24365C" stroke-width="1" opacity="0.6"><line x1="0" y1="45" x2="400" y2="45"/><line x1="0" y1="90" x2="400" y2="90"/><line x1="0" y1="135" x2="400" y2="135"/><line x1="0" y1="180" x2="400" y2="180"/><line x1="80" y1="0" x2="80" y2="225"/><line x1="160" y1="0" x2="160" y2="225"/><line x1="240" y1="0" x2="240" y2="225"/><line x1="320" y1="0" x2="320" y2="225"/></g><rect x="250" y="140" width="22" height="55" rx="3" fill="#2563EB"/><rect x="280" y="110" width="22" height="85" rx="3" fill="#06B6D4"/><rect x="310" y="125" width="22" height="70" rx="3" fill="#2563EB"/><rect x="340" y="95" width="22" height="100" rx="3" fill="#10B981"/><circle cx="90" cy="70" r="32" fill="none" stroke="#1E293B" stroke-width="14"/><circle cx="90" cy="70" r="32" fill="none" stroke="#2563EB" stroke-width="14" stroke-dasharray="120 201" stroke-linecap="round" transform="rotate(-90 90 70)"/><circle cx="90" cy="70" r="32" fill="none" stroke="#06B6D4" stroke-width="14" stroke-dasharray="60 201" stroke-dashoffset="-120" stroke-linecap="round" transform="rotate(-90 90 70)"/></svg>',
+    "automacao-processos": '<svg class="course-cover-art" viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Capa do curso"><defs><linearGradient id="cov2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0F2333"/><stop offset="1" stop-color="#0B1120"/></linearGradient></defs><rect width="400" height="225" fill="url(#cov2)"/><path d="M60 170C120 60,200 190,260 80S360 60,360 60" fill="none" stroke="#1E3A5F" stroke-width="3" stroke-dasharray="2 10" stroke-linecap="round"/><circle cx="60" cy="170" r="14" fill="#111C30" stroke="#2563EB" stroke-width="3"/><circle cx="200" cy="120" r="16" fill="#111C30" stroke="#06B6D4" stroke-width="3"/><circle cx="340" cy="70" r="14" fill="#111C30" stroke="#10B981" stroke-width="3"/><g transform="translate(150 55)" fill="none" stroke="#2563EB" stroke-width="3"><circle r="18"/><path d="M0 -24v8M0 16v8M-24 0h8M16 0h8M-17 -17l6 6M11 11l6 6M-17 17l6 -6M11 -11l6 -6"/></g></svg>',
+    "design-digital": '<svg class="course-cover-art" viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Capa do curso"><defs><linearGradient id="cov3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#122A26"/><stop offset="1" stop-color="#0B1120"/></linearGradient></defs><rect width="400" height="225" fill="url(#cov3)"/><rect x="60" y="50" width="110" height="110" rx="14" fill="#10B981" opacity="0.18"/><rect x="110" y="80" width="110" height="110" rx="14" fill="#06B6D4" opacity="0.22"/><rect x="170" y="45" width="90" height="90" rx="14" fill="#2563EB" opacity="0.28" transform="rotate(8 215 90)"/><path d="M300 150l14-56 68-68 20 20-68 68-56 14z" fill="none" stroke="#F8FAFC" stroke-width="2.4" stroke-linejoin="round" opacity="0.85"/><path d="M368 46l20 20" stroke="#F8FAFC" stroke-width="2.4" opacity="0.85"/></svg>',
+    "cloud-computing": '<svg class="course-cover-art" viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Capa do curso"><defs><linearGradient id="cov4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#122036"/><stop offset="1" stop-color="#0B1120"/></linearGradient></defs><rect width="400" height="225" fill="url(#cov4)"/><path d="M120 130a34 34 0 01-6-67 46 46 0 0189-14 38 38 0 0141 40 32 32 0 01-4 64H120a30 30 0 010-23z" fill="none" stroke="#2563EB" stroke-width="3"/><rect x="150" y="150" width="40" height="16" rx="3" fill="#111C30" stroke="#06B6D4" stroke-width="2"/><rect x="200" y="150" width="40" height="16" rx="3" fill="#111C30" stroke="#06B6D4" stroke-width="2"/><rect x="250" y="150" width="40" height="16" rx="3" fill="#111C30" stroke="#06B6D4" stroke-width="2"/><line x1="170" y1="130" x2="170" y2="150" stroke="#2563EB" stroke-width="2"/><line x1="220" y1="130" x2="220" y2="150" stroke="#2563EB" stroke-width="2"/><line x1="270" y1="130" x2="270" y2="150" stroke="#2563EB" stroke-width="2"/></svg>'
+  };
+
+  var COURSES = {
+    "excel-power-bi": {
+      category: "PRODUTIVIDADE & DADOS",
+      title: "Excel Avançado e Power BI",
+      shortDesc: "Organize dados, construa planilhas inteligentes e monte painéis para decisões de negócio — do zero até dashboards prontos para apresentar.",
+      level: "Iniciante → Avançado",
+      duration: "42 horas",
+      format: "Online, no seu ritmo",
+      outcomes: [
+        "Criar planilhas dinâmicas com fórmulas avançadas e tabelas dinâmicas",
+        "Organizar e limpar bases de dados para análise",
+        "Construir dashboards interativos no Power BI",
+        "Apresentar indicadores de forma clara para tomada de decisão",
+        "Automatizar relatórios recorrentes",
+        "Aplicar boas práticas de modelagem de dados"
+      ],
+      modules: [
+        { title: "Fundamentos do Excel", lessons: ["Interface e navegação", "Fórmulas essenciais", "Formatação condicional", "Tabelas e intervalos nomeados"] },
+        { title: "Excel avançado", lessons: ["Tabelas dinâmicas", "PROCV e ÍNDICE/CORRESP", "Macros básicas", "Validação de dados"] },
+        { title: "Introdução ao Power BI", lessons: ["Conectando fontes de dados", "Modelagem e relacionamentos", "Medidas com DAX", "Publicação de relatórios"] },
+        { title: "Projeto final", lessons: ["Construção de um dashboard completo", "Apresentação de indicadores", "Entrega e portfólio"] }
+      ],
+      audience: "Profissionais de áreas administrativas, financeiras, comerciais ou de operações que lidam com planilhas e precisam transformar dados em decisões.",
+      instructor: { name: "Fernanda Ribeiro", role: "Especialista em Dados e BI", bio: "Mais de 8 anos ajudando empresas a organizar dados e construir painéis de gestão.", initials: "FR", gradient: "linear-gradient(135deg,#2563EB,#06B6D4)" },
+      faq: [
+        { q: "Preciso saber Excel básico antes de começar?", a: "Não. O curso começa pelos fundamentos e avança gradualmente até o Power BI." },
+        { q: "O curso serve para qualquer área profissional?", a: "Sim, os conceitos se aplicam a áreas administrativas, financeiras, comerciais e de operações." },
+        { q: "Vou construir projetos reais?", a: "Sim, você constrói um dashboard completo como projeto final." }
+      ]
+    },
+    "automacao-processos": {
+      category: "AUTOMAÇÃO & GESTÃO",
+      title: "Automação de Processos",
+      shortDesc: "Use ferramentas de automação e gestão para eliminar tarefas repetitivas, organizar fluxos de trabalho e ganhar produtividade no dia a dia.",
+      level: "Intermediário",
+      duration: "30 horas",
+      format: "Online, no seu ritmo",
+      outcomes: [
+        "Mapear processos manuais que podem ser automatizados",
+        "Criar fluxos automáticos com Power Automate",
+        "Organizar tarefas e projetos com Notion",
+        "Reduzir retrabalho e erros operacionais",
+        "Integrar ferramentas usadas no dia a dia",
+        "Medir o impacto da automação nos resultados"
+      ],
+      modules: [
+        { title: "Fundamentos de automação", lessons: ["O que automatizar (e o que não)", "Mapeamento de processos", "Ferramentas do mercado"] },
+        { title: "Power Automate na prática", lessons: ["Criando o primeiro fluxo", "Gatilhos e condições", "Conectando aplicativos", "Automações aprovadas por gestores"] },
+        { title: "Gestão com Notion", lessons: ["Organizando projetos e tarefas", "Bases de dados e relacionamentos", "Modelos reutilizáveis"] },
+        { title: "Projeto final", lessons: ["Automatizando um processo real da sua rotina", "Documentação do fluxo", "Apresentação de resultados"] }
+      ],
+      audience: "Profissionais de gestão, operações e administrativo que querem reduzir tarefas repetitivas e organizar melhor o trabalho da equipe.",
+      instructor: { name: "Marcos Teixeira", role: "Consultor de Processos e Produtividade", bio: "Ajuda equipes a automatizar rotinas e ganhar tempo para o que realmente importa.", initials: "MT", gradient: "linear-gradient(135deg,#10B981,#2563EB)" },
+      faq: [
+        { q: "Preciso saber programar para automatizar processos?", a: "Não. As ferramentas usadas no curso são visuais, sem necessidade de código." },
+        { q: "Consigo aplicar na minha empresa atual?", a: "Sim, o projeto final é a automação de um processo real da sua rotina." },
+        { q: "O curso ensina outras ferramentas além de Power Automate e Notion?", a: "O foco é nessas duas, mas os conceitos se aplicam a outras ferramentas semelhantes." }
+      ]
+    },
+    "design-digital": {
+      category: "DESIGN & CRIAÇÃO",
+      title: "Design Digital para Negócios",
+      shortDesc: "Crie peças, apresentações e materiais visuais com ferramentas usadas no dia a dia das empresas, sem depender de uma equipe de design.",
+      level: "Intermediário",
+      duration: "26 horas",
+      format: "Online, no seu ritmo",
+      outcomes: [
+        "Aplicar princípios básicos de design e composição visual",
+        "Criar peças gráficas com Photoshop e Canva",
+        "Montar apresentações e materiais para redes sociais",
+        "Manter consistência visual de marca",
+        "Preparar arquivos para impressão e digital",
+        "Construir um portfólio de peças próprias"
+      ],
+      modules: [
+        { title: "Fundamentos de design", lessons: ["Cor, tipografia e composição", "Identidade visual e branding", "Referências e inspiração"] },
+        { title: "Photoshop na prática", lessons: ["Ferramentas essenciais", "Camadas e ajustes", "Tratamento de imagens"] },
+        { title: "Canva para negócios", lessons: ["Modelos e templates", "Materiais para redes sociais", "Apresentações profissionais"] },
+        { title: "Projeto final", lessons: ["Criação de um kit de peças para uma marca", "Apresentação do material", "Entrega e portfólio"] }
+      ],
+      audience: "Profissionais de marketing, atendimento, empreendedores e equipes que precisam criar materiais visuais sem depender de um designer.",
+      instructor: { name: "Bianca Ferreira", role: "Designer e Consultora de Marca", bio: "Trabalha há anos ajudando negócios a construir uma identidade visual consistente.", initials: "BF", gradient: "linear-gradient(135deg,#06B6D4,#10B981)" },
+      faq: [
+        { q: "Preciso ter talento artístico para o curso?", a: "Não. O curso ensina fundamentos práticos de design que qualquer pessoa pode aplicar." },
+        { q: "O curso usa apenas Photoshop?", a: "Não, também trabalha com o Canva para agilizar a criação de peças no dia a dia." },
+        { q: "Vou sair com peças prontas para usar?", a: "Sim, o projeto final é um kit de peças para uma marca real ou fictícia." }
+      ]
+    },
+    "cloud-computing": {
+      category: "CLOUD & INFRAESTRUTURA",
+      title: "Fundamentos de Cloud Computing",
+      shortDesc: "Entenda os conceitos essenciais de nuvem e ferramentas usadas por empresas de todos os portes para hospedar sistemas e dados.",
+      level: "Avançado",
+      duration: "34 horas",
+      format: "Online, no seu ritmo",
+      outcomes: [
+        "Entender os principais modelos de computação em nuvem",
+        "Comparar serviços da AWS e Azure",
+        "Configurar armazenamento e máquinas virtuais na nuvem",
+        "Aplicar boas práticas de segurança e custos",
+        "Entender conceitos de escalabilidade e disponibilidade",
+        "Preparar-se para certificações de nuvem"
+      ],
+      modules: [
+        { title: "Fundamentos de nuvem", lessons: ["O que é computação em nuvem", "Modelos IaaS, PaaS e SaaS", "Provedores do mercado"] },
+        { title: "AWS na prática", lessons: ["Painel e principais serviços", "Armazenamento com S3", "Máquinas virtuais com EC2"] },
+        { title: "Azure na prática", lessons: ["Painel e principais serviços", "Recursos e grupos", "Máquinas virtuais no Azure"] },
+        { title: "Segurança e custos", lessons: ["Boas práticas de segurança", "Controle de custos na nuvem", "Escalabilidade e disponibilidade"] }
+      ],
+      audience: "Profissionais de TI, suporte e infraestrutura que querem migrar ou se especializar em ambientes de nuvem.",
+      instructor: { name: "Diego Martins", role: "Especialista em Cloud e Infraestrutura", bio: "Atua com arquitetura de nuvem e ajuda empresas a migrar sistemas para AWS e Azure.", initials: "DM", gradient: "linear-gradient(135deg,#2563EB,#10B981)" },
+      faq: [
+        { q: "Preciso ter experiência prévia em TI?", a: "É recomendado ter noções básicas de redes e sistemas, já que o curso é avançado." },
+        { q: "O curso prepara para certificações oficiais?", a: "Ele cobre os fundamentos essenciais que servem de base para certificações da AWS e Azure." },
+        { q: "Vou praticar em ambientes reais de nuvem?", a: "Sim, o curso inclui atividades práticas nos painéis da AWS e Azure." }
+      ]
+    }
+  };
+
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, function(c){
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  var params = new URLSearchParams(window.location.search);
+  var slug = params.get("curso");
+  if(!slug || !COURSES[slug]) slug = "excel-power-bi";
+  var course = COURSES[slug];
+
+  document.title = course.title + " — Nexas";
+  var metaDesc = document.getElementById("pageDescription");
+  if(metaDesc) metaDesc.setAttribute("content", course.shortDesc);
+
+  document.getElementById("cdBreadcrumb").textContent = course.title;
+  document.getElementById("cdCategory").textContent = "// " + course.category.toLowerCase();
+  document.getElementById("cdTitle").textContent = course.title;
+  document.getElementById("cdShortDesc").textContent = course.shortDesc;
+  document.getElementById("cdCoverWrap").innerHTML = COVERS[slug] || "";
+
+  var statRow = document.getElementById("cdStatRow");
+  [["Nível", course.level], ["Duração", course.duration], ["Formato", course.format]].forEach(function(pair){
+    var pill = document.createElement("span");
+    pill.className = "stat-pill";
+    pill.innerHTML = pair[0] + ": <strong>" + escapeHtml(pair[1]) + "</strong>";
+    statRow.appendChild(pill);
+  });
+
+  var outcomesEl = document.getElementById("cdOutcomes");
+  outcomesEl.innerHTML = course.outcomes.map(function(text){
+    return '<li class="outcome-item reveal">' +
+      '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+      "<span>" + escapeHtml(text) + "</span></li>";
+  }).join("");
+
+  var modulesEl = document.getElementById("cdModules");
+  modulesEl.innerHTML = course.modules.map(function(mod, i){
+    var lessons = mod.lessons.map(function(l){ return '<div class="lesson-item">' + escapeHtml(l) + "</div>"; }).join("");
+    return '<details class="module-item reveal"' + (i === 0 ? " open" : "") + ">" +
+      '<summary class="module-summary">' +
+        "<span>" + escapeHtml(mod.title) + "</span>" +
+        '<span class="module-count">' + mod.lessons.length + " aulas</span>" +
+        '<svg class="module-icon" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 7l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+      "</summary>" +
+      '<div class="lesson-list">' + lessons + "</div>" +
+    "</details>";
+  }).join("");
+
+  document.getElementById("cdAudience").textContent = course.audience;
+
+  document.getElementById("cdInstructorAvatar").textContent = course.instructor.initials;
+  document.getElementById("cdInstructorAvatar").style.background = course.instructor.gradient;
+  document.getElementById("cdInstructorName").textContent = course.instructor.name;
+  document.getElementById("cdInstructorRole").textContent = course.instructor.role;
+  document.getElementById("cdInstructorBio").textContent = course.instructor.bio;
+
+  var faqEl = document.getElementById("cdFaq");
+  faqEl.innerHTML = course.faq.map(function(item, i){
+    var idx = String(i + 1).padStart(2, "0");
+    return '<div class="faq-row">' +
+      '<span class="faq-index">' + idx + "</span>" +
+      '<details class="faq-item"' + (i === 0 ? " open" : "") + ">" +
+        '<summary class="faq-question">' + escapeHtml(item.q) +
+          '<svg class="faq-icon" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 7l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+        "</summary>" +
+        '<div class="faq-answer"><p>' + escapeHtml(item.a) + "</p></div>" +
+      "</details>" +
+    "</div>";
+  }).join("");
+
+  // Mobile menu — close after a link is clicked
+  var navToggle = document.getElementById("nav-toggle");
+  var mobileLinks = document.querySelectorAll(".main-nav a");
+  if(navToggle){
+    mobileLinks.forEach(function(a){
+      a.addEventListener("click", function(){ navToggle.checked = false; });
+    });
+  }
+
+  // Rail nav — highlight active section on scroll
+  var sections = document.querySelectorAll("main section[id]");
+  var dots = document.querySelectorAll(".rail-dot");
+  var dotByTarget = {};
+  dots.forEach(function(d){ dotByTarget[d.dataset.target] = d; });
+
+  if("IntersectionObserver" in window && sections.length){
+    var railIO = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          dots.forEach(function(d){ d.classList.remove("is-active"); });
+          var dot = dotByTarget[entry.target.id];
+          if(dot) dot.classList.add("is-active");
+        }
+      });
+    }, { rootMargin: "-45% 0px -45% 0px", threshold: 0 });
+    sections.forEach(function(s){ railIO.observe(s); });
+  }
+
+  // Scroll reveal (runs after dynamic content is injected)
+  var revealEls = document.querySelectorAll(".reveal");
+  if("IntersectionObserver" in window && revealEls.length){
+    var revealIO = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add("is-in");
+          revealIO.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(function(el){ revealIO.observe(el); });
+  } else {
+    revealEls.forEach(function(el){ el.classList.add("is-in"); });
+  }
+})();
+</script>
+
+</body>
+</html>

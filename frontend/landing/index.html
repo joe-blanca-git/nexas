@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexas — Tecnologia para quem quer evoluir</title>
+<meta name="description" content="Aprenda tecnologia na prática, construa projetos reais e transforme conhecimento em oportunidade profissional.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./css/style.css">
+<link rel="icon" href="./assets/favicon.ico" type="image/x-icon">
+</head>
+<body>
+
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+<nav class="rail-nav" aria-label="Navegação por seções">
+  <a class="rail-dot" href="#topo" data-target="topo" aria-label="Início"></a>
+  <a class="rail-dot" href="#cursos" data-target="cursos" aria-label="Cursos"></a>
+  <a class="rail-dot" href="#precos" data-target="precos" aria-label="Preços"></a>
+  <a class="rail-dot" href="#trilhas" data-target="trilhas" aria-label="Trilhas"></a>
+  <a class="rail-dot" href="#depoimentos" data-target="depoimentos" aria-label="Comunidade"></a>
+  <a class="rail-dot" href="#empresas" data-target="empresas" aria-label="Dúvidas"></a>
+  <a class="rail-dot" href="#comecar" data-target="comecar" aria-label="Começar"></a>
+</nav>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="#topo" class="logo" aria-label="Nexas — página inicial">
+      <img class="logo-mark" src="assets/logo.png" alt="" aria-hidden="true">
+      <span class="logo-word">NEXAS</span>
+    </a>
+
+    <input type="checkbox" id="nav-toggle" class="nav-toggle-input" hidden>
+
+    <nav class="main-nav" aria-label="Navegação principal">
+      <ul class="nav-links">
+        <li><a href="#cursos">Cursos</a></li>
+        <li><a href="nexpace.html">Nexpace</a></li>
+        <li><a href="#metodologia">Como funciona</a></li>
+        <li><a href="#trilhas">Trilhas</a></li>
+        <li><a href="for-enterprises.html">Para empresas</a></li>
+        <li><a href="sobre.html">Sobre</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="#entrar" class="link-muted">Entrar</a>
+        <a href="#comecar" class="btn btn-primary btn-sm">Começar agora</a>
+      </div>
+    </nav>
+
+    <label for="nav-toggle" class="nav-toggle-label" aria-label="Abrir menu">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+        <path d="M3 6h16M3 11h16M3 16h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+    </label>
+  </div>
+</header>
+
+<main id="conteudo">
+
+  <!-- HERO -->
+  <section class="hero" id="topo">
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <p class="eyebrow"><span class="live-dot" aria-hidden="true"></span>// nova geração de educação em tecnologia</p>
+
+        <h1 class="hero-title">
+          Domine a tecnologia<br>
+          <span class="accent-underline">que o mercado exige.</span>
+        </h1>
+
+        <p class="hero-sub">
+          Aprenda tecnologia na prática, desenvolva projetos reais e prepare-se
+          para transformar conhecimento em oportunidades profissionais.
+        </p>
+
+        <div class="hero-ctas">
+          <a href="#comecar" class="btn btn-primary btn-lg">Começar do zero</a>
+          <a href="#cursos" class="btn btn-secondary btn-lg">Explorar cursos</a>
+        </div>
+
+        <p class="hero-meta">
+          <span><svg class="icon-check" viewBox="0 0 16 16" width="14" height="14"><path d="M3 8.5l3 3 7-7" stroke="#10B981" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Aulas práticas</span>
+          <span><svg class="icon-check" viewBox="0 0 16 16" width="14" height="14"><path d="M3 8.5l3 3 7-7" stroke="#10B981" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Certificado</span>
+          <span><svg class="icon-check" viewBox="0 0 16 16" width="14" height="14"><path d="M3 8.5l3 3 7-7" stroke="#10B981" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Acesso online</span>
+        </p>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-photo-wrap">
+          <div class="hero-photo bracket-frame">
+            <span class="corner corner-tl"></span><span class="corner corner-tr"></span><span class="corner corner-bl"></span><span class="corner corner-br"></span>
+            <div class="hero-slideshow" id="heroSlideshow">
+              <img class="hero-slide is-active" src="assets/slides-instuticional/1.jpeg" alt="Profissional trabalhando em um escritório moderno, acompanhando dados e indicadores em telas">
+              <img class="hero-slide" src="assets/slides-instuticional/2.jpeg" alt="Analista acompanhando um painel de Operations Center, com rotas e indicadores de uma máquina agrícola em tempo real">
+              <img class="hero-slide" src="assets/slides-instuticional/7.jpeg" alt="Trator no campo com sobreposição de dados de agricultura de precisão">
+              <img class="hero-slide" src="assets/slides-instuticional/8.jpeg" alt="Painel de bordo de um trator mostrando rotas guiadas por GPS e indicadores operacionais">
+              <img class="hero-slide" src="assets/slides-instuticional/4.jpeg" alt="Trator em operação no campo ao entardecer, com gráficos de dados agrícolas sobrepostos">
+              <img class="hero-slide" src="assets/slides-instuticional/6.jpeg" alt="Profissional monitorando a operação de máquinas agrícolas por um tablet">
+              <img class="hero-slide" src="assets/slides-instuticional/5.jpeg" alt="Profissional usando inteligência artificial aplicada a indicadores de negócio">
+            </div>
+          </div>
+
+          <div class="hero-badge hero-badge--stat">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+              <circle cx="6.5" cy="6" r="2.6" stroke="#2563EB" stroke-width="1.5"/>
+              <path d="M1.5 15c0-3.2 2.2-5.4 5-5.4s5 2.2 5 5.4" stroke="#2563EB" stroke-width="1.5" stroke-linecap="round"/>
+              <circle cx="13.2" cy="6.6" r="2.1" stroke="#06B6D4" stroke-width="1.5"/>
+              <path d="M11.6 15c.2-2.6 1.7-4.4 3.4-4.7" stroke="#06B6D4" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <div class="hero-badge-text" id="heroBadgeStatText">
+              <strong>FOCO</strong>
+              <span>APLICAÇÃO PRÁTICA</span>
+            </div>
+          </div>
+
+          <div class="hero-badge-cert-pos">
+            <div class="hero-badge hero-badge--cert">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span class="hero-badge-line" id="heroBadgeCertLine">Certificado — <strong>Avançado</strong></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST BAR / MARQUEE -->
+  <section class="trust">
+    <p class="trust-title">Ferramentas e tecnologias que movem o mercado de trabalho</p>
+    <div class="marquee marquee--trust">
+      <div class="marquee-track marquee-track--trust">
+        <span>Excel</span><span>Power BI</span><span>Google Gemini</span><span>Flow</span><span>NotebookLM</span><span>Operations Center John Deere</span><span>Notion</span><span>Inteligência Artificial</span><span>ERP</span>
+        <span aria-hidden="true">Excel</span><span aria-hidden="true">Power BI</span><span aria-hidden="true">Google Gemini</span><span aria-hidden="true">Flow</span><span aria-hidden="true">NotebookLM</span><span aria-hidden="true">Operations Center John Deere</span><span aria-hidden="true">Notion</span><span aria-hidden="true">Inteligência Artificial</span><span aria-hidden="true">ERP</span>
+      </div>
+    </div>
+  </section>
+
+    <!-- CURSOS -->
+  <section class="section courses" id="cursos">
+    <div class="container">
+      <div class="courses-head-row">
+        <div class="section-head reveal">
+          <p class="eyebrow">// catálogo</p>
+          <h2 class="section-title">Aprenda as tecnologias que estão construindo o futuro.</h2>
+          <p class="section-sub">Escolha uma trilha e comece a desenvolver habilidades aplicáveis ao mercado.</p>
+        </div>
+        <div class="courses-controls">
+          <div class="courses-progress"><div class="courses-progress-fill" id="coursesProgressFill"></div></div>
+          <div class="carousel-btns">
+            <button class="carousel-btn" id="coursesPrev" aria-label="Curso anterior" type="button">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="carousel-btn" id="coursesNext" aria-label="Próximo curso" type="button">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="courses-track" id="coursesTrack">
+        <article class="course-card bracket-frame reveal">
+          <span class="corner corner-tl"></span><span class="corner corner-tr"></span><span class="corner corner-bl"></span><span class="corner corner-br"></span>
+          <div class="course-cover">
+            <svg class="course-cover-art" viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Capa do curso Excel Avançado e Power BI">
+              <defs>
+                <linearGradient id="cov1" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#132038"/>
+                  <stop offset="1" stop-color="#0B1120"/>
+                </linearGradient>
+              </defs>
+              <rect width="400" height="225" fill="url(#cov1)"/>
+              <g stroke="#24365C" stroke-width="1" opacity="0.6">
+                <line x1="0" y1="45" x2="400" y2="45"/>
+                <line x1="0" y1="90" x2="400" y2="90"/>
+                <line x1="0" y1="135" x2="400" y2="135"/>
+                <line x1="0" y1="180" x2="400" y2="180"/>
+                <line x1="80" y1="0" x2="80" y2="225"/>
+                <line x1="160" y1="0" x2="160" y2="225"/>
+                <line x1="240" y1="0" x2="240" y2="225"/>
+                <line x1="320" y1="0" x2="320" y2="225"/>
+              </g>
+              <rect x="250" y="140" width="22" height="55" rx="3" fill="#2563EB"/>
+              <rect x="280" y="110" width="22" height="85" rx="3" fill="#06B6D4"/>
+              <rect x="310" y="125" width="22" height="70" rx="3" fill="#2563EB"/>
+              <rect x="340" y="95" width="22" height="100" rx="3" fill="#10B981"/>
+              <circle cx="90" cy="70" r="32" fill="none" stroke="#1E293B" stroke-width="14"/>
+              <circle cx="90" cy="70" r="32" fill="none" stroke="#2563EB" stroke-width="14" stroke-dasharray="120 201" stroke-linecap="round" transform="rotate(-90 90 70)"/>
+              <circle cx="90" cy="70" r="32" fill="none" stroke="#06B6D4" stroke-width="14" stroke-dasharray="60 201" stroke-dashoffset="-120" stroke-linecap="round" transform="rotate(-90 90 70)"/>
+            </svg>
+            <span class="course-index">Trilha 01</span>
+          </div>
+          <div class="course-body">
+            <span class="course-category">PRODUTIVIDADE &amp; DADOS</span>
+            <h3 class="course-title">Excel Avançado e Power BI</h3>
+            <p class="course-desc">Organize dados, construa planilhas inteligentes e monte painéis para decisões de negócio.</p>
+            <div class="course-tags">
+              <span class="tag">Excel</span>
+              <span class="tag">Power BI</span>
+              <span class="tag">Dados</span>
+            </div>
+            <div class="course-meta">Iniciante → Avançado</div>
+            <a href="course-detail.html?curso=excel-power-bi" class="course-cta">Explorar curso <span aria-hidden="true">→</span></a>
+          </div>
+        </article>
+
+        <article class="course-card bracket-frame reveal">
+          <span class="corner corner-tl"></span><span class="corner corner-tr"></span><span class="corner corner-bl"></span><span class="corner corner-br"></span>
+          <div class="course-cover">
+            <svg class="course-cover-art" viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Capa do curso Automação de Processos">
+              <defs>
+                <linearGradient id="cov2" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#0F2333"/>
+                  <stop offset="1" stop-color="#0B1120"/>
+                </linearGradient>
+              </defs>
+              <rect width="400" height="225" fill="url(#cov2)"/>
+              <path d="M60 170C120 60,200 190,260 80S360 60,360 60" fill="none" stroke="#1E3A5F" stroke-width="3" stroke-dasharray="2 10" stroke-linecap="round"/>
+              <circle cx="60" cy="170" r="14" fill="#111C30" stroke="#2563EB" stroke-width="3"/>
+              <circle cx="200" cy="120" r="16" fill="#111C30" stroke="#06B6D4" stroke-width="3"/>
+              <circle cx="340" cy="70" r="14" fill="#111C30" stroke="#10B981" stroke-width="3"/>
+              <g transform="translate(150 55)" fill="none" stroke="#2563EB" stroke-width="3">
+                <circle r="18"/>
+                <path d="M0 -24v8M0 16v8M-24 0h8M16 0h8M-17 -17l6 6M11 11l6 6M-17 17l6 -6M11 -11l6 -6"/>
+              </g>
+            </svg>
+            <span class="course-index">Trilha 02</span>
+          </div>
+          <div class="course-body">
+            <span class="course-category">AUTOMAÇÃO &amp; GESTÃO</span>
+            <h3 class="course-title">Automação de Processos</h3>
+            <p class="course-desc">Use ferramentas de automação e gestão para eliminar tarefas repetitivas e ganhar produtividade.</p>
+            <div class="course-tags">
+              <span class="tag">Power Automate</span>
+              <span class="tag">Notion</span>
+              <span class="tag">Gestão</span>
+            </div>
+            <div class="course-meta">Intermediário</div>
+            <a href="course-detail.html?curso=automacao-processos" class="course-cta">Explorar curso <span aria-hidden="true">→</span></a>
+          </div>
+        </article>
+
+        <article class="course-card bracket-frame reveal">
+          <span class="corner corner-tl"></span><span class="corner corner-tr"></span><span class="corner corner-bl"></span><span class="corner corner-br"></span>
+          <div class="course-cover">
+            <svg class="course-cover-art" viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Capa do curso Design Digital para Negócios">
+              <defs>
+                <linearGradient id="cov3" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#122A26"/>
+                  <stop offset="1" stop-color="#0B1120"/>
+                </linearGradient>
+              </defs>
+              <rect width="400" height="225" fill="url(#cov3)"/>
+              <rect x="60" y="50" width="110" height="110" rx="14" fill="#10B981" opacity="0.18"/>
+              <rect x="110" y="80" width="110" height="110" rx="14" fill="#06B6D4" opacity="0.22"/>
+              <rect x="170" y="45" width="90" height="90" rx="14" fill="#2563EB" opacity="0.28" transform="rotate(8 215 90)"/>
+              <path d="M300 150l14-56 68-68 20 20-68 68-56 14z" fill="none" stroke="#F8FAFC" stroke-width="2.4" stroke-linejoin="round" opacity="0.85"/>
+              <path d="M368 46l20 20" stroke="#F8FAFC" stroke-width="2.4" opacity="0.85"/>
+            </svg>
+            <span class="course-index">Trilha 03</span>
+          </div>
+          <div class="course-body">
+            <span class="course-category">DESIGN &amp; CRIAÇÃO</span>
+            <h3 class="course-title">Design Digital para Negócios</h3>
+            <p class="course-desc">Crie peças, apresentações e materiais visuais com ferramentas usadas no dia a dia das empresas.</p>
+            <div class="course-tags">
+              <span class="tag">Photoshop</span>
+              <span class="tag">Canva</span>
+              <span class="tag">Branding</span>
+            </div>
+            <div class="course-meta">Intermediário</div>
+            <a href="course-detail.html?curso=design-digital" class="course-cta">Explorar curso <span aria-hidden="true">→</span></a>
+          </div>
+        </article>
+
+        <article class="course-card bracket-frame reveal">
+          <span class="corner corner-tl"></span><span class="corner corner-tr"></span><span class="corner corner-bl"></span><span class="corner corner-br"></span>
+          <div class="course-cover">
+            <svg class="course-cover-art" viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Capa do curso Fundamentos de Cloud Computing">
+              <defs>
+                <linearGradient id="cov4" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#122036"/>
+                  <stop offset="1" stop-color="#0B1120"/>
+                </linearGradient>
+              </defs>
+              <rect width="400" height="225" fill="url(#cov4)"/>
+              <path d="M120 130a34 34 0 01-6-67 46 46 0 0189-14 38 38 0 0141 40 32 32 0 01-4 64H120a30 30 0 010-23z" fill="none" stroke="#2563EB" stroke-width="3"/>
+              <rect x="150" y="150" width="40" height="16" rx="3" fill="#111C30" stroke="#06B6D4" stroke-width="2"/>
+              <rect x="200" y="150" width="40" height="16" rx="3" fill="#111C30" stroke="#06B6D4" stroke-width="2"/>
+              <rect x="250" y="150" width="40" height="16" rx="3" fill="#111C30" stroke="#06B6D4" stroke-width="2"/>
+              <line x1="170" y1="130" x2="170" y2="150" stroke="#2563EB" stroke-width="2"/>
+              <line x1="220" y1="130" x2="220" y2="150" stroke="#2563EB" stroke-width="2"/>
+              <line x1="270" y1="130" x2="270" y2="150" stroke="#2563EB" stroke-width="2"/>
+            </svg>
+            <span class="course-index">Trilha 04</span>
+          </div>
+          <div class="course-body">
+            <span class="course-category">CLOUD &amp; INFRAESTRUTURA</span>
+            <h3 class="course-title">Fundamentos de Cloud Computing</h3>
+            <p class="course-desc">Entenda os conceitos essenciais de nuvem e ferramentas usadas por empresas de todos os portes.</p>
+            <div class="course-tags">
+              <span class="tag">AWS</span>
+              <span class="tag">Azure</span>
+              <span class="tag">Cloud</span>
+            </div>
+            <div class="course-meta">Avançado</div>
+            <a href="course-detail.html?curso=cloud-computing" class="course-cta">Explorar curso <span aria-hidden="true">→</span></a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMO FUNCIONA O PREÇO -->
+  <section class="section" id="precos">
+    <div class="container">
+      <div class="precos-head-grid">
+        <div class="section-head reveal">
+          <p class="eyebrow">// como funciona o preço</p>
+          <h2 class="section-title">Cada curso tem seu preço. Sua empresa pode ter uma condição especial.</h2>
+          <p class="section-sub">
+            Na Nexas você paga por curso, não por assinatura. Vários cursos são totalmente
+            gratuitos, e outros têm um valor único. Para empresas, o modelo muda: dá pra escolher
+            os cursos e comprar uma quantidade de acessos com desconto para o time.
+          </p>
+        </div>
+
+        <div class="price-highlight bracket-frame reveal">
+          <span class="corner corner-tl"></span><span class="corner corner-tr"></span><span class="corner corner-bl"></span><span class="corner corner-br"></span>
+          <span class="price-highlight-label">CURSOS A PARTIR DE</span>
+          <div class="price-highlight-value">
+            <span class="price-currency">R$</span>19<span class="price-cents">,90</span>
+          </div>
+          <span class="price-highlight-sub">por curso, sem assinatura</span>
+          <div class="price-highlight-divider"></div>
+          <ul class="price-highlight-list">
+            <li>Vários cursos gratuitos</li>
+            <li>Acesso vitalício ao curso comprado</li>
+            <li>Sem taxa recorrente</li>
+          </ul>
+          <a href="#cursos" class="btn btn-primary btn-lg price-highlight-cta">Ver cursos</a>
+        </div>
+      </div>
+
+      <div class="audience-grid">
+        <article class="audience-card audience-card--start bracket-frame reveal">
+          <span class="corner corner-tl"></span><span class="corner corner-tr"></span><span class="corner corner-bl"></span><span class="corner corner-br"></span>
+          <span class="audience-badge">INDIVIDUAL</span>
+          <h3>Sem assinatura. Sem mensalidade.</h3>
+          <p>Você paga só pelo curso que for estudar — no seu ritmo, sem taxa recorrente.</p>
+          <ul class="audience-list">
+            <li>Vários cursos gratuitos</li>
+            <li>Cursos pagos com preço único</li>
+            <li>Acesso vitalício ao curso comprado</li>
+            <li>Pague só pelo que for estudar</li>
+          </ul>
+          <a href="#cursos" class="audience-cta">Ver cursos <span aria-hidden="true">→</span></a>
+        </article>
+
+        <article class="audience-card audience-card--advanced bracket-frame reveal">
+          <span class="corner corner-tl"></span><span class="corner corner-tr"></span><span class="corner corner-bl"></span><span class="corner corner-br"></span>
+          <span class="audience-badge badge-advanced">ENTERPRISE</span>
+          <h3>Compre acesso para o time, pague menos por pessoa.</h3>
+          <p>Sua empresa escolhe os cursos e a quantidade de acessos — o valor por colaborador cai conforme o volume.</p>
+          <ul class="audience-list">
+            <li>Escolha os cursos ou libere todos</li>
+            <li>Quantidade define o desconto</li>
+            <li>Certificado para cada colaborador</li>
+            <li>Proposta sob medida</li>
+          </ul>
+          <a href="for-enterprises.html" class="audience-cta">Solicitar proposta <span aria-hidden="true">→</span></a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROPOSTA DE VALOR -->
+  <section class="section value" id="metodologia">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">// como funciona</p>
+        <h2 class="section-title">Aprender tecnologia precisa ir além da teoria.</h2>
+        <p class="section-sub">No Nexas, você aprende construindo, praticando e resolvendo problemas que fazem sentido para o mercado de trabalho.</p>
+      </div>
+
+      <div class="value-list">
+        <div class="value-row reveal">
+          <span class="ghost-num" aria-hidden="true">01</span>
+          <div class="value-row-inner">
+            <span class="value-icon">
+              <svg width="20" height="20" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8.2" stroke="#2563EB" stroke-width="1.8"/><circle cx="11" cy="11" r="4" stroke="#2563EB" stroke-width="1.8"/><circle cx="11" cy="11" r="1.1" fill="#2563EB"/></svg>
+            </span>
+            <div class="value-row-text">
+              <h3>Aprenda fazendo</h3>
+              <p>Transforme conceitos em projetos práticos e desenvolva habilidades que podem ser aplicadas no mundo real.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="value-row reveal">
+          <span class="ghost-num" aria-hidden="true">02</span>
+          <div class="value-row-inner">
+            <span class="value-icon">
+              <svg width="20" height="20" viewBox="0 0 22 22" fill="none"><path d="M2 18l5-5 4 4 9-9" stroke="#06B6D4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="20" cy="8" r="1.6" fill="#06B6D4"/></svg>
+            </span>
+            <div class="value-row-text">
+              <h3>Evolua no seu ritmo</h3>
+              <p>Trilhas estruturadas para quem está começando e também para profissionais que querem avançar.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="value-row reveal">
+          <span class="ghost-num" aria-hidden="true">03</span>
+          <div class="value-row-inner">
+            <span class="value-icon">
+              <svg width="20" height="20" viewBox="0 0 22 22" fill="none"><path d="M3 8h16v10a1 1 0 01-1 1H4a1 1 0 01-1-1V8z" stroke="#10B981" stroke-width="1.8"/><path d="M7 8V6a2 2 0 012-2h4a2 2 0 012 2v2" stroke="#10B981" stroke-width="1.8"/></svg>
+            </span>
+            <div class="value-row-text">
+              <h3>Prepare-se para o mercado</h3>
+              <p>Aprenda tecnologias, ferramentas e softwares utilizados no dia a dia do mercado de trabalho.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PARA QUEM -->
+  <section class="section audience" id="trilhas">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">// trilhas</p>
+        <h2 class="section-title">Uma plataforma. Diferentes momentos da sua carreira.</h2>
+      </div>
+
+      <div class="audience-grid">
+        <article class="audience-card audience-card--start bracket-frame reveal">
+          <span class="corner corner-tl"></span><span class="corner corner-tr"></span><span class="corner corner-bl"></span><span class="corner corner-br"></span>
+          <span class="audience-badge">DO ZERO</span>
+          <h3>Sua primeira oportunidade começa com conhecimento.</h3>
+          <p>Para quem quer entrar no mercado de trabalho, mudar de profissão ou começar a desenvolver suas primeiras habilidades com tecnologia.</p>
+          <ul class="audience-list">
+            <li>Fundamentos</li>
+            <li>Projetos práticos</li>
+            <li>Trilhas passo a passo</li>
+            <li>Construção de portfólio</li>
+          </ul>
+          <a href="#comecar" class="audience-cta">Começar do zero <span aria-hidden="true">→</span></a>
+        </article>
+
+        <article class="audience-card audience-card--advanced bracket-frame reveal">
+          <span class="corner corner-tl"></span><span class="corner corner-tr"></span><span class="corner corner-bl"></span><span class="corner corner-br"></span>
+          <span class="audience-badge badge-advanced">AVANÇADO</span>
+          <h3>Leve suas habilidades para o próximo nível.</h3>
+          <p>Para profissionais que já atuam no mercado e querem aprofundar conhecimentos e dominar novas ferramentas.</p>
+          <ul class="audience-list">
+            <li>Especializações</li>
+            <li>Integrações entre ferramentas</li>
+            <li>Boas práticas</li>
+            <li>Ferramentas avançadas</li>
+          </ul>
+          <a href="#cursos" class="audience-cta">Ver especializações <span aria-hidden="true">→</span></a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJETO PRÁTICO -->
+  <section class="section project">
+    <div class="container project-grid">
+      <div class="project-text reveal">
+        <p class="eyebrow">// na prática</p>
+        <h2 class="section-title">Não fique apenas assistindo aulas. Construa.</h2>
+        <p class="section-sub">Cada etapa de aprendizado deve aproximar você daquilo que realmente importa: saber resolver problemas.</p>
+        <div class="project-points">
+          <span class="point-item">Projetos reais</span>
+          <span class="point-item">Portfólio</span>
+          <span class="point-item">Prática</span>
+          <span class="point-item">Experiência</span>
+        </div>
+      </div>
+
+      <div class="project-visual reveal" aria-hidden="true">
+        <div class="dash-window">
+          <div class="dash-topbar">
+            <span>painel-de-projeto</span>
+            <span class="dash-live"><span class="dash-live-dot"></span>ao vivo</span>
+          </div>
+          <div class="dash-body">
+            <div class="dash-row">
+              <div class="dash-tile">
+                <span class="dash-tile-label">Prazo</span>
+                <span class="dash-tile-value">no prazo</span>
+              </div>
+              <div class="dash-tile">
+                <span class="dash-tile-label">Qualidade</span>
+                <span class="dash-tile-value">9.6/10</span>
+              </div>
+              <div class="dash-tile">
+                <span class="dash-tile-label">Status</span>
+                <span class="dash-tile-value">entregue</span>
+              </div>
+            </div>
+            <div class="dash-chart">
+              <svg viewBox="0 0 300 90" width="100%" height="90" preserveAspectRatio="none">
+                <polyline points="0,70 30,60 60,64 90,40 120,45 150,25 180,32 210,18 240,22 270,10 300,14" fill="none" stroke="#2563EB" stroke-width="2.5"/>
+                <polyline points="0,70 30,60 60,64 90,40 120,45 150,25 180,32 210,18 240,22 270,10 300,14 300,90 0,90" fill="url(#g1)" stroke="none" opacity="0.25"/>
+                <defs>
+                  <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stop-color="#2563EB"/>
+                    <stop offset="1" stop-color="#2563EB" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+            <div class="dash-log">
+              <span>› relatório final enviado ao cliente</span>
+              <span>› apresentação aprovada pela equipe</span>
+              <span>› projeto adicionado ao portfólio</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROVA SOCIAL -->
+  <!-- <section class="section testimonials" id="depoimentos">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">// comunidade</p>
+        <h2 class="section-title">Quem aprende, evolui.</h2>
+        <p class="section-sub">Histórias de pessoas que decidiram investir no próprio futuro.</p>
+      </div>
+    </div>
+
+    <div class="marquee marquee--testimonials">
+      <div class="marquee-track marquee-track--testimonials">
+        <article class="testimonial-card">
+          <div class="stars" aria-label="5 de 5 estrelas">★★★★★</div>
+          <p class="quote">"Os projetos práticos fizeram a diferença para eu finalmente entender como aplicar o que estava estudando."</p>
+          <div class="testimonial-author">
+            <span class="avatar" style="background:linear-gradient(135deg,#2563EB,#06B6D4)">CM</span>
+            <div><strong>Carlos Mendes</strong><span>Analista de Dados</span></div>
+          </div>
+        </article>
+        <article class="testimonial-card">
+          <div class="stars" aria-label="5 de 5 estrelas">★★★★★</div>
+          <p class="quote">"A estrutura das trilhas me ajudou a organizar meus estudos e enxergar um caminho claro para minha evolução."</p>
+          <div class="testimonial-author">
+            <span class="avatar" style="background:linear-gradient(135deg,#10B981,#2563EB)">LA</span>
+            <div><strong>Letícia Almeida</strong><span>Coordenadora de Marketing</span></div>
+          </div>
+        </article>
+        <article class="testimonial-card">
+          <div class="stars" aria-label="5 de 5 estrelas">★★★★★</div>
+          <p class="quote">"Consegui transformar conhecimento que estava espalhado em uma rotina de aprendizado muito mais objetiva."</p>
+          <div class="testimonial-author">
+            <span class="avatar" style="background:linear-gradient(135deg,#06B6D4,#2563EB)">RS</span>
+            <div><strong>Rafael Souza</strong><span>Especialista em Cloud</span></div>
+          </div>
+        </article>
+
+        <article class="testimonial-card" aria-hidden="true">
+          <div class="stars">★★★★★</div>
+          <p class="quote">"Os projetos práticos fizeram a diferença para eu finalmente entender como aplicar o que estava estudando."</p>
+          <div class="testimonial-author">
+            <span class="avatar" style="background:linear-gradient(135deg,#2563EB,#06B6D4)">CM</span>
+            <div><strong>Carlos Mendes</strong><span>Analista de Dados</span></div>
+          </div>
+        </article>
+        <article class="testimonial-card" aria-hidden="true">
+          <div class="stars">★★★★★</div>
+          <p class="quote">"A estrutura das trilhas me ajudou a organizar meus estudos e enxergar um caminho claro para minha evolução."</p>
+          <div class="testimonial-author">
+            <span class="avatar" style="background:linear-gradient(135deg,#10B981,#2563EB)">LA</span>
+            <div><strong>Letícia Almeida</strong><span>Coordenadora de Marketing</span></div>
+          </div>
+        </article>
+        <article class="testimonial-card" aria-hidden="true">
+          <div class="stars">★★★★★</div>
+          <p class="quote">"Consegui transformar conhecimento que estava espalhado em uma rotina de aprendizado muito mais objetiva."</p>
+          <div class="testimonial-author">
+            <span class="avatar" style="background:linear-gradient(135deg,#06B6D4,#2563EB)">RS</span>
+            <div><strong>Rafael Souza</strong><span>Especialista em Cloud</span></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section> -->
+
+  <!-- NÚMEROS -->
+  <!-- <section class="section stats">
+    <div class="container">
+      <div class="stats-ticker">
+        <div class="stat-tick reveal">
+          <span class="stat-number">+10.000</span>
+          <span class="stat-label">Alunos alcançados</span>
+        </div>
+        <span class="tick-divider" aria-hidden="true"></span>
+        <div class="stat-tick reveal">
+          <span class="stat-number">+50</span>
+          <span class="stat-label">Projetos práticos</span>
+        </div>
+        <span class="tick-divider" aria-hidden="true"></span>
+        <div class="stat-tick reveal">
+          <span class="stat-number">+20</span>
+          <span class="stat-label">Tecnologias</span>
+        </div>
+        <span class="tick-divider" aria-hidden="true"></span>
+        <div class="stat-tick reveal">
+          <span class="stat-number">4.9/5</span>
+          <span class="stat-label">Avaliação média</span>
+        </div>
+      </div>
+      <p class="stats-note">Dados de exemplo para fins de demonstração deste layout.</p>
+    </div>
+  </section> -->
+
+  <!-- FAQ -->
+  <section class="section faq" id="empresas">
+    <div class="container faq-container">
+      <div class="section-head reveal">
+        <p class="eyebrow">// dúvidas</p>
+        <h2 class="section-title">Ainda tem dúvidas?</h2>
+      </div>
+
+      <div class="faq-list">
+        <div class="faq-row">
+          <span class="faq-index">01</span>
+          <details class="faq-item" open>
+            <summary class="faq-question">
+              Preciso ter conhecimento técnico para começar?
+              <svg class="faq-icon" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 7l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </summary>
+            <div class="faq-answer"><p>Não. Nossas trilhas para iniciantes começam do absoluto zero, com fundamentos explicados de forma clara antes de qualquer prática.</p></div>
+          </details>
+        </div>
+
+        <div class="faq-row">
+          <span class="faq-index">02</span>
+          <details class="faq-item">
+            <summary class="faq-question">
+              Os cursos são para iniciantes?
+              <svg class="faq-icon" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 7l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </summary>
+            <div class="faq-answer"><p>Temos trilhas para iniciantes e também conteúdos avançados para quem já atua na área e quer se especializar.</p></div>
+          </details>
+        </div>
+
+        <div class="faq-row">
+          <span class="faq-index">03</span>
+          <details class="faq-item">
+            <summary class="faq-question">
+              Posso estudar no meu próprio ritmo?
+              <svg class="faq-icon" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 7l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </summary>
+            <div class="faq-answer"><p>Sim. O acesso é 100% online e você organiza os estudos de acordo com a sua rotina.</p></div>
+          </details>
+        </div>
+
+        <div class="faq-row">
+          <span class="faq-index">04</span>
+          <details class="faq-item">
+            <summary class="faq-question">
+              Os cursos possuem certificado?
+              <svg class="faq-icon" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 7l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </summary>
+            <div class="faq-answer"><p>Sim, ao concluir uma trilha você recebe um certificado de conclusão.</p></div>
+          </details>
+        </div>
+
+        <div class="faq-row">
+          <span class="faq-index">05</span>
+          <details class="faq-item">
+            <summary class="faq-question">
+              Tenho acesso aos cursos pelo celular?
+              <svg class="faq-icon" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 7l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </summary>
+            <div class="faq-answer"><p>Sim, a plataforma é totalmente responsiva e funciona bem em qualquer dispositivo.</p></div>
+          </details>
+        </div>
+
+        <div class="faq-row">
+          <span class="faq-index">06</span>
+          <details class="faq-item">
+            <summary class="faq-question">
+              Qual curso devo fazer primeiro?
+              <svg class="faq-icon" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 7l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </summary>
+            <div class="faq-answer"><p>Se você está começando, recomendamos a trilha "Do zero". Se já atua na área, explore as especializações avançadas.</p></div>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="cta-final" id="comecar">
+    <div class="container">
+      <div class="cta-frame bracket-frame reveal">
+        <span class="corner corner-tl"></span><span class="corner corner-tr"></span><span class="corner corner-bl"></span><span class="corner corner-br"></span>
+        <p class="eyebrow">// pronto para começar</p>
+        <h2>Sua próxima oportunidade pode começar hoje.</h2>
+        <p class="cta-sub">Aprenda tecnologia. Construa projetos. Desenvolva sua carreira.</p>
+        <div class="hero-ctas">
+          <a href="#" class="btn btn-primary btn-lg">Começar agora</a>
+          <a href="#cursos" class="btn btn-secondary btn-lg">Explorar cursos</a>
+        </div>
+        <p class="cta-note">Comece gratuitamente. Sem compromisso.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-col footer-brand">
+      <a href="#topo" class="logo">
+        <img class="logo-mark" src="assets/logo.png" alt="" aria-hidden="true">
+        <span class="logo-word">NEXAS</span>
+      </a>
+      <p>Tecnologia para quem quer evoluir.</p>
+      <div class="social-links">
+        <a href="#" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6"/><circle cx="17.2" cy="6.8" r="1" fill="currentColor"/></svg></a>
+        <a href="#" aria-label="LinkedIn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.6"/><path d="M7.5 10v6.5M7.5 7.5v.01M12 16.5V12.7c0-1.5 1-2.7 2.5-2.7s2 1.2 2 2.7v3.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></a>
+        <a href="#" aria-label="YouTube"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="2.5" y="6" width="19" height="12" rx="4" stroke="currentColor" stroke-width="1.6"/><path d="M10.5 9.5l5 2.5-5 2.5v-5z" fill="currentColor"/></svg></a>
+        <a href="#" aria-label="GitHub"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3a9 9 0 00-2.85 17.54c.45.08.62-.2.62-.43v-1.7c-2.51.55-3.04-1.08-3.04-1.08-.41-1.05-1-1.33-1-1.33-.82-.56.06-.55.06-.55.9.06 1.38.93 1.38.93.8 1.38 2.11.98 2.62.75.08-.58.31-.98.57-1.21-2-.23-4.1-1-4.1-4.45 0-.98.35-1.79.92-2.42-.09-.23-.4-1.15.09-2.4 0 0 .76-.24 2.5.92a8.6 8.6 0 014.55 0c1.73-1.16 2.5-.92 2.5-.92.49 1.25.18 2.17.09 2.4.57.63.92 1.44.92 2.42 0 3.46-2.11 4.22-4.11 4.44.32.28.61.83.61 1.68v2.48c0 .24.16.52.62.43A9 9 0 0012 3z" fill="currentColor"/></svg></a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h4>Plataforma</h4>
+      <ul>
+        <li><a href="#cursos">Cursos</a></li>
+        <li><a href="nexpace.html">Nexpace</a></li>
+        <li><a href="#precos">Preços</a></li>
+        <li><a href="#trilhas">Trilhas</a></li>
+        <li><a href="#metodologia">Como funciona</a></li>
+        <li><a href="certificados.html">Certificados</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Empresa</h4>
+      <ul>
+        <li><a href="sobre.html">Sobre</a></li>
+        <li><a href="for-enterprises.html">Para empresas</a></li>
+        <li><a href="contato.html">Contato</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Suporte</h4>
+      <ul>
+        <li><a href="central-de-ajuda.html">Central de ajuda</a></li>
+        <li><a href="termos-de-uso.html">Termos de uso</a></li>
+        <li><a href="politica-de-privacidade.html">Política de privacidade</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col footer-newsletter">
+      <h4>Fique por dentro</h4>
+      <p>Receba conteúdos sobre tecnologia e carreira.</p>
+      <form class="newsletter-form" onsubmit="return false;">
+        <label for="newsletter-email" class="sr-only">Seu melhor e-mail</label>
+        <input type="email" id="newsletter-email" placeholder="Seu melhor e-mail" required>
+        <button type="submit" class="btn btn-primary btn-sm">Inscrever</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="container footer-bottom">
+    <span>© 2026 Nexas. Todos os direitos reservados.</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  // Hero slideshow — crossfade between institutional slides
+  var heroSlides = document.querySelectorAll("#heroSlideshow .hero-slide");
+  if(heroSlides.length > 1){
+    var heroSlideIndex = 0;
+    setInterval(function(){
+      heroSlides[heroSlideIndex].classList.remove("is-active");
+      heroSlideIndex = (heroSlideIndex + 1) % heroSlides.length;
+      heroSlides[heroSlideIndex].classList.add("is-active");
+    }, 5000);
+  }
+
+  // Hero badges — cycle through short motivational/institutional messages,
+  // fading out/in instead of swapping text abruptly
+  var HERO_STAT_MESSAGES = [
+    { title: "FOCO", sub: "APLICAÇÃO PRÁTICA" },
+    { title: "+10.000", sub: "PROFISSIONAIS CAPACITADOS" },
+    { title: "TECNOLOGIA", sub: "APLICADA AO TRABALHO REAL" },
+    { title: "AGRO &amp; TI", sub: "NA MESMA TRILHA" }
+  ];
+  var HERO_CERT_MESSAGES = [
+    "Certificado — <strong>Avançado</strong>",
+    "Aprenda no seu <strong>ritmo</strong>",
+    "Cursos <strong>gratuitos</strong> e pagos",
+    "Feito para o <strong>mercado real</strong>"
+  ];
+
+  function cycleHeroBadge(el, messages, render, intervalMs, startDelayMs){
+    if(!el || messages.length < 2) return;
+    var i = 0;
+    setTimeout(function(){
+      setInterval(function(){
+        el.classList.add("is-fading");
+        setTimeout(function(){
+          i = (i + 1) % messages.length;
+          render(el, messages[i]);
+          el.classList.remove("is-fading");
+        }, 350);
+      }, intervalMs);
+    }, startDelayMs);
+  }
+
+  cycleHeroBadge(
+    document.getElementById("heroBadgeStatText"),
+    HERO_STAT_MESSAGES,
+    function(el, msg){ el.innerHTML = "<strong>" + msg.title + "</strong><span>" + msg.sub + "</span>"; },
+    4500, 0
+  );
+  cycleHeroBadge(
+    document.getElementById("heroBadgeCertLine"),
+    HERO_CERT_MESSAGES,
+    function(el, msg){ el.innerHTML = msg; },
+    5200, 1800
+  );
+
+  // Mobile menu — close after a link is clicked, so the dropdown doesn't
+  // stay covering the section it just jumped to
+  var navToggle = document.getElementById("nav-toggle");
+  var mobileLinks = document.querySelectorAll(".main-nav a");
+  if(navToggle){
+    mobileLinks.forEach(function(a){
+      a.addEventListener("click", function(){ navToggle.checked = false; });
+    });
+  }
+
+  // Rail nav — highlight active section on scroll
+  var sections = document.querySelectorAll("main section[id], section#comecar");
+  var dots = document.querySelectorAll(".rail-dot");
+  var dotByTarget = {};
+  dots.forEach(function(d){ dotByTarget[d.dataset.target] = d; });
+
+  if("IntersectionObserver" in window && sections.length){
+    var railIO = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          dots.forEach(function(d){ d.classList.remove("is-active"); });
+          var dot = dotByTarget[entry.target.id];
+          if(dot) dot.classList.add("is-active");
+        }
+      });
+    }, { rootMargin: "-45% 0px -45% 0px", threshold: 0 });
+    sections.forEach(function(s){ railIO.observe(s); });
+  }
+
+  // Courses carousel
+  var track = document.getElementById("coursesTrack");
+  var prevBtn = document.getElementById("coursesPrev");
+  var nextBtn = document.getElementById("coursesNext");
+  var fill = document.getElementById("coursesProgressFill");
+
+  function cardStep(){
+    var card = track ? track.querySelector(".course-card") : null;
+    return card ? card.getBoundingClientRect().width + 20 : 320;
+  }
+
+  if(track && prevBtn && nextBtn){
+    prevBtn.addEventListener("click", function(){ track.scrollBy({ left: -cardStep(), behavior: "smooth" }); });
+    nextBtn.addEventListener("click", function(){ track.scrollBy({ left: cardStep(), behavior: "smooth" }); });
+  }
+
+  if(track && fill){
+    var updateProgress = function(){
+      var max = track.scrollWidth - track.clientWidth;
+      var ratio = max > 0 ? track.scrollLeft / max : 0;
+      fill.style.width = (ratio * 100) + "%";
+    };
+    track.addEventListener("scroll", updateProgress);
+    updateProgress();
+  }
+
+  // Scroll reveal
+  var revealEls = document.querySelectorAll(".reveal");
+  if("IntersectionObserver" in window && revealEls.length){
+    var revealIO = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add("is-in");
+          revealIO.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(function(el){ revealIO.observe(el); });
+  } else {
+    revealEls.forEach(function(el){ el.classList.add("is-in"); });
+  }
+})();
+</script>
+
+</body>
+</html>

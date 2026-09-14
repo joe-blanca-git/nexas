@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">Nexpace — Nexas</title>
+<meta name="description" id="pageDescription" content="Conteúdo do Nexpace, o portal de notícias, artigos, podcasts, vídeos e aulas grátis da Nexas.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./css/style.css">
+<link rel="icon" href="./assets/favicon.ico" type="image/x-icon">
+</head>
+<body>
+
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="index.html" class="logo" aria-label="Nexas — página inicial">
+      <img class="logo-mark" src="assets/logo.png" alt="" aria-hidden="true">
+      <span class="logo-word">NEXAS</span>
+    </a>
+
+    <input type="checkbox" id="nav-toggle" class="nav-toggle-input" hidden>
+
+    <nav class="main-nav" aria-label="Navegação principal">
+      <ul class="nav-links">
+        <li><a href="index.html#cursos">Cursos</a></li>
+        <li><a href="nexpace.html">Nexpace</a></li>
+        <li><a href="index.html#metodologia">Como funciona</a></li>
+        <li><a href="index.html#trilhas">Trilhas</a></li>
+        <li><a href="for-enterprises.html">Para empresas</a></li>
+        <li><a href="sobre.html">Sobre</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="index.html#entrar" class="link-muted">Entrar</a>
+        <a href="index.html#comecar" class="btn btn-primary btn-sm">Começar agora</a>
+      </div>
+    </nav>
+
+    <label for="nav-toggle" class="nav-toggle-label" aria-label="Abrir menu">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+        <path d="M3 6h16M3 11h16M3 16h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+    </label>
+  </div>
+</header>
+
+<main id="conteudo">
+
+  <!-- MASTHEAD -->
+  <section class="space-detail-masthead">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Trilha de navegação">
+        <a href="index.html">Início</a>
+        <span aria-hidden="true">/</span>
+        <a href="nexpace.html">Nexpace</a>
+        <span aria-hidden="true">/</span>
+        <span id="sdCategory">Categoria</span>
+      </nav>
+
+      <span class="space-detail-type" id="sdTypeBadge">TIPO</span>
+      <h1 class="space-detail-title" id="sdTitle">Carregando publicação...</h1>
+
+      <div class="space-detail-meta">
+        <span class="avatar" id="sdAvatar" aria-hidden="true"></span>
+        <strong id="sdAuthor"></strong>
+        <span class="dot" aria-hidden="true"></span>
+        <span id="sdDate"></span>
+        <span class="dot" aria-hidden="true"></span>
+        <span id="sdMeta"></span>
+        <span class="dot" aria-hidden="true"></span>
+        <span id="sdViews"></span>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+
+    <!-- CAPA / PLAYER -->
+    <div class="space-detail-cover" id="sdCoverWrap" hidden>
+      <div id="sdCoverArt"></div>
+    </div>
+
+    <div class="space-player" id="sdPlayerWrap" hidden>
+      <div id="sdPlayerArt"></div>
+      <span class="space-play-badge" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 3.5l12 6.5-12 6.5v-13z" fill="#fff"/></svg>
+      </span>
+      <span class="space-duration-badge" id="sdPlayerDuration"></span>
+    </div>
+
+    <!-- CORPO -->
+    <div class="space-body" id="sdBody"></div>
+
+    <!-- TAGS -->
+    <div class="space-tags" id="sdTags"></div>
+
+    <!-- COMPARTILHAR -->
+    <div class="space-share">
+      <span class="space-share-label">// compartilhar</span>
+      <a href="#" aria-label="Compartilhar no LinkedIn" class="space-share-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.6"/><path d="M7.5 10v6.5M7.5 7.5v.01M12 16.5V12.7c0-1.5 1-2.7 2.5-2.7s2 1.2 2 2.7v3.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </a>
+      <a href="#" aria-label="Compartilhar no WhatsApp" class="space-share-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 18l1.2-4A7.5 7.5 0 1110 20l-4 1z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#" aria-label="Copiar link" class="space-share-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 15l6-6M10 6l1-1a3.2 3.2 0 014.5 4.5l-1 1M14 18l-1 1a3.2 3.2 0 01-4.5-4.5l1-1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </a>
+    </div>
+
+    <!-- RELACIONADOS -->
+    <section class="section" id="relacionados">
+      <div class="space-related-head section-head reveal">
+        <p class="eyebrow">// continue explorando</p>
+        <h2 class="section-title">Talvez você também goste</h2>
+      </div>
+      <div class="space-grid" id="sdRelated"></div>
+    </section>
+
+  </div>
+
+  <!-- CTA FINAL -->
+  <section class="cta-final">
+    <div class="container">
+      <div class="cta-frame bracket-frame reveal">
+        <span class="corner corner-tl"></span><span class="corner corner-tr"></span><span class="corner corner-bl"></span><span class="corner corner-br"></span>
+        <p class="eyebrow">// quer ir além do conteúdo?</p>
+        <h2>Transforme o que você leu em prática.</h2>
+        <p class="cta-sub">A Nexas tem trilhas completas para aplicar tudo isso no seu dia a dia.</p>
+        <div class="hero-ctas">
+          <a href="index.html#cursos" class="btn btn-primary btn-lg">Ver cursos</a>
+          <a href="nexpace.html" class="btn btn-secondary btn-lg">Voltar para o Nexpace</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-col footer-brand">
+      <a href="index.html" class="logo">
+        <img class="logo-mark" src="assets/logo.png" alt="" aria-hidden="true">
+        <span class="logo-word">NEXAS</span>
+      </a>
+      <p>Tecnologia para quem quer evoluir.</p>
+      <div class="social-links">
+        <a href="#" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6"/><circle cx="17.2" cy="6.8" r="1" fill="currentColor"/></svg></a>
+        <a href="#" aria-label="LinkedIn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.6"/><path d="M7.5 10v6.5M7.5 7.5v.01M12 16.5V12.7c0-1.5 1-2.7 2.5-2.7s2 1.2 2 2.7v3.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></a>
+        <a href="#" aria-label="YouTube"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="2.5" y="6" width="19" height="12" rx="4" stroke="currentColor" stroke-width="1.6"/><path d="M10.5 9.5l5 2.5-5 2.5v-5z" fill="currentColor"/></svg></a>
+        <a href="#" aria-label="GitHub"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3a9 9 0 00-2.85 17.54c.45.08.62-.2.62-.43v-1.7c-2.51.55-3.04-1.08-3.04-1.08-.41-1.05-1-1.33-1-1.33-.82-.56.06-.55.06-.55.9.06 1.38.93 1.38.93.8 1.38 2.11.98 2.62.75.08-.58.31-.98.57-1.21-2-.23-4.1-1-4.1-4.45 0-.98.35-1.79.92-2.42-.09-.23-.4-1.15.09-2.4 0 0 .76-.24 2.5.92a8.6 8.6 0 014.55 0c1.73-1.16 2.5-.92 2.5-.92.49 1.25.18 2.17.09 2.4.57.63.92 1.44.92 2.42 0 3.46-2.11 4.22-4.11 4.44.32.28.61.83.61 1.68v2.48c0 .24.16.52.62.43A9 9 0 0012 3z" fill="currentColor"/></svg></a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h4>Plataforma</h4>
+      <ul>
+        <li><a href="index.html#cursos">Cursos</a></li>
+        <li><a href="nexpace.html">Nexpace</a></li>
+        <li><a href="index.html#precos">Preços</a></li>
+        <li><a href="index.html#trilhas">Trilhas</a></li>
+        <li><a href="index.html#metodologia">Como funciona</a></li>
+        <li><a href="certificados.html">Certificados</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Empresa</h4>
+      <ul>
+        <li><a href="sobre.html">Sobre</a></li>
+        <li><a href="for-enterprises.html">Para empresas</a></li>
+        <li><a href="contato.html">Contato</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Suporte</h4>
+      <ul>
+        <li><a href="central-de-ajuda.html">Central de ajuda</a></li>
+        <li><a href="termos-de-uso.html">Termos de uso</a></li>
+        <li><a href="politica-de-privacidade.html">Política de privacidade</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col footer-newsletter">
+      <h4>Fique por dentro</h4>
+      <p>Receba conteúdos sobre tecnologia e carreira.</p>
+      <form class="newsletter-form" onsubmit="return false;">
+        <label for="newsletter-email" class="sr-only">Seu melhor e-mail</label>
+        <input type="email" id="newsletter-email" placeholder="Seu melhor e-mail" required>
+        <button type="submit" class="btn btn-primary btn-sm">Inscrever</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="container footer-bottom">
+    <span>© 2026 Nexas. Todos os direitos reservados.</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  var COVERS = {
+    farm: '<svg class="space-card-cover" viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="cvFarm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#122A26"/><stop offset="1" stop-color="#0B1120"/></linearGradient></defs><rect width="400" height="225" fill="url(#cvFarm)"/><g stroke="#10B981" stroke-width="2" opacity="0.85"><line x1="10" y1="190" x2="390" y2="170"/><line x1="10" y1="168" x2="390" y2="148"/><line x1="10" y1="146" x2="390" y2="126"/><line x1="10" y1="124" x2="390" y2="104"/></g><circle cx="335" cy="45" r="22" fill="#06B6D4" opacity="0.18"/><rect x="176" y="88" width="48" height="26" rx="5" fill="#111C30" stroke="#06B6D4" stroke-width="2"/><circle cx="188" cy="118" r="9" fill="#0B1120" stroke="#06B6D4" stroke-width="2"/><circle cx="212" cy="118" r="9" fill="#0B1120" stroke="#06B6D4" stroke-width="2"/></svg>',
+    farmBlue: '<svg class="space-card-cover" viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="cvFarmB" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#122A26"/><stop offset="1" stop-color="#0B1120"/></linearGradient></defs><rect width="400" height="225" fill="url(#cvFarmB)"/><g stroke="#10B981" stroke-width="2" opacity="0.85"><line x1="10" y1="190" x2="390" y2="170"/><line x1="10" y1="168" x2="390" y2="148"/><line x1="10" y1="146" x2="390" y2="126"/><line x1="10" y1="124" x2="390" y2="104"/></g><rect x="176" y="88" width="48" height="26" rx="5" fill="#111C30" stroke="#2563EB" stroke-width="2"/><circle cx="188" cy="118" r="9" fill="#0B1120" stroke="#2563EB" stroke-width="2"/><circle cx="212" cy="118" r="9" fill="#0B1120" stroke="#2563EB" stroke-width="2"/></svg>',
+    farmCloud: '<svg class="space-card-cover" viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="cvFarmC" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#122A26"/><stop offset="1" stop-color="#0B1120"/></linearGradient></defs><rect width="400" height="225" fill="url(#cvFarmC)"/><g stroke="#10B981" stroke-width="2" opacity="0.85"><line x1="10" y1="190" x2="390" y2="170"/><line x1="10" y1="168" x2="390" y2="148"/><line x1="10" y1="146" x2="390" y2="126"/></g><path d="M120 110a34 34 0 01-6-67 46 46 0 0189-14 38 38 0 0141 40 32 32 0 01-4 64H120a30 30 0 010-23z" fill="none" stroke="#06B6D4" stroke-width="3"/></svg>',
+    ai: '<svg class="space-card-cover" viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="cvAi" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#132038"/><stop offset="1" stop-color="#0B1120"/></linearGradient></defs><rect width="400" height="225" fill="url(#cvAi)"/><circle cx="200" cy="112" r="34" fill="none" stroke="#2563EB" stroke-width="3"/><circle cx="200" cy="112" r="6" fill="#06B6D4"/><circle cx="120" cy="60" r="6" fill="#2563EB"/><circle cx="280" cy="60" r="6" fill="#06B6D4"/><circle cx="100" cy="160" r="6" fill="#06B6D4"/><circle cx="300" cy="160" r="6" fill="#2563EB"/><g stroke-width="1.5" opacity="0.6"><line x1="200" y1="112" x2="120" y2="60" stroke="#2563EB"/><line x1="200" y1="112" x2="280" y2="60" stroke="#06B6D4"/><line x1="200" y1="112" x2="100" y2="160" stroke="#06B6D4"/><line x1="200" y1="112" x2="300" y2="160" stroke="#2563EB"/></g></svg>',
+    bi: '<svg class="space-card-cover" viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="cvBi" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#132038"/><stop offset="1" stop-color="#0B1120"/></linearGradient></defs><rect width="400" height="225" fill="url(#cvBi)"/><g stroke="#24365C" stroke-width="1" opacity="0.6"><line x1="0" y1="75" x2="400" y2="75"/><line x1="0" y1="150" x2="400" y2="150"/><line x1="133" y1="0" x2="133" y2="225"/><line x1="266" y1="0" x2="266" y2="225"/></g><rect x="150" y="120" width="22" height="55" rx="3" fill="#2563EB"/><rect x="180" y="90" width="22" height="85" rx="3" fill="#06B6D4"/><rect x="210" y="105" width="22" height="70" rx="3" fill="#2563EB"/><rect x="240" y="75" width="22" height="100" rx="3" fill="#10B981"/></svg>',
+    mic: '<svg class="space-card-cover" viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="cvMic" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1E1533"/><stop offset="1" stop-color="#0B1120"/></linearGradient></defs><rect width="400" height="225" fill="url(#cvMic)"/><rect x="185" y="70" width="30" height="60" rx="15" fill="none" stroke="#A78BFA" stroke-width="3"/><path d="M160 118a40 40 0 0080 0" fill="none" stroke="#A78BFA" stroke-width="3" stroke-linecap="round"/><line x1="200" y1="158" x2="200" y2="175" stroke="#A78BFA" stroke-width="3"/><line x1="180" y1="175" x2="220" y2="175" stroke="#A78BFA" stroke-width="3" stroke-linecap="round"/><g fill="#A78BFA" opacity="0.7"><rect x="70" y="110" width="8" height="25"/><rect x="90" y="90" width="8" height="65"/><rect x="110" y="105" width="8" height="35"/><rect x="300" y="100" width="8" height="45"/><rect x="320" y="85" width="8" height="75"/><rect x="340" y="110" width="8" height="25"/></g></svg>',
+    play: '<svg class="space-card-cover" viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="cvPlay" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2A1D12"/><stop offset="1" stop-color="#0B1120"/></linearGradient></defs><rect width="400" height="225" fill="url(#cvPlay)"/><circle cx="200" cy="112" r="40" fill="rgba(251,146,60,0.15)"/><circle cx="200" cy="112" r="40" fill="none" stroke="#FB923C" stroke-width="3"/><path d="M188 92l32 20-32 20z" fill="#FB923C"/></svg>',
+    cloud: '<svg class="space-card-cover" viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="cvCloud" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#122036"/><stop offset="1" stop-color="#0B1120"/></linearGradient></defs><rect width="400" height="225" fill="url(#cvCloud)"/><path d="M120 130a34 34 0 01-6-67 46 46 0 0189-14 38 38 0 0141 40 32 32 0 01-4 64H120a30 30 0 010-23z" fill="none" stroke="#2563EB" stroke-width="3"/><rect x="150" y="150" width="40" height="16" rx="3" fill="#111C30" stroke="#06B6D4" stroke-width="2"/><rect x="200" y="150" width="40" height="16" rx="3" fill="#111C30" stroke="#06B6D4" stroke-width="2"/><rect x="250" y="150" width="40" height="16" rx="3" fill="#111C30" stroke="#06B6D4" stroke-width="2"/></svg>',
+    gear: '<svg class="space-card-cover" viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="cvGear" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0F2333"/><stop offset="1" stop-color="#0B1120"/></linearGradient></defs><rect width="400" height="225" fill="url(#cvGear)"/><path d="M60 170C120 80,200 190,260 100S360 80,360 80" fill="none" stroke="#1E3A5F" stroke-width="3" stroke-dasharray="2 10" stroke-linecap="round"/><circle cx="60" cy="170" r="14" fill="#111C30" stroke="#2563EB" stroke-width="3"/><circle cx="200" cy="130" r="16" fill="#111C30" stroke="#06B6D4" stroke-width="3"/><circle cx="340" cy="90" r="14" fill="#111C30" stroke="#10B981" stroke-width="3"/><g transform="translate(150 65)" fill="none" stroke="#2563EB" stroke-width="3"><circle r="18"/><path d="M0 -24v8M0 16v8M-24 0h8M16 0h8M-17 -17l6 6M11 11l6 6M-17 17l6 -6M11 -11l6 -6"/></g></svg>'
+  };
+
+  var TYPE_LABELS = { noticia: "NOTÍCIA", artigo: "ARTIGO", podcast: "PODCAST", video: "VÍDEO", aula: "AULA GRÁTIS" };
+
+  var POSTS = {
+    "nexas-lanca-operations-center-agro": {
+      type: "noticia", category: "AGRO & TECNOLOGIA",
+      title: "Nexas lança trilha de Operations Center voltada para o agro",
+      author: "Redação Nexas", avatar: "NX", gradient: "linear-gradient(135deg,#2563EB,#06B6D4)",
+      date: "10 de setembro de 2026", meta: "4 min de leitura", views: "3,8 mil leituras",
+      cover: "farm", tags: ["Operations Center", "Agro", "Notícia"],
+      body: [
+        "A Nexas anunciou o lançamento de uma nova trilha voltada especificamente para analistas de operação de usinas, fazendas e empresas de tratos agrícolas: o curso de Operations Center, inspirado nas ferramentas que já são usadas por operações agrícolas de grande porte.",
+        "A trilha nasce da experiência prática de quem já esteve dentro da operação — unindo noções de telemetria de máquinas, leitura de indicadores em tempo real e tomada de decisão baseada em dados de campo.",
+        "Segundo a equipe da Nexas, a demanda por profissionais capacitados nesse tipo de ferramenta cresceu nos últimos anos, à medida que fazendas e usinas passaram a adotar sistemas de monitoramento cada vez mais sofisticados.",
+        "O curso está disponível para matrícula individual e também como parte do plano Enterprise, para empresas que quiserem capacitar equipes inteiras de operação.",
+        "Mais detalhes sobre o conteúdo programático estão disponíveis na página do curso."
+      ]
+    },
+    "5-ferramentas-ia-empresas": {
+      type: "artigo", category: "INTELIGÊNCIA ARTIFICIAL",
+      title: "5 ferramentas de IA que já estão no dia a dia das empresas",
+      author: "Camila Duarte", avatar: "CD", gradient: "linear-gradient(135deg,#06B6D4,#10B981)",
+      date: "5 de setembro de 2026", meta: "6 min de leitura", views: "2,1 mil leituras",
+      cover: "ai", tags: ["Inteligência Artificial", "Produtividade", "Artigo"],
+      body: [
+        "A inteligência artificial deixou de ser um assunto restrito a times de tecnologia e passou a fazer parte da rotina de áreas como marketing, atendimento, operações e gestão. A seguir, listamos cinco ferramentas de IA que já aparecem no dia a dia de empresas de diferentes tamanhos.",
+        "1. Assistentes de redação — usados para gerar rascunhos de e-mails, relatórios e materiais de comunicação, economizando tempo em tarefas repetitivas de escrita.",
+        "2. Análise preditiva de dados — modelos que ajudam times comerciais e financeiros a antecipar tendências, com base em dados históricos da própria empresa.",
+        "3. Automação de atendimento — chatbots e assistentes que resolvem dúvidas simples de clientes sem depender de um atendente humano o tempo todo.",
+        "4. Geração de imagens e materiais visuais — usada por times de marketing para criar variações de peças gráficas rapidamente.",
+        "5. Transcrição e resumo de reuniões — ferramentas que transformam gravações de reuniões em atas resumidas, reduzindo trabalho manual.",
+        "O ponto em comum entre essas ferramentas é que nenhuma delas exige conhecimento avançado de programação — o que também é o foco da trilha de IA aplicada da Nexas."
+      ]
+    },
+    "tour-plataforma-nexas": {
+      type: "video", category: "NEXAS",
+      title: "Tour rápido pela plataforma Nexas",
+      author: "Nexas Academy", avatar: "NA", gradient: "linear-gradient(135deg,#A78BFA,#2563EB)",
+      date: "1 de setembro de 2026", meta: "4:52", views: "5,4 mil visualizações",
+      cover: "play", tags: ["Nexas", "Plataforma", "Vídeo"],
+      body: [
+        "Neste vídeo, mostramos como funciona a plataforma Nexas na prática: como encontrar um curso, como funciona o processo de matrícula, e como acompanhar seu progresso dentro da área de cursos.",
+        "O vídeo também apresenta a diferença entre os cursos gratuitos e os cursos pagos, e como funciona a emissão de certificados ao final de cada trilha.",
+        "Se você está começando agora na Nexas, esse é um bom ponto de partida antes de escolher sua primeira trilha."
+      ]
+    },
+    "intro-excel-formulas": {
+      type: "aula", category: "PRODUTIVIDADE",
+      title: "Introdução ao Excel: fórmulas essenciais",
+      author: "Fernanda Ribeiro", avatar: "FR", gradient: "linear-gradient(135deg,#2563EB,#06B6D4)",
+      date: "28 de agosto de 2026", meta: "18 min", views: "6,7 mil alunos",
+      cover: "bi", tags: ["Excel", "Produtividade", "Aula grátis"],
+      body: [
+        "Essa aula gratuita é o primeiro passo da trilha de Excel Avançado e Power BI. Nela, você aprende as fórmulas mais usadas no dia a dia — soma, média, contagem condicional e lógica básica com SE.",
+        "O objetivo não é decorar fórmulas, mas entender a lógica por trás delas, para que você consiga aplicar o mesmo raciocínio em outras situações do trabalho.",
+        "Ao final da aula, você já consegue montar uma planilha simples de controle, com totais automáticos e alertas condicionais.",
+        "Essa aula é gratuita e faz parte da trilha completa de Excel Avançado e Power BI, disponível na Nexas."
+      ]
+    },
+    "ep01-tecnologia-no-campo": {
+      type: "podcast", category: "PODCAST NEXAS",
+      title: "Ep. 01 — Tecnologia no campo: o que muda com o Operations Center",
+      author: "Diego Martins", avatar: "DM", gradient: "linear-gradient(135deg,#2563EB,#10B981)",
+      date: "25 de agosto de 2026", meta: "38:12", views: "1,9 mil plays",
+      cover: "mic", tags: ["Podcast", "Operations Center", "Agro"],
+      body: [
+        "Nesse primeiro episódio do podcast Nexas, conversamos com Diego Martins, especialista em Cloud e Operations Center, sobre como a tecnologia está mudando a forma como usinas e fazendas monitoram suas operações.",
+        "O papo passa por temas como telemetria de máquinas, painéis de acompanhamento em tempo real, e os desafios de formar profissionais capacitados para lidar com esse tipo de ferramenta.",
+        "Um episódio para quem quer entender, na prática, por que o Operations Center virou um dos temas mais procurados do momento no agro."
+      ]
+    },
+    "vagas-tecnologia-agro-crescem": {
+      type: "noticia", category: "MERCADO DE TRABALHO",
+      title: "Vagas de tecnologia aplicada ao agro crescem no Brasil",
+      author: "Redação Nexas", avatar: "NX", gradient: "linear-gradient(135deg,#2563EB,#06B6D4)",
+      date: "22 de agosto de 2026", meta: "3 min de leitura", views: "4,2 mil leituras",
+      cover: "farm", tags: ["Mercado de Trabalho", "Agro", "Notícia"],
+      body: [
+        "O número de vagas relacionadas a tecnologia aplicada ao agronegócio cresceu de forma consistente nos últimos anos, segundo levantamentos do setor. Entre as posições mais procuradas estão analistas de Operations Center, especialistas em automação agrícola e profissionais de dados voltados para o campo.",
+        "A tendência acompanha a modernização das operações agrícolas, que vêm adotando cada vez mais sensores, máquinas conectadas e painéis de monitoramento em tempo real.",
+        "Para a Nexas, esse movimento reforça a importância de trilhas de capacitação voltadas especificamente para esse público — um dos motivos por trás do lançamento da trilha de Operations Center para o agro."
+      ]
+    },
+    "operations-center-gestao-agricola": {
+      type: "artigo", category: "OPERATIONS CENTER",
+      title: "Por que o Operations Center virou peça-chave na gestão agrícola",
+      author: "Diego Martins", avatar: "DM", gradient: "linear-gradient(135deg,#2563EB,#10B981)",
+      date: "18 de agosto de 2026", meta: "7 min de leitura", views: "2,6 mil leituras",
+      cover: "farmBlue", tags: ["Operations Center", "Gestão", "Agro"],
+      body: [
+        "Operations Center é o nome dado aos sistemas que centralizam informações de máquinas, sensores e operações agrícolas em um único painel, permitindo que gestores acompanhem em tempo real o que está acontecendo no campo.",
+        "Diferente da gestão tradicional, baseada em relatórios manuais e visitas físicas, o Operations Center permite decisões mais rápidas: identificar uma máquina parada, comparar o rendimento entre diferentes áreas da fazenda, ou antecipar problemas antes que eles afetem a produção.",
+        "Para quem já atua na operação, dominar esse tipo de painel deixou de ser um diferencial e passou a ser uma exigência básica em fazendas, usinas e empresas de tratos agrícolas de maior porte.",
+        "É justamente esse cenário que motivou a Nexas a criar uma trilha específica sobre o tema, unindo teoria e prática de quem já trabalhou dentro da operação."
+      ]
+    },
+    "como-montar-dashboard-power-bi": {
+      type: "video", category: "DADOS & BI",
+      title: "Como montar seu primeiro dashboard no Power BI",
+      author: "Fernanda Ribeiro", avatar: "FR", gradient: "linear-gradient(135deg,#2563EB,#06B6D4)",
+      date: "14 de agosto de 2026", meta: "12:34", views: "8,1 mil visualizações",
+      cover: "bi", tags: ["Power BI", "Dados", "Vídeo"],
+      body: [
+        "Neste vídeo, mostramos o passo a passo para montar seu primeiro dashboard no Power BI: como conectar uma base de dados, criar os primeiros gráficos e organizar um painel que realmente ajude na tomada de decisão.",
+        "O vídeo faz parte da trilha de Excel Avançado e Power BI, e serve tanto para quem nunca usou a ferramenta quanto para quem já tem alguma experiência e quer organizar melhor seus painéis.",
+        "Ao final, você terá um dashboard funcional, pronto para ser adaptado à realidade da sua empresa."
+      ]
+    },
+    "ep02-automacao-processos": {
+      type: "podcast", category: "PODCAST NEXAS",
+      title: "Ep. 02 — Automação de processos: por onde começar",
+      author: "Marcos Teixeira", avatar: "MT", gradient: "linear-gradient(135deg,#10B981,#2563EB)",
+      date: "10 de agosto de 2026", meta: "41:05", views: "1,5 mil plays",
+      cover: "gear", tags: ["Podcast", "Automação", "Produtividade"],
+      body: [
+        "No segundo episódio do podcast Nexas, Marcos Teixeira, consultor de processos e produtividade, explica por onde começar quando o assunto é automação: como identificar o que vale a pena automatizar, e o que ainda exige um olhar humano.",
+        "O episódio traz exemplos práticos de automações simples, que qualquer pessoa pode aplicar no dia a dia, sem depender de uma equipe de tecnologia.",
+        "Um bom ponto de partida para quem sente que está perdendo tempo com tarefas repetitivas."
+      ]
+    },
+    "fundamentos-cloud-o-que-e": {
+      type: "aula", category: "CLOUD",
+      title: "Fundamentos de Cloud: o que é computação em nuvem",
+      author: "Diego Martins", avatar: "DM", gradient: "linear-gradient(135deg,#2563EB,#10B981)",
+      date: "5 de agosto de 2026", meta: "22 min", views: "3,3 mil alunos",
+      cover: "cloud", tags: ["Cloud", "Infraestrutura", "Aula grátis"],
+      body: [
+        "Essa aula gratuita explica, de forma simples, o que é computação em nuvem e por que ela se tornou tão importante para empresas de todos os tamanhos.",
+        "Você vai entender a diferença entre os principais modelos de nuvem (IaaS, PaaS e SaaS), e por que empresas estão migrando sistemas inteiros para esse tipo de infraestrutura.",
+        "Essa aula é o primeiro passo da trilha completa de Fundamentos de Cloud Computing, disponível na Nexas."
+      ]
+    },
+    "canteiro-a-nuvem-dados-agricola": {
+      type: "artigo", category: "AGRO & DADOS",
+      title: "Do canteiro à nuvem: como os dados estão mudando a operação agrícola",
+      author: "Camila Duarte", avatar: "CD", gradient: "linear-gradient(135deg,#06B6D4,#10B981)",
+      date: "2 de agosto de 2026", meta: "8 min de leitura", views: "1,8 mil leituras",
+      cover: "farmCloud", tags: ["Agro", "Dados", "Cloud"],
+      body: [
+        "Sensores de solo, máquinas conectadas e imagens de satélite geram, hoje, uma quantidade de dados agrícolas que seria impensável há poucos anos. O desafio deixou de ser coletar esses dados — e passou a ser o que fazer com eles.",
+        "É aqui que a nuvem entra: ao centralizar informações de diferentes fontes em um único ambiente, fica possível cruzar dados de clima, solo e desempenho das máquinas para tomar decisões mais precisas sobre plantio, irrigação e colheita.",
+        "Esse movimento também está mudando o perfil profissional buscado pelo setor: cada vez mais, empresas do agro procuram pessoas capazes de transitar entre a operação de campo e ferramentas de dados e nuvem — exatamente o público para quem a Nexas constrói suas trilhas."
+      ]
+    },
+    "ia-aplicada-corporativo-exemplos": {
+      type: "video", category: "INTELIGÊNCIA ARTIFICIAL",
+      title: "IA aplicada ao dia a dia corporativo: 3 exemplos práticos",
+      author: "Camila Duarte", avatar: "CD", gradient: "linear-gradient(135deg,#06B6D4,#10B981)",
+      date: "29 de julho de 2026", meta: "9:47", views: "4,9 mil visualizações",
+      cover: "ai", tags: ["Inteligência Artificial", "Corporativo", "Vídeo"],
+      body: [
+        "Nesse vídeo, apresentamos três exemplos práticos de como a inteligência artificial já está sendo usada no dia a dia corporativo: geração de relatórios automáticos, priorização de tarefas e apoio à tomada de decisão.",
+        "A ideia não é substituir o trabalho humano, mas eliminar tarefas repetitivas para que as pessoas foquem no que realmente exige julgamento e experiência.",
+        "Esses e outros exemplos fazem parte da trilha de Inteligência Artificial aplicada da Nexas."
+      ]
+    }
+  };
+
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, function(c){
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  var params = new URLSearchParams(window.location.search);
+  var slug = params.get("post");
+  if(!slug || !POSTS[slug]) slug = "nexas-lanca-operations-center-agro";
+  var post = POSTS[slug];
+  var isMedia = post.type === "video" || post.type === "podcast";
+
+  document.title = post.title + " — Nexpace";
+  var metaDesc = document.getElementById("pageDescription");
+  if(metaDesc) metaDesc.setAttribute("content", post.body[0]);
+
+  document.getElementById("sdCategory").textContent = post.category;
+  var typeBadge = document.getElementById("sdTypeBadge");
+  typeBadge.textContent = TYPE_LABELS[post.type];
+  typeBadge.classList.add("space-type-badge--" + post.type);
+  document.getElementById("sdTitle").textContent = post.title;
+  document.getElementById("sdAvatar").textContent = post.avatar;
+  document.getElementById("sdAvatar").style.background = post.gradient;
+  document.getElementById("sdAuthor").textContent = post.author;
+  document.getElementById("sdDate").textContent = post.date;
+  document.getElementById("sdMeta").textContent = post.meta;
+  document.getElementById("sdViews").textContent = post.views;
+
+  if(isMedia){
+    document.getElementById("sdPlayerWrap").hidden = false;
+    document.getElementById("sdPlayerArt").innerHTML = COVERS[post.cover] || "";
+    document.getElementById("sdPlayerDuration").textContent = post.meta;
+  } else {
+    document.getElementById("sdCoverWrap").hidden = false;
+    document.getElementById("sdCoverArt").innerHTML = COVERS[post.cover] || "";
+  }
+
+  document.getElementById("sdBody").innerHTML = post.body.map(function(p){
+    return "<p>" + escapeHtml(p) + "</p>";
+  }).join("");
+
+  document.getElementById("sdTags").innerHTML = post.tags.map(function(t){
+    return '<span class="tag">' + escapeHtml(t) + "</span>";
+  }).join("");
+
+  // Related — up to 3 other posts, prioritizing a mix of different types
+  var relatedEl = document.getElementById("sdRelated");
+  var otherSlugs = Object.keys(POSTS).filter(function(s){ return s !== slug; });
+  var related = otherSlugs.slice(0, 3);
+  relatedEl.innerHTML = related.map(function(s){
+    var p = POSTS[s];
+    var durationBadge = (p.type === "video" || p.type === "podcast")
+      ? '<span class="space-duration-badge">' + escapeHtml(p.meta) + "</span>"
+      : "";
+    var playBadge = (p.type === "video" || p.type === "podcast")
+      ? '<span class="space-play-badge" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3.5 2.5l8 4.5-8 4.5v-9z" fill="#fff"/></svg></span>'
+      : "";
+    return '<a href="space-detail.html?post=' + s + '" class="space-card">' +
+      '<div class="space-card-thumb">' +
+        '<span class="space-type-badge space-type-badge--' + p.type + '">' + TYPE_LABELS[p.type] + "</span>" +
+        durationBadge +
+        (COVERS[p.cover] || "") +
+        playBadge +
+      "</div>" +
+      '<div class="space-card-body">' +
+        '<span class="space-card-category">' + escapeHtml(p.category) + "</span>" +
+        '<h3 class="space-card-title">' + escapeHtml(p.title) + "</h3>" +
+        '<p class="space-card-meta">' + escapeHtml(p.author) + " · " + escapeHtml(p.views) + "</p>" +
+      "</div>" +
+    "</a>";
+  }).join("");
+
+  // Mobile menu — close after a link is clicked
+  var navToggle = document.getElementById("nav-toggle");
+  var mobileLinks = document.querySelectorAll(".main-nav a");
+  if(navToggle){
+    mobileLinks.forEach(function(a){
+      a.addEventListener("click", function(){ navToggle.checked = false; });
+    });
+  }
+
+  // Scroll reveal (runs after dynamic content is injected)
+  var revealEls = document.querySelectorAll(".reveal");
+  if("IntersectionObserver" in window && revealEls.length){
+    var revealIO = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add("is-in");
+          revealIO.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(function(el){ revealIO.observe(el); });
+  } else {
+    revealEls.forEach(function(el){ el.classList.add("is-in"); });
+  }
+})();
+</script>
+
+</body>
+</html>

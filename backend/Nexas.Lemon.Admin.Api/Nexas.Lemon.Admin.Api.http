@@ -1,0 +1,6 @@
+@Nexas.Lemon.Admin.Api_HostAddress = http://localhost:5066
+
+GET {{Nexas.Lemon.Admin.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

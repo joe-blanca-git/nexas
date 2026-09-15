@@ -21,12 +21,12 @@ services:
       timeout: 20s
       retries: 10
 
-  # 1. Nexas Admin API (pon) - Porta 5012
-  nexas-admin-api:
+  # 1. Nexas.Lemon.Admin.Api - Porta 5012
+  Nexas.Lemon.Admin.Api:
     build:
       context: .
-      dockerfile: Nexas.Admin.Api/Dockerfile
-    container_name: nexas-admin-api-container
+      dockerfile: Nexas.Lemon.Admin.Api/Dockerfile
+    container_name: Nexas.Lemon.Admin.Api-container
     ports:
       - "6012:8080"
     env_file:
@@ -39,12 +39,12 @@ services:
       - agivys_default
     restart: always
 
-  # 2. Nexas API (PAT) - Porta 5011
-  nexas-api:
+  # 2. Nexas.Lemon.Ead.Api (PAN) - Porta 5011
+  Nexas.Lemon.Ead.Api:
     build:
       context: .
-      dockerfile: Nexas.Api/Dockerfile
-    container_name: nexas-api-container
+      dockerfile: Nexas.Lemon.Ead.Api/Dockerfile
+    container_name: Nexas.Lemon.Ead.Api-container
     ports:
       - "6011:8080"
     env_file:
@@ -57,14 +57,32 @@ services:
       - agivys_default
     restart: always
 
-  # 3. Nexas Landing API - Porta 5013
-  nexas-landing-api:
+  # 3. Nexas.Lemon.Landing.Api - Porta 5013
+  Nexas.Lemon.Landing.Api:
     build:
       context: .
-      dockerfile: Nexas.Landing.Api/Dockerfile
-    container_name: nexas-landing-api-container
+      dockerfile: Nexas.Lemon.Landing.Api/Dockerfile
+    container_name: Nexas.Lemon.Landing.Api-container
     ports:
       - "6013:8080"
+    env_file:
+      - .env
+    depends_on:
+      mysql_banco:
+        condition: service_healthy
+    networks:
+      - nexas-network
+      - agivys_default
+    restart: always
+
+  # 4. Nexas System Manager API - Porta 6014
+  nexas-system-manager-api:
+    build:
+      context: .
+      dockerfile: Nexas.SystemManager/Dockerfile
+    container_name: nexas-system-manager-api-container
+    ports:
+      - "6014:8080"
     env_file:
       - .env
     depends_on:

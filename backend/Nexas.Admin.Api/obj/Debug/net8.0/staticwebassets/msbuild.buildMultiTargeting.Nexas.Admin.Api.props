@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\Nexas.Admin.Api.props" />
-</Project>

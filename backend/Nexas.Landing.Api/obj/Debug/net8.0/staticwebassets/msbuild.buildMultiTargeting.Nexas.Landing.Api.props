@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\Nexas.Landing.Api.props" />
-</Project>

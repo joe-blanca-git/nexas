@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nexas.Api", "Nexas.Api\Nexas.Api.csproj", "{7833A81C-C2D9-4FFA-B6A9-F7F2D6291837}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nexas.Lemon.Ead.Api", "Nexas.Lemon.Ead.Api\Nexas.Lemon.Ead.Api.csproj", "{7833A81C-C2D9-4FFA-B6A9-F7F2D6291837}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nexas.Application", "Nexas.Application\Nexas.Application.csproj", "{A81C96FE-B6DB-49D4-ACED-80F006D26EB9}"
 EndProject
@@ -11,9 +11,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nexas.Domain", "Nexas.Domai
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nexas.Infrastructure", "Nexas.Infrastructure\Nexas.Infrastructure.csproj", "{4E4AB014-C815-484D-9569-BE628A5F6F88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nexas.Admin.Api", "Nexas.Admin.Api\Nexas.Admin.Api.csproj", "{EA634CC1-B743-4197-8D36-85E1CCE742A8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nexas.Lemon.Admin.Api", "Nexas.Lemon.Admin.Api\Nexas.Lemon.Admin.Api.csproj", "{EA634CC1-B743-4197-8D36-85E1CCE742A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nexas.Landing.Api", "Nexas.Landing.Api\Nexas.Landing.Api.csproj", "{40AC10D3-5042-470F-8B28-B4D02ABD5B08}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nexas.Lemon.Landing.Api", "Nexas.Lemon.Landing.Api\Nexas.Lemon.Landing.Api.csproj", "{40AC10D3-5042-470F-8B28-B4D02ABD5B08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nexas.SystemManager", "Nexas.SystemManager\Nexas.SystemManager.csproj", "{CF8E55D8-60E7-4617-BDDF-D253B3B9AE1E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,5 +50,9 @@ Global
 		{40AC10D3-5042-470F-8B28-B4D02ABD5B08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40AC10D3-5042-470F-8B28-B4D02ABD5B08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40AC10D3-5042-470F-8B28-B4D02ABD5B08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF8E55D8-60E7-4617-BDDF-D253B3B9AE1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF8E55D8-60E7-4617-BDDF-D253B3B9AE1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF8E55D8-60E7-4617-BDDF-D253B3B9AE1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF8E55D8-60E7-4617-BDDF-D253B3B9AE1E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

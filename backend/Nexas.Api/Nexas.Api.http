@@ -1,6 +1,0 @@
-@Nexas.Api_HostAddress = http://localhost:5079
-
-GET {{Nexas.Api_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

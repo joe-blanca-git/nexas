@@ -1,0 +1,6 @@
+@Nexas.SystemManager_HostAddress = http://localhost:5179
+
+GET {{Nexas.SystemManager_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

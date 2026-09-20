@@ -1,0 +1,997 @@
+<title>Nexas AppAuth</title>
+<meta name="description" content="Guia passo a passo para integrar cadastro, login, papéis e login com Google dos usuários finais da sua aplicação Nexas.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F7F9FC;
+    --bg-raised: #FFFFFF;
+    --bg-sunken: #EEF2F8;
+    --border: #E1E7F0;
+    --text: #101828;
+    --text-secondary: #4B5670;
+    --text-muted: #7C889E;
+    --accent: #2563EB;
+    --accent-ink: #0B3B99;
+    --accent-soft: #E8EFFE;
+    --code-bg: #0F172A;
+    --code-text: #E2E8F0;
+    --code-key: #7DD3FC;
+    --code-string: #A5D6A7;
+    --ok: #0F9D58;
+    --ok-soft: #E6F7EE;
+    --warn: #B45309;
+    --warn-soft: #FEF3E2;
+    --danger: #C0362C;
+    --danger-soft: #FCEAE8;
+    --method-post: #0F9D58;
+    --method-get: #2563EB;
+    --shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 6px rgba(16, 24, 40, 0.04);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0B1220;
+      --bg-raised: #121B2E;
+      --bg-sunken: #0D1626;
+      --border: #223050;
+      --text: #EAF0FC;
+      --text-secondary: #AEBBD6;
+      --text-muted: #7C8AAD;
+      --accent: #5B9CFF;
+      --accent-ink: #DCE9FF;
+      --accent-soft: #16233F;
+      --code-bg: #060A14;
+      --code-text: #DCE6F5;
+      --ok: #34D399;
+      --ok-soft: #0E2A22;
+      --warn: #F7B155;
+      --warn-soft: #2C220C;
+      --danger: #F28B82;
+      --danger-soft: #301415;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.35);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #0B1220;
+    --bg-raised: #121B2E;
+    --bg-sunken: #0D1626;
+    --border: #223050;
+    --text: #EAF0FC;
+    --text-secondary: #AEBBD6;
+    --text-muted: #7C8AAD;
+    --accent: #5B9CFF;
+    --accent-ink: #DCE9FF;
+    --accent-soft: #16233F;
+    --code-bg: #060A14;
+    --code-text: #DCE6F5;
+    --ok: #34D399;
+    --ok-soft: #0E2A22;
+    --warn: #F7B155;
+    --warn-soft: #2C220C;
+    --danger: #F28B82;
+    --danger-soft: #301415;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.35);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    line-height: 1.6;
+    padding-inline: 16px;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  code, pre, .mono { font-family: 'JetBrains Mono', ui-monospace, 'Courier New', monospace; }
+
+  .layout {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 2.5rem;
+    padding-block: 2rem 5rem;
+  }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+  }
+
+  /* ---- Sidebar ---- */
+  .sidebar {
+    position: sticky;
+    top: 1.5rem;
+    align-self: start;
+    max-height: calc(100vh - 3rem);
+    overflow-y: auto;
+  }
+
+  @media (max-width: 900px) {
+    .sidebar { position: static; max-height: none; }
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .brand__mark {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-ink));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 800;
+    font-size: 1.05rem;
+    flex-shrink: 0;
+  }
+
+  .brand__text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+  }
+
+  .brand__text strong { font-size: 0.95rem; font-weight: 700; }
+  .brand__text span { font-size: 0.7rem; color: var(--text-muted); letter-spacing: 0.04em; text-transform: uppercase; }
+
+  .toc-toggle { display: none; }
+
+  @media (max-width: 900px) {
+    .toc-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: var(--bg-raised);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      margin-bottom: 0.75rem;
+    }
+    .toc-toggle svg { width: 16px; height: 16px; transition: transform 0.2s ease; }
+    .toc-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+    .toc-list { display: none; }
+    .toc-list.open { display: block; }
+  }
+
+  .toc-group { margin-bottom: 1.1rem; }
+
+  .toc-group__title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.4rem;
+    padding-left: 0.6rem;
+  }
+
+  .toc-link {
+    display: block;
+    padding: 0.35rem 0.6rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    border-left: 2px solid transparent;
+  }
+
+  .toc-link:hover { background: var(--bg-sunken); text-decoration: none; color: var(--text); }
+  .toc-link.active { color: var(--accent); border-left-color: var(--accent); font-weight: 600; background: var(--accent-soft); }
+
+  /* ---- Content ---- */
+  .content { min-width: 0; }
+
+  .hero {
+    padding: 1.75rem 2rem;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+  }
+
+  .hero__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    margin-bottom: 0.9rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(1.6rem, 3.5vw, 2.1rem);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    margin-bottom: 0.6rem;
+  }
+
+  .hero p { color: var(--text-secondary); max-width: 62ch; font-size: 0.98rem; }
+
+  .hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-top: 1.25rem;
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .hero__meta-item { display: flex; flex-direction: column; gap: 0.15rem; }
+  .hero__meta-item span:first-child { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  .hero__meta-item span:last-child { font-size: 0.85rem; font-weight: 600; font-family: 'JetBrains Mono', monospace; color: var(--text); }
+
+  section.doc-section {
+    margin-bottom: 2.75rem;
+    scroll-margin-top: 1.5rem;
+  }
+
+  .doc-section h2 {
+    font-size: 1.35rem;
+    font-weight: 750;
+    letter-spacing: -0.005em;
+    margin-bottom: 0.35rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .doc-section .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 0.8rem;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+
+  .doc-section > .lede {
+    color: var(--text-secondary);
+    max-width: 72ch;
+    margin-bottom: 1.1rem;
+    font-size: 0.95rem;
+  }
+
+  h3 { font-size: 1.02rem; font-weight: 700; margin: 1.4rem 0 0.6rem; }
+  h4 { font-size: 0.9rem; font-weight: 700; margin: 1.1rem 0 0.5rem; color: var(--text-secondary); }
+
+  p { margin-bottom: 0.85rem; max-width: 72ch; }
+  ul, ol { margin: 0 0 1rem 1.2rem; max-width: 70ch; }
+  li { margin-bottom: 0.35rem; }
+
+  .card {
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.25rem 1.4rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 1.1rem;
+  }
+
+  .note {
+    display: flex;
+    gap: 0.7rem;
+    padding: 0.85rem 1rem;
+    border-radius: 12px;
+    font-size: 0.875rem;
+    margin: 1rem 0;
+    border: 1px solid transparent;
+  }
+
+  .note svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 0.1rem; }
+  .note p { margin: 0; }
+  .note--info { background: var(--accent-soft); color: var(--accent-ink); border-color: color-mix(in srgb, var(--accent) 25%, transparent); }
+  .note--warn { background: var(--warn-soft); color: var(--warn); border-color: color-mix(in srgb, var(--warn) 30%, transparent); }
+  .note--danger { background: var(--danger-soft); color: var(--danger); border-color: color-mix(in srgb, var(--danger) 30%, transparent); }
+
+  /* ---- Endpoint blocks ---- */
+  .endpoint {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--bg-raised);
+    box-shadow: var(--shadow);
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+  }
+
+  .endpoint__head {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.9rem 1.2rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-sunken);
+    flex-wrap: wrap;
+  }
+
+  .method-pill {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    padding: 0.22rem 0.55rem;
+    border-radius: 6px;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .method-pill.post { background: var(--method-post); }
+  .method-pill.get { background: var(--method-get); }
+
+  .endpoint__path {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.88rem;
+    font-weight: 600;
+  }
+
+  .endpoint__desc { color: var(--text-secondary); font-size: 0.85rem; margin-left: auto; }
+
+  .endpoint__body { padding: 1.1rem 1.2rem 1.3rem; }
+
+  .auth-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.9rem; }
+  .auth-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    background: var(--bg-sunken);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  table { width: 100%; border-collapse: collapse; margin: 0.75rem 0 1.1rem; font-size: 0.85rem; }
+  th, td { text-align: left; padding: 0.5rem 0.7rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--text-muted); font-weight: 700; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; }
+  td code { background: var(--bg-sunken); padding: 0.1rem 0.35rem; border-radius: 5px; font-size: 0.8rem; }
+  .table-wrap { overflow-x: auto; }
+
+  /* ---- Code blocks ---- */
+  .code-block {
+    position: relative;
+    background: var(--code-bg);
+    border-radius: 12px;
+    margin: 0.75rem 0 1.1rem;
+    overflow: hidden;
+  }
+
+  .code-block__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.9rem;
+    background: rgba(255,255,255,0.04);
+    font-size: 0.7rem;
+    color: #94A3B8;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  .copy-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.14);
+    color: #CBD5E1;
+    font-size: 0.68rem;
+    padding: 0.22rem 0.55rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: normal;
+    text-transform: none;
+  }
+  .copy-btn:hover { background: rgba(255,255,255,0.08); }
+
+  pre {
+    margin: 0;
+    padding: 0.9rem 1rem 1.05rem;
+    overflow-x: auto;
+    font-size: 0.82rem;
+    color: var(--code-text);
+    line-height: 1.55;
+    max-width: 100%;
+  }
+
+  .tok-key { color: #7DD3FC; }
+  .tok-str { color: #A5D6A7; }
+  .tok-com { color: #64748B; font-style: italic; }
+  .tok-kw { color: #F0ABFC; }
+
+  .steps { counter-reset: step; margin: 1rem 0 1.4rem; padding: 0; list-style: none; max-width: 68ch; }
+  .steps li {
+    counter-increment: step;
+    position: relative;
+    padding-left: 2.6rem;
+    margin-bottom: 1.1rem;
+  }
+  .steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0.05rem;
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 8px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 800;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .claim-pill { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; background: var(--bg-sunken); padding: 0.15rem 0.4rem; border-radius: 5px; overflow-wrap: anywhere; }
+
+  .status-pill {
+    display: inline-flex;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.45rem;
+    border-radius: 6px;
+  }
+  .status-pill.s2 { background: var(--ok-soft); color: var(--ok); }
+  .status-pill.s4 { background: var(--warn-soft); color: var(--warn); }
+
+  footer {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 2rem 0 3rem;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    text-align: center;
+  }
+</style>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand__mark">N</div>
+      <div class="brand__text">
+        <strong>Nexas</strong>
+        <span>AppAuth · Guia de integração</span>
+      </div>
+    </div>
+
+    <button class="toc-toggle" id="tocToggle" aria-expanded="false">
+      Navegar pelo guia
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    </button>
+
+    <nav class="toc-list" id="tocList">
+      <div class="toc-group">
+        <div class="toc-group__title">Começando</div>
+        <a class="toc-link" href="#visao-geral">Visão geral</a>
+        <a class="toc-link" href="#antes-de-comecar">Antes de começar</a>
+        <a class="toc-link" href="#autenticacao">Autenticação das requisições</a>
+      </div>
+      <div class="toc-group">
+        <div class="toc-group__title">Endpoints</div>
+        <a class="toc-link" href="#ep-register">Cadastrar usuário</a>
+        <a class="toc-link" href="#ep-login">Login</a>
+        <a class="toc-link" href="#ep-google">Login com Google</a>
+        <a class="toc-link" href="#ep-forgot">Esqueci a senha</a>
+        <a class="toc-link" href="#ep-reset">Redefinir senha</a>
+        <a class="toc-link" href="#ep-me">Dados do usuário logado</a>
+      </div>
+      <div class="toc-group">
+        <div class="toc-group__title">Aprofundando</div>
+        <a class="toc-link" href="#papeis">Papéis (roles)</a>
+        <a class="toc-link" href="#token">Estrutura do token JWT</a>
+        <a class="toc-link" href="#erros">Erros</a>
+        <a class="toc-link" href="#fluxo-completo">Exemplo de fluxo completo</a>
+        <a class="toc-link" href="#seguranca">Segurança</a>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="content">
+    <div class="hero">
+      <span class="hero__eyebrow">Guia de integração</span>
+      <h1>Autenticação para os usuários da sua aplicação</h1>
+      <p>
+        Toda aplicação cadastrada na Nexas ganha um módulo de autenticação pronto para os seus
+        próprios usuários finais — cadastro, login, recuperação de senha, papéis (roles) e login
+        com Google — isolado das demais aplicações e sem você precisar construir nada disso do zero.
+      </p>
+      <div class="hero__meta">
+        <div class="hero__meta-item"><span>Base URL</span><span>https://SEU-AMBIENTE-NEXAS/api/</span></div>
+        <div class="hero__meta-item"><span>Formato</span><span>application/json</span></div>
+        <div class="hero__meta-item"><span>Autenticação</span><span>Header X-Api-Key</span></div>
+      </div>
+    </div>
+
+    <section class="doc-section" id="visao-geral">
+      <h2><span class="step-num">i</span> Visão geral</h2>
+      <p class="lede">
+        Pense nisso como o "provedor de identidade" da sua aplicação: você não guarda senha de
+        ninguém, não implementa hash, e-mail de recuperação ou emissão de token — a Nexas cuida
+        disso para os usuários finais do seu produto, do mesmo jeito que ela já faz isso para você
+        mesmo (dono da aplicação) no portal.
+      </p>
+      <div class="card">
+        <h3 style="margin-top:0">O que você ganha</h3>
+        <ul>
+          <li><strong>Cadastro e login</strong> por e-mail e senha, isolados por aplicação — o mesmo e-mail pode existir na sua aplicação e na de outro cliente Nexas como duas contas totalmente independentes.</li>
+          <li><strong>Recuperação de senha</strong> por token, pronta para acoplar ao seu próprio fluxo de e-mail.</li>
+          <li><strong>Papéis (roles)</strong> livres — Admin, Professor, Aluno, ou o que fizer sentido pro seu produto — com um usuário podendo acumular vários ao mesmo tempo.</li>
+          <li><strong>Login com Google</strong> usando o Client ID OAuth da sua própria aplicação.</li>
+          <li>Um <strong>token JWT</strong> por sessão, pronto para o seu backend usar como prova de identidade nas próprias rotas.</li>
+        </ul>
+      </div>
+      <div class="note note--info">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        <p>Isso é diferente do seu próprio login no portal Nexas (onde você cadastra e gerencia a
+        <em>sua aplicação</em>). Este guia é sobre os usuários <em>do seu produto</em> — os clientes
+        do seu cliente.</p>
+      </div>
+    </section>
+
+    <section class="doc-section" id="antes-de-comecar">
+      <h2><span class="step-num">1</span> Antes de começar</h2>
+      <p class="lede">Você precisa de duas coisas do portal Nexas antes de escrever qualquer código.</p>
+      <ol class="steps">
+        <li>
+          <strong>Cadastre (ou abra) sua aplicação</strong> em <span class="claim-pill">Aplicações</span> no
+          portal Nexas. Se ainda não tem uma, clique em "Nova aplicação" e preencha nome, domínio e descrição.
+        </li>
+        <li>
+          <strong>Copie a Chave de API</strong> na página de detalhes da sua aplicação (card "Chave de
+          API"). Ela identifica a sua aplicação em toda chamada aos endpoints deste guia — guarde-a
+          com cuidado (veja a seção <a href="#seguranca">Segurança</a>).
+        </li>
+      </ol>
+      <div class="note note--warn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        <p>Se a chave vazar ou você suspeitar de uso indevido, gere uma nova a qualquer momento no
+        mesmo card ("Gerar nova chave de API") — a antiga para de funcionar na hora.</p>
+      </div>
+    </section>
+
+    <section class="doc-section" id="autenticacao">
+      <h2><span class="step-num">2</span> Autenticação das requisições</h2>
+      <p class="lede">
+        Todo endpoint deste guia exige o header <span class="claim-pill">X-Api-Key</span> com a
+        chave da sua aplicação. Sem ele (ou com uma chave inválida), a resposta é sempre
+        <span class="status-pill s4">401</span>, sem corpo.
+      </p>
+      <div class="code-block">
+        <div class="code-block__head"><span>header obrigatório em toda chamada</span></div>
+        <pre>X-Api-Key: nxs_sua_chave_aqui</pre>
+      </div>
+      <p>
+        Alguns endpoints (marcados abaixo) exigem <em>além</em> disso um token de sessão, enviado
+        como <span class="claim-pill">Authorization: Bearer &lt;token&gt;</span> — é o token que
+        você recebe de volta no login.
+      </p>
+    </section>
+
+    <section class="doc-section" id="ep-register">
+      <h2>Endpoints de referência</h2>
+      <p class="lede">Todas as rotas abaixo têm como prefixo a base URL + <span class="claim-pill">v1/apps/auth</span>.</p>
+
+      <div class="endpoint">
+        <div class="endpoint__head">
+          <span class="method-pill post">POST</span>
+          <span class="endpoint__path">/v1/apps/auth/register</span>
+          <span class="endpoint__desc">Cadastra um usuário final</span>
+        </div>
+        <div class="endpoint__body">
+          <div class="auth-tags"><span class="auth-tag">X-Api-Key</span></div>
+          <h4>Corpo da requisição</h4>
+          <div class="table-wrap">
+            <table>
+              <tr><th>Campo</th><th>Tipo</th><th>Obrigatório</th></tr>
+              <tr><td><code>email</code></td><td>string</td><td>Sim</td></tr>
+              <tr><td><code>password</code></td><td>string</td><td>Sim</td></tr>
+              <tr><td><code>fullName</code></td><td>string</td><td>Não</td></tr>
+            </table>
+          </div>
+          <div class="code-block">
+            <div class="code-block__head"><span>requisição</span><button class="copy-btn" data-copy="curl-register">Copiar</button></div>
+            <pre id="curl-register"><span class="tok-com"># cURL</span>
+curl -X POST https://SEU-AMBIENTE-NEXAS/api/v1/apps/auth/register \
+  -H <span class="tok-str">"X-Api-Key: nxs_sua_chave_aqui"</span> \
+  -H <span class="tok-str">"Content-Type: application/json"</span> \
+  -d <span class="tok-str">'{"email":"ana@exemplo.com","password":"SenhaForte@123","fullName":"Ana Silva"}'</span></pre>
+          </div>
+          <h4>Resposta — <span class="status-pill s2">201 Created</span></h4>
+          <div class="code-block">
+            <div class="code-block__head"><span>json</span></div>
+            <pre>{
+  <span class="tok-key">"id"</span>: <span class="tok-str">"9f63ff57-56e0-4288-bf84-005545440ca4"</span>,
+  <span class="tok-key">"email"</span>: <span class="tok-str">"ana@exemplo.com"</span>,
+  <span class="tok-key">"fullName"</span>: <span class="tok-str">"Ana Silva"</span>,
+  <span class="tok-key">"createdAt"</span>: <span class="tok-str">"2026-09-20T17:28:06.55Z"</span>,
+  <span class="tok-key">"roles"</span>: []
+}</pre>
+          </div>
+          <h4>Erros possíveis</h4>
+          <div class="table-wrap">
+            <table>
+              <tr><th>Status</th><th>Quando</th></tr>
+              <tr><td><span class="status-pill s4">400</span></td><td>E-mail/senha ausentes, ou já existe uma conta com esse e-mail <em>nesta aplicação</em> (e-mails repetidos entre aplicações diferentes são permitidos — são contas independentes).</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint" id="ep-login">
+        <div class="endpoint__head">
+          <span class="method-pill post">POST</span>
+          <span class="endpoint__path">/v1/apps/auth/login</span>
+          <span class="endpoint__desc">Autentica por e-mail e senha</span>
+        </div>
+        <div class="endpoint__body">
+          <div class="auth-tags"><span class="auth-tag">X-Api-Key</span></div>
+          <div class="code-block">
+            <div class="code-block__head"><span>requisição</span></div>
+            <pre>curl -X POST https://SEU-AMBIENTE-NEXAS/api/v1/apps/auth/login \
+  -H <span class="tok-str">"X-Api-Key: nxs_sua_chave_aqui"</span> \
+  -H <span class="tok-str">"Content-Type: application/json"</span> \
+  -d <span class="tok-str">'{"email":"ana@exemplo.com","password":"SenhaForte@123"}'</span></pre>
+          </div>
+          <h4>Resposta — <span class="status-pill s2">200 OK</span></h4>
+          <div class="code-block">
+            <div class="code-block__head"><span>json</span></div>
+            <pre>{
+  <span class="tok-key">"accessToken"</span>: <span class="tok-str">"eyJhbGciOiJIUzI1NiIs..."</span>,
+  <span class="tok-key">"expiresIn"</span>: <span class="tok-str">3600</span>,
+  <span class="tok-key">"user"</span>: {
+    <span class="tok-key">"id"</span>: <span class="tok-str">"9f63ff57-...-0ca4"</span>,
+    <span class="tok-key">"email"</span>: <span class="tok-str">"ana@exemplo.com"</span>,
+    <span class="tok-key">"fullName"</span>: <span class="tok-str">"Ana Silva"</span>,
+    <span class="tok-key">"createdAt"</span>: <span class="tok-str">"2026-09-20T17:28:06.55Z"</span>,
+    <span class="tok-key">"roles"</span>: [<span class="tok-str">"Aluno"</span>]
+  }
+}</pre>
+          </div>
+          <p><span class="claim-pill">expiresIn</span> está em segundos (3600 = 1 hora). Guarde o
+          <span class="claim-pill">accessToken</span> — é o que autentica as próximas chamadas do
+          usuário no seu próprio backend.</p>
+          <h4>Erros possíveis</h4>
+          <div class="table-wrap">
+            <table>
+              <tr><th>Status</th><th>Quando</th></tr>
+              <tr><td><span class="status-pill s4">401</span></td><td>E-mail não encontrado nessa aplicação, ou senha incorreta (corpo vazio — a mensagem não diferencia os dois casos, de propósito).</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint" id="ep-google">
+        <div class="endpoint__head">
+          <span class="method-pill post">POST</span>
+          <span class="endpoint__path">/v1/apps/auth/google-login</span>
+          <span class="endpoint__desc">Autentica com uma conta Google</span>
+        </div>
+        <div class="endpoint__body">
+          <div class="auth-tags"><span class="auth-tag">X-Api-Key</span></div>
+          <p>Cria a conta automaticamente no primeiro login (find-or-create por e-mail) — não
+          precisa chamar <span class="claim-pill">/register</span> antes.</p>
+
+          <h3>Configuração (uma vez só, antes de usar)</h3>
+          <ol class="steps">
+            <li>Crie um <strong>OAuth Client ID</strong> no <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener">Google Cloud Console</a>, tipo "Aplicativo Web".</li>
+            <li>Em "Origens JavaScript autorizadas", adicione o(s) domínio(s) de <em>onde a sua aplicação roda</em> (ex.: <span class="claim-pill">https://app.suaempresa.com.br</span>).</li>
+            <li>Copie o Client ID gerado (formato <span class="claim-pill">algo.apps.googleusercontent.com</span>) e cole no card <strong>"Login com Google"</strong> da página de detalhes da sua aplicação, no portal Nexas.</li>
+            <li>No seu próprio frontend, inicialize o <a href="https://developers.google.com/identity/gsi/web" target="_blank" rel="noopener">Google Identity Services</a> com esse mesmo Client ID e renderize o botão "Entrar com Google".</li>
+            <li>Quando o Google devolver a credencial (<span class="claim-pill">response.credential</span>), envie-a como <span class="claim-pill">idToken</span> para este endpoint.</li>
+          </ol>
+
+          <div class="code-block">
+            <div class="code-block__head"><span>requisição</span></div>
+            <pre>curl -X POST https://SEU-AMBIENTE-NEXAS/api/v1/apps/auth/google-login \
+  -H <span class="tok-str">"X-Api-Key: nxs_sua_chave_aqui"</span> \
+  -H <span class="tok-str">"Content-Type: application/json"</span> \
+  -d <span class="tok-str">'{"idToken":"&lt;token que o Google devolveu no seu frontend&gt;"}'</span></pre>
+          </div>
+          <p>Resposta de sucesso é <strong>idêntica</strong> à do <span class="claim-pill">/login</span> normal — mesmo formato de token e de usuário.</p>
+          <h4>Erros possíveis</h4>
+          <div class="table-wrap">
+            <table>
+              <tr><th>Status</th><th>Corpo</th><th>Quando</th></tr>
+              <tr><td><span class="status-pill s4">400</span></td><td><code>{"error":"Login com Google não está configurado para esta aplicação."}</code></td><td>Você ainda não colou um Client ID no card "Login com Google" do portal.</td></tr>
+              <tr><td><span class="status-pill s4">400</span></td><td><code>{"error":"Token do Google inválido."}</code></td><td>Token expirado, assinatura inválida, ou emitido para um Client ID diferente do configurado.</td></tr>
+            </table>
+          </div>
+          <div class="note note--warn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            <p>Use o <strong>seu próprio</strong> Client ID do Google, nunca o da Nexas — cada
+            aplicação valida contra o Client ID que ela mesma configurou, por isso o Google só
+            aceita as origens que você autorizou no seu projeto.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint" id="ep-forgot">
+        <div class="endpoint__head">
+          <span class="method-pill post">POST</span>
+          <span class="endpoint__path">/v1/apps/auth/forgot-password</span>
+          <span class="endpoint__desc">Inicia a recuperação de senha</span>
+        </div>
+        <div class="endpoint__body">
+          <div class="auth-tags"><span class="auth-tag">X-Api-Key</span></div>
+          <div class="code-block">
+            <div class="code-block__head"><span>requisição</span></div>
+            <pre>curl -X POST https://SEU-AMBIENTE-NEXAS/api/v1/apps/auth/forgot-password \
+  -H <span class="tok-str">"X-Api-Key: nxs_sua_chave_aqui"</span> \
+  -H <span class="tok-str">"Content-Type: application/json"</span> \
+  -d <span class="tok-str">'{"email":"ana@exemplo.com"}'</span></pre>
+          </div>
+          <p>Sempre responde <span class="status-pill s2">200</span> com corpo vazio, exista ou não
+          o e-mail — por segurança, a API nunca revela se uma conta existe.</p>
+          <div class="note note--danger">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+            <p><strong>Nenhum e-mail é enviado automaticamente ainda</strong> — este endpoint só
+            gera e guarda o token de redefinição. Enquanto o envio de e-mail transacional da Nexas
+            não estiver disponível, você precisa do seu próprio canal (e-mail, WhatsApp, etc.) para
+            entregar esse token ao usuário antes de chamar <span class="claim-pill">/reset-password</span>.
+            Fale com o time Nexas se precisar desse token de outra forma.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint" id="ep-reset">
+        <div class="endpoint__head">
+          <span class="method-pill post">POST</span>
+          <span class="endpoint__path">/v1/apps/auth/reset-password</span>
+          <span class="endpoint__desc">Confirma a nova senha com o token</span>
+        </div>
+        <div class="endpoint__body">
+          <div class="auth-tags"><span class="auth-tag">X-Api-Key</span></div>
+          <div class="code-block">
+            <div class="code-block__head"><span>requisição</span></div>
+            <pre>curl -X POST https://SEU-AMBIENTE-NEXAS/api/v1/apps/auth/reset-password \
+  -H <span class="tok-str">"X-Api-Key: nxs_sua_chave_aqui"</span> \
+  -H <span class="tok-str">"Content-Type: application/json"</span> \
+  -d <span class="tok-str">'{"email":"ana@exemplo.com","token":"&lt;token recebido&gt;","newPassword":"NovaSenha@456"}'</span></pre>
+          </div>
+          <p>Sucesso: <span class="status-pill s2">200</span>, corpo vazio.</p>
+          <h4>Erros possíveis</h4>
+          <div class="table-wrap">
+            <table>
+              <tr><th>Status</th><th>Corpo</th><th>Quando</th></tr>
+              <tr><td><span class="status-pill s4">400</span></td><td><code>{"errors":{"Token":["Token inválido ou expirado."]}}</code></td><td>Token errado, já usado, ou expirado (validade de 1 hora).</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint" id="ep-me">
+        <div class="endpoint__head">
+          <span class="method-pill get">GET</span>
+          <span class="endpoint__path">/v1/apps/auth/me</span>
+          <span class="endpoint__desc">Introspecção do usuário logado</span>
+        </div>
+        <div class="endpoint__body">
+          <div class="auth-tags"><span class="auth-tag">X-Api-Key</span><span class="auth-tag">Authorization: Bearer</span></div>
+          <p>Use este endpoint para <strong>validar um token</strong> que seu backend recebeu — ele
+          confirma que o token é genuíno, não expirou, e pertence à sua aplicação (ver
+          <a href="#token">Estrutura do token</a> sobre por que isso é necessário).</p>
+          <div class="code-block">
+            <div class="code-block__head"><span>requisição</span></div>
+            <pre>curl https://SEU-AMBIENTE-NEXAS/api/v1/apps/auth/me \
+  -H <span class="tok-str">"X-Api-Key: nxs_sua_chave_aqui"</span> \
+  -H <span class="tok-str">"Authorization: Bearer eyJhbGciOiJIUzI1NiIs..."</span></pre>
+          </div>
+          <h4>Resposta — <span class="status-pill s2">200 OK</span></h4>
+          <div class="code-block">
+            <div class="code-block__head"><span>json</span></div>
+            <pre>{
+  <span class="tok-key">"id"</span>: <span class="tok-str">"9f63ff57-...-0ca4"</span>,
+  <span class="tok-key">"email"</span>: <span class="tok-str">"ana@exemplo.com"</span>,
+  <span class="tok-key">"fullName"</span>: <span class="tok-str">"Ana Silva"</span>,
+  <span class="tok-key">"createdAt"</span>: <span class="tok-str">"2026-09-20T17:28:06.55Z"</span>,
+  <span class="tok-key">"roles"</span>: [<span class="tok-str">"Aluno"</span>]
+}</pre>
+          </div>
+          <h4>Erros possíveis</h4>
+          <div class="table-wrap">
+            <table>
+              <tr><th>Status</th><th>Quando</th></tr>
+              <tr><td><span class="status-pill s4">401</span></td><td>Sem header <code>Authorization</code>, token expirado, ou assinatura inválida.</td></tr>
+              <tr><td><span class="status-pill s4">403</span></td><td>Token válido, mas emitido para <strong>outra</strong> aplicação (a <code>X-Api-Key</code> usada não bate com o dono do token) — isolamento entre aplicações garantido pela própria API.</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc-section" id="papeis">
+      <h2><span class="step-num">3</span> Papéis (roles)</h2>
+      <p class="lede">
+        Papéis são livres — você define quais fazem sentido para o seu produto (ex.: Admin,
+        Professor, Aluno) e um usuário pode ter <strong>vários ao mesmo tempo</strong>.
+      </p>
+      <div class="note note--info">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        <p>Hoje, papéis são <strong>criados e atribuídos pelo portal Nexas</strong> (cards "Gerenciar
+        papéis" e o ícone de editar ao lado de cada usuário, na página de detalhes da sua
+        aplicação) — não há ainda um endpoint de API para o seu backend criar ou atribuir papéis
+        programaticamente. O que a sua aplicação recebe é a <strong>leitura</strong>: os papéis
+        já atribuídos aparecem no array <code>roles</code> das respostas de login/<code>/me</code>
+        e como claims dentro do próprio token.</p>
+      </div>
+      <p>Use isso no seu backend para autorização simples, por exemplo:</p>
+      <div class="code-block">
+        <div class="code-block__head"><span>pseudocódigo</span></div>
+        <pre><span class="tok-kw">if</span> (!usuario.roles.includes(<span class="tok-str">"Admin"</span>)) {
+  <span class="tok-kw">return</span> responder403(<span class="tok-str">"Sem permissão"</span>);
+}</pre>
+      </div>
+    </section>
+
+    <section class="doc-section" id="token">
+      <h2><span class="step-num">4</span> Estrutura do token JWT</h2>
+      <p class="lede">
+        O <code>accessToken</code> devolvido por login/google-login é um JWT assinado pela Nexas.
+        As claims usam os nomes longos padrão do .NET — decodifique o payload (base64 da segunda
+        parte do token) e procure por estas chaves exatas:
+      </p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Claim</th><th>Significado</th></tr>
+          <tr><td><span class="claim-pill">http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier</span></td><td>ID do usuário (Guid)</td></tr>
+          <tr><td><span class="claim-pill">http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress</span></td><td>E-mail do usuário</td></tr>
+          <tr><td><span class="claim-pill">http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name</span></td><td>Nome completo (ausente se não informado)</td></tr>
+          <tr><td><span class="claim-pill">http://schemas.microsoft.com/ws/2008/06/identity/claims/role</span></td><td>Papel(éis) — string única ou array, ausente se o usuário não tiver nenhum</td></tr>
+          <tr><td><span class="claim-pill">app_id</span></td><td>ID da sua aplicação — sempre presente</td></tr>
+          <tr><td><span class="claim-pill">token_type</span></td><td>Sempre <code>"app_end_user"</code></td></tr>
+          <tr><td><span class="claim-pill">exp / iss / aud</span></td><td>Expiração, emissor e audiência padrão de JWT</td></tr>
+        </table>
+      </div>
+      <div class="note note--warn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        <p><strong>Seu backend não tem a chave de assinatura</strong> — ela é privada da Nexas, de
+        propósito, por segurança. Isso quer dizer que você não consegue validar a assinatura do
+        token sozinho. Para confirmar que um token é válido e pertence à sua aplicação, chame
+        <a href="#ep-me"><code>GET /v1/apps/auth/me</code></a> a cada requisição sensível — é
+        rápido e já faz essa verificação (incluindo o isolamento entre aplicações) por você.</p>
+      </div>
+    </section>
+
+    <section class="doc-section" id="erros">
+      <h2><span class="step-num">5</span> Referência de erros</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Status</th><th>Significado geral</th></tr>
+          <tr><td><span class="status-pill s4">400</span></td><td>Dado inválido no corpo da requisição — veja o campo <code>errors</code> (ou <code>error</code>, no caso do Google) da resposta para o motivo exato.</td></tr>
+          <tr><td><span class="status-pill s4">401</span></td><td><code>X-Api-Key</code> ausente/inválida, credenciais de login erradas, ou token de sessão ausente/expirado.</td></tr>
+          <tr><td><span class="status-pill s4">403</span></td><td>Token de sessão válido, mas de outra aplicação.</td></tr>
+        </table>
+      </div>
+      <p>
+        Observação: o formato do corpo de erro varia um pouco entre endpoints — a maioria usa o
+        padrão <em>problem+json</em> do ASP.NET (campo <code>errors</code>, um dicionário por
+        campo), mas <code>/google-login</code> usa um objeto simples <code>{ "error": "..." }</code>.
+        Trate ambos os formatos no seu client.
+      </p>
+    </section>
+
+    <section class="doc-section" id="fluxo-completo">
+      <h2><span class="step-num">6</span> Exemplo de fluxo completo</h2>
+      <p class="lede">Cadastro, login e uma chamada autenticada, em JavaScript puro (fetch).</p>
+      <div class="code-block">
+        <div class="code-block__head"><span>javascript</span><button class="copy-btn" data-copy="js-flow">Copiar</button></div>
+        <pre id="js-flow"><span class="tok-kw">const</span> API_KEY = <span class="tok-str">"nxs_sua_chave_aqui"</span>;
+<span class="tok-kw">const</span> BASE = <span class="tok-str">"https://SEU-AMBIENTE-NEXAS/api/v1/apps/auth"</span>;
+
+<span class="tok-com">// 1. Cadastro</span>
+<span class="tok-kw">await</span> fetch(`${BASE}/register`, {
+  method: <span class="tok-str">"POST"</span>,
+  headers: { <span class="tok-str">"X-Api-Key"</span>: API_KEY, <span class="tok-str">"Content-Type"</span>: <span class="tok-str">"application/json"</span> },
+  body: JSON.stringify({ email: <span class="tok-str">"ana@exemplo.com"</span>, password: <span class="tok-str">"SenhaForte@123"</span>, fullName: <span class="tok-str">"Ana Silva"</span> })
+});
+
+<span class="tok-com">// 2. Login</span>
+<span class="tok-kw">const</span> loginResp = <span class="tok-kw">await</span> fetch(`${BASE}/login`, {
+  method: <span class="tok-str">"POST"</span>,
+  headers: { <span class="tok-str">"X-Api-Key"</span>: API_KEY, <span class="tok-str">"Content-Type"</span>: <span class="tok-str">"application/json"</span> },
+  body: JSON.stringify({ email: <span class="tok-str">"ana@exemplo.com"</span>, password: <span class="tok-str">"SenhaForte@123"</span> })
+});
+<span class="tok-kw">const</span> { accessToken, user } = <span class="tok-kw">await</span> loginResp.json();
+
+<span class="tok-com">// 3. Guarde o token e use nas próximas chamadas ao SEU backend,</span>
+<span class="tok-com">//    ou valide direto contra a Nexas quando precisar:</span>
+<span class="tok-kw">const</span> me = <span class="tok-kw">await</span> fetch(`${BASE}/me`, {
+  headers: { <span class="tok-str">"X-Api-Key"</span>: API_KEY, <span class="tok-str">"Authorization"</span>: `Bearer ${accessToken}` }
+});</pre>
+      </div>
+    </section>
+
+    <section class="doc-section" id="seguranca">
+      <h2><span class="step-num">7</span> Segurança</h2>
+      <ul>
+        <li><strong>A chave de API identifica a sua aplicação</strong>, do mesmo jeito que a chave pública de um provedor de autenticação — mas ela permite cadastrar/autenticar usuários na sua aplicação, então trate-a como um segredo de produção mesmo assim: não a exponha em repositórios públicos.</li>
+        <li>Se for chamar estes endpoints diretamente do navegador do seu usuário final, isso é esperado (é como a própria Nexas usa a chave no seu portal) — mas se quiser uma camada extra de controle, você pode proxiar as chamadas pelo seu backend em vez do frontend.</li>
+        <li><strong>Sempre use HTTPS</strong> em produção — senhas e tokens trafegam no corpo das requisições.</li>
+        <li>Se suspeitar de vazamento da chave, regenere-a no portal — a anterior para de funcionar imediatamente.</li>
+      </ul>
+    </section>
+  </main>
+</div>
+
+<footer>
+  Nexas AppAuth · Dúvidas sobre este guia? Fale com o time Nexas.
+</footer>
+
+<script>
+(function () {
+  try {
+    var toggle = document.getElementById('tocToggle');
+    var list = document.getElementById('tocList');
+    if (toggle && list) {
+      toggle.addEventListener('click', function () {
+        var open = list.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    }
+  } catch (e) {}
+
+  try {
+    var links = Array.prototype.slice.call(document.querySelectorAll('.toc-link'));
+    var sections = links
+      .map(function (l) { return document.querySelector(l.getAttribute('href')); })
+      .filter(Boolean);
+
+    function onScroll() {
+      var pos = window.scrollY + 120;
+      var current = sections[0];
+      sections.forEach(function (s) { if (s.offsetTop <= pos) current = s; });
+      links.forEach(function (l) {
+        l.classList.toggle('active', current && l.getAttribute('href') === '#' + current.id);
+      });
+    }
+    document.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  } catch (e) {}
+
+  try {
+    document.querySelectorAll('.copy-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var target = document.getElementById(btn.getAttribute('data-copy'));
+        if (!target) return;
+        var text = target.innerText;
+        navigator.clipboard.writeText(text).then(function () {
+          var original = btn.textContent;
+          btn.textContent = 'Copiado!';
+          setTimeout(function () { btn.textContent = original; }, 1500);
+        }).catch(function () {});
+      });
+    });
+  } catch (e) {}
+})();
+</script>

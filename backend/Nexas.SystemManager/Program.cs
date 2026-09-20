@@ -42,10 +42,13 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 // ASP.NET Core Identity (Provedor de Identidade Isolado) — único esquema de autenticação
-// deste projeto. Não registramos o JwtBearer próprio da Nexas aqui (diferente das outras
-// APIs): esse esquema emite tokens opacos incompatíveis com o JWT usado pelas demais APIs,
-// e ter os dois esquemas registrados ao mesmo tempo fazia o token do /login (Identity) não
-// autenticar em nada, porque o esquema padrão continuava sendo o JwtBearer.
+// deste projeto. Não registramos um segundo esquema JwtBearer aqui (diferente das outras
+// APIs): fazer isso já quebrou a autenticação antes, porque o esquema padrão passava a ser
+// o JwtBearer e o token opaco emitido pelo /login (Identity) parava de autenticar em nada.
+// Em vez disso, mantemos o único esquema "Identity.Bearer" e trocamos apenas o seu
+// BearerTokenProtector (ver JwtTicketDataFormat) para emitir/validar JWT de verdade —
+// compatível com a Issuer/Audience/Key usada pelas demais APIs Nexas — sem mexer no
+// /login, /refresh, /forgotPassword etc. que já vêm prontos do MapIdentityApi.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<Nexas.SystemManager.Infrastructure.SystemManagerDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
@@ -53,7 +56,15 @@ builder.Services.AddDbContext<Nexas.SystemManager.Infrastructure.SystemManagerDb
 builder.Services.AddIdentityApiEndpoints<NexasUser>()
     .AddRoles<Microsoft.AspNetCore.Identity.IdentityRole>()
     .AddEntityFrameworkStores<Nexas.SystemManager.Infrastructure.SystemManagerDbContext>();
+
+builder.Services.PostConfigure<Microsoft.AspNetCore.Authentication.BearerToken.BearerTokenOptions>(
+    Microsoft.AspNetCore.Identity.IdentityConstants.BearerScheme,
+    options => options.BearerTokenProtector = new Nexas.SystemManager.Services.JwtTicketDataFormat(builder.Configuration));
+
+builder.Services.AddScoped<Microsoft.AspNetCore.Identity.SignInManager<NexasUser>, CustomSignInManager>();
+builder.Services.AddScoped<Microsoft.AspNetCore.Identity.IUserClaimsPrincipalFactory<NexasUser>, Nexas.SystemManager.Services.NexasUserClaimsPrincipalFactory>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddSingleton<Nexas.SystemManager.Services.AppEndUserTokenService>();
 builder.Services.AddScoped<IPaymentEventPublisher, PaymentEventPublisher>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSignalR();
@@ -145,7 +156,10 @@ app.MapControllers();
 
 var authGroup = app.MapGroup("/api/v1/auth").WithTags("Authenticator");
 authGroup.MapCustomRegister();
+authGroup.MapProfile();
+authGroup.MapPrivacy();
 authGroup.MapIdentityApi<NexasUser>();
+app.MapAppAuth();
 app.MapHub<PaymentHub>("/hubs/payment");
 
 app.Run();

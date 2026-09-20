@@ -1,0 +1,39 @@
+<div class="edit-roles-modal">
+  <div class="edit-roles-modal__backdrop" (click)="onBackdropClick()"></div>
+
+  <div class="edit-roles-modal__panel">
+    <h3>Papéis de {{ user.fullName || user.email }}</h3>
+    <p class="edit-roles-modal__subtitle">{{ user.email }}</p>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      @if (roles.length > 0) {
+        <div class="edit-roles-list">
+          @for (role of roles; track role.id) {
+            <label class="edit-roles-checkbox">
+              <input type="checkbox" [formControlName]="role.id" />
+              {{ role.name }}
+            </label>
+          }
+        </div>
+      } @else {
+        <p class="edit-roles-modal__hint">
+          Nenhum papel criado ainda nessa aplicação — crie um em "Gerenciar papéis" primeiro.
+        </p>
+      }
+
+      <div class="edit-roles-modal__actions">
+        <button type="button" class="edit-roles-modal__btn edit-roles-modal__btn--secondary" [disabled]="saving()" (click)="close()">
+          Cancelar
+        </button>
+        <button type="submit" class="edit-roles-modal__btn edit-roles-modal__btn--primary" [disabled]="saving() || roles.length === 0">
+          @if (saving()) {
+            <span class="edit-roles-modal__spinner"></span>
+            Salvando...
+          } @else {
+            Salvar
+          }
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

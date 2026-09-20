@@ -1,0 +1,26 @@
+.org-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 72px); /* Desconta a navbar */
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  padding: 2rem;
+}
+
+.org-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+  }
+
+  p {
+    font-size: 1rem;
+    color: var(--text-secondary);
+  }
+}

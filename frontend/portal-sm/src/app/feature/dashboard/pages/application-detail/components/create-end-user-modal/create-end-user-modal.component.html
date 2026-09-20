@@ -1,0 +1,101 @@
+<div class="end-user-modal">
+  <div class="end-user-modal__backdrop" (click)="onBackdropClick()"></div>
+
+  <div class="end-user-modal__panel">
+    @if (success()) {
+      <!-- Estado de sucesso: mostra a senha gerada -->
+      <div class="end-user-modal__success">
+        <div class="end-user-modal__success-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        </div>
+
+        <h3>Usuário criado com sucesso</h3>
+        <p>Compartilhe a senha abaixo com "{{ email?.value }}" — ela não será mostrada de novo.</p>
+
+        <div class="end-user-modal__key-box">
+          <code>{{ password?.value }}</code>
+          <button type="button" class="end-user-modal__copy-btn" (click)="copyPassword()">
+            @if (copied()) {
+              Copiado
+            } @else {
+              Copiar
+            }
+          </button>
+        </div>
+
+        <button type="button" class="end-user-modal__done-btn" (click)="close()">Concluir</button>
+      </div>
+    } @else {
+      <!-- Estado de formulário -->
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <h3>Novo usuário</h3>
+        <p class="end-user-modal__subtitle">Cadastre um usuário final diretamente, sem que ele precise se registrar sozinho.</p>
+
+        <div class="end-user-form-field">
+          <label for="end-user-email">E-mail</label>
+          <input id="end-user-email" type="email" formControlName="email" placeholder="pessoa@exemplo.com" autocomplete="off" />
+          @if (email?.invalid && email?.touched) {
+            <span class="end-user-form-field__error">Informe um e-mail válido.</span>
+          }
+        </div>
+
+        <div class="end-user-form-field">
+          <label for="end-user-name">Nome completo (opcional)</label>
+          <input id="end-user-name" type="text" formControlName="fullName" placeholder="Nome da pessoa" autocomplete="off" />
+        </div>
+
+        <div class="end-user-form-field">
+          <label for="end-user-password">Senha inicial</label>
+          <div class="end-user-password-row">
+            <input
+              id="end-user-password"
+              [type]="showPassword() ? 'text' : 'password'"
+              formControlName="password"
+              autocomplete="new-password"
+            />
+            <button type="button" class="end-user-password-row__btn" (click)="togglePasswordVisibility()">
+              {{ showPassword() ? 'Ocultar' : 'Mostrar' }}
+            </button>
+            <button type="button" class="end-user-password-row__btn" (click)="regeneratePassword()">Gerar nova</button>
+          </div>
+          <span class="end-user-form-field__hint">Você vai precisar compartilhar essa senha com a pessoa depois de criar.</span>
+        </div>
+
+        @if (roles.length > 0) {
+          <div class="end-user-form-field" [formGroup]="roleIdsGroup">
+            <label>Papéis (opcional)</label>
+            <div class="end-user-roles-list">
+              @for (role of roles; track role.id) {
+                <label class="end-user-role-checkbox">
+                  <input type="checkbox" [formControlName]="role.id" />
+                  {{ role.name }}
+                </label>
+              }
+            </div>
+          </div>
+        } @else {
+          <p class="end-user-form-field__hint">
+            Nenhum papel criado ainda nessa aplicação — você pode atribuir um depois de criar os papéis.
+          </p>
+        }
+
+        <div class="end-user-modal__actions">
+          <button type="button" class="end-user-modal__btn end-user-modal__btn--secondary" [disabled]="submitting()" (click)="close()">
+            Cancelar
+          </button>
+          <button type="submit" class="end-user-modal__btn end-user-modal__btn--primary" [disabled]="submitting()">
+            @if (submitting()) {
+              <span class="end-user-modal__spinner"></span>
+              Criando...
+            } @else {
+              Criar usuário
+            }
+          </button>
+        </div>
+      </form>
+    }
+  </div>
+</div>

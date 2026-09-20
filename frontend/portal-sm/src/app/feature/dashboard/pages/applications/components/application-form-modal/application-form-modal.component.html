@@ -1,0 +1,114 @@
+<div class="app-form-modal">
+  <div class="app-form-modal__backdrop" (click)="onBackdropClick()"></div>
+
+  <div class="app-form-modal__panel">
+    @if (createdApp(); as app) {
+      <!-- Estado de sucesso: mostra a chave de API gerada -->
+      <div class="app-form-modal__success">
+        <div class="app-form-modal__success-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        </div>
+
+        <h3>Aplicação criada com sucesso</h3>
+        <p>Guarde a chave de API abaixo — você vai precisar dela para integrar "{{ app.name }}" com os serviços da Nexas.</p>
+
+        <div class="app-form-modal__key-box">
+          <code>{{ app.apiKey }}</code>
+          <button type="button" class="app-form-modal__copy-btn" (click)="copyApiKey()">
+            @if (copied()) {
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Copiado
+            } @else {
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              Copiar
+            }
+          </button>
+        </div>
+
+        <p class="app-form-modal__hint">
+          Você pode ver essa chave novamente ou gerar uma nova a qualquer momento na lista de aplicações.
+        </p>
+
+        <button type="button" class="app-form-modal__done-btn" (click)="close()">Concluir</button>
+      </div>
+    } @else {
+      <!-- Estado de formulário -->
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <h3>Nova aplicação</h3>
+        <p class="app-form-modal__subtitle">Cadastre um sistema seu para usar os serviços da Nexas.</p>
+
+        <div class="app-form-field">
+          <label for="app-name">Nome</label>
+          <input id="app-name" type="text" formControlName="name" placeholder="Nome da aplicação" autocomplete="off" />
+          @if (name?.invalid && name?.touched) {
+            <span class="app-form-field__error">Informe um nome com pelo menos 2 caracteres.</span>
+          }
+        </div>
+
+        <div class="app-form-field">
+          <label for="app-description">Descrição</label>
+          <textarea id="app-description" formControlName="description" rows="3" placeholder="O que essa aplicação faz"></textarea>
+        </div>
+
+        <div class="app-form-field">
+          <label for="app-domain">Domínio</label>
+          <input id="app-domain" type="text" formControlName="urlDomain" placeholder="app.seudominio.com.br" autocomplete="off" />
+        </div>
+
+        <div class="app-form-field">
+          <label for="app-logo">URL do logo (opcional)</label>
+          <input id="app-logo" type="text" formControlName="urlLogo" placeholder="https://..." autocomplete="off" />
+        </div>
+
+        <div class="app-form-field-row">
+          <div class="app-form-field">
+            <label for="app-primary-color">Cor primária</label>
+            <div class="app-form-color">
+              <input id="app-primary-color" type="color" formControlName="primaryColor" />
+              <span>{{ form.get('primaryColor')?.value }}</span>
+            </div>
+          </div>
+
+          <div class="app-form-field">
+            <label for="app-secondary-color">Cor secundária</label>
+            <div class="app-form-color">
+              <input id="app-secondary-color" type="color" formControlName="secondaryColor" />
+              <span>{{ form.get('secondaryColor')?.value }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="app-form-field">
+          <label for="app-status">Status</label>
+          <select id="app-status" formControlName="status">
+            <option value="active">Ativa</option>
+            <option value="pending">Pendente</option>
+            <option value="inactive">Inativa</option>
+          </select>
+        </div>
+
+        <div class="app-form-modal__actions">
+          <button type="button" class="app-form-modal__btn app-form-modal__btn--secondary" [disabled]="submitting()" (click)="close()">
+            Cancelar
+          </button>
+          <button type="submit" class="app-form-modal__btn app-form-modal__btn--primary" [disabled]="submitting()">
+            @if (submitting()) {
+              <span class="app-form-modal__spinner"></span>
+              Criando...
+            } @else {
+              Criar aplicação
+            }
+          </button>
+        </div>
+      </form>
+    }
+  </div>
+</div>

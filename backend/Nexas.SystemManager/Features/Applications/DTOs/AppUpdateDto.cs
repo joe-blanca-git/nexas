@@ -10,5 +10,7 @@ namespace Nexas.SystemManager.Features.Applications.DTOs
         public string? PrimaryColor { get; set; }
         public string? SecondaryColor { get; set; }
         public string? UrlDomain { get; set; }
+        public string? Status { get; set; }
+        public string? GoogleClientId { get; set; }
     }
 }

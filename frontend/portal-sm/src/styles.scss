@@ -1,1 +1,79 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global Styles */
+:root {
+  /* Dark Theme (Default) */
+  --bg-primary: #030712; /* Slate 950 */
+  --bg-secondary: #0B1120;
+  --bg-card: #0F172A; /* Slate 900 */
+  --bg-card-hover: #152033;
+  --bg-nav: rgba(15, 23, 42, 0.85);
+  
+  --border-color: #1E293B; /* Slate 800 */
+  --border-hover: #334155; /* Slate 700 */
+  --border-light: rgba(255, 255, 255, 0.05);
+
+  --text-primary: #F8FAFC; /* Slate 50 */
+  --text-secondary: #94A3B8; /* Slate 400 */
+  --text-muted: #64748B; /* Slate 500 */
+  
+  --accent-cyan: #38BDF8;
+  --accent-green: #10B981;
+  --accent-blue: #3B82F6;
+  --accent-yellow: #F59E0B;
+  --accent-purple: #A78BFA;
+  
+  --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.4);
+
+  --logo-bg: transparent;
+  --logo-padding: 0;
+  --logo-radius: 0;
+}
+
+.theme-light {
+  /* Light Theme Overrides */
+  --bg-primary: #F1F5F9; /* Slate 100 */
+  --bg-secondary: #E2E8F0; /* Slate 200 */
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #F8FAFC;
+  --bg-nav: rgba(255, 255, 255, 0.9);
+  
+  --border-color: #CBD5E1; /* Slate 300 */
+  --border-hover: #94A3B8; /* Slate 400 */
+  --border-light: rgba(0, 0, 0, 0.05);
+
+  --text-primary: #0F172A; /* Slate 900 */
+  --text-secondary: #475569; /* Slate 600 */
+  --text-muted: #64748B; /* Slate 500 */
+  
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 20px rgba(0, 0, 0, 0.12);
+
+  --logo-bg: #0F172A; /* Fundo escuro para destacar o logo claro */
+  --logo-padding: 4px 8px;
+  --logo-radius: 6px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Remove default focus outline and add a custom one for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
+}

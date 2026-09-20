@@ -1,0 +1,131 @@
+@if (loading()) {
+  <div class="profile-skeleton">
+    <div class="profile-skeleton__avatar"></div>
+    <div class="profile-skeleton__line profile-skeleton__line--sm"></div>
+    <div class="profile-skeleton__line"></div>
+    <div class="profile-skeleton__line"></div>
+    <div class="profile-skeleton__line"></div>
+  </div>
+} @else {
+  <form class="profile-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="profile-avatar">
+      <div class="profile-avatar__photo-wrap">
+        @if (avatarPreview(); as preview) {
+          <img class="profile-avatar__circle profile-avatar__circle--photo" [src]="preview" alt="Foto de perfil" />
+        } @else {
+          <div class="profile-avatar__circle">{{ initials }}</div>
+        }
+
+        <button
+          type="button"
+          class="profile-avatar__edit-btn"
+          (click)="toggleAvatarMenu()"
+          aria-label="Alterar foto de perfil"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+            <circle cx="12" cy="13" r="4"></circle>
+          </svg>
+        </button>
+
+        @if (avatarMenuOpen()) {
+          <div class="profile-avatar__backdrop" (click)="avatarMenuOpen.set(false)"></div>
+          <div class="profile-avatar__menu">
+            <button type="button" (click)="triggerFileInput(fileInput)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              Enviar foto
+            </button>
+            <button type="button" (click)="openCamera()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                <circle cx="12" cy="13" r="4"></circle>
+              </svg>
+              Usar câmera
+            </button>
+          </div>
+        }
+
+        <input #fileInput type="file" accept="image/*" hidden (change)="onAvatarFileSelected($event)" />
+      </div>
+
+      <div class="profile-avatar__info">
+        <span class="profile-avatar__name">{{ fullName?.value || 'Usuário' }}</span>
+        <span class="profile-avatar__hint">PNG ou JPG, até 8MB</span>
+      </div>
+    </div>
+
+    <div class="profile-fields">
+      <div class="profile-fields__row">
+        <div class="profile-field">
+          <label for="fullName">Nome completo</label>
+          <input
+            id="fullName"
+            type="text"
+            formControlName="fullName"
+            placeholder="Seu nome completo"
+            autocomplete="name"
+          />
+          @if (fullName?.invalid && fullName?.touched) {
+            <span class="profile-field__error">Informe seu nome completo.</span>
+          }
+        </div>
+
+        <div class="profile-field">
+          <label for="phoneNumber">Telefone</label>
+          <input
+            id="phoneNumber"
+            type="tel"
+            formControlName="phoneNumber"
+            placeholder="(00) 00000-0000"
+            autocomplete="tel"
+          />
+        </div>
+      </div>
+
+      <div class="profile-field">
+        <label for="email">E-mail</label>
+        <input id="email" type="email" formControlName="email" autocomplete="email" />
+      </div>
+    </div>
+
+    <div class="profile-actions">
+      <button type="submit" class="profile-save-btn" [disabled]="saving() || !hasChanges()">
+        @if (saving()) {
+          <span class="profile-save-btn__spinner"></span>
+          Salvando...
+        } @else {
+          Salvar alterações
+        }
+      </button>
+    </div>
+  </form>
+}
+
+@if (cameraActive()) {
+  <div class="camera-modal">
+    <div class="camera-modal__backdrop" (click)="closeCamera()"></div>
+    <div class="camera-modal__panel">
+      <video
+        #cameraVideo
+        class="camera-modal__video"
+        [srcObject]="mediaStream()"
+        autoplay
+        playsinline
+        muted
+      ></video>
+
+      <div class="camera-modal__actions">
+        <button type="button" class="camera-modal__btn camera-modal__btn--secondary" (click)="closeCamera()">
+          Cancelar
+        </button>
+        <button type="button" class="camera-modal__btn camera-modal__btn--primary" (click)="capturePhoto(cameraVideo)">
+          Capturar
+        </button>
+      </div>
+    </div>
+  </div>
+}

@@ -11,6 +11,10 @@ namespace Nexas.SystemManager.Infrastructure
         {
         }
         public DbSet<Nexas.SystemManager.Domain.Entities.SystemApp> Applications { get; set; }
+        public DbSet<Nexas.SystemManager.Domain.Entities.UserLoginHistory> LoginHistories { get; set; }
+        public DbSet<Nexas.SystemManager.Domain.Entities.AppEndUser> AppEndUsers { get; set; }
+        public DbSet<Nexas.SystemManager.Domain.Entities.AppRole> AppRoles { get; set; }
+        public DbSet<Nexas.SystemManager.Domain.Entities.AppEndUserRole> AppEndUserRoles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -18,6 +22,9 @@ namespace Nexas.SystemManager.Infrastructure
             // Custmize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
+
+            builder.Entity<Nexas.SystemManager.Domain.Entities.AppEndUserRole>()
+                .HasKey(x => new { x.AppEndUserId, x.AppRoleId });
         }
     }
 }

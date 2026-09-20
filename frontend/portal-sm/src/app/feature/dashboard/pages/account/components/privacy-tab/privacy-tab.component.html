@@ -1,0 +1,126 @@
+@if (loading()) {
+  <div class="privacy-skeleton">
+    <div class="privacy-skeleton__line"></div>
+    <div class="privacy-skeleton__line"></div>
+    <div class="privacy-skeleton__line"></div>
+  </div>
+} @else {
+  <div class="privacy-content">
+    <section class="privacy-section">
+      <h3>Preferências de comunicação</h3>
+
+      <div class="privacy-row">
+        <div class="privacy-row__text">
+          <h4>E-mails de novidades e promoções</h4>
+          <p>Lançamentos, dicas e ofertas do ecossistema Nexas.</p>
+        </div>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            [checked]="preferences()?.receiveMarketingEmails"
+            [disabled]="savingKey() === 'receiveMarketingEmails'"
+            (change)="onToggleChange('receiveMarketingEmails', $event)"
+          />
+          <span class="toggle__track"><span class="toggle__thumb"></span></span>
+        </label>
+      </div>
+
+      <div class="privacy-row">
+        <div class="privacy-row__text">
+          <h4>Notificações do sistema</h4>
+          <p>Avisos importantes sobre sua conta e as aplicações que você usa.</p>
+        </div>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            [checked]="preferences()?.receiveProductNotifications"
+            [disabled]="savingKey() === 'receiveProductNotifications'"
+            (change)="onToggleChange('receiveProductNotifications', $event)"
+          />
+          <span class="toggle__track"><span class="toggle__thumb"></span></span>
+        </label>
+      </div>
+    </section>
+
+    <section class="privacy-section">
+      <h3>Seus dados</h3>
+      <div class="privacy-row">
+        <div class="privacy-row__text">
+          <h4>Exportar meus dados</h4>
+          <p>Baixe um arquivo com todas as informações que temos sobre sua conta.</p>
+        </div>
+        <button type="button" class="privacy-btn" [disabled]="exporting()" (click)="exportMyData()">
+          @if (exporting()) {
+            <span class="privacy-btn__spinner"></span>
+            Exportando...
+          } @else {
+            Exportar dados
+          }
+        </button>
+      </div>
+    </section>
+
+    <section class="privacy-section privacy-section--danger">
+      <h3>Excluir conta</h3>
+      <div class="privacy-row">
+        <div class="privacy-row__text">
+          <h4>Excluir minha conta permanentemente</h4>
+          <p>Remove sua conta e todos os dados associados. Essa ação não pode ser desfeita.</p>
+        </div>
+        <button type="button" class="privacy-btn privacy-btn--danger" (click)="openDeleteModal()">
+          Excluir conta
+        </button>
+      </div>
+    </section>
+  </div>
+}
+
+@if (deleteModalOpen()) {
+  <div class="danger-modal">
+    <div class="danger-modal__backdrop" (click)="closeDeleteModal()"></div>
+    <div class="danger-modal__panel">
+      <h3>Excluir sua conta</h3>
+      <p>
+        Essa ação é <strong>permanente</strong> e não pode ser desfeita. Todos os seus dados
+        serão removidos.
+      </p>
+      <p>
+        Para confirmar, digite seu e-mail (<strong>{{ email }}</strong>) abaixo:
+      </p>
+
+      <input
+        type="email"
+        class="danger-modal__input"
+        [value]="deleteConfirmInput()"
+        (input)="onDeleteConfirmInput($event)"
+        placeholder="seu-email@exemplo.com"
+        [disabled]="deleting()"
+        autocomplete="off"
+      />
+
+      <div class="danger-modal__actions">
+        <button
+          type="button"
+          class="danger-modal__btn danger-modal__btn--secondary"
+          [disabled]="deleting()"
+          (click)="closeDeleteModal()"
+        >
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="danger-modal__btn danger-modal__btn--danger"
+          [disabled]="!canConfirmDelete || deleting()"
+          (click)="confirmDelete()"
+        >
+          @if (deleting()) {
+            <span class="privacy-btn__spinner"></span>
+            Excluindo...
+          } @else {
+            Excluir permanentemente
+          }
+        </button>
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,182 @@
+<div class="app-layout">
+  <app-navbar></app-navbar>
+
+  <main class="app-main">
+    <div class="app-content">
+      <div class="app-header">
+        <div class="app-header__text">
+          <h1>Aplicações</h1>
+          <p>Cadastre e gerencie os sistemas que usam os serviços da Nexas.</p>
+        </div>
+
+        <button type="button" class="app-header__new-btn" (click)="onNewApplication()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Nova aplicação
+        </button>
+      </div>
+
+      @if (loading()) {
+        <div class="app-list">
+          <div class="app-skeleton"></div>
+          <div class="app-skeleton"></div>
+          <div class="app-skeleton"></div>
+        </div>
+      } @else {
+        <div class="app-list">
+          @for (app of applications(); track app.id) {
+            <article class="app-card">
+              <div class="app-card__logo" [style.background]="gradientFor(app)">
+                @if (app.urlLogo) {
+                  <img [src]="app.urlLogo" [alt]="app.name" />
+                } @else {
+                  <span>{{ initials(app.name) }}</span>
+                }
+              </div>
+
+              <div class="app-card__body">
+                <div class="app-card__title-row">
+                  <h3>{{ app.name }}</h3>
+                  <span class="app-card__status" [ngClass]="'app-card__status--' + app.status">
+                    <span class="app-card__status-dot"></span>
+                    {{ statusLabel(app.status) }}
+                  </span>
+                </div>
+
+                <p class="app-card__description">{{ app.description }}</p>
+
+                <div class="app-card__meta">
+                  @if (app.urlDomain) {
+                    <span class="app-card__meta-item">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                      </svg>
+                      {{ app.urlDomain }}
+                    </span>
+                  }
+                  <span class="app-card__meta-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                      <line x1="16" y1="2" x2="16" y2="6"></line>
+                      <line x1="8" y1="2" x2="8" y2="6"></line>
+                      <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    Criado em {{ formatDate(app.createdAt) }}
+                  </span>
+                </div>
+
+                <div class="app-card__api-key">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
+                  </svg>
+                  <code>{{ maskedApiKey(app.apiKey) }}</code>
+                  <button type="button" class="app-card__key-btn" (click)="copyApiKey(app.apiKey)">Copiar</button>
+                  <button type="button" class="app-card__key-btn" (click)="openRegenerateConfirm(app)">Gerar nova chave</button>
+                </div>
+              </div>
+
+              <div class="app-card__actions">
+                <button type="button" class="app-card__manage-btn" (click)="onManage(app)">Gerenciar</button>
+                <button type="button" class="app-card__action-btn app-card__action-btn--danger" aria-label="Excluir aplicação" (click)="openDeleteConfirm(app)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  </svg>
+                </button>
+              </div>
+            </article>
+          } @empty {
+            <div class="app-empty">
+              <p>Você ainda não cadastrou nenhuma aplicação.</p>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </main>
+
+  <app-footer></app-footer>
+</div>
+
+@if (deleteTarget(); as app) {
+  <div class="app-delete-modal">
+    <div class="app-delete-modal__backdrop" (click)="closeDeleteConfirm()"></div>
+    <div class="app-delete-modal__panel">
+      <h3>Excluir aplicação</h3>
+      <p>
+        Tem certeza que deseja excluir <strong>{{ app.name }}</strong>? Essa ação não pode ser
+        desfeita.
+      </p>
+      <div class="app-delete-modal__actions">
+        <button
+          type="button"
+          class="app-delete-modal__btn app-delete-modal__btn--secondary"
+          [disabled]="deleting()"
+          (click)="closeDeleteConfirm()"
+        >
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="app-delete-modal__btn app-delete-modal__btn--danger"
+          [disabled]="deleting()"
+          (click)="confirmDelete()"
+        >
+          @if (deleting()) {
+            <span class="app-delete-modal__spinner"></span>
+            Excluindo...
+          } @else {
+            Excluir
+          }
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+@if (regenerateTarget(); as app) {
+  <div class="app-delete-modal">
+    <div class="app-delete-modal__backdrop" (click)="closeRegenerateConfirm()"></div>
+    <div class="app-delete-modal__panel">
+      <h3>Gerar nova chave de API</h3>
+      <p>
+        A chave atual de <strong>{{ app.name }}</strong> vai parar de funcionar imediatamente.
+        Você vai precisar atualizar a chave em qualquer lugar onde ela esteja configurada.
+      </p>
+      <div class="app-delete-modal__actions">
+        <button
+          type="button"
+          class="app-delete-modal__btn app-delete-modal__btn--secondary"
+          [disabled]="regenerating()"
+          (click)="closeRegenerateConfirm()"
+        >
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="app-delete-modal__btn app-delete-modal__btn--danger"
+          [disabled]="regenerating()"
+          (click)="confirmRegenerate()"
+        >
+          @if (regenerating()) {
+            <span class="app-delete-modal__spinner"></span>
+            Gerando...
+          } @else {
+            Gerar nova chave
+          }
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+@if (showCreateModal()) {
+  <app-application-form-modal
+    (closed)="closeCreateModal()"
+    (created)="onApplicationCreated($event)"
+  ></app-application-form-modal>
+}

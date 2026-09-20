@@ -1,0 +1,262 @@
+<div class="detail-layout">
+  <app-navbar></app-navbar>
+
+  <main class="detail-main">
+    <div class="detail-content">
+      <button type="button" class="detail-back-btn" (click)="goBack()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Voltar para Aplicações
+      </button>
+
+      @if (app(); as current) {
+        <header class="detail-header">
+          <div class="detail-header__logo" [style.background]="gradientFor(current)">
+            @if (current.urlLogo) {
+              <img [src]="current.urlLogo" [alt]="current.name" />
+            } @else {
+              <span>{{ initials(current.name) }}</span>
+            }
+          </div>
+
+          <div class="detail-header__info">
+            <div class="detail-header__title-row">
+              <h1>{{ current.name }}</h1>
+              <span class="detail-status" [ngClass]="'detail-status--' + current.status">
+                <span class="detail-status__dot"></span>
+                {{ statusLabel(current.status) }}
+              </span>
+            </div>
+            @if (current.description) {
+              <p>{{ current.description }}</p>
+            }
+          </div>
+        </header>
+
+        <div class="detail-grid">
+          <section class="detail-card">
+            <h2>Informações</h2>
+
+            <div class="detail-row">
+              <dt>Domínio</dt>
+              <dd>{{ current.urlDomain || '—' }}</dd>
+            </div>
+            <div class="detail-row">
+              <dt>Criado em</dt>
+              <dd>{{ formatDate(current.createdAt) }}</dd>
+            </div>
+            @if (current.updatedAt) {
+              <div class="detail-row">
+                <dt>Última atualização</dt>
+                <dd>{{ formatDate(current.updatedAt) }}</dd>
+              </div>
+            }
+          </section>
+
+          <section class="detail-card">
+            <h2>Chave de API</h2>
+            <p class="detail-card__hint">
+              Use essa chave para autenticar "{{ current.name }}" nos serviços da Nexas.
+            </p>
+
+            <div class="detail-key-box">
+              <code>{{ maskedApiKey(current.apiKey) }}</code>
+              <button type="button" class="detail-key-box__copy-btn" (click)="copyApiKey()">Copiar</button>
+            </div>
+
+            <button type="button" class="detail-regenerate-btn" (click)="openRegenerateConfirm()">
+              Gerar nova chave de API
+            </button>
+          </section>
+        </div>
+
+        <section class="detail-card detail-google-card">
+          <h2>Login com Google</h2>
+
+          @if (editingGoogleClientId()) {
+            <p class="detail-card__hint">
+              Cole o Client ID OAuth do Google criado no seu próprio projeto do Google Cloud
+              (com o domínio de "{{ current.name }}" autorizado como origem). Deixe em branco
+              para desabilitar o login com Google nessa aplicação.
+            </p>
+            <div class="detail-google-field">
+              <input
+                type="text"
+                [value]="googleClientIdInput()"
+                (input)="googleClientIdInput.set($any($event.target).value)"
+                placeholder="000000000000-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com"
+                autocomplete="off"
+              />
+            </div>
+            <div class="detail-google-actions">
+              <button type="button" class="detail-google-actions__btn detail-google-actions__btn--secondary" [disabled]="savingGoogleClientId()" (click)="cancelEditGoogleClientId()">
+                Cancelar
+              </button>
+              <button type="button" class="detail-google-actions__btn detail-google-actions__btn--primary" [disabled]="savingGoogleClientId()" (click)="saveGoogleClientId()">
+                @if (savingGoogleClientId()) {
+                  Salvando...
+                } @else {
+                  Salvar
+                }
+              </button>
+            </div>
+          } @else if (current.googleClientId) {
+            <p class="detail-card__hint">
+              Os usuários finais de "{{ current.name }}" já podem entrar com a conta Google deles.
+            </p>
+            <div class="detail-key-box">
+              <code>{{ current.googleClientId }}</code>
+            </div>
+            <button type="button" class="detail-regenerate-btn" (click)="startEditGoogleClientId()">
+              Editar Client ID
+            </button>
+          } @else {
+            <p class="detail-card__hint">
+              Ainda não configurado — os usuários finais de "{{ current.name }}" só podem entrar
+              com e-mail e senha.
+            </p>
+            <button type="button" class="detail-regenerate-btn" (click)="startEditGoogleClientId()">
+              Configurar login com Google
+            </button>
+          }
+        </section>
+
+        <section class="detail-card detail-users-card">
+          <div class="detail-users-card__header">
+            <div>
+              <h2>Usuários cadastrados</h2>
+              <p class="detail-card__hint">
+                Pessoas que criaram conta em "{{ current.name }}" através do módulo de autenticação da Nexas.
+              </p>
+            </div>
+            <div class="detail-users-card__actions">
+              <button type="button" class="detail-users-card__roles-btn" (click)="openManageRolesModal()">
+                Gerenciar papéis
+              </button>
+              <button type="button" class="detail-users-card__new-btn" (click)="openCreateUserModal()">
+                Novo usuário
+              </button>
+            </div>
+          </div>
+
+          @if (usersLoading()) {
+            <div class="detail-users-skeleton"></div>
+          } @else if (users().length > 0) {
+            <ul class="detail-users-list">
+              @for (user of users(); track user.id) {
+                <li class="detail-users-list__item">
+                  <span class="detail-users-list__avatar">{{ userInitials(user) }}</span>
+                  <div class="detail-users-list__info">
+                    <span class="detail-users-list__name">{{ user.fullName || user.email }}</span>
+                    @if (user.fullName) {
+                      <span class="detail-users-list__email">{{ user.email }}</span>
+                    }
+                    @if (user.roles.length > 0) {
+                      <div class="detail-users-list__roles">
+                        @for (role of user.roles; track role.id) {
+                          <span class="detail-users-list__role-chip">{{ role.name }}</span>
+                        }
+                      </div>
+                    }
+                  </div>
+                  <span class="detail-users-list__date">{{ formatDate(user.createdAt) }}</span>
+                  <button
+                    type="button"
+                    class="detail-users-list__edit-roles-btn"
+                    title="Editar papéis"
+                    (click)="openEditRolesModal(user)"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
+                    </svg>
+                  </button>
+                </li>
+              }
+            </ul>
+          } @else {
+            <div class="detail-users-empty">
+              <p>Nenhum usuário cadastrado ainda nesta aplicação.</p>
+            </div>
+          }
+        </section>
+      } @else if (loading()) {
+        <div class="detail-skeleton"></div>
+      } @else {
+        <div class="detail-empty">
+          <p>Aplicação não encontrada.</p>
+        </div>
+      }
+    </div>
+  </main>
+
+  <app-footer></app-footer>
+</div>
+
+@if (regenerateConfirmOpen()) {
+  <div class="detail-modal">
+    <div class="detail-modal__backdrop" (click)="closeRegenerateConfirm()"></div>
+    <div class="detail-modal__panel">
+      <h3>Gerar nova chave de API</h3>
+      <p>
+        A chave atual vai parar de funcionar imediatamente. Você vai precisar atualizar a chave
+        em qualquer lugar onde ela esteja configurada.
+      </p>
+      <div class="detail-modal__actions">
+        <button
+          type="button"
+          class="detail-modal__btn detail-modal__btn--secondary"
+          [disabled]="regenerating()"
+          (click)="closeRegenerateConfirm()"
+        >
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="detail-modal__btn detail-modal__btn--danger"
+          [disabled]="regenerating()"
+          (click)="confirmRegenerate()"
+        >
+          @if (regenerating()) {
+            <span class="detail-modal__spinner"></span>
+            Gerando...
+          } @else {
+            Gerar nova chave
+          }
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+@if (createUserModalOpen() && app(); as current) {
+  <app-create-end-user-modal
+    [appId]="current.id"
+    [apiKey]="current.apiKey"
+    [roles]="roles()"
+    (closed)="closeCreateUserModal()"
+    (created)="onUserCreated()"
+  ></app-create-end-user-modal>
+}
+
+@if (manageRolesModalOpen() && app(); as current) {
+  <app-manage-roles-modal
+    [appId]="current.id"
+    [roles]="roles()"
+    (closed)="closeManageRolesModal()"
+    (rolesChanged)="onRolesChanged($event)"
+  ></app-manage-roles-modal>
+}
+
+@if (editRolesUser(); as editingUser) {
+  @if (app(); as current) {
+    <app-edit-user-roles-modal
+      [appId]="current.id"
+      [user]="editingUser"
+      [roles]="roles()"
+      (closed)="closeEditRolesModal()"
+      (saved)="onUserRolesSaved()"
+    ></app-edit-user-roles-modal>
+  }
+}

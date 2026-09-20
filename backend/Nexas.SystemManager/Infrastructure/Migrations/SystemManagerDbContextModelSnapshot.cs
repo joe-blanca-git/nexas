@@ -154,6 +154,94 @@ namespace Nexas.SystemManager.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Nexas.SystemManager.Domain.Entities.AppEndUser", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("ApplicationId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<string>("FullName")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<string>("NormalizedEmail")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PasswordResetToken")
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64)");
+
+                    b.Property<DateTime?>("PasswordResetTokenExpiresAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationId", "NormalizedEmail")
+                        .IsUnique();
+
+                    b.ToTable("AppEndUsers");
+                });
+
+            modelBuilder.Entity("Nexas.SystemManager.Domain.Entities.AppEndUserRole", b =>
+                {
+                    b.Property<Guid>("AppEndUserId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("AppRoleId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("AppEndUserId", "AppRoleId");
+
+                    b.HasIndex("AppRoleId");
+
+                    b.ToTable("AppEndUserRoles");
+                });
+
+            modelBuilder.Entity("Nexas.SystemManager.Domain.Entities.AppRole", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("ApplicationId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationId", "Name")
+                        .IsUnique();
+
+                    b.ToTable("AppRoles");
+                });
+
             modelBuilder.Entity("Nexas.SystemManager.Domain.Entities.NexasUser", b =>
                 {
                     b.Property<string>("Id")
@@ -161,6 +249,9 @@ namespace Nexas.SystemManager.Infrastructure.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
+
+                    b.Property<string>("AvatarBase64")
+                        .HasColumnType("MEDIUMTEXT");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -199,6 +290,12 @@ namespace Nexas.SystemManager.Infrastructure.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<bool>("ReceiveMarketingEmails")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("ReceiveProductNotifications")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("longtext");
 
@@ -227,6 +324,11 @@ namespace Nexas.SystemManager.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
+                    b.Property<string>("ApiKey")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
@@ -236,6 +338,10 @@ namespace Nexas.SystemManager.Infrastructure.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("GoogleClientId")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -244,6 +350,10 @@ namespace Nexas.SystemManager.Infrastructure.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("SecondaryColor")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -260,7 +370,36 @@ namespace Nexas.SystemManager.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ApiKey")
+                        .IsUnique();
+
                     b.ToTable("Applications");
+                });
+
+            modelBuilder.Entity("Nexas.SystemManager.Domain.Entities.UserLoginHistory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("LoginDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Method")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("varchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("LoginHistories");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -312,6 +451,68 @@ namespace Nexas.SystemManager.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Nexas.SystemManager.Domain.Entities.AppEndUser", b =>
+                {
+                    b.HasOne("Nexas.SystemManager.Domain.Entities.SystemApp", "Application")
+                        .WithMany()
+                        .HasForeignKey("ApplicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Application");
+                });
+
+            modelBuilder.Entity("Nexas.SystemManager.Domain.Entities.AppEndUserRole", b =>
+                {
+                    b.HasOne("Nexas.SystemManager.Domain.Entities.AppEndUser", "AppEndUser")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("AppEndUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Nexas.SystemManager.Domain.Entities.AppRole", "AppRole")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("AppRoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppEndUser");
+
+                    b.Navigation("AppRole");
+                });
+
+            modelBuilder.Entity("Nexas.SystemManager.Domain.Entities.AppRole", b =>
+                {
+                    b.HasOne("Nexas.SystemManager.Domain.Entities.SystemApp", "Application")
+                        .WithMany()
+                        .HasForeignKey("ApplicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Application");
+                });
+
+            modelBuilder.Entity("Nexas.SystemManager.Domain.Entities.UserLoginHistory", b =>
+                {
+                    b.HasOne("Nexas.SystemManager.Domain.Entities.NexasUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Nexas.SystemManager.Domain.Entities.AppEndUser", b =>
+                {
+                    b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("Nexas.SystemManager.Domain.Entities.AppRole", b =>
+                {
+                    b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
         }

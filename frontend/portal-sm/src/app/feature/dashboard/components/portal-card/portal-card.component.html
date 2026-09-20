@@ -1,0 +1,37 @@
+<a [routerLink]="routeLink" class="portal-card" [ngClass]="'portal-card--' + variant">
+  <div class="portal-card__glow"></div>
+  
+  <div class="portal-card__layout">
+    <!-- Esquerda: Ícone Gigante -->
+    <div class="portal-card__icon-area">
+      <div class="portal-card__icon-glass">
+        <ng-content></ng-content>
+      </div>
+    </div>
+
+    <!-- Direita: Conteúdo -->
+    <div class="portal-card__content-area">
+      <div class="portal-card__header">
+        <span class="portal-card__category">{{ category }}</span>
+        <!-- Botão circular com seta -->
+        <div class="portal-card__arrow-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </div>
+      </div>
+
+      <h3 class="portal-card__title">{{ title }}</h3>
+      <p class="portal-card__description">{{ description }}</p>
+
+      <div class="portal-card__footer">
+        <span class="portal-card__action">Acessar</span>
+        <svg class="portal-card__link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </div>
+    </div>
+  </div>
+</a>

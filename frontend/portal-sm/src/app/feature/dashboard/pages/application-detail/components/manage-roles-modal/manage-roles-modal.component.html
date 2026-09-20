@@ -1,0 +1,55 @@
+<div class="roles-modal">
+  <div class="roles-modal__backdrop" (click)="onBackdropClick()"></div>
+
+  <div class="roles-modal__panel">
+    <h3>Gerenciar papéis</h3>
+    <p class="roles-modal__subtitle">Crie ou remova os papéis que os usuários finais dessa aplicação podem ter (ex.: Admin, Professor, Aluno).</p>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="roles-modal__create-row">
+      <div class="roles-form-field">
+        <input type="text" formControlName="name" placeholder="Nome do novo papel" autocomplete="off" />
+        @if (name?.invalid && name?.touched) {
+          <span class="roles-form-field__error">Informe um nome com pelo menos 2 caracteres.</span>
+        }
+      </div>
+      <button type="submit" class="roles-modal__add-btn" [disabled]="creating()">
+        @if (creating()) {
+          <span class="roles-modal__spinner"></span>
+        } @else {
+          Adicionar
+        }
+      </button>
+    </form>
+
+    <ul class="roles-modal__list">
+      @for (role of roles; track role.id) {
+        <li class="roles-modal__item">
+          <span class="roles-modal__item-name">{{ role.name }}</span>
+
+          @if (roleIdPendingDelete() === role.id) {
+            <div class="roles-modal__confirm">
+              <span>Remover?</span>
+              <button type="button" class="roles-modal__confirm-btn roles-modal__confirm-btn--danger" [disabled]="deletingRoleId() === role.id" (click)="confirmDelete(role.id)">
+                Sim
+              </button>
+              <button type="button" class="roles-modal__confirm-btn" [disabled]="deletingRoleId() === role.id" (click)="cancelDelete()">
+                Não
+              </button>
+            </div>
+          } @else {
+            <button type="button" class="roles-modal__delete-btn" (click)="askDelete(role.id)" title="Remover papel">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+            </button>
+          }
+        </li>
+      } @empty {
+        <li class="roles-modal__empty">Nenhum papel criado ainda.</li>
+      }
+    </ul>
+
+    <button type="button" class="roles-modal__done-btn" (click)="close()">Concluir</button>
+  </div>
+</div>

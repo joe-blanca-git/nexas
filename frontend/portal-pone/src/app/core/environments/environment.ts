@@ -5,8 +5,7 @@ export const environment = {
   supportedLanguages: ['pt-BR'],
 
   //=============================DESENVOLVIMENTO=======================================================
-  apiAgivysUrl: 'https://joederblanca.com.br/agivys-api/api/v1/',
-  apiAvivysAuthUrl: 'https://joederblanca.com.br/agivys-api/api/v1/authentication/',
-  apiNexasUrl: 'https://joederblanca.com.br/nexas-admin-api/api/v1/',
+  apiNexasUrl: 'http://localhost:5179/api/v1/',
+  apiNexasKey: 'nxs_02bdca2285c131fa8ff053bdd654b7070727f203add2cef2',
   //===================================================================================================
 };

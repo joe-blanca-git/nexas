@@ -26,11 +26,11 @@ export class AuthService extends BaseService {
   }
 
   logIn(email: string, password: string): Observable<UserLogedModel> {
-    const url = `${this.urlApiServiceAuth}login`;
+    const url = `${this.urlApiNexas}apps/auth/login`;
     const body = { email, password };
 
     const response = this.http
-      .post(url, body, this.GetAuthHeaderJson())
+      .post(url, body, this.GetHeaderJson())
       .pipe(map(this.extractData));
 
     return response;
@@ -109,66 +109,67 @@ export class AuthService extends BaseService {
   }
 
   forgotPassword(email: string): Observable<any> {
-    const url = `${this.urlApiServiceAuth}forgot-password`;
-    const body = { email, idSystem: 2 };
+    const url = `${this.urlApiNexas}apps/auth/forgot-password`;
+    const body = { email }; // AppAuth no longer needs idSystem
 
     return this.http
-      .post(url, body, this.GetAuthHeaderJson())
+      .post(url, body, this.GetHeaderJson())
       .pipe(map(this.extractData));
   }
 
   resetPassword(email: string, token: string, newPassword: string): Observable<any> {
-    const url = `${this.urlApiServiceAuth}reset-password`;
+    const url = `${this.urlApiNexas}apps/auth/reset-password`;
     const body = { email, token, newPassword };
 
     return this.http
-      .post(url, body, this.GetAuthHeaderJson())
+      .post(url, body, this.GetHeaderJson())
       .pipe(map(this.extractData));
   }
 
   changePassword(currentPassword: string, newPassword: string): Observable<any> {
-    const url = `${this.urlApiServiceAuth}change-password`;
+    // There is no explicit change-password in AppAuth documentation currently, keeping legacy/fallback path
+    const url = `${this.urlApiNexas}apps/auth/change-password`; 
     const body = { currentPassword, newPassword };
     return this.http.post(url, body, this.GetAuthHeaderJson());
   }
 
   checkEmail(email: string): Observable<any> {
-    const url = `${this.urlApiServiceAuth}check-email/${encodeURIComponent(email)}`;
-    return this.http.get(url, this.GetAuthHeaderJson());
+    const url = `${this.urlApiNexas}apps/auth/check-email/${encodeURIComponent(email)}`;
+    return this.http.get(url, this.GetHeaderJson());
   }
 
   registerSystemUser(payload: any): Observable<any> {
-    const url = `${this.urlApiServiceAuth}register-system-user`;
-    return this.http.post(url, payload, this.GetAuthHeaderJson());
+    const url = `${this.urlApiNexas}apps/auth/register`;
+    return this.http.post(url, payload, this.GetHeaderJson());
   }
 
   updatePerson(payload: any): Observable<any> {
-    const url = `${this.urlApiService}person`;
+    const url = `${this.urlApiNexas}person`;
     return this.http.put(url, payload, this.GetAuthHeaderJson());
   }
 
   getPerson(): Observable<any> {
-    const url = `${this.urlApiService}person`;
+    const url = `${this.urlApiNexas}person`;
     return this.http.get(url, this.GetAuthHeaderJson());
   }
 
   getMyAddresses(): Observable<any> {
-    const url = `${this.urlApiService}address/my-address`;
+    const url = `${this.urlApiNexas}address/my-address`;
     return this.http.get(url, this.GetAuthHeaderJson());
   }
 
   addAddress(payload: any): Observable<any> {
-    const url = `${this.urlApiService}address/my-address`;
+    const url = `${this.urlApiNexas}address/my-address`;
     return this.http.post(url, payload, this.GetAuthHeaderJson());
   }
 
   updateAddress(id: string, payload: any): Observable<any> {
-    const url = `${this.urlApiService}address/my-address/${id}`;
+    const url = `${this.urlApiNexas}address/my-address/${id}`;
     return this.http.put(url, payload, this.GetAuthHeaderJson());
   }
 
   deleteAddress(id: string): Observable<any> {
-    const url = `${this.urlApiService}address/my-address/${id}`;
+    const url = `${this.urlApiNexas}address/my-address/${id}`;
     return this.http.delete(url, this.GetAuthHeaderJson());
   }
 }

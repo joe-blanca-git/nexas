@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Nexas.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b499db26b4f7ee1f9ff6cf3ecf5e14a9b788a543")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+eaea69cb2d993b276bfa5ce53c9cb2b0cf9226cb")]
 [assembly: System.Reflection.AssemblyProductAttribute("Nexas.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Nexas.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -119,6 +119,18 @@ o ambiente dele já está servindo esse código.
   pro `/login`). Se alguém relatar isso de novo, a causa mais provável é outra (ex.: uma rota
   quebrada lançando erro não tratado no Router *antes* do clique em "Sair", deixando a
   aplicação num estado estranho) — não é o método de logout em si.
+- **Botão da navbar (dropdown de perfil) "parou de responder" depois de um tempo de uso, mas um
+  F5 resolve — e volta a acontecer depois** — investigado a fundo (Playwright, várias páginas,
+  antes/depois de abrir e fechar cada modal novo do dia: gerenciar papéis, novo usuário, editar
+  papéis, login com Google, regenerar chave) e o clique **sempre funcionou** nesses cenários, sem
+  nenhum erro no console. O padrão relatado ("quebra depois de um tempo, F5 resolve, volta a
+  quebrar") não é sintoma de bug de código — é a assinatura clássica de **drift do hot-reload do
+  `ng serve`/Vite** depois de muitas edições de arquivo em sequência na mesma sessão de dev
+  (exatamente o que acontece numa sessão longa de trabalho como as deste projeto, com o `ng serve`
+  do usuário ficando aberto o dia todo enquanto dezenas de arquivos são salvos). Se isso for
+  relatado de novo: primeiro perguntar se um F5 resolve temporariamente — se sim, a solução é
+  reiniciar o `ng serve` (não investigar o componente), não perder tempo caçando um bug que não
+  existe no código.
 - **Nome do usuário sumindo/mostrando e-mail** — pode ser (a) falta de rehydratação no boot
   (já corrigida via `APP_INITIALIZER`, ver [architecture.md](architecture.md)), (b) token
   emitido *antes* de uma correção no backend relacionada a claims — nesse caso, só reiniciar o

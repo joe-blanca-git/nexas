@@ -13,14 +13,13 @@ export abstract class BaseService {
     return this.injector.get(AuthUtil);
   }
 
-  protected urlApiService: string = environment.apiAgivysUrl;
-  protected urlApiServiceAuth: string = environment.apiAvivysAuthUrl;
   protected urlApiNexas: string = environment.apiNexasUrl;
 
   protected GetHeaderJson() {
     return {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
+        'X-Api-Key': environment.apiNexasKey,
       }),
     };
   }
@@ -30,6 +29,7 @@ export abstract class BaseService {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + this.authUtil.getCookieAuth(),
+        'X-Api-Key': environment.apiNexasKey,
       }),
     };
   }
@@ -39,6 +39,7 @@ export abstract class BaseService {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + token,
+        'X-Api-Key': environment.apiNexasKey,
       }),
     };
   }
@@ -47,6 +48,7 @@ export abstract class BaseService {
     return {
       headers: new HttpHeaders({
         'Content-Type': 'application/x-www-form-urlencoded',
+        'X-Api-Key': environment.apiNexasKey,
       }),
     };
   }
@@ -55,6 +57,7 @@ export abstract class BaseService {
     return {
       headers: new HttpHeaders({
         Authorization: 'Bearer ' + this.authUtil.getCookieAuth(),
+        'X-Api-Key': environment.apiNexasKey,
       }),
     };
   }

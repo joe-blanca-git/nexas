@@ -18,14 +18,14 @@ export class AgivysService extends BaseService {
   }
 
   getRoles(): Observable<AgivysRole[]> {
-    return this.http.get<AgivysRole[]>(`${this.urlApiService}RLS`, this.GetAuthHeaderJson());
+    return this.http.get<AgivysRole[]>(`${this.urlApiNexas}RLS`, this.GetAuthHeaderJson());
   }
 
   assignRole(userId: number, roleName: string): Observable<any> {
     const payload = { userId, roleName };
     const options: any = this.GetAuthHeaderJson();
     options.responseType = 'text';
-    return this.http.post(`${this.urlApiService}RLS/postAssignRole`, payload, options);
+    return this.http.post(`${this.urlApiNexas}RLS/postAssignRole`, payload, options);
   }
 
   removeRole(userId: number, roleName: string): Observable<any> {
@@ -33,6 +33,6 @@ export class AgivysService extends BaseService {
     const options: any = this.GetAuthHeaderJson();
     options.body = payload;
     options.responseType = 'text';
-    return this.http.delete(`${this.urlApiService}RLS/removeRole`, options);
+    return this.http.delete(`${this.urlApiNexas}RLS/removeRole`, options);
   }
 }

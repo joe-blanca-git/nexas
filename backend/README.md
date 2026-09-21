@@ -164,6 +164,18 @@ Isso levantará o banco MySQL e as quatro APIs simultaneamente.
 
 ---
 
+## Troubleshooting Local
+
+### Falha de Autenticação MySQL (caching_sha2_password)
+Se você não estiver usando o Docker Compose e tentar rodar o banco MySQL nativamente no host (ex: porta `3306`), você pode receber um erro na inicialização do backend:
+`Authentication method 'caching_sha2_password' failed. Either use a secure connection, specify the server's RSA public key with ServerRSAPublicKeyFile, or set AllowPublicKeyRetrieval=True.`
+
+**Causa:** Isso acontece porque o MySQL 8+ usa `caching_sha2_password` por padrão e o driver do .NET Core recusa enviar a senha em texto plano (sem SSL) sem a chave pública RSA do servidor.
+**Solução:** Ajuste a string de conexão em `appsettings.Development.json` para adicionar `AllowPublicKeyRetrieval=True` ao final. Certifique-se também de apontar para a porta correta do seu MySQL local (ex: `Port=3306`) e de usar a senha correspondente (em vez da porta `3317` que o docker-compose mapeia). Exemplo:
+`"Server=localhost;Port=3306;Database=nexas_bd;Uid=root;Pwd=SUA_SENHA_AQUI;Charset=utf8;SslMode=none;AllowPublicKeyRetrieval=True"`
+
+---
+
 ## Problemas Conhecidos e Roadmap de Melhorias
 
 Com base na auditoria arquitetural, abaixo está o plano de ação sugerido:
